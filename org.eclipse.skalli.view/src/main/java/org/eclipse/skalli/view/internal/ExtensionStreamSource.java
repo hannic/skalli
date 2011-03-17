@@ -14,13 +14,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 import org.eclipse.skalli.api.java.IconProvider;
 import org.eclipse.skalli.log.Log;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
 import com.vaadin.terminal.StreamResource;
 
 public final class ExtensionStreamSource implements StreamResource.StreamSource {
@@ -39,17 +40,26 @@ public final class ExtensionStreamSource implements StreamResource.StreamSource 
   @Override
   public InputStream getStream() {
     Bundle bundle = FrameworkUtil.getBundle(clazz);
-    if (bundle != null) {
-      URL resource = bundle.getResource(path);
-      if (resource != null) {
-        try {
-         return resource.openStream();
-        } catch (IOException e) {
-          LOG.warning("I/O problems while opening stream."); //$NON-NLS-1$
-        }
+    if (bundle == null) {
+      LOG.warning(MessageFormat.format(
+          "Could not load ''{0}'': icon provider ''{1}'' not found in any bundle", //$NON-NLS-1$
+          path, clazz.getName()));
+      return null;
+    }
+    InputStream in = null;
+    URL resource = bundle.getResource(path);
+    if (resource != null) {
+      try {
+       in = resource.openStream();
+      } catch (IOException e) {
+        LOG.log(Level.WARNING, "I/O problems while opening stream", e); //$NON-NLS-1$
       }
     }
-    LOG.warning(MessageFormat.format("Could not load ''{0}'' from ''{1}'' of bundle ''{2}''", path, clazz.getName(), bundle.getSymbolicName())); //$NON-NLS-1$
-    return null;
+    if (in == null) {
+      LOG.warning(MessageFormat.format(
+          "Could not load ''{0}'' from ''{1}'' of bundle ''{2}''", //$NON-NLS-1$
+          path, clazz.getName(), bundle.getSymbolicName()));
+    }
+    return in;
   }
 }
