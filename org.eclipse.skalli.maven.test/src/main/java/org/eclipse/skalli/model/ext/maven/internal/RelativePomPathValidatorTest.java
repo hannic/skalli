@@ -10,10 +10,13 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.maven.internal;
 
-import org.junit.Test;
+import java.io.File;
+import java.io.IOException;
 
+import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.testutil.ValidatorUtils;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class RelativePomPathValidatorTest {
@@ -31,14 +34,25 @@ public class RelativePomPathValidatorTest {
     ValidatorUtils.assertNotValid(validator, "pom.xml", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "something/", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "/path/to", Severity.FATAL);
-    ValidatorUtils.assertNotValid(validator, "*?*", Severity.FATAL);
-    ValidatorUtils.assertNotValid(validator, "PRN", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "..", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "../somehwere/else", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "up/../down", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "some/go/up/and/..", Severity.FATAL);
     ValidatorUtils.assertNotValid(validator, "go\\to\\windows", Severity.FATAL);
+
+    assertMaybeValid(validator, "*?*");
+    assertMaybeValid(validator, "PRN");
   }
 
+  // check paths that may be allowed for some operating systems but not for others
+  private void assertMaybeValid(PropertyValidator validator, String path) {
+    try {
+      File f = new File(path);
+      f.getCanonicalPath();
+      ValidatorUtils.assertIsValid(validator, path);
+    } catch (IOException e) {
+      ValidatorUtils.assertNotValid(validator, path, Severity.FATAL);
+    }
+  }
 }
 
