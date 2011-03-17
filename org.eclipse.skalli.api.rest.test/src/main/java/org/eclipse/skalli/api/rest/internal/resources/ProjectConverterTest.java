@@ -21,15 +21,18 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.ProjectService;
+import org.eclipse.skalli.common.util.XMLUtils;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.testutil.MarshallingContextMock;
 import org.eclipse.skalli.testutil.ProjectServiceUtils;
 import org.eclipse.skalli.testutil.RestUtils;
 import org.eclipse.skalli.testutil.StringBufferHierarchicalStreamWriter;
+import org.eclipse.skalli.testutil.XMLDiffUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -72,7 +75,7 @@ public class ProjectConverterTest {
   }
 
   @Test
-  public void testMarshal() {
+  public void testMarshal() throws Exception {
     for (Project project: projects) {
       //marshal the project using ProjectConverter
       Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.ENGLISH); //$NON-NLS-1$
@@ -82,62 +85,63 @@ public class ProjectConverterTest {
       MarshallingContext context = new MarshallingContextMock(writer);
       converter.marshal(project, writer, context);
 
-
       // render the expected output of the writer
       StringBuilder expected = new StringBuilder();
       expected.append(
-          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
           "<project " +
           "xmlns=\"http://www.eclipse.org/skalli/2010/API\" " +
           "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
           "xsi:schemaLocation=\"http://www.eclipse.org/skalli/2010/API https://localhost/schemas/project.xsd\" " +
           "apiVersion=\"" + ProjectConverter.API_VERSION + "\" " +
           "lastModified=\"" + project.getLastModified() + "\" " +
-          "modifiedBy=\"" + project.getLastModifiedBy() + "\">\n" );
-      expected.append("  <uuid>").append(project.getUuid().toString()).append("</uuid>\n");
-      expected.append("  <id>").append(enc(project.getProjectId())).append("</id>\n");
-      expected.append("  <template>").append(enc(project.getProjectTemplateId())).append("</template>\n");
-      expected.append("  <name>").append(enc(project.getName())).append("</name>\n");
-      expected.append("  <link rel=\"project\" href=\"https://localhost/api/projects/").append(project.getUuid().toString()).append("\"/>\n");
-      expected.append("  <link rel=\"browse\" href=\"https://localhost/projects/").append(project.getProjectId()).append("\"/>\n");
-      expected.append("  <link rel=\"issues\" href=\"https://localhost/api/projects/").append(project.getUuid().toString()).append("/issues\"/>\n");
-      expected.append("  <phase>").append(enc(project.getPhase())).append("</phase>\n");
+          "modifiedBy=\"" + project.getLastModifiedBy() + "\">" );
+      expected.append("  <uuid>").append(project.getUuid().toString()).append("</uuid>");
+      expected.append("  <id>").append(enc(project.getProjectId())).append("</id>");
+      expected.append("  <template>").append(enc(project.getProjectTemplateId())).append("</template>");
+      expected.append("  <name>").append(enc(project.getName())).append("</name>");
+      expected.append("  <link rel=\"project\" href=\"https://localhost/api/projects/").append(project.getUuid().toString()).append("\"/>");
+      expected.append("  <link rel=\"browse\" href=\"https://localhost/projects/").append(project.getProjectId()).append("\"/>");
+      expected.append("  <link rel=\"issues\" href=\"https://localhost/api/projects/").append(project.getUuid().toString()).append("/issues\"/>");
+      expected.append("  <phase>").append(enc(project.getPhase())).append("</phase>");
       if (StringUtils.isNotBlank(enc(project.getDescription()))) {
-        expected.append("  <description>").append(enc(project.getDescription())).append("</description>\n");
+        expected.append("  <description>").append(enc(project.getDescription())).append("</description>");
       }
       if (project.getParentProject() != null) {
-        expected.append("  <link rel=\"parent\" href=\"https://localhost/api/projects/").append(enc(project.getParentProject().toString())).append("\"/>\n");
+        expected.append("  <link rel=\"parent\" href=\"https://localhost/api/projects/").append(enc(project.getParentProject().toString())).append("\"/>");
       }
       List<Project> subprojects = projectService.getSubProjects(project.getUuid());
       if (subprojects.size() > 0) {
-        expected.append("  <subprojects>\n");
+        expected.append("  <subprojects>");
         for (Project subproject: subprojects) {
-          expected.append("    <link rel=\"subproject\" href=\"https://localhost/api/projects/").append(enc(subproject.getUuid().toString())).append("\"/>\n");
+          expected.append("    <link rel=\"subproject\" href=\"https://localhost/api/projects/").append(enc(subproject.getUuid().toString())).append("\"/>");
         }
-        expected.append("  </subprojects>\n");
+        expected.append("  </subprojects>");
       }
 
       Set<ProjectMember> allPeople = projectService.getAllPeople(project);
       if (allPeople.size() > 0) {
-        expected.append("  <members>\n");
+        expected.append("  <members>");
         for (ProjectMember member : allPeople) {
-          expected.append("    <member>\n");
-          expected.append("      <userId>").append(enc(member.getUserID())).append("</userId>\n");
-          expected.append("      <link rel=\"user\" href=\"https://localhost/api/user/").append(enc(member.getUserID())).append("\"/>\n");
+          expected.append("    <member>");
+          expected.append("      <userId>").append(enc(member.getUserID())).append("</userId>");
+          expected.append("      <link rel=\"user\" href=\"https://localhost/api/user/").append(enc(member.getUserID())).append("\"/>");
           for (Entry<String, Set<ProjectMember>> entry : projectService.getAllPeopleByRole(project).entrySet()) {
             if (entry.getValue().contains(member)) {
-              expected.append("      <role>").append(enc(entry.getKey())).append("</role>\n");
+              expected.append("      <role>").append(enc(entry.getKey())).append("</role>");
             }
           }
-          expected.append("    </member>\n");
+          expected.append("    </member>");
         }
-        expected.append("  </members>\n");
+        expected.append("  </members>");
       }
-      expected.append("  <extensions/>\n");
+      expected.append("  <extensions/>");
       expected.append("</project>");
 
       // compare marshalled and expected output
-      Assert.assertEquals(project.getUuid().toString(), expected.toString(), writer.toString());
+      Document expectedDoc = XMLUtils.documentFromString(expected.toString());
+      Document actualDoc = XMLUtils.documentFromString(writer.toString());
+      XMLDiffUtil.assertEquals(expectedDoc, actualDoc, true);
     }
   }
 
@@ -147,8 +151,6 @@ public class ProjectConverterTest {
     Projects plist = new Projects(projects);
     RestUtils.validate(plist, new ProjectsConverterWrapper("https://localhost", new String[]{"members"}), "projects.xsd");
   }
-
-
 
   private String enc(String s) {
     if (s == null) {
@@ -182,4 +184,3 @@ public class ProjectConverterTest {
     return buffer.toString();
   }
 }
-

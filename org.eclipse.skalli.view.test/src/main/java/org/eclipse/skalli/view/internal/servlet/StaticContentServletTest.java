@@ -62,14 +62,14 @@ public class StaticContentServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     Assert.assertTrue(written);
-    Assert.assertTrue(sb.toString().startsWith(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\r\n" +
+    String xml = sb.toString();
+    Assert.assertTrue(xml, xml.indexOf(
         "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
         "xmlns=\"http://www.eclipse.org/skalli/2010/API\" " +
         "attributeFormDefault=\"unqualified\" " +
         "elementFormDefault=\"qualified\" " +
         "targetNamespace=\"http://www.eclipse.org/skalli/2010/API\" " +
-        "version=\"1.2\">"));
+        "version=\"1.2\">") > 0);
 
     verify(mocks);
   }
@@ -101,14 +101,14 @@ public class StaticContentServletTest {
 
     servlet.doGet(mockRequest, mockResponse);
     Assert.assertTrue(written);
-    Assert.assertTrue(sb.toString().startsWith(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\r\n" +
+    String xml = sb.toString();
+    Assert.assertTrue(xml, xml.indexOf(
         "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
         "xmlns=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
         "attributeFormDefault=\"unqualified\" " +
         "elementFormDefault=\"qualified\" " +
         "targetNamespace=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
-        "version=\"1.0\">"));
+        "version=\"1.0\">") > 0);
 
     verify(mocks);
   }
@@ -133,4 +133,3 @@ public class StaticContentServletTest {
     verify(mocks);
   }
 }
-
