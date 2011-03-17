@@ -20,12 +20,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
-import org.apache.commons.io.FileUtils;
-import org.easymock.EasyMock;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.easymock.EasyMock;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
@@ -33,6 +32,9 @@ import org.eclipse.skalli.testutil.TestExtensibleEntityBase;
 import org.eclipse.skalli.testutil.TestExtension;
 import org.eclipse.skalli.testutil.TestExtension1;
 import org.eclipse.skalli.testutil.TestUtils;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 @SuppressWarnings("nls")
 public class XStreamPersistenceTest {
@@ -144,7 +146,9 @@ public class XStreamPersistenceTest {
       assertNotNull(lastModified);
       SortedMap<String,Element> extensions = xp.getExtensionsByAlias(savedDoc, aliases);
       String lastModifiedExt1 = xp.getLastModifiedAttribute(extensions.get(ALIAS_EXT1));
+      assertIsXsdDateTime(lastModifiedExt1);
       String lastModifiedExt2 = xp.getLastModifiedAttribute(extensions.get(ALIAS_EXT1));
+      assertIsXsdDateTime(lastModifiedExt2);
 
       Set<ClassLoader> entityClassLoaders = new HashSet<ClassLoader>();
       entityClassLoaders.add(TestExtensibleEntityBase.class.getClassLoader());
@@ -211,12 +215,11 @@ public class XStreamPersistenceTest {
     Map<String, Class<?>> aliases = getAliases();
     xp.postProcessXML(newDoc, oldDoc, aliases, USER0);
     Element documentElement = newDoc.getDocumentElement();
-    String lastModified = xp.getLastModifiedAttribute(documentElement);
-    assertNotNull(lastModified);
+    assertIsXsdDateTime(xp.getLastModifiedAttribute(documentElement));
     assertEquals(USER0, xp.getLastModifiedByAttribute(documentElement));
     SortedMap<String,Element> extensions = xp.getExtensionsByAlias(newDoc, aliases);
     Element ext1 = extensions.get(ALIAS_EXT1);
-    assertEquals(lastModified, xp.getLastModifiedAttribute(ext1));
+    assertIsXsdDateTime(xp.getLastModifiedAttribute(ext1));
     assertEquals(USER0, xp.getLastModifiedByAttribute(ext1));
     Element ext2 = extensions.get(ALIAS_EXT2);
     assertNull(xp.getLastModifiedAttribute(ext2));
@@ -317,7 +320,7 @@ public class XStreamPersistenceTest {
     Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
     Element documentElement = doc.getDocumentElement();
     xp.setLastModifiedAttribute(documentElement);
-    assertNotNull(xp.getLastModifiedAttribute(documentElement));
+    assertIsXsdDateTime(xp.getLastModifiedAttribute(documentElement));
   }
 
   @Test(expected=RuntimeException.class)
@@ -375,6 +378,11 @@ public class XStreamPersistenceTest {
     Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
     Element documentElement = doc.getDocumentElement();
     assertTrue(xp.identical(documentElement, documentElement));
+  }
+
+  private void assertIsXsdDateTime(String lexicalXSDDateTime) {
+    assertTrue(StringUtils.isNotBlank(lexicalXSDDateTime));
+    DatatypeConverter.parseDateTime(lexicalXSDDateTime);
   }
 }
 
