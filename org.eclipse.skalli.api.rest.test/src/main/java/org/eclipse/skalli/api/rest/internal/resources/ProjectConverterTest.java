@@ -20,10 +20,6 @@ import java.util.TimeZone;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
@@ -31,6 +27,10 @@ import org.eclipse.skalli.testutil.MarshallingContextMock;
 import org.eclipse.skalli.testutil.ProjectServiceUtils;
 import org.eclipse.skalli.testutil.RestUtils;
 import org.eclipse.skalli.testutil.StringBufferHierarchicalStreamWriter;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
@@ -88,9 +88,9 @@ public class ProjectConverterTest {
       expected.append(
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
           "<project " +
-          "xmlns=\"http://xml.sap.com/2010/08/ProjectPortal/API\" " +
+          "xmlns=\"http://www.eclipse.org/skalli/2010/API\" " +
           "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-          "xsi:schemaLocation=\"http://xml.sap.com/2010/08/ProjectPortal/API https://localhost/schemas/project.xsd\" " +
+          "xsi:schemaLocation=\"http://www.eclipse.org/skalli/2010/API https://localhost/schemas/project.xsd\" " +
           "apiVersion=\"" + ProjectConverter.API_VERSION + "\" " +
           "lastModified=\"" + project.getLastModified() + "\" " +
           "modifiedBy=\"" + project.getLastModifiedBy() + "\">\n" );

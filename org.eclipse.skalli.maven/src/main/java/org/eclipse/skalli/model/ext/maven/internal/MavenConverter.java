@@ -12,6 +12,7 @@ package org.eclipse.skalli.model.ext.maven.internal;
 
 import org.eclipse.skalli.model.ext.AbstractConverter;
 import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -20,7 +21,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 class MavenConverter extends AbstractConverter<MavenProjectExt> {
 
   public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Maven"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Maven"; //$NON-NLS-1$
 
   public MavenConverter(String host) {
     super(MavenProjectExt.class, "maven", host); //$NON-NLS-1$

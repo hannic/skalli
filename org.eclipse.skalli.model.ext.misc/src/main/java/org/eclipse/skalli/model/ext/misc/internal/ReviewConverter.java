@@ -14,6 +14,7 @@ import org.eclipse.skalli.model.ext.AbstractConverter;
 import org.eclipse.skalli.model.ext.misc.ProjectRating;
 import org.eclipse.skalli.model.ext.misc.ReviewEntry;
 import org.eclipse.skalli.model.ext.misc.ReviewProjectExt;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -21,8 +22,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class ReviewConverter extends AbstractConverter<ReviewProjectExt> {
 
-  public static final String API_VERSION = "1.0";
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Review";
+  public static final String API_VERSION = "1.0"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Review"; //$NON-NLS-1$
 
   public ReviewConverter(String host) {
     super(ReviewProjectExt.class, "reviews", host); //$NON-NLS-1$

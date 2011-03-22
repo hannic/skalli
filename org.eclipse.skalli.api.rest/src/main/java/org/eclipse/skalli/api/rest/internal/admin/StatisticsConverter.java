@@ -15,9 +15,9 @@ import java.util.Date;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
-
 import org.eclipse.skalli.log.Statistics;
 import org.eclipse.skalli.model.ext.AbstractConverter;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -26,7 +26,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 class StatisticsConverter extends AbstractConverter<Statistics> {
 
   public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Admin"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Admin"; //$NON-NLS-1$
 
   public StatisticsConverter(String host) {
     super(Statistics.class, "statistics", host); //$NON-NLS-1$

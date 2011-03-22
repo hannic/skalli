@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Scrum"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Scrum"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API/Extension-Scrum"
+    xmlns="http://www.eclipse.org/skalli/2010/API/Extension-Scrum"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,20 +20,19 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API for
-      the SCRUM model extension.
+      This XML schema defines the Skalli REST API for the Scrum model extension.
     </xsd:documentation>
   </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
-  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <xsd:include schemaLocation="../../org.eclipse.skalli.model.core/schemas/common.xsd" />
   <!-- END of common declarations -->
 
   <xsd:element name="scrum" type="ScrumExtension" />
-  
+
   <xsd:complexType name="ScrumExtension">
     <xsd:complexContent>
-      <xsd:extension base="Extension">  
+      <xsd:extension base="Extension">
         <xsd:sequence>
           <xsd:element name="backlogUrl" type="xsd:anyURI" minOccurs="0">
             <xsd:annotation>

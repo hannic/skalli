@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-People"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-People"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API/Extension-People"
+    xmlns="http://www.eclipse.org/skalli/2010/API/Extension-People"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,13 +20,12 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API for
-      the People model extension.
-        </xsd:documentation>
+      This XML schema defines the Skalli REST API for the People model extension.
+    </xsd:documentation>
   </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
-  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <xsd:include schemaLocation="common.xsd" />
   <!-- END of common declarations -->
 
   <xsd:element name="people" type="PeopleExtension" />
@@ -46,7 +45,7 @@
                   <xsd:element name="lead" type="Member" minOccurs="0" maxOccurs="unbounded">
                     <xsd:annotation>
                       <xsd:documentation xml:lang="EN">
-                        Unique identifier and permanent link of a project lead.
+                        Unique identifier and permanent link to the user resource of a project lead.
                       </xsd:documentation>
                     </xsd:annotation>
                   </xsd:element>
@@ -64,7 +63,7 @@
                   <xsd:element name="member" type="Member" minOccurs="0" maxOccurs="unbounded">
                     <xsd:annotation>
                       <xsd:documentation xml:lang="EN">
-                        Unique identifier and permanent link of a project member.
+                        Unique identifier and permanent link to the user resource of a project member.
                       </xsd:documentation>
                     </xsd:annotation>
                   </xsd:element>

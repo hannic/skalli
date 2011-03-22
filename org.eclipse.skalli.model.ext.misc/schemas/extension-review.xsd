@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Review"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Review"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API/Extension-Review"
+    xmlns="http://www.eclipse.org/skalli/2010/API/Extension-Review"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,20 +20,19 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API for
-      the Review model extension.
+      This XML schema defines the Skalli REST API for the Review model extension.
     </xsd:documentation>
   </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
-  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <xsd:include schemaLocation="../../org.eclipse.skalli.model.core/schemas/common.xsd" />
   <!-- END of common declarations -->
 
   <xsd:element name="reviews" type="ReviewExtension" />
 
   <xsd:complexType name="ReviewExtension">
     <xsd:complexContent>
-      <xsd:extension base="Extension">  
+      <xsd:extension base="Extension">
         <xsd:sequence>
           <xsd:element name="review" type="Review" minOccurs="0" maxOccurs="unbounded" />
         </xsd:sequence>
@@ -50,7 +49,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="comment" type="xsd:string" />
+      <xsd:element name="comment" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The comment entered by the reviewer.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="timestamp" type="xsd:long">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
@@ -58,7 +63,15 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="rating" type="xsd:string" />
+      <xsd:element name="rating" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The rating of the project given by the reviewer.
+            One of UP, DOWN, NONE, FACE_SMILE_BIG, FACE_SMILE, FACE_PLAIN,
+            FACE_SAD or FACE_CRYING.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
     </xsd:sequence>
   </xsd:complexType>
 </xsd:schema>

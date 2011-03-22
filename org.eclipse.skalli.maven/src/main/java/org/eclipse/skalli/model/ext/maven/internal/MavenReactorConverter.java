@@ -16,6 +16,7 @@ import org.eclipse.skalli.model.ext.AbstractConverter;
 import org.eclipse.skalli.model.ext.maven.MavenCoordinate;
 import org.eclipse.skalli.model.ext.maven.MavenReactor;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -25,7 +26,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 class MavenReactorConverter extends AbstractConverter<MavenReactorProjectExt> {
 
   public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Extension-MavenReactor"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-MavenReactor"; //$NON-NLS-1$
 
   private static final String TAG_MODULE = "module"; //$NON-NLS-1$
   private static final String TAG_MODULES = "modules"; //$NON-NLS-1$

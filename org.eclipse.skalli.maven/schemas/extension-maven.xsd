@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Maven"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Maven"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API/Extension-Maven"
+    xmlns="http://www.eclipse.org/skalli/2010/API/Extension-Maven"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,9 +20,8 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API for
-      the Maven model extension.
-        </xsd:documentation>
+      This XML schema defines the Skalli REST API for the Maven model extension.
+    </xsd:documentation>
   </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
@@ -30,10 +29,10 @@
   <!-- END of common declarations -->
 
   <xsd:element name="maven" type="MavenExtension" />
-  
+
   <xsd:complexType name="MavenExtension">
     <xsd:complexContent>
-      <xsd:extension base="Extension">  
+      <xsd:extension base="Extension">
         <xsd:sequence>
           <xsd:element name="groupID" type="MavenId" minOccurs="0">
             <xsd:annotation>

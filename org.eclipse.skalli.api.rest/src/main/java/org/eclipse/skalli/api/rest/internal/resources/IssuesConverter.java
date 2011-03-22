@@ -13,6 +13,7 @@ package org.eclipse.skalli.api.rest.internal.resources;
 import org.eclipse.skalli.model.ext.AbstractConverter;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issues;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -21,7 +22,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 class IssuesConverter extends AbstractConverter<Issues> {
 
   public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API"; //$NON-NLS-1$
 
   public IssuesConverter(String host) {
     super(Issues.class, "issues", host); //$NON-NLS-1$

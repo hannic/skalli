@@ -21,6 +21,7 @@ import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -28,7 +29,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 class ProjectConverter extends CommonProjectConverter {
 
   public static final String API_VERSION = "1.4"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API"; //$NON-NLS-1$
 
   public ProjectConverter(String host, boolean omitNSAttributes) {
     super(host, omitNSAttributes);

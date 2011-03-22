@@ -17,7 +17,7 @@ import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 public class MavenReactorProjectExt extends ExtensionEntityBase {
 
   public static final String MODEL_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/Model/Extension-MavenReactor"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/Model/Extension-MavenReactor"; //$NON-NLS-1$
 
   @Derived
   public static final String PROPERTY_MAVEN_REACTOR = "mavenReactor"; //$NON-NLS-1$

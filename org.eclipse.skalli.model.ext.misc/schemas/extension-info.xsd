@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Info"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Info"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API/Extension-Info"
+    xmlns="http://www.eclipse.org/skalli/2010/API/Extension-Info"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,13 +20,12 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API for
-      the Info model extension.
-        </xsd:documentation>
+      This XML schema defines the Skalli REST API for the Info model extension.
+    </xsd:documentation>
   </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
-  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <xsd:include schemaLocation="../../org.eclipse.skalli.model.core/schemas/common.xsd" />
   <!-- END of common declarations -->
 
   <xsd:element name="info" type="InfoExtension" />
@@ -42,26 +41,27 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
-          <xsd:element name="mailingLists" minOccurs="0">
+          <xsd:element name="mailingLists" type="MailingLists" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
                 The project's mailing lists.
               </xsd:documentation>
             </xsd:annotation>
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="mailingList" type="xsd:anyURI" minOccurs="0" maxOccurs="unbounded">
-                  <xsd:annotation>
-                    <xsd:documentation xml:lang="EN">
-                      URL of a mailing list.
-                    </xsd:documentation>
-                  </xsd:annotation>
-                </xsd:element>
-              </xsd:sequence>
-            </xsd:complexType>
           </xsd:element>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="MailingLists">
+    <xsd:sequence>
+      <xsd:element name="mailingList" type="xsd:anyURI" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            URL of a mailing list.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
   </xsd:complexType>
 </xsd:schema>

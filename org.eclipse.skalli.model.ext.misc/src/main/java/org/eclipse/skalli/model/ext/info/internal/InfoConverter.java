@@ -12,6 +12,7 @@ package org.eclipse.skalli.model.ext.info.internal;
 
 import org.eclipse.skalli.model.ext.AbstractConverter;
 import org.eclipse.skalli.model.ext.info.InfoProjectExt;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -20,7 +21,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class InfoConverter extends AbstractConverter<InfoProjectExt> {
 
   public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Extension-Info"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Info"; //$NON-NLS-1$
 
   public InfoConverter(String host) {
     super(InfoProjectExt.class, "info", host); //$NON-NLS-1$

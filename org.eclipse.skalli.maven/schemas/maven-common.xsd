@@ -4,15 +4,33 @@
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     version="1.3">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License v1.0
+      which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      This XML schema defines common types used by the Skalli REST API for
+      the Maven and MavenReactor model extensions.
+    </xsd:documentation>
+  </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
-  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <xsd:include schemaLocation="../../org.eclipse.skalli.model.core/schemas/common.xsd" />
   <!-- END of common declarations -->
 
   <xsd:simpleType name="MavenId">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        Defines a group or artifact id of a Maven project.
+        Represents a group or artifact id of a Maven project.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:restriction base="xsd:string">
@@ -21,28 +39,33 @@
   </xsd:simpleType>
 
   <xsd:complexType name="MavenCoordinate">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the group id, artifact id and packaging type of a Maven project, module or artifact.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="groupId" type="MavenId">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The maven groupID of a project or module.
+            The Maven group id of a project or module.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="artifactId" type="MavenId">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The maven artifcatID of a project or module.
+            The Maven artifact id of a project or module.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="packaging" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The packaging type of a project or module.
+            The Maven packaging type of a project or module.
           </xsd:documentation>
         </xsd:annotation>
-      </xsd:element>               
+      </xsd:element>
     </xsd:sequence>
   </xsd:complexType>
 </xsd:schema>

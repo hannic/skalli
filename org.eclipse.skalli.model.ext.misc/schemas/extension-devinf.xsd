@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-DevInf"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-DevInf"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API/Extension-DevInf"
+    xmlns="http://www.eclipse.org/skalli/2010/API/Extension-DevInf"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,15 +20,14 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API for
-      the DevInf model extension.
-        </xsd:documentation>
+      This XML schema defines the Skalli REST API for the Development Infrastructure model extension.
+    </xsd:documentation>
   </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
-  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <xsd:include schemaLocation="../../org.eclipse.skalli.model.core/schemas/common.xsd" />
   <!-- END of common declarations -->
-  
+
   <xsd:element name="devInf" type="DevInfExtension" />
 
   <xsd:complexType name="DevInfExtension">
@@ -38,21 +37,22 @@
           <xsd:element name="bugtrackerUrl" type="xsd:anyURI" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The URL of the project's bugtracking system, e.g. a Bugzilla server.
+                The URL of the project's bug tracking system, e.g. a link to a Bugzilla project.
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="ciUrl" type="xsd:anyURI" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The URL of the project's continous integration system, e.g. a Hudson build server.
+                The URL of the project's continuous integration system, e.g. a link to a
+                job on a Hudson build server.
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="metricsUrl" type="xsd:anyURI" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The URL of the project's quality assurance system, e.g. a Sonar server.
+                The URL of the project's quality assurance system, e.g. a link to a Sonar server.
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -66,7 +66,8 @@
           <xsd:element name="scmLocations" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The project's source code locations.
+                The project's source code locations in Maven SCM format.
+                @see http://maven.apache.org/scm/scm-url-format.html
               </xsd:documentation>
             </xsd:annotation>
             <xsd:complexType>
@@ -78,7 +79,7 @@
           <xsd:element name="javadocs" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The project's Javadoc.
+                Link to Javadoc produced by the project.
               </xsd:documentation>
             </xsd:annotation>
             <xsd:complexType>

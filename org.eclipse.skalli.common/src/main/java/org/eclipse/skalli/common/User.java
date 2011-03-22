@@ -19,7 +19,7 @@ import org.eclipse.skalli.model.ext.PropertyName;
 public class User implements Comparable<User> {
 
   public static final String MODEL_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/Model"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/Model"; //$NON-NLS-1$
   private static final String UNKNOWN = "?"; //$NON-NLS-1$
 
   @PropertyName(position=0)

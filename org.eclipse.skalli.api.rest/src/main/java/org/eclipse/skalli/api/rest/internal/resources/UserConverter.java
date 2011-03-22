@@ -20,8 +20,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class UserConverter extends AbstractConverter<User> {
 
-  public static final String API_VERSION = "1.0";
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Project";
+  public static final String API_VERSION = "1.0"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API"; //$NON-NLS-1$
 
   public UserConverter(String host) {
     super(User.class, "user", host); //$NON-NLS-1$
@@ -64,7 +64,7 @@ class UserConverter extends AbstractConverter<User> {
 
   @Override
   public String getXsdFileName() {
-    return "user.xsd";
+    return "user.xsd"; //$NON-NLS-1$
   }
 }
 

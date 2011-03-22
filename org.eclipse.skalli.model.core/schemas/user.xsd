@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API"
+    xmlns="http://www.eclipse.org/skalli/2010/API"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,8 +20,7 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API resource for
-      a single user, i.e. /user/&lt;userid&gt;.
+      This XML schema defines the Skalli REST API resource for a user, i.e. /user/&lt;userid&gt;.
     </xsd:documentation>
   </xsd:annotation>
 
@@ -35,7 +34,7 @@
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
         Defines the attributes of a user.
-	  </xsd:documentation>
+      </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="link" type="Link">
@@ -56,70 +55,70 @@
       <xsd:element name="firstname" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's given name
+            The user's given name.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="lastname" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's last name
+            The user's last name.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="email" type="EmailAddress" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's e-mail address
+            The user's e-mail address.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="phone" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's office phone number
+            The user's office phone number.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="mobile" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's mobile phone number
+            The user's mobile phone number.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="sip" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's SIP address, e.g. sip:john.dow@example.org
+            The user's SIP address, e.g. "sip:john.dow@example.org".
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="company" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The company the user is working for or associated with
+            The company the user is working for or associated with.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="department" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The department the user is assigned to
+            The department the user is assigned to.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="location" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's office location
+            The user's office location.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="room" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user's office or room number
+            The user's office or room number.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>

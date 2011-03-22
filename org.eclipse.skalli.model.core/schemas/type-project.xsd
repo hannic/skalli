@@ -4,6 +4,18 @@
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     version="1.4">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License v1.0
+      which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+    </xsd:documentation>
+  </xsd:annotation>
 
   <!-- BEGIN of common declarations -->
   <xsd:include schemaLocation="common.xsd" />
@@ -26,29 +38,29 @@
       <xsd:element name="id" type="ProjectId">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The symbolic name of the project, e.g. ldi.projectportal.
-            Note, the symbolic name of a project can change over time!
+            The symbolic name of the project, e.g. "eclipse.skalli".
+            Note, the symbolic name of a project can change over time.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="template" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            ID of the template used for this project.
+            Identifier of the template assigned to this project.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>      
       <xsd:element name="name" type="ProjectName">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The display name of the project, e.g. "Project Portal".
+            The display name of the project, e.g. "Skalli".
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="link" type="Link">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            Permanent link to the project detail resource.
+            Permanent link to the project's detail resource.
             The value of the "rel" attribute is always "project".
           </xsd:documentation>
         </xsd:annotation>
@@ -64,11 +76,11 @@
       <xsd:element name="link" type="Link">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            Permanent link to the project's issue.
+            Permanent link to the project's validation issues.
             The value of the "rel" attribute is always "issues".
           </xsd:documentation>
         </xsd:annotation>
-      </xsd:element>      
+      </xsd:element>
       <xsd:element name="phase" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
@@ -86,7 +98,7 @@
       <xsd:element name="link" type="Link" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            Permanent link to the parent project resource, if the project is a subproject.
+            Permanent link to the parent project resource if the project is a subproject.
             The value of the "rel" attribute is always "parent".
           </xsd:documentation>
         </xsd:annotation>
@@ -121,7 +133,7 @@
             <xsd:element name="member" type="MemberWithRole" minOccurs="0" maxOccurs="unbounded">
               <xsd:annotation>
                 <xsd:documentation xml:lang="EN">
-                  Unique identifier, permanent link and role of a project member.
+                  Unique identifier, permanent link to the user resource and role of a project member.
                 </xsd:documentation>
               </xsd:annotation>
             </xsd:element>
@@ -131,7 +143,7 @@
       <xsd:element name="extensions" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            Additional informamtion provided by model extensions.
+            Additional information provided by model extensions.
           </xsd:documentation>
         </xsd:annotation>
         <xsd:complexType>
@@ -144,9 +156,8 @@
     <xsd:attribute name="lastModified" type="xsd:dateTime" use="optional">
       <xsd:annotation>
         <xsd:documentation xml:lang="EN">
-          The timestamp of the last modification of an extension in ISO 8601 date/time format.
-          For derived extension this timestamp could for example indicate the latest
-          update/download of the extension data from an external resource.
+          The timestamp of the last modification of the project or one of its extensions
+          in ISO 8601 date/time format.
           Examples: 2001-10-26T19:32:52Z, 2001-10-26T19:32:52+00:00
         </xsd:documentation>
       </xsd:annotation>
@@ -154,7 +165,7 @@
     <xsd:attribute name="modifiedBy" type="xsd:string" use="optional">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        The unique identifier of the last modifier.
+        The unique identifier of the last modifier of the project.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>

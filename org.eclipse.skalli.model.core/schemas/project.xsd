@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema
-    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API"
-    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API"
+    targetNamespace="http://www.eclipse.org/skalli/2010/API"
+    xmlns="http://www.eclipse.org/skalli/2010/API"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -20,8 +20,8 @@
   </xsd:annotation>
   <xsd:annotation>
     <xsd:documentation xml:lang="EN">
-      This XML schema defines the Project Portal REST API resource for
-      a single project accessible with /api/project/&lt;uuid&gt;
+      This XML schema defines the Skalli REST API resource for
+      a single project accessible with /api/project/&lt;projectId&gt;
     </xsd:documentation>
   </xsd:annotation>
 

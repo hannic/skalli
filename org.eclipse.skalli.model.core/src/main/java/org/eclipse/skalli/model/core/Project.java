@@ -16,7 +16,6 @@ import java.util.UUID;
 
 import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.model.ext.Derived;
 import org.eclipse.skalli.model.ext.ExtensibleEntityBase;
 import org.eclipse.skalli.model.ext.Historized;
@@ -27,7 +26,7 @@ import org.eclipse.skalli.model.ext.Taggable;
 public class Project extends ExtensibleEntityBase implements Taggable {
 
   public static final String MODEL_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/Model"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/Model"; //$NON-NLS-1$
 
   @PropertyName(position=0)
   public static final String PROPERTY_PROJECTID = "projectId"; //$NON-NLS-1$

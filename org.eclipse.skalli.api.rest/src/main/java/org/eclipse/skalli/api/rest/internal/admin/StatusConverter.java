@@ -10,10 +10,10 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.rest.internal.admin;
 
-import org.osgi.framework.Bundle;
-
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.model.ext.AbstractConverter;
+import org.osgi.framework.Bundle;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -21,8 +21,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class StatusConverter extends AbstractConverter<Object> {
 
-  public static final String API_VERSION = "1.0";
-  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Admin";
+  public static final String API_VERSION = "1.0"; //$NON-NLS-1$
+  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Admin"; //$NON-NLS-1$
 
   public StatusConverter(String host) {
     super(Object.class, "status", host); //$NON-NLS-1$

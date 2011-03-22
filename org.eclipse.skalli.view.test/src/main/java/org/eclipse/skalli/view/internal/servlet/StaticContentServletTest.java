@@ -18,11 +18,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.skalli.testutil.BundleManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.eclipse.skalli.testutil.BundleManager;
 
 @SuppressWarnings("nls")
 public class StaticContentServletTest {
@@ -66,10 +65,10 @@ public class StaticContentServletTest {
     Assert.assertTrue(sb.toString().startsWith(
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\r\n" +
         "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-        "xmlns=\"http://xml.sap.com/2010/08/ProjectPortal/API\" " +
+        "xmlns=\"http://www.eclipse.org/skalli/2010/API\" " +
         "attributeFormDefault=\"unqualified\" " +
         "elementFormDefault=\"qualified\" " +
-        "targetNamespace=\"http://xml.sap.com/2010/08/ProjectPortal/API\" " +
+        "targetNamespace=\"http://www.eclipse.org/skalli/2010/API\" " +
         "version=\"1.2\">"));
 
     verify(mocks);
@@ -105,10 +104,10 @@ public class StaticContentServletTest {
     Assert.assertTrue(sb.toString().startsWith(
         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\r\n" +
         "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-        "xmlns=\"http://xml.sap.com/2010/08/ProjectPortal/API/Extension-DevInf\" " +
+        "xmlns=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
         "attributeFormDefault=\"unqualified\" " +
         "elementFormDefault=\"qualified\" " +
-        "targetNamespace=\"http://xml.sap.com/2010/08/ProjectPortal/API/Extension-DevInf\" " +
+        "targetNamespace=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
         "version=\"1.0\">"));
 
     verify(mocks);

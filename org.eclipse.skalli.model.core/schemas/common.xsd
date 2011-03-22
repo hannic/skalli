@@ -4,6 +4,23 @@
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     version="1.4">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License v1.0
+      which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      This XML schema defines common types used by various parts of the Skalli REST API.
+    </xsd:documentation>
+  </xsd:annotation>
 
   <xsd:complexType name="empty" />
 
@@ -28,7 +45,7 @@
   <xsd:simpleType name="ProjectId">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        Defines the symbolic name of a project, e.g. "ldi.projectportal".
+        Defines the unique symbolic name of a project, e.g. "eclipse.skalli".
       </xsd:documentation>
     </xsd:annotation>
     <xsd:restriction base="xsd:string">
@@ -41,7 +58,7 @@
   <xsd:simpleType name="ProjectName">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        Defines the display name of a project, e.g. "Project Portal".
+        Defines the display name of a project, e.g. "Skalli".
       </xsd:documentation>
     </xsd:annotation>
     <xsd:restriction base="xsd:string">
@@ -73,6 +90,11 @@
   </xsd:simpleType>
 
   <xsd:simpleType name="Severity">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the severity of a validation issue.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
        <xsd:enumeration value="INFO"/>
        <xsd:enumeration value="WARNING"/>
@@ -84,14 +106,15 @@
   <xsd:complexType name="Member">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        Defines the unique identifier, permanent link and role of a project member.
+        Defines the unique identifier and permanent link to the user resource
+        of a project member.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
       <xsd:element name="userId" type="xsd:string">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The user identifier of the project member.
+            The unique identifier of the project member.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -109,7 +132,8 @@
   <xsd:complexType name="MemberWithRole">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        Defines the unique identifier, permanent link and role of a project member.
+        Defines the unique identifier, permanent link to the user resource
+        and roles of a project member.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
@@ -141,14 +165,15 @@
   <xsd:complexType name="Extension">
     <xsd:annotation>
       <xsd:documentation xml:lang="EN">
-        Defines common attributes for an extension.
+        Defines common attributes for a model extension.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:attribute name="inherited" type="xsd:boolean" use="required">
       <xsd:annotation>
         <xsd:documentation xml:lang="EN">
-          If true, indicates that the extension is inherited,
-          i.e. attributes cannot be changed with REST commands.
+          If true, indicates that the extension is inherited from the parent
+          project in the project hierarchy. Attributes of inherited extensions
+          cannot be changed with REST commands.
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
