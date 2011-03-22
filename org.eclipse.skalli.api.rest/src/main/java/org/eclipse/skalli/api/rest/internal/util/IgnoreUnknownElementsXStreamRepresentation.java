@@ -17,18 +17,18 @@ import org.restlet.representation.Representation;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import com.thoughtworks.xstream.XStream;
 
-public class ProjectPortalXStreamRepresentation<T> extends XstreamRepresentation<T> {
+public class IgnoreUnknownElementsXStreamRepresentation<T> extends XstreamRepresentation<T> {
 
   private final Class<?>[] classes;
   private final AliasedConverter[] converters;
 
-  public ProjectPortalXStreamRepresentation(Representation representation, AliasedConverter[] converters, Class<?>[] classes) {
+  public IgnoreUnknownElementsXStreamRepresentation(Representation representation, AliasedConverter[] converters, Class<?>[] classes) {
     super(representation);
     this.converters = converters;
     this.classes = classes;
   }
 
-  public ProjectPortalXStreamRepresentation(T object, AliasedConverter[] converters) {
+  public IgnoreUnknownElementsXStreamRepresentation(T object, AliasedConverter[] converters) {
     super(object);
     this.converters = converters;
     if (object != null) {
@@ -40,7 +40,7 @@ public class ProjectPortalXStreamRepresentation<T> extends XstreamRepresentation
 
   @Override
   protected XStream createXstream(MediaType arg0) {
-    XStream xstream = new ProjectPortalXStream();
+    XStream xstream = new IgnoreUnknownElementsXStream();
     for (AliasedConverter converter : converters) {
       xstream.registerConverter(converter);
       xstream.alias(converter.getAlias(), converter.getConversionClass());

@@ -30,7 +30,7 @@ import org.osgi.service.component.ComponentContext;
 import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.UserService;
 import org.eclipse.skalli.core.internal.persistence.xstream.NoopConverter;
-import org.eclipse.skalli.core.internal.persistence.xstream.ProjectPortalXStream;
+import org.eclipse.skalli.core.internal.persistence.xstream.IgnoreUnknownElementsXStream;
 import org.eclipse.skalli.log.Log;
 import com.thoughtworks.xstream.XStream;
 
@@ -98,7 +98,7 @@ public class LocalUserServiceImpl implements UserService {
   }
 
   private XStream getXStreamInstance() {
-    XStream xstream = new ProjectPortalXStream();
+    XStream xstream = new IgnoreUnknownElementsXStream();
     xstream.registerConverter(new NoopConverter());
     xstream.setClassLoader(User.class.getClassLoader());
     return xstream;

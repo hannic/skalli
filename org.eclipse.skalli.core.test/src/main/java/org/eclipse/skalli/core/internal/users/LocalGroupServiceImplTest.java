@@ -38,7 +38,7 @@ public class LocalGroupServiceImplTest {
 
   @Before
   public void setup() throws Exception {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
     groupService = Services.getService(GroupService.class, FILTER);
     if (groupService == null) {
       Assert.fail("local group service not found.");

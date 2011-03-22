@@ -41,7 +41,7 @@ public class UserServiceUtilTest {
 
   @Before
   public void setup() throws BundleException {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
     mockConfig = EasyMock.createMock(ConfigurationService.class);
   }
 

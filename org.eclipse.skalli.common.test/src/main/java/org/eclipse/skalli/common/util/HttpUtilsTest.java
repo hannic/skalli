@@ -32,7 +32,7 @@ public class HttpUtilsTest {
 
   @BeforeClass
   public static void setUpOnce() throws Exception {
-    new BundleManager(HttpUtilsTest.class).startProjectPortalBundles();
+    new BundleManager(HttpUtilsTest.class).startBundles();
     mmus = new HttpServerMock();
     mmus.start();
   }

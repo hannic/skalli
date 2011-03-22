@@ -15,15 +15,14 @@ import static org.easymock.EasyMock.*;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.skalli.model.core.Project;
+import org.eclipse.skalli.testutil.BundleManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.testutil.BundleManager;
-
-
+@SuppressWarnings("nls")
 public class MailTemplateUtilTest {
 
   private UUID projectUuid;
@@ -37,7 +36,7 @@ public class MailTemplateUtilTest {
 
   @Before
   public void setup() throws Exception{
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
 
     projectUuid = UUID.randomUUID();
     project = new Project();
@@ -62,7 +61,7 @@ public class MailTemplateUtilTest {
   @Test
   public void testGetBody() {
     MailTemplate mockMailTemplate = createNiceMock(MailTemplate.class);
-    expect(mockMailTemplate.getBodyTemplate()).andReturn("com/sap/di/projectportal/core/internal/mail/TestContent.vm");
+    expect(mockMailTemplate.getBodyTemplate()).andReturn("org/eclipse/skalli/core/internal/mail/TestContent.vm");
     replay(mockMailTemplate);
     try {
       String body = MailTemplateUtil.getBody(mockMailTemplate, project);
@@ -89,7 +88,7 @@ public class MailTemplateUtilTest {
   @Test
   public void testGetSubject() {
     MailTemplate mockMailTemplate = createNiceMock(MailTemplate.class);
-    expect(mockMailTemplate.getSubjectTemplate()).andReturn("com/sap/di/projectportal/core/internal/mail/TestContent.vm");
+    expect(mockMailTemplate.getSubjectTemplate()).andReturn("org/eclipse/skalli/core/internal/mail/TestContent.vm");
     replay(mockMailTemplate);
     try {
       String subject = MailTemplateUtil.getSubject(mockMailTemplate, project);

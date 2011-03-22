@@ -81,7 +81,7 @@ public class XStreamPersistence {
   }
 
   XStream getXStreamInstance(Set<ClassLoader> entityClassLoaders, Map<String, Class<?>> aliases) {
-    XStream xstream = new ProjectPortalXStream();
+    XStream xstream = new IgnoreUnknownElementsXStream();
     xstream.registerConverter(new NoopConverter());
     xstream.registerConverter(new UUIDListConverter());
     xstream.registerConverter(new ExtensionsMapConverter());

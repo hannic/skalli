@@ -17,9 +17,9 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * Specialized XStream for our needs: MapperWrapperIgnoreUnknownElements to
  * ignore unknown fields.
  */
-public class ProjectPortalXStream extends XStream {
+public class IgnoreUnknownElementsXStream extends XStream {
 
-  public ProjectPortalXStream() {
+  public IgnoreUnknownElementsXStream() {
   }
 
   @Override

@@ -14,14 +14,14 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class StatusResource extends ServerResource {
 
   @Get
   public Representation retrieve() {
-    return new ProjectPortalXStreamRepresentation<Object>(new Object(),
+    return new IgnoreUnknownElementsXStreamRepresentation<Object>(new Object(),
         new AliasedConverter[] {new StatusConverter(getRequest().getResourceRef().getHostIdentifier())});
   }
 

@@ -29,7 +29,7 @@ public class ResourceServletTest {
 
   @Before
   public void setup() throws Exception {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
   }
 
   boolean written = false;

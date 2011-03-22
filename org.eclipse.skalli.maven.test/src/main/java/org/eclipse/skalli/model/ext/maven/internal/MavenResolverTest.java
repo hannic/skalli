@@ -77,7 +77,7 @@ public class MavenResolverTest {
 
   @BeforeClass
   public static void setUpOnce() throws Exception {
-    new BundleManager(MavenResolverTest.class).startProjectPortalBundles();
+    new BundleManager(MavenResolverTest.class).startBundles();
     mmus = new HttpServerMock();
     mmus.start();
   }

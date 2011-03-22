@@ -38,7 +38,7 @@ public class RestAPISmokeTest {
 
   @BeforeClass
   public static void beforeClass() throws Exception {
-    new BundleManager(RestAPISmokeTest.class).startProjectPortalBundles();
+    new BundleManager(RestAPISmokeTest.class).startBundles();
 
     String portParam = System.getProperty("PORT1");
     if (!StringUtils.isBlank(portParam)) {

@@ -18,7 +18,7 @@ import org.restlet.resource.Get;
 
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.ProjectService;
-import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.log.Statistics;
 import org.eclipse.skalli.model.core.Project;
@@ -53,6 +53,6 @@ public class IssuesResource extends AbstractServerResource {
 
     Issues issues = issuesService.getByUUID(project.getUuid());
 
-    return new ProjectPortalXStreamRepresentation<Issues>(issues, new AliasedConverter[] {new IssuesConverter(getRequest().getResourceRef().getHostIdentifier())});
+    return new IgnoreUnknownElementsXStreamRepresentation<Issues>(issues, new AliasedConverter[] {new IssuesConverter(getRequest().getResourceRef().getHostIdentifier())});
   }
 }

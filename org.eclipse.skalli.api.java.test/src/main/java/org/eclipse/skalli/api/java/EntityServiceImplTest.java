@@ -16,10 +16,6 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issuer;
 import org.eclipse.skalli.model.ext.Severity;
@@ -28,6 +24,9 @@ import org.eclipse.skalli.testutil.AssertUtils;
 import org.eclipse.skalli.testutil.BundleManager;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
 import org.eclipse.skalli.testutil.TestEntityBase1;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class EntityServiceImplTest {
@@ -76,7 +75,7 @@ public class EntityServiceImplTest {
 
   @Before
   public void setup() throws Exception {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
 
     validEntity = new TestEntityBase1(PropertyHelperUtils.TEST_UUIDS[0]);
     noUuidEntity = new TestEntityBase1();

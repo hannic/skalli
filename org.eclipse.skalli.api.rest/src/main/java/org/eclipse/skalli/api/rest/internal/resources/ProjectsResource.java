@@ -24,7 +24,7 @@ import org.eclipse.skalli.api.java.PagingInfo;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.QueryParseException;
 import org.eclipse.skalli.api.java.SearchService;
-import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.log.Statistics;
@@ -65,7 +65,7 @@ public class ProjectsResource extends ServerResource {
       if (extensionParam != null) {
         extensions = extensionParam.split(Consts.PARAM_LIST_SEPARATOR);
       }
-      return new ProjectPortalXStreamRepresentation<Projects>(projects,
+      return new IgnoreUnknownElementsXStreamRepresentation<Projects>(projects,
           new AliasedConverter[] {new ProjectsConverter(getRequest().getResourceRef().getHostIdentifier(), extensions)});
     } catch (QueryParseException e) {
       getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

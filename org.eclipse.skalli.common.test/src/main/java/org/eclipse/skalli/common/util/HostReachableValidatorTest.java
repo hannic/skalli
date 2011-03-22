@@ -40,7 +40,7 @@ public class HostReachableValidatorTest {
 
   @BeforeClass
   public static void setUpOnce() throws Exception {
-    new BundleManager(HostReachableValidatorTest.class).startProjectPortalBundles();
+    new BundleManager(HostReachableValidatorTest.class).startBundles();
     mmus = new HttpServerMock();
     mmus.start();
 

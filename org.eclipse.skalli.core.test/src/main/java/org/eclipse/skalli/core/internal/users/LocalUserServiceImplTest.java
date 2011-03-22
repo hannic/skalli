@@ -34,7 +34,7 @@ public class LocalUserServiceImplTest {
 
   @Before
   public void setup() throws Exception {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
 
     userService = new LocalUserServiceImpl();
     users = userService.getUsers();

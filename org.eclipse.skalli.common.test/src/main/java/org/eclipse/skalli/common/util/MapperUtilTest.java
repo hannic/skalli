@@ -18,18 +18,18 @@ public class MapperUtilTest {
 
   @Test
   public void testConvertGit() {
-    String scmLocation = "scm:git:git.blubb.corp/NGP/LDI/projectportal.git";
+    String scmLocation = "scm:git:git.blubb.corp/eclipse/skalli.git";
     String pattern = "^scm:git:(git.blubb.corp)/(.*).git$";
     String template = "https://{1}:8080/#project,open,{2},n,z";
     String projectId = "bla.blubb";
 
     String res = MapperUtil.convert(projectId, scmLocation, pattern, template);
-    Assert.assertEquals("https://git.blubb.corp:8080/#project,open,NGP/LDI/projectportal,n,z", res);
+    Assert.assertEquals("https://git.blubb.corp:8080/#project,open,eclipse/skalli,n,z", res);
   }
 
   @Test
   public void testConvertUsingProjectId() {
-    String scmLocation = "scm:git:git.blubb.corp/NGP/LDI/projectportal.git";
+    String scmLocation = "scm:git:git.blubb.corp/eclipse/skalli.git";
     String pattern = "^scm:git:(git.blubb.corp)/(.*).git$";
     String template = "https://server/{0}/index.html";
     String projectId = "bla.blubb";

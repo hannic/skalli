@@ -13,17 +13,16 @@ package org.eclipse.skalli.model.ext.scrum;
 import java.util.Map;
 import java.util.TreeSet;
 
-import org.junit.Test;
-
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.testutil.PropertyHelper;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
+import org.junit.Test;
 
 public class ScrumProjectExtTest {
   @Test
   public void testPropertyDefinitions() throws Exception {
     Map<String,Object> values = PropertyHelperUtils.getValues();
-    values.put(ScrumProjectExt.PROPERTY_BACKLOG_URL, "http://devinf.example.org/projectportal/backlog");
+    values.put(ScrumProjectExt.PROPERTY_BACKLOG_URL, "http://devinf.example.org/skalli/backlog");
     TreeSet<ProjectMember> scrumMasters = new TreeSet<ProjectMember>();
     scrumMasters.add(new ProjectMember("homer"));
     scrumMasters.add(new ProjectMember("marge"));

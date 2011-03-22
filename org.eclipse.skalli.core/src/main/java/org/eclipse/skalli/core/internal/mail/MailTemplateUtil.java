@@ -16,7 +16,6 @@ import java.util.Properties;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-
 import org.eclipse.skalli.model.core.Project;
 
 public class MailTemplateUtil {
@@ -26,8 +25,8 @@ public class MailTemplateUtil {
    * email when the project parent has changed.
    */
   public final static MailTemplate PARENT_CHANGED = new MailTemplateImpl(
-      "com/sap/di/projectportal/core/internal/mail/ParentChangedSubject.vm",
-      "com/sap/di/projectportal/core/internal/mail/ParentChangedBody.vm");
+      "org/eclipse/skalli/core/internal/mail/ParentChangedSubject.vm",
+      "org/eclipse/skalli/core/internal/mail/ParentChangedBody.vm");
 
   // parameters that are passed to all velocity templates
   private final static String PARAMETER_PROJECT = "project";

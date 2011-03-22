@@ -32,12 +32,6 @@
 
 <div class="tagcloudarea">
 	<center>
-		<!--
-		<a href=<%=Consts.URL_WELCOME%>>
-			<img src="/VAADIN/themes/projectportal/images/about.png" alt="Logo" width=350px>
-		</a>
-	
-		-->
 		<div class="tagcloud">
 			<%= tagCloud.doLayout() %>
 		</div>

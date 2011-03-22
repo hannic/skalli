@@ -16,12 +16,12 @@
 
   <servlet>
     <description></description>
-    <display-name>ProjectPortalAPI</display-name>
-    <servlet-name>ProjectPortalAPI</servlet-name>
+    <display-name>SkalliAPI</display-name>
+    <servlet-name>SkalliAPI</servlet-name>
     <servlet-class>org.eclipse.skalli.api.rest.internal.RestletServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ProjectPortalAPI</servlet-name>
+    <servlet-name>SkalliAPI</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
   

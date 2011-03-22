@@ -103,7 +103,7 @@ public class ProjectServiceImplTest {
 
   @Before
   public void setup() throws BundleException {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
 
     for (int i=0; i<uuids.length; ++i) {
       uuids[i] = UUID.randomUUID();

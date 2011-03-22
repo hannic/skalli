@@ -21,7 +21,7 @@ import org.restlet.resource.Put;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.authentication.LoginUtil;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
-import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.log.Statistics;
 import org.eclipse.skalli.model.core.Project;
@@ -48,14 +48,14 @@ public class ProjectResource extends AbstractServerResource {
       return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" not found.", id); //$NON-NLS-1$
     }
 
-    ProjectPortalXStreamRepresentation<Project> representation = new ProjectPortalXStreamRepresentation<Project>(
+    IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
         project, new AliasedConverter[] { new ProjectConverter(getRequest().getResourceRef().getHostIdentifier(), false) });
     return representation;
   }
 
   @Put
   public Representation store(Representation entity) {
-    ProjectPortalXStreamRepresentation<Project> representation = new ProjectPortalXStreamRepresentation<Project>(
+    IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
         entity, new AliasedConverter[] { new ProjectConverter(getRequest().getResourceRef().getHostIdentifier(), false) },
         new Class[] { Project.class });
     Project project = representation.getObject();

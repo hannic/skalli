@@ -15,7 +15,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
 import org.eclipse.skalli.api.java.authentication.UserUtil;
-import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.log.Statistics;
 import org.eclipse.skalli.model.ext.AliasedConverter;
@@ -33,6 +33,6 @@ public class UserResource extends AbstractServerResource {
       return createError(Status.CLIENT_ERROR_NOT_FOUND, "User \"{0}\" not found.", id); //$NON-NLS-1$
     }
 
-    return new ProjectPortalXStreamRepresentation<User>(user, new AliasedConverter[] {new UserConverter(getRequest().getResourceRef().getHostIdentifier())});
+    return new IgnoreUnknownElementsXStreamRepresentation<User>(user, new AliasedConverter[] {new UserConverter(getRequest().getResourceRef().getHostIdentifier())});
   }
 }

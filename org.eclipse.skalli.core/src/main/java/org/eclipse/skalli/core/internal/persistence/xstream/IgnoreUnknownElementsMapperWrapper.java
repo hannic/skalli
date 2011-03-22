@@ -21,10 +21,10 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * support that yet. See http://pvoss.wordpress.com/2009/01/08/xstream and JIRA
  * entry http://jira.codehaus.org/browse/XSTR-30
  */
-public class ProjectPortalMapperWrapper extends MapperWrapper {
-  private static final Logger LOG = Log.getLogger(ProjectPortalMapperWrapper.class);
+public class IgnoreUnknownElementsMapperWrapper extends MapperWrapper {
+  private static final Logger LOG = Log.getLogger(IgnoreUnknownElementsMapperWrapper.class);
 
-  public ProjectPortalMapperWrapper(MapperWrapper next) {
+  public IgnoreUnknownElementsMapperWrapper(MapperWrapper next) {
     super(next);
   }
 

@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.BundleException;
 
-import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
@@ -41,7 +41,7 @@ public class InheritanceTest {
 
   @Before
   public void setup() throws BundleException {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
     uuidParent = UUID.randomUUID();
     uuidProject = UUID.randomUUID();
     uuidExtension = UUID.randomUUID();
@@ -74,20 +74,20 @@ public class InheritanceTest {
     };
 
     // Verify that the parent has the extension, but not inherited
-    ProjectPortalXStreamRepresentation<Project> rep1 = new ProjectPortalXStreamRepresentation<Project>(parent, new AliasedConverter[] {projectConverter});
+    IgnoreUnknownElementsXStreamRepresentation<Project> rep1 = new IgnoreUnknownElementsXStreamRepresentation<Project>(parent, new AliasedConverter[] {projectConverter});
     String res1 = rep1.getText();
     Assert.assertTrue(res1.contains("<testExtension"));
     Assert.assertFalse(res1.contains("inherited=\"true\""));
 
     // Verify that the project doesn't have the extension
-    ProjectPortalXStreamRepresentation<Project> rep2 = new ProjectPortalXStreamRepresentation<Project>(project, new AliasedConverter[] {projectConverter});
+    IgnoreUnknownElementsXStreamRepresentation<Project> rep2 = new IgnoreUnknownElementsXStreamRepresentation<Project>(project, new AliasedConverter[] {projectConverter});
     String res2 = rep2.getText();
     Assert.assertFalse(res2.contains("<testExtension"));
     Assert.assertFalse(res2.contains("inherited=\"true\""));
 
     project.setInherited(TestExtension.class, true);
     // Verify that now the project inherits the extension
-    ProjectPortalXStreamRepresentation<Project> rep3 = new ProjectPortalXStreamRepresentation<Project>(project, new AliasedConverter[] {projectConverter});
+    IgnoreUnknownElementsXStreamRepresentation<Project> rep3 = new IgnoreUnknownElementsXStreamRepresentation<Project>(project, new AliasedConverter[] {projectConverter});
     String res3 = rep3.getText();
     Assert.assertTrue(res3.contains("<testExtension"));
     Assert.assertTrue(res3.contains("inherited=\"true\""));

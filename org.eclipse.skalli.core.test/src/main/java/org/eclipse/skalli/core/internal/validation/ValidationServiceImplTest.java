@@ -108,7 +108,7 @@ public class ValidationServiceImplTest {
 
   @Before
   public void setup() throws Exception {
-    new BundleManager(this.getClass()).startProjectPortalBundles();
+    new BundleManager(this.getClass()).startBundles();
 
     entities1 = new ArrayList<TestEntityBase1>();
     issues1 = new ArrayList<Issues>();

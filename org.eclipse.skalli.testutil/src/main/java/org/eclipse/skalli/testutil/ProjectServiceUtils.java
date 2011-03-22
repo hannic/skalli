@@ -19,7 +19,7 @@ import org.eclipse.skalli.common.Services;
 public class ProjectServiceUtils {
 
   public static ProjectService getProjectService() throws BundleException {
-    new BundleManager(ProjectServiceUtils.class).startProjectPortalBundles();
+    new BundleManager(ProjectServiceUtils.class).startBundles();
     return Services.getRequiredService(ProjectService.class);
   }
 }

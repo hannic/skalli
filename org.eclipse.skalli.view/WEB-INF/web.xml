@@ -47,14 +47,14 @@
     </servlet>
     <servlet>
         <description></description>
-        <display-name>ProjectPortal</display-name>
+        <display-name>Skalli</display-name>
         <servlet-name>ProjectServlet</servlet-name>
         <servlet-class>org.eclipse.skalli.view.internal.servlet.ProjectServlet</servlet-class>
     </servlet>
     <servlet>
         <description></description>
-        <display-name>ProjectPortalResources</display-name>
-        <servlet-name>ProjectPortalResources</servlet-name>
+        <display-name>SkalliResources</display-name>
+        <servlet-name>SkalliResources</servlet-name>
         <servlet-class>org.eclipse.skalli.view.internal.servlet.ResourceServlet</servlet-class>
     </servlet>
     <servlet>
@@ -125,7 +125,7 @@
     </servlet>
     <servlet>
         <description>Error Page</description>
-        <display-name>ProjectPortal - Error</display-name>
+        <display-name>SkalliError</display-name>
         <servlet-name>ErrorPage</servlet-name>
         <jsp-file>/search/error.jsp</jsp-file>
     </servlet>
@@ -231,7 +231,7 @@
         <url-pattern>/vprojects/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProjectPortalResources</servlet-name>
+        <servlet-name>SkalliResources</servlet-name>
         <url-pattern>/VAADIN/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
