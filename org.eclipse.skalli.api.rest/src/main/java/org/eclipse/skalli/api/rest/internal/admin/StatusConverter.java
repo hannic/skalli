@@ -49,6 +49,8 @@ class StatusConverter extends AbstractConverter<Object> {
 
   @Override
   public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+    marshalNSAttributes(writer);
+    marshalApiVersion(writer);
     writer.startNode("bundles"); //$NON-NLS-1$
     for (Bundle bundle : Services.getBundles()) {
       writer.startNode("bundle"); //$NON-NLS-1$
@@ -78,7 +80,7 @@ class StatusConverter extends AbstractConverter<Object> {
 
   @Override
   public String getXsdFileName() {
-    return "admin-status.xsd";
+    return "admin-status.xsd"; //$NON-NLS-1$
   }
 }
 

@@ -18,9 +18,23 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public abstract class AbstractConverter<T> implements AliasedConverter {
 
-  public static final String XSI_INSTANCE_NS = "http://www.w3.org/2001/XMLSchema-instance"; //$NON-NLS-1$
-  public static final String URL_SCHEMAS = "/schemas/"; //$NON-NLS-1$
-  public static final String URL_API = "/api/"; //$NON-NLS-1$
+  /** URL prefix for schema access. */
+  protected static final String URL_SCHEMAS = "/schemas/"; //$NON-NLS-1$
+
+  /** URL prefix for API access. */
+  protected static final String URL_API = "/api/"; //$NON-NLS-1$
+
+  private static final String XMLNS = "xmlns"; //$NON-NLS-1$
+  private static final String XMLNS_XSI = "xmlns:xsi"; //$NON-NLS-1$
+  private static final String XSI_INSTANCE_NS = "http://www.w3.org/2001/XMLSchema-instance"; //$NON-NLS-1$
+  private static final String XSI_SCHEMA_LOCATION = "xsi:schemaLocation"; //$NON-NLS-1$
+
+  private static final String MODIFIED_BY = "modifiedBy"; //$NON-NLS-1$
+  private static final String LAST_MODIFIED = "lastModified"; //$NON-NLS-1$
+  private static final String API_VERSION = "apiVersion"; //$NON-NLS-1$
+  private static final String HREF = "href"; //$NON-NLS-1$
+  private static final String REL = "rel"; //$NON-NLS-1$
+  private static final String LINK = "link"; //$NON-NLS-1$
 
   private final String host;
   private final String alias;
@@ -52,12 +66,50 @@ public abstract class AbstractConverter<T> implements AliasedConverter {
     return type.equals(clazz);
   }
 
-  protected void writeLink(HierarchicalStreamWriter writer, String relation, String url) {
-    writer.startNode("link");
-    if (relation != null && !"".equals(relation)) {
-      writer.addAttribute("rel", relation);
+  protected void marshalNSAttributes(HierarchicalStreamWriter writer) {
+    marshalNSAttributes(this, writer);
+  }
+
+  protected void marshalNSAttributes(AliasedConverter converter, HierarchicalStreamWriter writer) {
+    writer.addAttribute(XMLNS, converter.getNamespace());
+    writer.addAttribute(XMLNS_XSI, XSI_INSTANCE_NS);
+    writer.addAttribute(XSI_SCHEMA_LOCATION, getSchemaLocationAttribute(converter));
+  }
+
+  private String getSchemaLocationAttribute(AliasedConverter converter) {
+    return converter.getNamespace() + " " + converter.getHost() + URL_SCHEMAS + converter.getXsdFileName(); //$NON-NLS-1$
+  }
+
+  protected void marshalApiVersion(HierarchicalStreamWriter writer) {
+    marshalApiVersion(this, writer);
+  }
+
+  protected void marshalApiVersion(AliasedConverter converter, HierarchicalStreamWriter writer) {
+    writer.addAttribute(API_VERSION, converter.getApiVersion());
+  }
+
+  protected void marshalCommonAttributes(EntityBase entity, HierarchicalStreamWriter writer) {
+    marshalCommonAttributes(entity, this, writer);
+  }
+
+  protected void marshalCommonAttributes(EntityBase entity, AliasedConverter converter, HierarchicalStreamWriter writer) {
+    marshalApiVersion(converter, writer);
+    String lastModified = entity.getLastModified();
+    if (StringUtils.isNotBlank(lastModified)) {
+      writer.addAttribute(LAST_MODIFIED, lastModified);
     }
-    writer.addAttribute("href", url);
+    String modifiedBy = entity.getLastModifiedBy();
+    if (StringUtils.isNotBlank(modifiedBy)) {
+      writer.addAttribute(MODIFIED_BY, modifiedBy);
+    }
+  }
+
+  protected void writeLink(HierarchicalStreamWriter writer, String relation, String url) {
+    writer.startNode(LINK);
+    if (StringUtils.isNotBlank(relation)) {
+      writer.addAttribute(REL, relation);
+    }
+    writer.addAttribute(HREF, url);
     writer.endNode();
   }
 

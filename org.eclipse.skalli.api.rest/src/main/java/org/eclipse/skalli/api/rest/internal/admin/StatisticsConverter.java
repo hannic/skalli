@@ -37,7 +37,8 @@ class StatisticsConverter extends AbstractConverter<Statistics> {
   @Override
   public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
     Statistics statistics = (Statistics) source;
-
+    marshalNSAttributes(writer);
+    marshalApiVersion(writer);
     writer.startNode("info"); //$NON-NLS-1$
     writeNode(writer, "started", SDF.format(new Date(statistics.getStartTimestamp()))); //$NON-NLS-1$
     writeNode(writer, "snapshot", SDF.format(new Date())); //$NON-NLS-1$

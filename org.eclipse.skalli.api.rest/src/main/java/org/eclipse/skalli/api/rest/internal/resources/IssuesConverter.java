@@ -30,29 +30,24 @@ class IssuesConverter extends AbstractConverter<Issues> {
   @Override
   public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
     Issues issues = (Issues) source;
-    writer.addAttribute("xmlns", getNamespace()); //$NON-NLS-1$
-    writer.addAttribute("xmlns:xsi", XSI_INSTANCE_NS); //$NON-NLS-1$
-    writer.addAttribute("xsi:schemaLocation", getNamespace() + " " + getHost() + URL_SCHEMAS + getXsdFileName()); //$NON-NLS-1$ //$NON-NLS-2$
-    writer.addAttribute("apiVersion", getApiVersion()); //$NON-NLS-1$
-
-    if (issues != null && !issues.getIssues().isEmpty()) {
-      writeNode(writer, "isStale", Boolean.toString(issues.isStale())); //$NON-NLS-1$
-      for (Issue issue : issues.getIssues()) {
-        writer.startNode("issue"); //$NON-NLS-1$
-        writeNode(writer, "timestamp", issue.getTimestamp()); //$NON-NLS-1$
-        writeNode(writer, "severity", issue.getSeverity().name()); //$NON-NLS-1$
-        if (issue.getExtension() != null) {
-          writeNode(writer, "extension", issue.getExtension().getName()); //$NON-NLS-1$
-        }
-        if (issue.getPropertyId() != null) {
-          writeNode(writer, "propertyId", issue.getPropertyId().toString()); //$NON-NLS-1$
-        }
-        writeNode(writer, "issuer", issue.getIssuer().getName()); //$NON-NLS-1$
-        writeNode(writer, "item", issue.getItem()); //$NON-NLS-1$
-        writeNode(writer, "message", issue.getMessage()); //$NON-NLS-1$
-        writeNode(writer, "description", issue.getDescription()); //$NON-NLS-1$
-        writer.endNode();
+    marshalNSAttributes(writer);
+    marshalCommonAttributes(issues, writer);
+    writeNode(writer, "isStale", Boolean.toString(issues.isStale())); //$NON-NLS-1$
+    for (Issue issue : issues.getIssues()) {
+      writer.startNode("issue"); //$NON-NLS-1$
+      writeNode(writer, "timestamp", issue.getTimestamp()); //$NON-NLS-1$
+      writeNode(writer, "severity", issue.getSeverity().name()); //$NON-NLS-1$
+      if (issue.getExtension() != null) {
+        writeNode(writer, "extension", issue.getExtension().getName()); //$NON-NLS-1$
       }
+      if (issue.getPropertyId() != null) {
+        writeNode(writer, "propertyId", issue.getPropertyId().toString()); //$NON-NLS-1$
+      }
+      writeNode(writer, "issuer", issue.getIssuer().getName()); //$NON-NLS-1$
+      writeNode(writer, "item", issue.getItem()); //$NON-NLS-1$
+      writeNode(writer, "message", issue.getMessage()); //$NON-NLS-1$
+      writeNode(writer, "description", issue.getDescription()); //$NON-NLS-1$
+      writer.endNode();
     }
   }
 

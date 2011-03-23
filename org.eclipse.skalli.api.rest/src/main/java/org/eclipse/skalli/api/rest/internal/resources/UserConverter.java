@@ -12,6 +12,7 @@ package org.eclipse.skalli.api.rest.internal.resources;
 
 import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.model.ext.AbstractConverter;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -29,10 +30,8 @@ class UserConverter extends AbstractConverter<User> {
   @Override
   public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
     User user = (User) source;
-    writer.addAttribute("xmlns", getNamespace());
-    writer.addAttribute("xmlns:xsi", XSI_INSTANCE_NS);
-    writer.addAttribute("xsi:schemaLocation", getNamespace() + " " + getHost() + URL_SCHEMAS + getXsdFileName());
-    writer.addAttribute("apiVersion", getApiVersion());
+    marshalNSAttributes(writer);
+    marshalApiVersion(writer);
     writeLink(writer, "self", getHost() + "/api/user/" + user.getUserId()); //$NON-NLS-1$ //$NON-NLS-2$
     writeNode(writer, "userId", user.getUserId()); //$NON-NLS-1$
     writeNode(writer, "firstname", user.getFirstname()); //$NON-NLS-1$

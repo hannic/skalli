@@ -17,8 +17,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.model.core.Project;
@@ -29,6 +27,7 @@ import org.eclipse.skalli.model.ext.Derived;
 import org.eclipse.skalli.model.ext.ExtensibleEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
@@ -64,9 +63,9 @@ public abstract class CommonProjectConverter extends AbstractConverter<Project> 
     Project project = (Project) source;
     String host = getHost();
     if (!omitNSAttributes) {
-      marshalNSAttributes(this, writer);
+      marshalNSAttributes(writer);
     }
-    marshalCommonAttributes(project, this, writer);
+    marshalCommonAttributes(project, writer);
     writeNode(writer, "uuid", project.getUuid().toString()); //$NON-NLS-1$
     writeNode(writer, "id", project.getProjectId()); //$NON-NLS-1$
     writeNode(writer, "template", project.getProjectTemplateId()); //$NON-NLS-1$
@@ -123,27 +122,6 @@ public abstract class CommonProjectConverter extends AbstractConverter<Project> 
     writer.endNode();
   }
 
-  private void marshalNSAttributes(AliasedConverter converter, HierarchicalStreamWriter writer) {
-    writer.addAttribute("xmlns", converter.getNamespace()); //$NON-NLS-1$
-    writer.addAttribute("xmlns:xsi", XSI_INSTANCE_NS); //$NON-NLS-1$
-    writer.addAttribute("xsi:schemaLocation", getSchemaLocationAttribute(converter)); //$NON-NLS-1$
-  }
-
-  private String getSchemaLocationAttribute(AliasedConverter converter) {
-    return converter.getNamespace() + " " + converter.getHost() + URL_SCHEMAS + converter.getXsdFileName(); //$NON-NLS-1$
-  }
-
-  private void marshalCommonAttributes(ExtensionEntityBase ext, AliasedConverter converter, HierarchicalStreamWriter writer) {
-    writer.addAttribute("apiVersion", converter.getApiVersion()); //$NON-NLS-1$
-    String lastModified = ext.getLastModified();
-    if (StringUtils.isNotBlank(lastModified)) {
-      writer.addAttribute("lastModified", lastModified); //$NON-NLS-1$
-    }
-    String modifiedBy = ext.getLastModifiedBy();
-    if (StringUtils.isNotBlank(modifiedBy)) {
-      writer.addAttribute("modifiedBy", modifiedBy); //$NON-NLS-1$
-    }
-  }
 
   private void marshalExtension(ExtensibleEntityBase extensibleEntity, ExtensionService<?> extensionService,
       HierarchicalStreamWriter writer, MarshallingContext context) {
