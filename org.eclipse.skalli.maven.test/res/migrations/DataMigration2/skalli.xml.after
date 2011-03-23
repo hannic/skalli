@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eclipse.skalli.model.core.Project modifiedBy="homer" version="1">
+  <uuid>5856b08a-0f87-4d91-b007-ac367ced247a</uuid>
+  <deleted>false</deleted>
+  <extensions>
+    <no-comparator/>
+    <org.eclipse.skalli.model.ext.maven.MavenProjectExt>
+      <deleted>false</deleted>
+      <reactorPOM>reactor</reactorPOM>
+      <siteUrl>http://www.eclipse.org/skalli</siteUrl>
+    </org.eclipse.skalli.model.ext.maven.MavenProjectExt>
+    <org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt>
+      <deleted>false</deleted>
+      <mavenReactor>
+        <coordinate>
+          <groupId>org.eclipse.skalli</groupId>
+          <artefactId>org.eclipse.skalli.reactor</artefactId>
+          <packaging>pom</packaging>
+        </coordinate>
+        <modules>
+          <no-comparator/>
+          <org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+            <groupId>org.eclipse.skalli</groupId>
+            <artefactId>org.eclipse.skalli.api.java</artefactId>
+            <packaging>eclipse-plugin</packaging>
+          </org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+          <org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+            <groupId>org.eclipse.skalli</groupId>
+            <artefactId>org.eclipse.skalli.api.java.test</artefactId>
+            <packaging>eclipse-test-plugin</packaging>
+          </org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+          <org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+            <groupId>org.eclipse.skalli</groupId>
+            <artefactId>org.eclipse.skalli.api.rest</artefactId>
+            <packaging>eclipse-plugin</packaging>
+          </org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+          <org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+            <groupId>org.eclipse.skalli</groupId>
+            <artefactId>org.eclipse.skalli.api.rest.test</artefactId>
+            <packaging>eclipse-test-plugin</packaging>
+          </org.eclipse.skalli.model.ext.maven.MavenCoordinate>
+        </modules>
+      </mavenReactor>
+    </org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt>
+  </extensions>
+  <projectId>eclipse.skalli</projectId>
+  <name>Skalli</name>
+  <description>The goal of the project is to build an extensible system for organizing projects.</description>
+</org.eclipse.skalli.model.core.Project>

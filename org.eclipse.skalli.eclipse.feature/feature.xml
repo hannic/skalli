@@ -1,30 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
-    Copyright (c) 2010, 2011 SAP AG and others.
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-   
-    Contributors:
-        SAP AG - initial API and implementation
- -->
-
+<?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.skalli.eclipse.feature"
       label="Skalli Eclipse Dependency Feature (Incubation)"
       version="0.1.0.qualifier"
       provider-name="Eclipse Skalli">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="http://www.eclipse.org/skalli">
+        A new generation project management tool accessible and usable by the Eclipse community and other open source projects.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright>
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License
+      v1.0 which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+         Eclipse Public License (EPL) 1.0
    </license>
 
    <plugin

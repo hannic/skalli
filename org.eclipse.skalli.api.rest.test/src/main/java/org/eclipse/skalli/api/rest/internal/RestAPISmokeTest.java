@@ -11,6 +11,7 @@
 package org.eclipse.skalli.api.rest.internal;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.skalli.testutil.BundleManager;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -22,7 +23,6 @@ import com.meterware.httpunit.GetMethodWebRequest;
 import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
-import org.eclipse.skalli.testutil.BundleManager;
 
 /**
  * Verifies that the REST API "is there" and the contexts are bound properly.
@@ -31,14 +31,14 @@ import org.eclipse.skalli.testutil.BundleManager;
  *
  */
 @SuppressWarnings("nls")
-public class TestRestAPISmoke {
+public class RestAPISmokeTest {
 
   private static Component component;
   private static int port = 8182;
 
   @BeforeClass
   public static void beforeClass() throws Exception {
-    new BundleManager(TestRestAPISmoke.class).startProjectPortalBundles();
+    new BundleManager(RestAPISmokeTest.class).startProjectPortalBundles();
 
     String portParam = System.getProperty("PORT1");
     if (!StringUtils.isBlank(portParam)) {
@@ -77,7 +77,7 @@ public class TestRestAPISmoke {
   @Test
   public void testGetProjectsWithQuery() throws Exception {
     WebConversation wc = new WebConversation();
-    WebRequest     req = new GetMethodWebRequest("http://localhost:" + port + "/projects?query=portal");
+    WebRequest     req = new GetMethodWebRequest("http://localhost:" + port + "/projects?query=skalli");
     WebResponse   resp = wc.getResponse(req);
     Assert.assertEquals(200, resp.getResponseCode());
     Assert.assertTrue(resp.getText().contains("<projects"));
@@ -92,7 +92,7 @@ public class TestRestAPISmoke {
   @Test
   public void testGetProject() throws Exception {
     WebConversation wc = new WebConversation();
-    WebRequest     req = new GetMethodWebRequest("http://localhost:" + port + "/projects/00c5cdb4-fb0f-4f11-913c-44a7f24531bd");
+    WebRequest     req = new GetMethodWebRequest("http://localhost:" + port + "/projects/5856b08a-0f87-4d91-b007-ac367ced247a");
     WebResponse   resp = wc.getResponse(req);
     Assert.assertEquals(200, resp.getResponseCode());
     Assert.assertTrue(resp.getText().contains("<project"));

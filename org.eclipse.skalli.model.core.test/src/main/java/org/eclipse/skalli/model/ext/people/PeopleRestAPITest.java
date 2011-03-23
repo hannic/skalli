@@ -12,15 +12,15 @@ package org.eclipse.skalli.model.ext.people;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.testutil.ProjectServiceUtils;
 import org.eclipse.skalli.testutil.RestUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
+@SuppressWarnings("nls")
 public class PeopleRestAPITest {
   private List<Project> projects;
   private ProjectService projectService;

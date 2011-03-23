@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eclipse.skalli.model.core.Project modifiedBy="homer" version="1">
+  <uuid>5856b08a-0f87-4d91-b007-ac367ced247a</uuid>
+  <deleted>false</deleted>
+  <extensions>
+    <no-comparator/>
+    <org.eclipse.skalli.model.ext.maven.MavenProjectExt>
+      <deleted>false</deleted>
+      <groupID>org.eclipse.skalli</groupID>
+      <id>id</id>
+      <reactorPOM>pom.xml</reactorPOM>
+      <version>0.8.15</version>
+      <siteUrl>http://www.eclipse.org/skalli</siteUrl>
+      <artifactID>artifactID</artifactID>
+    </org.eclipse.skalli.model.ext.maven.MavenProjectExt>
+  </extensions>
+  <projectId>eclipse.skalli</projectId>
+  <name>Skalli</name>
+  <description>The goal of the project is to build an extensible system for organizing projects.</description>
+</org.eclipse.skalli.model.core.Project>

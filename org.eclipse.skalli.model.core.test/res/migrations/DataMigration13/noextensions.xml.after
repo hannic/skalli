@@ -1,56 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<com.sap.di.projectportal.model.core.Project modifiedBy="d032916" version="13">
+<org.eclipse.skalli.model.core.Project modifiedBy="test" version="13">
   <uuid>5856b08a-0f87-4d91-b007-ac367ced247a</uuid>
   <deleted>false</deleted>
-  <parentEntityId>b5ae2db3-4681-41af-8119-bb14965f6d5c</parentEntityId>
-  <projectId>ldi.projectportal</projectId>
-  <projectTemplateId>com.sap.ngp</projectTemplateId>
-  <name>Project Portal</name>
-  <description>This project develops a portal for LeanDI</description>
-  <mailingLists>
-    <string>projectportal-dev@listserv.sap.corp</string>
-  </mailingLists>
-  <pageUrl>http://dewdfias011.wdf.sap.corp:8700/</pageUrl>
+  <projectId>eclipse.skalli</projectId>
+  <projectTemplateId>default</projectTemplateId>
+  <parentProject>b5ae2db3-4681-41af-8119-bb14965f6d5c</parentProject>
+  <name>Skalli</name>
+  <description>The goal of the project is to build an extensible system for organizing projects.</description>
   <tags>
     <no-comparator/>
-    <string>bÃ¤r</string>
-    <string>html5</string>
-    <string>leandi</string>
-    <string>ljs</string>
+    <string>cool</string>
+    <string>stuff</string>
     <string>osgi</string>
-    <string>Ã©kkk</string>
   </tags>
   <logoUrl/>
   <phase>Prototype</phase>
   <registered>0</registered>
   <extensions>
     <no-comparator/>
-    <com.sap.di.projectportal.model.ext.people.PeopleProjectExt>
+    <org.eclipse.skalli.model.ext.people.PeopleProjectExt>
       <deleted>false</deleted>
       <members>
         <no-comparator/>
-        <com.sap.di.projectportal.model.core.ProjectMember>
-          <userID>d032916</userID>
-        </com.sap.di.projectportal.model.core.ProjectMember>
-        <com.sap.di.projectportal.model.core.ProjectMember>
-          <userID>d038928</userID>
-        </com.sap.di.projectportal.model.core.ProjectMember>
-        <com.sap.di.projectportal.model.core.ProjectMember>
-          <userID>d041655</userID>
-        </com.sap.di.projectportal.model.core.ProjectMember>
-        <com.sap.di.projectportal.model.core.ProjectMember>
-          <userID>d049863</userID>
-        </com.sap.di.projectportal.model.core.ProjectMember>
+        <org.eclipse.skalli.model.core.ProjectMember>
+          <userID>user2</userID>
+        </org.eclipse.skalli.model.core.ProjectMember>
+        <org.eclipse.skalli.model.core.ProjectMember>
+          <userID>user3</userID>
+        </org.eclipse.skalli.model.core.ProjectMember>
+        <org.eclipse.skalli.model.core.ProjectMember>
+          <userID>user5</userID>
+        </org.eclipse.skalli.model.core.ProjectMember>
       </members>
       <leads>
         <no-comparator/>
-        <com.sap.di.projectportal.model.core.ProjectMember>
-          <userID>d032916</userID>
-        </com.sap.di.projectportal.model.core.ProjectMember>
-        <com.sap.di.projectportal.model.core.ProjectMember>
-          <userID>d049863</userID>
-        </com.sap.di.projectportal.model.core.ProjectMember>
-      </leads>
-    </com.sap.di.projectportal.model.ext.people.PeopleProjectExt>
-  </extensions>  
-</com.sap.di.projectportal.model.core.Project>
+        <org.eclipse.skalli.model.core.ProjectMember>
+          <userID>user5</userID>
+        </org.eclipse.skalli.model.core.ProjectMember>
+      </leads>      
+    </org.eclipse.skalli.model.ext.people.PeopleProjectExt> 
+  </extensions>
+</org.eclipse.skalli.model.core.Project>

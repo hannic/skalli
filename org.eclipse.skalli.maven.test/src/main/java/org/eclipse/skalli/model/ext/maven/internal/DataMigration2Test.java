@@ -10,9 +10,8 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.maven.internal;
 
-import org.junit.Test;
-
 import org.eclipse.skalli.testutil.MigrationTestUtil;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class DataMigration2Test {
@@ -20,7 +19,7 @@ public class DataMigration2Test {
   @Test
   public void testMigrate() throws Exception {
     DataMigration2 migration = new DataMigration2();
-    MigrationTestUtil.testMigration(migration, "projectportal");
+    MigrationTestUtil.testMigration(migration, "skalli");
   }
 
 }
