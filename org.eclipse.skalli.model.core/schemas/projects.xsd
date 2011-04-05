@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API"
+    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.2">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License v1.0
+      which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      This XML schema defines the Project Portal REST API for the list
+      of all existing projects accessible with /api/projects.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!-- BEGIN of project type declaration -->
+  <xsd:include schemaLocation="type-project.xsd" />
+  <!-- END of project type declaration -->
+
+  <xsd:element name="projects">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="project" type="Project" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="apiVersion" type="ModelVersion" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

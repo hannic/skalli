@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-DevInf"
+    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API/Extension-DevInf"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License v1.0
+      which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      This XML schema defines the Project Portal REST API for
+      the DevInf model extension.
+        </xsd:documentation>
+  </xsd:annotation>
+
+  <!-- BEGIN of common declarations -->
+  <xsd:include schemaLocation="../../com.sap.ldi.projectportal.model.core/schemas/common.xsd" />
+  <!-- END of common declarations -->
+  
+  <xsd:element name="devInf" type="DevInfExtension" />
+
+  <xsd:complexType name="DevInfExtension">
+    <xsd:complexContent>
+      <xsd:extension base="Extension">
+        <xsd:sequence>
+          <xsd:element name="bugtrackerUrl" type="xsd:anyURI" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="EN">
+                The URL of the project's bugtracking system, e.g. a Bugzilla server.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="ciUrl" type="xsd:anyURI" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="EN">
+                The URL of the project's continous integration system, e.g. a Hudson build server.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="metricsUrl" type="xsd:anyURI" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="EN">
+                The URL of the project's quality assurance system, e.g. a Sonar server.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="scmUrl" type="xsd:anyURI" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="EN">
+                The URL of the project's source code repository.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="scmLocations" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="EN">
+                The project's source code locations.
+              </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="scmLocation" type="xsd:anyURI" minOccurs="0" maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="javadocs" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="EN">
+                The project's Javadoc.
+              </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="javadoc" type="xsd:anyURI" minOccurs="0" maxOccurs="unbounded" />
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

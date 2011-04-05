@@ -1,0 +1,47 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Core UI (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.view;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.skalli.api.java,
+ org.eclipse.skalli.api.java.authentication,
+ org.eclipse.skalli.api.rest.config,
+ org.eclipse.skalli.common,
+ org.eclipse.skalli.common.configuration,
+ org.eclipse.skalli.common.util,
+ org.eclipse.skalli.log,
+ org.eclipse.skalli.model.core,
+ org.eclipse.skalli.model.ext,
+ org.eclipse.skalli.model.ext.devinf,
+ org.eclipse.skalli.model.ext.maven,
+ org.eclipse.skalli.model.ext.people,
+ org.eclipse.skalli.model.ext.scrum,
+ org.eclipse.skalli.view.ext,
+ com.thoughtworks.xstream.annotations,
+ javax.el,
+ javax.servlet,
+ javax.servlet.http,
+ javax.servlet.jsp,
+ javax.servlet.jsp.el,
+ javax.servlet.jsp.tagext,
+ org.apache.commons.io,
+ org.apache.commons.lang,
+ org.apache.commons.lang.math,
+ org.osgi.framework,
+ org.osgi.service.http,
+ org.osgi.util.tracker,
+ org.restlet.representation,
+ org.restlet.resource
+Service-Component: OSGI-INF/FeedbackConfigSection.xml,
+ OSGI-INF/TopLinksConfigSection.xml,
+ OSGI-INF/NewsConfigSection.xml,
+ OSGI-INF/UserDetailsConfigSection.xml
+Web-ContextPath: /
+Webapp-Context: /
+Export-Package: org.eclipse.skalli.view.component
+Bundle-ClassPath: .
+Require-Bundle: com.vaadin;bundle-version="6.4.0"
+Bundle-ActivationPolicy: lazy
+

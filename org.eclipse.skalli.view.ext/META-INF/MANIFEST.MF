@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli UI Extensibility (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.view.ext
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.skalli.api.java,
+ org.eclipse.skalli.common,
+ org.eclipse.skalli.log,
+ org.eclipse.skalli.model.core,
+ org.eclipse.skalli.model.ext,
+ com.vaadin.data,
+ com.vaadin.data.validator,
+ com.vaadin.terminal,
+ com.vaadin.ui,
+ org.apache.commons.io,
+ org.apache.commons.lang,
+ org.osgi.framework
+Export-Package: org.eclipse.skalli.view.ext
+Bundle-ActivationPolicy: lazy
+

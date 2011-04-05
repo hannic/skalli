@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    targetNamespace="http://xml.sap.com/2010/08/ProjectPortal/API"
+    xmlns="http://xml.sap.com/2010/08/ProjectPortal/API"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License v1.0
+      which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="EN">
+      This XML schema defines the Project Portal REST API resource for
+      issues, i.e. /project/&lt;projectid&gt;/issues.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!-- BEGIN of common declarations -->
+  <xsd:include schemaLocation="common.xsd" />
+  <!-- END of common declarations -->
+
+  <xsd:element name="issues">
+    <xsd:complexType>
+      <xsd:sequence>
+      <xsd:element name="isStale" type="xsd:boolean"/>
+        <xsd:element name="issue" type="Issue" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="apiVersion" type="ModelVersion" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="Issue">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the properties of an issue.
+	  </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="timestamp" type="xsd:long">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Timestamp when the issue was raised (ms)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="severity" type="Severity">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Severity of the issue (INFO, WARNING, ERROR, FATAL)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="extension" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Name of the extension the issue was found in (if any)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="propertyId" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            ID of the property the issue was found for (if any)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="issuer" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Name of the entity that found the issue (typically a validator implementation)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="item" type="xsd:nonNegativeInteger">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Index of the checked value for values in collections, 0 otherwise.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="message" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Message of the issue (if any)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="description" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Description of the issue (if any)
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

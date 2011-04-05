@@ -1,0 +1,71 @@
+/*******************************************************************************
+ * Copyright (c) 2010, 2011 SAP AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     SAP AG - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.skalli.api.rest.internal.resources;
+
+import org.eclipse.skalli.common.User;
+import org.eclipse.skalli.model.ext.AbstractConverter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+class UserConverter extends AbstractConverter<User> {
+
+  public static final String API_VERSION = "1.0";
+  public static final String NAMESPACE = "http://xml.sap.com/2010/08/ProjectPortal/API/Project";
+
+  public UserConverter(String host) {
+    super(User.class, "user", host); //$NON-NLS-1$
+  }
+
+  @Override
+  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+    User user = (User) source;
+    writer.addAttribute("xmlns", getNamespace());
+    writer.addAttribute("xmlns:xsi", XSI_INSTANCE_NS);
+    writer.addAttribute("xsi:schemaLocation", getNamespace() + " " + getHost() + URL_SCHEMAS + getXsdFileName());
+    writer.addAttribute("apiVersion", getApiVersion());
+    writeLink(writer, "self", getHost() + "/api/user/" + user.getUserId()); //$NON-NLS-1$ //$NON-NLS-2$
+    writeNode(writer, "userId", user.getUserId()); //$NON-NLS-1$
+    writeNode(writer, "firstname", user.getFirstname()); //$NON-NLS-1$
+    writeNode(writer, "lastname", user.getLastname()); //$NON-NLS-1$
+    writeNode(writer, "email", user.getEmail()); //$NON-NLS-1$
+    writeNode(writer, "phone", user.getTelephone()); //$NON-NLS-1$
+    writeNode(writer, "mobile", user.getMobile()); //$NON-NLS-1$
+    writeNode(writer, "sip", user.getSip()); //$NON-NLS-1$
+    writeNode(writer, "company", user.getCompany()); //$NON-NLS-1$
+    writeNode(writer, "department", user.getDepartment()); //$NON-NLS-1$
+    writeNode(writer, "location", user.getLocation()); //$NON-NLS-1$
+    writeNode(writer, "room", user.getRoom()); //$NON-NLS-1$
+  }
+
+  @Override
+  public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
+    // don't support that yet
+    return null;
+  }
+
+  @Override
+  public String getApiVersion() {
+    return API_VERSION;
+  }
+
+  @Override
+  public String getNamespace() {
+    return NAMESPACE;
+  }
+
+  @Override
+  public String getXsdFileName() {
+    return "user.xsd";
+  }
+}
+

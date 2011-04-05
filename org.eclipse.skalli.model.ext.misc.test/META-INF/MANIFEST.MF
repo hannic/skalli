@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Miscellaneous Extensions Tests (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.model.ext.misc.test
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: org.eclipse.skalli.model.ext.misc
+Import-Package: org.eclipse.skalli.api.java,
+ org.eclipse.skalli.testutil,
+ org.easymock,
+ org.junit
+Require-Bundle: org.eclipse.skalli.core;bundle-version="0.1.0"
+

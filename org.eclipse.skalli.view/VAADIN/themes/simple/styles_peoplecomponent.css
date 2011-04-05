@@ -1,0 +1,63 @@
+.v-customcomponent-peoplecomponent {
+	height: auto;
+	width: auto;
+	padding: none;
+	margin: none;
+	border: none;
+}
+
+.v-customcomponent-peoplecomponent .v-table-body {
+    border: none;
+}
+
+.v-customcomponent-peoplecomponent .v-table-peoplecomponent {
+	height: auto;
+	width: auto;
+	padding: none;
+	margin: none;
+	border: none;
+}
+
+
+.v-customcomponent-peoplecomponent .v-table-peoplecomponent .v-table-cell-content-peoplecomponent {
+	height: auto;
+	width: auto;
+	padding: 0;
+	padding-right: 4px;
+	margin: 0;
+	border: 0;
+}
+
+.v-customcomponent-peoplecomponent .v-table-peoplecomponent .v-table-cell-wrapper {
+	padding: 0px;
+}
+
+.v-customcomponent-peoplecomponent .v-table-peoplecomponent .v-table-cell-wrapper:hover {
+    text-decoration: underline;
+}
+
+
+.v-customcomponent-peoplecomponent .v-img-peoplecomponent img {
+	width: 16px;
+	height: 16px;
+}
+
+.v-label-peoplecomponentseparator {
+	padding-right: 5px;
+	padding-left: 2px;
+}
+
+.v-customcomponent-peoplecomponent .v-link-peoplecomponent a {
+	vertical-align: bottom;	
+	line-height: 16px;
+  font-size: 10px;	
+  text-decoration: none;
+}
+
+.v-customcomponent-peoplecomponent .v-label-peoplecomponent {
+    vertical-align: text-bottom;    
+    line-height: 16px;
+    font-size: 10px;    
+    text-decoration: none;
+}
+

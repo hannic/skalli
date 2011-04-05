@@ -1,0 +1,75 @@
+/*******************************************************************************
+ * Copyright (c) 2010, 2011 SAP AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     SAP AG - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.skalli.api.rest.internal.resources;
+
+import java.util.HashSet;
+import java.util.List;
+
+import org.restlet.data.Form;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.resource.Get;
+import org.restlet.resource.ServerResource;
+
+import org.eclipse.skalli.api.java.PagingInfo;
+import org.eclipse.skalli.api.java.ProjectService;
+import org.eclipse.skalli.api.java.QueryParseException;
+import org.eclipse.skalli.api.java.SearchService;
+import org.eclipse.skalli.api.rest.internal.util.ProjectPortalXStreamRepresentation;
+import org.eclipse.skalli.common.Consts;
+import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.model.core.Project;
+import org.eclipse.skalli.model.ext.AliasedConverter;
+
+public class ProjectsResource extends ServerResource {
+
+
+  @Get
+  public Representation retrieve() {
+    try {
+      Statistics.getDefault().trackUsage("api.rest.projects.get"); //$NON-NLS-1$
+      Projects projects = new Projects();
+      projects.setProjects(new HashSet<Project>());
+
+      Form form = getRequest().getResourceRef().getQueryAsForm();
+      String query = form.getFirstValue(Consts.PARAM_QUERY);
+      String tag = form.getFirstValue(Consts.PARAM_TAG);
+
+      List<Project> projectList = null;
+      if (query != null) {
+        SearchService searchService = Services.getRequiredService(SearchService.class);
+        projectList = searchService.findProjectsByQuery(query, new PagingInfo(0, 300)).getEntities();
+      } else if (tag != null) {
+        SearchService searchService = Services.getRequiredService(SearchService.class);
+        projectList = searchService.findProjectsByTag(tag, new PagingInfo(0, 300)).getEntities();
+      } else {
+        ProjectService projectService = Services.getRequiredService(ProjectService.class);
+        projectList = projectService.getAll();
+      }
+      for (Project project : projectList) {
+        projects.getProjects().add(project);
+      }
+
+      String extensionParam = getQuery().getValues(Consts.PARAM_EXTENSIONS);
+      String[] extensions = new String[] {};
+      if (extensionParam != null) {
+        extensions = extensionParam.split(Consts.PARAM_LIST_SEPARATOR);
+      }
+      return new ProjectPortalXStreamRepresentation<Projects>(projects,
+          new AliasedConverter[] {new ProjectsConverter(getRequest().getResourceRef().getHostIdentifier(), extensions)});
+    } catch (QueryParseException e) {
+      getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+      return new StringRepresentation("Error parsing query: " + e.getMessage()); //$NON-NLS-1$
+    }
+  }
+}

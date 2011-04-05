@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.4">
+
+  <xsd:complexType name="empty" />
+
+  <xsd:simpleType name="ModelVersion">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[0-9]+\.[0-9]+(\.[0-9]+)?(\..+)?" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="UUID">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="EmailAddress">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([a-zA-Z0-9_\-])([a-zA-Z0-9_\-\.]*)@(\[((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}|((([a-zA-Z0-9\-]+)\.)+))([a-zA-Z]{2,}|(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\])" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="ProjectId">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the symbolic name of a project, e.g. "ldi.projectportal".
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[a-z][a-z0-9_\-.]*" />
+      <xsd:minLength value="3" />
+      <xsd:maxLength value="64" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="ProjectName">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the display name of a project, e.g. "Project Portal".
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="3" />
+      <xsd:maxLength value="255" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="Link">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines a link to another API resource, e.g. to a project
+        detail resource (rel="project") or a user resource (rel="user").
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="rel" type="RelValues" use="required" />
+    <xsd:attribute name="href" type="xsd:anyURI" use="required" />
+  </xsd:complexType>
+
+  <xsd:simpleType name="RelValues">
+    <xsd:restriction base="xsd:string">
+       <xsd:enumeration value="project"/>
+       <xsd:enumeration value="browse"/>
+       <xsd:enumeration value="issues"/>
+       <xsd:enumeration value="parent"/>
+       <xsd:enumeration value="subproject"/>
+       <xsd:enumeration value="user"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Severity">
+    <xsd:restriction base="xsd:string">
+       <xsd:enumeration value="INFO"/>
+       <xsd:enumeration value="WARNING"/>
+       <xsd:enumeration value="ERROR"/>
+       <xsd:enumeration value="FATAL"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="Member">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the unique identifier, permanent link and role of a project member.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="userId" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The user identifier of the project member.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="link" type="Link">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Permanent link to the user resource of the project member.
+            The value of the "rel" attribute is always "user".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="MemberWithRole">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the unique identifier, permanent link and role of a project member.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="userId" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The user identifier of the project member.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="link" type="Link">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Permanent link to the user resource of the project member.
+            The value of the "rel" attribute is always "user".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="role" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The roles of the project member.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Extension">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines common attributes for an extension.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="inherited" type="xsd:boolean" use="required">
+      <xsd:annotation>
+        <xsd:documentation xml:lang="EN">
+          If true, indicates that the extension is inherited,
+          i.e. attributes cannot be changed with REST commands.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="derived" type="xsd:boolean" use="required">
+      <xsd:annotation>
+        <xsd:documentation xml:lang="EN">
+          If true, indicates that the extension is not editable but
+          contains information that is calculated or derived from
+          external resources stored elsewhere.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="lastModified" type="xsd:dateTime" use="optional">
+      <xsd:annotation>
+        <xsd:documentation xml:lang="EN">
+          The timestamp of the last modification of an extension in ISO 8601 date/time format.
+          For derived extension this timestamp could for example indicate the latest
+          update/download of the extension data from an external resource.
+          Examples: 2001-10-26T19:32:52Z, 2001-10-26T19:32:52+00:00
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="modifiedBy" type="xsd:string" use="optional">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        The unique identifier of the last modifier.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="apiVersion" type="ModelVersion" use="required" />
+  </xsd:complexType>
+</xsd:schema>

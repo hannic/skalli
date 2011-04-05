@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Miscellaneous UI Extensions Tests (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.view.ext.impl.test
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Fragment-Host: org.eclipse.skalli.view.ext.impl
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.skalli.testutil,
+ org.easymock;version="2.4.0",
+ org.junit
+

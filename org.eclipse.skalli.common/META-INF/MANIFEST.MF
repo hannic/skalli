@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Common (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.common
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.skalli.log,
+ com.thoughtworks.xstream.converters,
+ com.thoughtworks.xstream.io,
+ org.apache.commons.httpclient,
+ org.apache.commons.httpclient.methods,
+ org.apache.commons.httpclient.params,
+ org.apache.commons.httpclient.protocol,
+ org.apache.commons.io;version="1.4.0",
+ org.apache.commons.lang,
+ org.osgi.framework
+Export-Package: org.eclipse.skalli.common,
+ org.eclipse.skalli.common.configuration,
+ org.eclipse.skalli.common.configuration.proxy,
+ org.eclipse.skalli.common.util,
+ org.eclipse.skalli.model.ext
+Bundle-ActivationPolicy: lazy
+

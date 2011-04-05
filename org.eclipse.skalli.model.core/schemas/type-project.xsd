@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.4">
+
+  <!-- BEGIN of common declarations -->
+  <xsd:include schemaLocation="common.xsd" />
+  <!-- END of common declarations -->
+
+  <xsd:complexType name="Project">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines a list of projects.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="uuid" type="UUID">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The unique identifier of a project - created once, never changed!
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="id" type="ProjectId">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The symbolic name of the project, e.g. ldi.projectportal.
+            Note, the symbolic name of a project can change over time!
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="template" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            ID of the template used for this project.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>      
+      <xsd:element name="name" type="ProjectName">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The display name of the project, e.g. "Project Portal".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="link" type="Link">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Permanent link to the project detail resource.
+            The value of the "rel" attribute is always "project".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="link" type="Link">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Permanent link to the project's detail page.
+            The value of the "rel" attribute is always "browse".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="link" type="Link">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Permanent link to the project's issue.
+            The value of the "rel" attribute is always "issues".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>      
+      <xsd:element name="phase" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Current lifecycle phase of the project.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="description" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Description of the project.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="link" type="Link" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Permanent link to the parent project resource, if the project is a subproject.
+            The value of the "rel" attribute is always "parent".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="subprojects" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            A list of permanent links to the subprojects of this project if the project has subprojects.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="link" type="Link" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation xml:lang="EN">
+                  Permanent link to a subproject resource of the project.
+                  The value of the "rel" attribute is always "subproject".
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="members" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            A list of project members.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="member" type="MemberWithRole" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation xml:lang="EN">
+                  Unique identifier, permanent link and role of a project member.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="extensions" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            Additional informamtion provided by model extensions.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="lastModified" type="xsd:dateTime" use="optional">
+      <xsd:annotation>
+        <xsd:documentation xml:lang="EN">
+          The timestamp of the last modification of an extension in ISO 8601 date/time format.
+          For derived extension this timestamp could for example indicate the latest
+          update/download of the extension data from an external resource.
+          Examples: 2001-10-26T19:32:52Z, 2001-10-26T19:32:52+00:00
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="modifiedBy" type="xsd:string" use="optional">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        The unique identifier of the last modifier.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="apiVersion" type="ModelVersion" use="required" />
+  </xsd:complexType>
+</xsd:schema>

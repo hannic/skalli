@@ -1,0 +1,93 @@
+ @import url(../reindeer/styles.css);
+ @import url(styles_userspicker.css);
+ @import url(styles_peoplecomponent.css);
+ @import url(styles_projectview.css);
+ @import url(styles_projectedit.css);
+ @import url(styles_tray.css);
+ @import url(styles_tray.css);
+ @import url(styles_peoplesearch.css);
+ @import url(styles_multitext.css);
+ 
+.v-app {
+      background: #fff;
+      font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+      color: #222;
+}
+
+.v-table-body {
+      border: none;
+}
+ 
+.v-panel-deco {
+	color: #fff;	
+}
+ 
+.v-panel-caption-view {
+	  color: #004b98;
+}
+ 
+.view {
+      background: white;     
+}
+
+.v-app-ProjectApplication .v-panel {
+	padding: none;
+	border: none;
+	margin: none;
+	overflow: hidden;
+	outline: none;	
+}
+ 
+
+.v-app-ProjectApplication .v-horizontallayout-header {
+	border-bottom-width: 1px; 
+    border-bottom-style: solid;
+    border-bottom-color: gray;	
+}
+ 
+em { font-weight: bold; font-style: normal;}
+ 
+.v-link a:link span {
+    color: #1B699F;
+}
+ 
+.v-link > a > span {
+	text-decoration:none;
+}
+.v-link > a > span:hover {
+    text-decoration:underline;
+}
+ 
+.link:hover {
+    text-decoration: none;
+}
+ 
+.link {
+	text-decoration: none;
+}
+
+a.link {
+    text-decoration: none;
+}	
+
+a.link:hover {
+    text-decoration: underline;
+}   
+ 
+ 
+.v-button-link > span > span {
+    text-decoration: none !important;  
+}
+     
+.v-button-link:hover > span > span { 
+    text-decoration: underline !important;   
+} 	
+
+.v-disabled {
+	cursor: default;
+	opacity: 1; 
+}
+
+.v-disabled.v-button > span > span {
+	color: silver;
+}

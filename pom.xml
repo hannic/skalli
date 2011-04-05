@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>org.eclipse.skalli.parent</artifactId>
+    <groupId>org.eclipse.skalli</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+    <relativePath>org.eclipse.skalli.parent</relativePath>
+  </parent>
+
+  <artifactId>org.eclipse.skalli.reactor</artifactId>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>org.eclipse.skalli.target</module>
+    <module>org.eclipse.skalli.parent</module>
+    <module>org.eclipse.skalli.api.java</module>
+    <module>org.eclipse.skalli.api.rest</module>
+    <module>org.eclipse.skalli.log</module>
+    <module>org.eclipse.skalli.core</module>
+    <module>org.eclipse.skalli.model.core</module>
+    <module>org.eclipse.skalli.common</module>
+    <module>org.eclipse.skalli.commands</module>
+    <module>org.eclipse.skalli.model.ext.misc</module>
+    <module>org.eclipse.skalli.view</module>
+    <module>org.eclipse.skalli.view.ext</module>
+    <module>org.eclipse.skalli.view.ext.impl</module>
+    <module>org.eclipse.skalli.view.theme</module>
+    <module>org.eclipse.skalli.maven</module>
+  </modules>
+
+  <name>LeanDI Project Portal</name>
+  <profiles>
+    <profile>
+      <id>qa</id>
+      <modules>
+        <module>org.eclipse.skalli.testutil</module>
+        <module>org.eclipse.skalli.core.test</module>
+        <module>org.eclipse.skalli.model.core.test</module>
+        <module>org.eclipse.skalli.model.ext.misc.test</module>
+        <module>org.eclipse.skalli.view.test</module>
+        <module>org.eclipse.skalli.api.java.test</module>
+        <module>org.eclipse.skalli.api.rest.test</module>
+        <module>org.eclipse.skalli.common.test</module>
+        <module>org.eclipse.skalli.view.ext.impl.test</module>
+        <module>org.eclipse.skalli.maven.test</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>site</id>
+      <modules>
+        <module>org.eclipse.skalli.feature</module>
+        <module>org.eclipse.skalli.eclipse.feature</module>
+        <module>org.eclipse.skalli.site</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>selenium</id>
+      <modules>
+        <module>org.eclipse.skalli.view.selenium</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>sonar</id>
+      <properties>
+        <sonar.jdbc.url>jdbc:derby://localhost:1527/sonar;create=true</sonar.jdbc.url>
+        <sonar.jdbc.driver>org.apache.derby.jdbc.ClientDriver</sonar.jdbc.driver>
+        <sonar.jdbc.username>sonar</sonar.jdbc.username>
+        <sonar.jdbc.password>sonar</sonar.jdbc.password>
+        <sonar.host.url>http://localhost:8400</sonar.host.url>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

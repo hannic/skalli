@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+   
+    Contributors:
+        SAP AG - initial API and implementation
+ -->
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	
+	<display-name>org.eclipse.skalli.view</display-name>
+
+    <mime-mapping>
+        <extension>ico</extension>
+        <mime-type>image/x-icon</mime-type>
+    </mime-mapping>
+
+    <!-- 
+    ******************* 
+    servlet definitions 
+    ******************* 
+    -->
+
+    <servlet>
+        <description>Authentication</description>
+        <display-name>Authentication</display-name>
+        <servlet-name>AuthenticationServlet</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.AuthenticationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>Logout</description>
+        <display-name>Logout</display-name>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>Welcome</description>
+        <display-name>Welcome</display-name>
+        <servlet-name>Welcome</servlet-name>
+        <jsp-file>/search/welcome.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description></description>
+        <display-name>ProjectPortal</display-name>
+        <servlet-name>ProjectServlet</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.ProjectServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description></description>
+        <display-name>ProjectPortalResources</display-name>
+        <servlet-name>ProjectPortalResources</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.ResourceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description></description>
+        <display-name>StaticContent</display-name>
+        <servlet-name>StaticContent</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.StaticContentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>DispatcherServlet</description>
+        <display-name>DispatcherServlet</display-name>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.Servlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>Search Result</description>
+        <display-name>Search Result</display-name>
+        <servlet-name>SearchResult</servlet-name>
+        <jsp-file>/search/searchresult.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>TagCloud</description>
+        <display-name>TagCloud</display-name>
+        <servlet-name>TagCloud</servlet-name>
+        <jsp-file>/search/tagcloud.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>Project Page</description>
+        <display-name>Project Portal</display-name>
+        <servlet-name>ProjectPage</servlet-name>
+        <jsp-file>/search/project.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>Project Hierarchy</description>
+        <display-name>ProjectHierarchy</display-name>
+        <servlet-name>ProjectHierarchy</servlet-name>
+        <jsp-file>/search/hierarchy.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>SearchFrame</description>
+        <display-name>SearchFrame</display-name>
+        <servlet-name>SearchFrame</servlet-name>
+        <jsp-file>/search/searchframe.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>MyFavorites</description>
+        <display-name>MyFavorites</display-name>
+        <servlet-name>MyFavorites</servlet-name>
+        <jsp-file>/search/searchresult.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>FavoritesServlet</description>
+        <display-name>FavoritesServlet</display-name>
+        <servlet-name>FavoritesServlet</servlet-name>
+        <servlet-class>org.eclipse.skalli.view.internal.servlet.FavoritesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <description>DeletedProjects</description>
+        <display-name>DeletedProjects</display-name>
+        <servlet-name>DeletedProjects</servlet-name>
+        <jsp-file>/search/deleted.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>DevInfInherited</description>
+        <display-name>DevInfInherited</display-name>
+        <servlet-name>DevInfInherited</servlet-name>
+        <jsp-file>/search/devinfinherited.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>Error Page</description>
+        <display-name>ProjectPortal - Error</display-name>
+        <servlet-name>ErrorPage</servlet-name>
+        <jsp-file>/search/error.jsp</jsp-file>
+    </servlet>
+
+    <!--  move functionality of the following servlets to separate bundles -->
+    <servlet>
+        <description>CreateJira</description>
+        <display-name>CreateJira</display-name>
+        <servlet-name>CreateJira</servlet-name>
+        <jsp-file>/search/jira.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>RequestP4Depot</description>
+        <display-name>RequestP4Depot</display-name>
+        <servlet-name>RequestP4Depot</servlet-name>
+        <jsp-file>/search/p4.jsp</jsp-file>
+    </servlet>
+
+
+    <!--
+     **************************
+     servlet filter definitions 
+     **************************
+     -->
+
+    <filter>
+       <filter-name>UserFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.UserFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>StatisticsFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.StatisticsFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>RestFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.RestFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>ProjectFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.ProjectFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>ProjectACFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.ACFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>ProjectDetailsFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.ProjectDetailsFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>SearchFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.SearchFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>FavoritesFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.FavoritesFilter</filter-class>
+    </filter>
+        <filter>
+       <filter-name>CssCachingFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.servlet.CssCachingFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>ConfigFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.ConfigFilter</filter-class>
+    </filter>
+    
+    
+    
+    <!--  move functionality of the following filters to separate bundles -->
+    <filter>
+       <filter-name>JiraFilter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.ext.JiraFilter</filter-class>
+    </filter>
+    <filter>
+       <filter-name>P4Filter</filter-name>
+       <filter-class>org.eclipse.skalli.view.internal.filter.ext.P4Filter</filter-class>
+    </filter>
+    
+    <!--
+     ****************
+     servlet mappings 
+     ****************
+     -->
+    
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.css</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.ico</url-pattern>
+        <url-pattern>*.xml</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AuthenticationServlet</servlet-name>
+		<url-pattern>/authenticate</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LogoutServlet</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectServlet</servlet-name>
+        <url-pattern>/vprojects/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectPortalResources</servlet-name>
+        <url-pattern>/VAADIN/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaticContent</servlet-name>
+        <url-pattern>/content/*</url-pattern>
+        <url-pattern>/schemas/*</url-pattern>
+    </servlet-mapping>  
+    <servlet-mapping>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+        <url-pattern>/news</url-pattern>
+        <url-pattern>/subprojects</url-pattern>
+        <url-pattern>/relatedprojects</url-pattern>
+        <url-pattern>/reindex</url-pattern>
+        <url-pattern>/create</url-pattern>
+        <url-pattern>/favicon.ico</url-pattern>
+        <url-pattern>/search-plugin.xml</url-pattern>
+        <url-pattern>/myprojects</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchResult</servlet-name>
+        <url-pattern>/projects</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectPage</servlet-name>
+        <url-pattern>/projects/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TagCloud</servlet-name>
+        <url-pattern>/tags</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectHierarchy</servlet-name>
+        <url-pattern>/hierarchy</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchFrame</servlet-name>
+        <url-pattern>/searchframe</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MyFavorites</servlet-name>
+        <url-pattern>/myfavorites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FavoritesServlet</servlet-name>
+        <url-pattern>/favorites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeletedProjects</servlet-name>
+        <url-pattern>/deletedprojects</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>DevInfInherited</servlet-name>
+        <url-pattern>/error/devinfinherited</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Welcome</servlet-name>
+        <url-pattern>/search/welcome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ErrorPage</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!--  move functionality of the following servlets to separate bundles -->
+    <servlet-mapping>
+        <servlet-name>CreateJira</servlet-name>
+        <url-pattern>/create/jira</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RequestP4Depot</servlet-name>
+        <url-pattern>/create/p4</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!--
+     ***************
+     filter mappings
+     *************** 
+     -->
+    
+    <filter-mapping>
+       <filter-name>UserFilter</filter-name>
+       <url-pattern>/</url-pattern>
+       <url-pattern>/projects/*</url-pattern>
+       <url-pattern>/tags</url-pattern>
+       <url-pattern>/hierarchy</url-pattern>
+       <url-pattern>/favorites</url-pattern>
+       <url-pattern>/myfavorites</url-pattern>
+       <url-pattern>/myprojects</url-pattern>
+       <url-pattern>/create/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+       <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+       <filter-name>StatisticsFilter</filter-name>
+       <url-pattern>/</url-pattern>
+       <url-pattern>/projects/*</url-pattern>
+       <url-pattern>/tags</url-pattern>
+       <url-pattern>/hierarchy</url-pattern>
+       <url-pattern>/favorites</url-pattern>
+       <url-pattern>/myfavorites</url-pattern>
+       <url-pattern>/myprojects</url-pattern>
+       <url-pattern>/create/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+       <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>RestFilter</filter-name>
+        <url-pattern>/projects/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProjectFilter</filter-name>
+        <url-pattern>/projects/*</url-pattern>
+        <url-pattern>/create/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProjectACFilter</filter-name>
+        <url-pattern>/projects/*</url-pattern>
+        <url-pattern>/create/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ProjectDetailsFilter</filter-name>
+        <url-pattern>/projects/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+       <filter-name>SearchFilter</filter-name>
+       <url-pattern>/projects</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+       <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+       <filter-name>FavoritesFilter</filter-name>
+       <url-pattern>/myfavorites</url-pattern>
+    </filter-mapping>
+        <filter-mapping>
+        <filter-name>CssCachingFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ConfigFilter</filter-name>
+        <url-pattern>/search/includes/header.jsp</url-pattern>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>       
+
+    <!--  move functionality of the following filters to separate bundles -->
+    <filter-mapping>
+        <filter-name>JiraFilter</filter-name>
+        <url-pattern>/create/jira</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>P4Filter</filter-name>
+        <url-pattern>/create/p4</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+
+    <!--
+     **********
+     error page
+     **********
+     -->
+	
+    <error-page>  
+        <error-code>500</error-code>  
+        <location>/error</location>  
+    </error-page> 
+
+	<security-constraint>
+	   <web-resource-collection>
+	    <web-resource-name>All Access</web-resource-name>
+	     <url-pattern>/search/style.css</url-pattern>
+	     <url-pattern>/js/*</url-pattern>
+	     <url-pattern>/error</url-pattern>
+	     <url-pattern>/VAADIN/*</url-pattern>
+	     <url-pattern>/</url-pattern>
+	     <url-pattern>/tags</url-pattern>
+         <url-pattern>/hierarchy</url-pattern>
+         <url-pattern>/news</url-pattern>
+	     <url-pattern>/projects</url-pattern>
+	     <url-pattern>/projects/*</url-pattern>
+	     <url-pattern>/vprojects/*</url-pattern>
+	     <url-pattern>/logout</url-pattern>
+	     <http-method>GET</http-method>
+	     <http-method>POST</http-method>
+	   </web-resource-collection>
+	   <user-data-constraint>
+	     <transport-guarantee>NONE</transport-guarantee>
+	   </user-data-constraint>
+	</security-constraint>
+
+	<security-constraint>
+	    <web-resource-collection>
+	      <web-resource-name>all</web-resource-name>
+	      <url-pattern>/*</url-pattern>
+	      <http-method>GET</http-method>
+	      <http-method>POST</http-method>
+	    </web-resource-collection>
+	    <auth-constraint>
+	      <role-name>admin</role-name>
+	      <role-name>Everyone</role-name>
+	    </auth-constraint>
+	</security-constraint>
+
+	<login-config>
+	  <auth-method>FORM</auth-method>
+	  <form-login-config>
+	     <form-login-page>/search/login.jsp</form-login-page>
+	     <form-error-page>/search/login_fail.jsp</form-error-page>
+	  </form-login-config>
+	</login-config>
+
+	<security-role>
+	  <description>Assigned to all users in the server</description>
+	  <role-name>admin</role-name>
+	</security-role>
+
+	<security-role>
+	  <description>Everyone</description>
+	  <role-name>Everyone</role-name>
+	</security-role>
+
+</web-app>

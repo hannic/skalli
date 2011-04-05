@@ -1,0 +1,89 @@
+.tray {
+}
+
+.tray .v-embedded-header-icon {
+	padding-left: 5px;
+}
+
+.tray .header {
+	padding-top:0px;
+	padding-bottom:0px;
+	border: 0px;
+	border-top:1px;
+	border-bottom:1px;
+	border-style: solid;
+	border-color: #D3D3D3;
+	background: transparent url("icons/tray/gradient.png") repeat-x;
+}
+
+.tray .header-label {
+	font-weight: bold;
+}
+
+.tray .description {
+	margin-top: 10px;
+}
+
+.tray .open {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;	
+	background: transparent url(icons/tray/open.png) no-repeat;
+	overflow: hidden;
+	border: none;
+	outline: none;
+}
+
+.tray .closed {
+	width: 16px;
+	height: 16px;	
+	margin: 0;
+	padding: 0;	
+	background: transparent url(icons/tray/closed.png) no-repeat;
+	overflow: hidden;
+	border: none;
+	outline: none;	
+}
+
+.tray .enabled {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;	
+	background: transparent url(icons/tray/enabled.png) no-repeat;
+	overflow: hidden;
+	border: none;
+	outline: none;
+}
+
+.tray .disabled {
+	width: 16px;
+	height: 16px;	
+	margin: 0;
+	padding: 0;	
+	background: transparent url(icons/tray/disabled.png) no-repeat;
+	overflow: hidden;
+	border: none;
+	outline: none;		
+}
+
+.tray .selected > span > span {
+	font-weight: 120;
+    font-weight: bold;
+	color: #1B699F;
+    position: relative; /* stupid IE, keep this here! */
+}
+
+.tray .selected:hover > span > span {
+	text-decoration: none !important;
+}
+
+.tray .v-disabled:hover > span > span {
+    text-decoration: none !important;
+}
+
+.tray .selected {
+	opacity: 1 !important;
+	filter: alpha(opacity = 100); /* stupid IE, keep this here! */
+}

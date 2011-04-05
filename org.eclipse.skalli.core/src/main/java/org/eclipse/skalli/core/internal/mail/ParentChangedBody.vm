@@ -1,0 +1,13 @@
+Update on Project:      $project.name
+Action:                 Parent Project has changed
+
+Your Project:           https://projectportal.wdf.sap.corp/projects/$project.projectId
+Actual Parent Project:  https://projectportal.wdf.sap.corp/projects/$project.parent.projectId
+
+---
+
+This is an automated email send by the project portal:
+
+projectportal-dev@listserv.sap.corp
+
+Please contact us if you have technical questions regarding this email.

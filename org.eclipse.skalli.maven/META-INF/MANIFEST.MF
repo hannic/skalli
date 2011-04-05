@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Maven Extension (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.maven
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.skalli.api.java,
+ org.eclipse.skalli.api.java.events,
+ org.eclipse.skalli.api.java.tasks,
+ org.eclipse.skalli.api.rest.config,
+ org.eclipse.skalli.common,
+ org.eclipse.skalli.common.configuration,
+ org.eclipse.skalli.common.util,
+ org.eclipse.skalli.log,
+ org.eclipse.skalli.model.core,
+ org.eclipse.skalli.model.ext,
+ org.eclipse.skalli.model.ext.devinf,
+ com.thoughtworks.xstream.annotations,
+ com.thoughtworks.xstream.converters,
+ com.thoughtworks.xstream.io,
+ org.apache.commons.httpclient;version="3.1.0",
+ org.apache.commons.httpclient.methods;version="3.1.0",
+ org.apache.commons.io;version="1.4.0",
+ org.apache.commons.lang,
+ org.osgi.service.component,
+ org.restlet.resource
+Export-Package: org.eclipse.skalli.model.ext.maven
+Service-Component: OSGI-INF/ExtensionServiceMaven.xml,
+ OSGI-INF/ExtensionServiceMavenReactor.xml,
+ OSGI-INF/MavenResolverComponent.xml,
+ OSGI-INF/MavenResolverConfigSection.xml
+Bundle-ActivationPolicy: lazy
+

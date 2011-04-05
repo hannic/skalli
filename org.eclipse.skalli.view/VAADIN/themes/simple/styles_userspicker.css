@@ -1,0 +1,35 @@
+.usrpk-tbl {
+	padding-bottom:8px;
+}
+
+.usrpk-tbl .v-table-body {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #D3D3D3;
+	outline: none;	
+	background-color:#FBFBFB;
+}
+
+.usrpk-tbl .v-table-cell-content {
+	border-style: none;
+}
+
+.usrpk-tbl .v-link span {
+    text-decoration: none;  
+}
+
+.usrpk-tbl .v-link a:hover span {
+    text-decoration: underline;  
+}
+
+.usrpk-tbl .v-button-link span {
+	text-decoration: none;  
+}
+	
+.usrpk-tbl .v-button-link:hover > span > span {	
+    text-decoration: underline;   
+}
+
+.usrpk-tbl .link:hover {
+	text-decoration: none;
+}
