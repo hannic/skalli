@@ -11,10 +11,12 @@
 package org.eclipse.skalli.api.java.authentication;
 
 import java.security.Principal;
+import java.util.Locale;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.User;
 
 /**
@@ -29,6 +31,9 @@ public class LoginUtil {
       Principal userPrincipal = ((HttpServletRequest) request).getUserPrincipal();
       if (userPrincipal != null) {
         userName = userPrincipal.getName();
+        if (StringUtils.isNotBlank(userName)) {
+          userName = userName.toLowerCase(Locale.ENGLISH);
+        }
       }
     }
   }
