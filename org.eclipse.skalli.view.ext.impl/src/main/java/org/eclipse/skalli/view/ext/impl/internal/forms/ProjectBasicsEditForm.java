@@ -52,11 +52,6 @@ public class ProjectBasicsEditForm extends AbstractExtensionFormService<Project>
   }
 
   @Override
-  public boolean listenOnPropertyChanged(String propertyId, Object newValue) {
-    return EntityBase.PROPERTY_PARENT_ENTITY.equals(propertyId);
-  }
-
-  @Override
   protected String[] getVisibleItemProperties() {
     return new String[] {
         Project.PROPERTY_PROJECTID,

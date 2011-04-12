@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
@@ -30,6 +29,7 @@ import org.eclipse.skalli.model.ext.Issues;
 import org.eclipse.skalli.view.ext.ExtensionFormService;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
 import org.eclipse.skalli.view.internal.ExtensionStreamSource;
+
 import com.vaadin.Application;
 import com.vaadin.terminal.ErrorMessage;
 import com.vaadin.terminal.StreamResource;
@@ -281,12 +281,12 @@ class ProjectEditPanelEntry extends CustomComponent {
   }
 
   public void onPropertyChanged(String propertyId, Object newValue) {
-    if (EntityBase.PROPERTY_PARENT_ENTITY.equals(propertyId)
-        && (TrayState.INHERITED_INVISIBLE.equals(state) || TrayState.INHERITED_VISIBLE.equals(state)))
-    {
+    if (EntityBase.PROPERTY_PARENT_ENTITY.equals(propertyId)) {
       project.setParentEntity((EntityBase)newValue);
-      inheritExtension();
-      setState(state);
+      if (TrayState.INHERITED_INVISIBLE.equals(state) || TrayState.INHERITED_VISIBLE.equals(state)) {
+        inheritExtension();
+        setState(state);
+      }
     }
     if (formService.listenOnPropertyChanged(propertyId, newValue)) {
       form.commit();
