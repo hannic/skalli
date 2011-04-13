@@ -19,11 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restlet.ext.servlet.ServerServlet;
-
 import org.eclipse.skalli.api.java.authentication.LoginUtil;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.log.Statistics;
+import org.restlet.ext.servlet.ServerServlet;
 
 public class RestletServlet extends ServerServlet {
   private static final long serialVersionUID = -7953560055729006206L;
@@ -71,6 +70,11 @@ public class RestletServlet extends ServerServlet {
       // anonymous user => enforcing a "Referer" header
       String referer = request.getHeader("Referer"); //$NON-NLS-1$
       if (StringUtils.isBlank(referer)) {
+        // referer not defined in request header, try to fetch it from url
+        referer = request.getParameter("referer"); //$NON-NLS-1$
+      }
+      if (StringUtils.isBlank(referer)) {
+        // referer not defined neither in request header nor as url parameter
         response.sendError(403, "No referer provided, access denied."); //$NON-NLS-1$
         return;
       }
