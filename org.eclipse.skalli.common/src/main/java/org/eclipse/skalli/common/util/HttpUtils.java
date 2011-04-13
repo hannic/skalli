@@ -35,8 +35,8 @@ public class HttpUtils {
   public static final String PROTOCOL_HTTP = HTTP + PROTOCOL_SEPARATOR;
 
   // RegExp for non proxy hosts
-  private static final String[] RE_SEARCH = new String[] { ";", "*" }; //$NON-NLS-1$ //$NON-NLS-2$
-  private static final String[] RE_REPLACE = new String[] { "|", "(\\w|\\.)*" }; //$NON-NLS-1$ //$NON-NLS-2$
+  private static final String[] RE_SEARCH = new String[] { ";", "*", "." }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+  private static final String[] RE_REPLACE = new String[] { "|", "(\\w|\\.|\\-)*", "\\." }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
   // general timeout for connection requests
   private static final int TIMEOUT = 10000;
@@ -62,7 +62,7 @@ public class HttpUtils {
     client.getHttpConnectionManager().getParams().setConnectionTimeout(TIMEOUT);
 
     // according to http://hc.apache.org/httpclient-3.x/sslguide.html
-    if (url.getProtocol().equals(HTTP)) {
+    if (url.getProtocol().equals(HTTPS)) {
       Protocol.registerProtocol(HTTPS, new Protocol(HTTPS, new AlwaysTrustSSLProtocolSocketFactory(), 443));
     }
 
