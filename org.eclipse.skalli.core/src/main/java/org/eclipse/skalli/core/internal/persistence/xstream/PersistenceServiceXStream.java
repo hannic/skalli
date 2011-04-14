@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -24,8 +25,6 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.EntityFilter;
 import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.core.internal.persistence.AbstractPersistenceService;
@@ -33,6 +32,7 @@ import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.osgi.service.component.ComponentContext;
 
 /**
  * Helper class for marshalling/unmarshalling entities to/from the file system
@@ -46,6 +46,8 @@ import org.eclipse.skalli.model.ext.ExtensionService;
 public class PersistenceServiceXStream extends AbstractPersistenceService implements PersistenceService {
 
   private static final Logger LOG = Log.getLogger(PersistenceServiceXStream.class);
+  private static final String PROPERTIES_FILE = "/skalli.properties"; //$NON-NLS-1$
+  private static final String PROPERTY_WORKDIR = "workdir"; //$NON-NLS-1$
   private static final String STORAGE_BASE = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
 
   public static final String ENTITY_PREFIX = "entity-"; //$NON-NLS-1$
@@ -85,19 +87,43 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
 
   private void initializeStorage() {
     if (storageDirectory == null) {
-      String workdir = System.getProperty("workdir");
+      String workdir = null;
+      try {
+        // try to get working directory from configuration file
+        Properties properties = new Properties();
+        properties.load(getClass().getResourceAsStream(PROPERTIES_FILE));
+        workdir = properties.getProperty(PROPERTY_WORKDIR);
+        if (StringUtils.isBlank(workdir)) {
+          LOG.warning("property '"+PROPERTY_WORKDIR+"' not defined in configuration file '"+PROPERTIES_FILE+"' - " +
+              " falling back to system property '"+PROPERTY_WORKDIR+"'.");
+        }
+      } catch (Exception e) {
+        LOG.warning("cannot read configuration file '" + PROPERTIES_FILE + "' - " +
+            "falling back to system properties.");
+      }
+
+      if (StringUtils.isBlank(workdir)) {
+        // fall back: get working directory from system property
+        workdir = System.getProperty(PROPERTY_WORKDIR);
+        if (StringUtils.isBlank(workdir)) {
+          LOG.warning("cannot get system property '"+PROPERTY_WORKDIR+"' - " +
+              "falling back to working directory.");
+        }
+      }
+
       if (workdir != null) {
         File workingDirectory = new File(workdir);
         if (workingDirectory.exists() && workingDirectory.isDirectory()) {
           storageDirectory = new File(workingDirectory, STORAGE_BASE);
         } else {
           LOG.warning("Working directory " + workingDirectory.getAbsolutePath()
-              + "not found - falling back to current directory");
+              + " not found - falling back to current directory.");
         }
       }
       if (storageDirectory == null) {
         storageDirectory = new File(STORAGE_BASE);
       }
+      LOG.info("use storage folder '"+ storageDirectory.getAbsolutePath()+"' for persistence.");
     }
     xstreamPersistence = new XStreamPersistence(storageDirectory);
   }
