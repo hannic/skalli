@@ -12,6 +12,8 @@
   <artifactId>org.eclipse.skalli.reactor</artifactId>
   <packaging>pom</packaging>
 
+  <name>Skalli (Incubation)</name>
+
   <modules>
     <module>org.eclipse.skalli.target</module>
     <module>org.eclipse.skalli.parent</module>
@@ -30,7 +32,6 @@
     <module>org.eclipse.skalli.maven</module>
   </modules>
 
-  <name>LeanDI Project Portal</name>
   <profiles>
     <profile>
       <id>qa</id>
@@ -54,22 +55,6 @@
         <module>org.eclipse.skalli.eclipse.feature</module>
         <module>org.eclipse.skalli.site</module>
       </modules>
-    </profile>
-    <profile>
-      <id>selenium</id>
-      <modules>
-        <module>org.eclipse.skalli.view.selenium</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>sonar</id>
-      <properties>
-        <sonar.jdbc.url>jdbc:derby://localhost:1527/sonar;create=true</sonar.jdbc.url>
-        <sonar.jdbc.driver>org.apache.derby.jdbc.ClientDriver</sonar.jdbc.driver>
-        <sonar.jdbc.username>sonar</sonar.jdbc.username>
-        <sonar.jdbc.password>sonar</sonar.jdbc.password>
-        <sonar.host.url>http://localhost:8400</sonar.host.url>
-      </properties>
     </profile>
   </profiles>
 
