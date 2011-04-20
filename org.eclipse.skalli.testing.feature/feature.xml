@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.skalli.testing.feature"
+      label="Skalli Test Support Feature (Incubation)"
+      version="0.1.0.qualifier"
+      provider-name="Eclipse Skalli">
+
+   <description url="http://www.eclipse.org/skalli">
+        A new generation project management tool accessible and usable by the Eclipse community and other open source projects.
+   </description>
+
+   <copyright>
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License
+      v1.0 which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+         Eclipse Public License (EPL) 1.0
+   </license>
+
+   <plugin
+         id="org.eclipse.skalli.testutil"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -30,13 +30,13 @@
     <module>org.eclipse.skalli.view.ext.impl</module>
     <module>org.eclipse.skalli.view.theme</module>
     <module>org.eclipse.skalli.maven</module>
+    <module>org.eclipse.skalli.testutil</module>
   </modules>
 
   <profiles>
     <profile>
       <id>qa</id>
       <modules>
-        <module>org.eclipse.skalli.testutil</module>
         <module>org.eclipse.skalli.core.test</module>
         <module>org.eclipse.skalli.model.core.test</module>
         <module>org.eclipse.skalli.model.ext.misc.test</module>
@@ -53,6 +53,7 @@
       <modules>
         <module>org.eclipse.skalli.feature</module>
         <module>org.eclipse.skalli.eclipse.feature</module>
+        <module>org.eclipse.skalli.testing.feature</module>
         <module>org.eclipse.skalli.site</module>
       </modules>
     </profile>
