@@ -73,9 +73,17 @@ public class CollectionUtils {
     }
   }
 
-  public static Map<String,String> addAll(Map<String,String> map, String[][] args) {
-    map.putAll(asMap(args));
-    return map;
+  /**
+  * Returns a new <code>Map</code> instance which contains the given <code>sourceMap<code>
+  * and <code>members<code> values.
+  *
+  * @param sourceMap  map from which to copy entries into the result.
+  * @param members  additional entries to add.
+  */
+  public static Map<String,String> addAll(Map<String,String> sourceMap, String[][] members) {
+    Map<String,String> result = new HashMap<String,String>(sourceMap);
+    result.putAll(asMap(members));
+    return result;
   }
 
   public static Map<String,List<String>> asMap(String key, String... args) {
