@@ -37,10 +37,10 @@ import java.lang.annotation.Target;
  * For a property of a type implementing {@link java.lang.Collection} or any subclasses,
  * the class must define an adder method while the setter is optional, e.g.
  * <pre>
- *    private TreeSet<String> strings = new TreeSet<String>();
+ *    private TreeSet&lt;String&gt; strings = new TreeSet&lt;String&gt;();
  *    ...
- *    public void addString(String srings) {
- *      this.strings = new TreeSet<String>(strings);
+ *    public void addString(Collection&lt;String&gt; strings) {
+ *      this.strings = new TreeSet&lt;String&gt;(strings);
  *    }
  * </pre>
  * The name of the adder method must be "add" + the singular form of the the string constant value,
@@ -55,13 +55,10 @@ import java.lang.annotation.Target;
 public @interface PropertyName {
 
   /**
-   * Denotes the position of the property.
+   * Returns the position of the property.
    *
-   * <p>
    * This position will be used to sort a set of properties whenever the order matters
    * (e.g. when determining the properties to be rendered in the user interface automatically).
-   * </p>
-   * @return
    */
   int position();
 
