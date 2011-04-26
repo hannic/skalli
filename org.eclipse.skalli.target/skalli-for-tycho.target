@@ -6,6 +6,7 @@
 <location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit">
 
 <!-- depedencies to Equinox/Eclipse platform -->
+<unit id="a.jre.javase" version="1.6.0"/>
 <unit id="org.eclipse.core.jobs" version="0.0.0"/>
 <unit id="org.eclipse.core.contenttype" version="0.0.0"/>
 <unit id="org.eclipse.core.runtime" version="0.0.0"/>
@@ -19,7 +20,7 @@
 <unit id="org.eclipse.osgi" version="0.0.0"/>
 <unit id="org.eclipse.osgi.services" version="0.0.0"/>
 <unit id="org.eclipse.osgi.util" version="0.0.0"/>
-<repository location="http://download.eclipse.org/releases/helios"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7milestones/"/>
 
 <!-- dependencies to Eclipse Orbit project -->
 <unit id="javax.activation" version="1.1.0.v201005080500"/>
@@ -57,6 +58,10 @@
 
 <!-- TODO replace this once we have an orbit -->
 <repository location="http://download.eclipse.org/skalli"/>
+
+<!-- Jetty Runtime to run it locally during development -->
+<unit id="org.eclipse.jetty.sdk.feature.group" version="7.3.1.201103121747"/>
+<repository location="http://download.eclipse.org/jetty/updates/jetty-rt-3.7milestones/S-3.7.M6-201103121818/"/>
 
 </location>
 </locations>
