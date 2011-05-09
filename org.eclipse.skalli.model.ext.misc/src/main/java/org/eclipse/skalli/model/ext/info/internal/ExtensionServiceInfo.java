@@ -32,100 +32,101 @@ import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.info.InfoProjectExt;
 
 public class ExtensionServiceInfo
-    extends ExtensionServiceBase<InfoProjectExt>
-    implements ExtensionService<InfoProjectExt>
+        extends ExtensionServiceBase<InfoProjectExt>
+        implements ExtensionService<InfoProjectExt>
 {
 
-  private static final Logger LOG = Log.getLogger(ExtensionServiceInfo.class);
+    private static final Logger LOG = Log.getLogger(ExtensionServiceInfo.class);
 
-  private static final String CAPTION = "Info";
-  private static final String DESCRIPTION = "Additional information related to the project";
+    private static final String CAPTION = "Info";
+    private static final String DESCRIPTION = "Additional information related to the project";
 
-  private static final Map<String,String> CAPTIONS = CollectionUtils.addAll(ExtensionServiceBase.CAPTIONS, new String[][] {
-      {InfoProjectExt.PROPERTY_MAILING_LIST, "Mailing Lists"},
-      {InfoProjectExt.PROPERTY_PAGE_URL, "Project Homepage"}});
+    private static final Map<String, String> CAPTIONS = CollectionUtils.addAll(ExtensionServiceBase.CAPTIONS,
+            new String[][] {
+                    { InfoProjectExt.PROPERTY_MAILING_LIST, "Mailing Lists" },
+                    { InfoProjectExt.PROPERTY_PAGE_URL, "Project Homepage" } });
 
-  private static final Map<String,String> DESCRIPTIONS = CollectionUtils.addAll(ExtensionServiceBase.DESCRIPTIONS, new String[][] {
-      {InfoProjectExt.PROPERTY_MAILING_LIST, "Mailing lists provided by this project"},
-      {InfoProjectExt.PROPERTY_PAGE_URL, "Browsable link to the project's homepage"}});
+    private static final Map<String, String> DESCRIPTIONS = CollectionUtils.addAll(ExtensionServiceBase.DESCRIPTIONS,
+            new String[][] {
+                    { InfoProjectExt.PROPERTY_MAILING_LIST, "Mailing lists provided by this project" },
+                    { InfoProjectExt.PROPERTY_PAGE_URL, "Browsable link to the project's homepage" } });
 
-  @Override
-  public Class<InfoProjectExt> getExtensionClass() {
-    return InfoProjectExt.class;
-  }
-
-  protected void activate(ComponentContext context){
-    LOG.info("activated model extension: " + getShortName()); //$NON-NLS-1$
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info("deactivated model extension: " + getShortName()); //$NON-NLS-1$
-  }
-
-  @Override
-  public String getShortName() {
-    return "info"; //$NON-NLS-1$
-  }
-
-  @Override
-  public String getCaption() {
-    return CAPTION;
-  }
-
-  @Override
-  public String getDescription() {
-    return DESCRIPTION;
-  }
-
-  @Override
-  public AliasedConverter getConverter(String host) {
-    return new InfoConverter(host);
-  }
-
-  @Override
-  public String getModelVersion() {
-    return InfoProjectExt.MODEL_VERSION;
-  }
-
-  @Override
-  public String getNamespace() {
-    return InfoProjectExt.NAMESPACE;
-  }
-
-  @Override
-  public String getXsdFileName() {
-    return "model-info.xsd";
-  }
-
-  @Override
-  public AbstractIndexer<InfoProjectExt> getIndexer() {
-    return new InfoIndexer();
-  }
-
-  @Override
-  public String getCaption(String propertyName) {
-    return CAPTIONS.get(propertyName);
-  }
-
-  @Override
-  public String getDescription(String propertyName) {
-    return DESCRIPTIONS.get(propertyName);
-  }
-
-  @Override
-  public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
-    caption = getCaption(propertyName, caption);
-    Set<PropertyValidator> validators = new HashSet<PropertyValidator>();
-    if (InfoProjectExt.PROPERTY_MAILING_LIST.equals(propertyName)) {
-      validators.add(new EmailValidator(Severity.FATAL, getExtensionClass(), propertyName,
-          MessageFormat.format("{0} must be a valid e-mail address", caption),
-          null));
+    @Override
+    public Class<InfoProjectExt> getExtensionClass() {
+        return InfoProjectExt.class;
     }
-    else if (InfoProjectExt.PROPERTY_PAGE_URL.equals(propertyName)) {
-      validators.add(new URLValidator(Severity.FATAL, getExtensionClass(), propertyName, caption));
-      validators.add(new HostReachableValidator(getExtensionClass(), propertyName));
+
+    protected void activate(ComponentContext context) {
+        LOG.info("activated model extension: " + getShortName()); //$NON-NLS-1$
     }
-    return validators;
-  }
+
+    protected void deactivate(ComponentContext context) {
+        LOG.info("deactivated model extension: " + getShortName()); //$NON-NLS-1$
+    }
+
+    @Override
+    public String getShortName() {
+        return "info"; //$NON-NLS-1$
+    }
+
+    @Override
+    public String getCaption() {
+        return CAPTION;
+    }
+
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
+    }
+
+    @Override
+    public AliasedConverter getConverter(String host) {
+        return new InfoConverter(host);
+    }
+
+    @Override
+    public String getModelVersion() {
+        return InfoProjectExt.MODEL_VERSION;
+    }
+
+    @Override
+    public String getNamespace() {
+        return InfoProjectExt.NAMESPACE;
+    }
+
+    @Override
+    public String getXsdFileName() {
+        return "model-info.xsd";
+    }
+
+    @Override
+    public AbstractIndexer<InfoProjectExt> getIndexer() {
+        return new InfoIndexer();
+    }
+
+    @Override
+    public String getCaption(String propertyName) {
+        return CAPTIONS.get(propertyName);
+    }
+
+    @Override
+    public String getDescription(String propertyName) {
+        return DESCRIPTIONS.get(propertyName);
+    }
+
+    @Override
+    public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
+        caption = getCaption(propertyName, caption);
+        Set<PropertyValidator> validators = new HashSet<PropertyValidator>();
+        if (InfoProjectExt.PROPERTY_MAILING_LIST.equals(propertyName)) {
+            validators.add(new EmailValidator(Severity.FATAL, getExtensionClass(), propertyName,
+                    MessageFormat.format("{0} must be a valid e-mail address", caption),
+                    null));
+        }
+        else if (InfoProjectExt.PROPERTY_PAGE_URL.equals(propertyName)) {
+            validators.add(new URLValidator(Severity.FATAL, getExtensionClass(), propertyName, caption));
+            validators.add(new HostReachableValidator(getExtensionClass(), propertyName));
+        }
+        return validators;
+    }
 }
-

@@ -23,22 +23,21 @@ import org.eclipse.skalli.testutil.PropertyHelper;
 @SuppressWarnings("nls")
 public class UserTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    HashMap<String,Object> values = new HashMap<String,Object>();
-    values.put(User.PROPERTY_USERID, "homer");
-    values.put(User.PROPERTY_FIRSTNAME, "Homer");
-    values.put(User.PROPERTY_LASTNAME, "Simpson");
-    values.put(User.PROPERTY_EMAIL, "homer@springfield.net");
-    values.put(User.PROPERTY_FULL_NAME, "Homer Simpson");
-    values.put(User.PROPERTY_DISPLAY_NAME, "Homer Simpson (homer)");
-    values.put(EntityBase.PROPERTY_UUID, UUID.fromString("e4d78581-08da-4f04-8a90-a7dac41f6247"));
-    values.put(EntityBase.PROPERTY_DELETED, Boolean.FALSE);
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        HashMap<String, Object> values = new HashMap<String, Object>();
+        values.put(User.PROPERTY_USERID, "homer");
+        values.put(User.PROPERTY_FIRSTNAME, "Homer");
+        values.put(User.PROPERTY_LASTNAME, "Simpson");
+        values.put(User.PROPERTY_EMAIL, "homer@springfield.net");
+        values.put(User.PROPERTY_FULL_NAME, "Homer Simpson");
+        values.put(User.PROPERTY_DISPLAY_NAME, "Homer Simpson (homer)");
+        values.put(EntityBase.PROPERTY_UUID, UUID.fromString("e4d78581-08da-4f04-8a90-a7dac41f6247"));
+        values.put(EntityBase.PROPERTY_DELETED, Boolean.FALSE);
 
-    Map<Class<?>,String[]> requiredProperties = Collections.emptyMap();
+        Map<Class<?>, String[]> requiredProperties = Collections.emptyMap();
 
-    PropertyHelper.checkPropertyDefinitions(User.class, requiredProperties, values);
-  }
+        PropertyHelper.checkPropertyDefinitions(User.class, requiredProperties, values);
+    }
 
 }
-

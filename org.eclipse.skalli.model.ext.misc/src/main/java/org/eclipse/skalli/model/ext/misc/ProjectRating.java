@@ -11,23 +11,22 @@
 package org.eclipse.skalli.model.ext.misc;
 
 public enum ProjectRating {
-  UP, DOWN, NONE,
-  FACE_SMILE_BIG, FACE_SMILE, FACE_PLAIN, FACE_SAD, FACE_CRYING;
+    UP, DOWN, NONE,
+    FACE_SMILE_BIG, FACE_SMILE, FACE_PLAIN, FACE_SAD, FACE_CRYING;
 
-  private static final ProjectRating[] TWO_STATE_RATINGS =
-    new ProjectRating[] {UP, DOWN};
+    private static final ProjectRating[] TWO_STATE_RATINGS =
+            new ProjectRating[] { UP, DOWN };
 
-  private static final ProjectRating[] FIVE_STATE_RATINGS =
-    new ProjectRating[] {FACE_SMILE_BIG, FACE_SMILE, FACE_PLAIN, FACE_SAD, FACE_CRYING};
+    private static final ProjectRating[] FIVE_STATE_RATINGS =
+            new ProjectRating[] { FACE_SMILE_BIG, FACE_SMILE, FACE_PLAIN, FACE_SAD, FACE_CRYING };
 
-  public static ProjectRating[] getRatings(ProjectRatingStyle style) {
-    switch (style) {
-    case TWO_STATES:
-      return TWO_STATE_RATINGS;
-    case FIVE_STATES:
-      return FIVE_STATE_RATINGS;
+    public static ProjectRating[] getRatings(ProjectRatingStyle style) {
+        switch (style) {
+        case TWO_STATES:
+            return TWO_STATE_RATINGS;
+        case FIVE_STATES:
+            return FIVE_STATE_RATINGS;
+        }
+        return null;
     }
-    return null;
-  }
 }
-

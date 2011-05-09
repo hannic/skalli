@@ -22,41 +22,40 @@ import com.vaadin.ui.Form;
 
 public interface ExtensionFormService<T extends ExtensionEntityBase> extends IconProvider {
 
-  public static final String DEFAULT_ICON = "res/icons/default.png"; //$NON-NLS-1$
+    public static final String DEFAULT_ICON = "res/icons/default.png"; //$NON-NLS-1$
 
-  /**
-   * Returns the default rank of the form. The rank
-   * determines in which order the forms are displayed.
-   */
-  public float getRank();
+    /**
+     * Returns the default rank of the form. The rank
+     * determines in which order the forms are displayed.
+     */
+    public float getRank();
 
-  /**
-   * Returns the extension class for which this form
-   * factory is able to create forms.
-   */
-  public Class<T> getExtensionClass();
+    /**
+     * Returns the extension class for which this form
+     * factory is able to create forms.
+     */
+    public Class<T> getExtensionClass();
 
-  /**
-   * Creates a new instance of the extension class.
-   */
-  public T newExtensionInstance();
+    /**
+     * Creates a new instance of the extension class.
+     */
+    public T newExtensionInstance();
 
-  /**
-   * Returns a form for an extension instance matching {@link #getExtensionClass()}
-   * of a given project. Note, this method always creates a new form instance.
-   * @param project  the project to which the extension instance is attached.
-   * @param mode  determines if a new project is to be created or an existing project to be edited.
-   * @param context  additional information that influence the form creation.
-   * @return  a new form instance for the extension.
-   */
-  public Form createForm(Project project, ProjectEditContext context);
+    /**
+     * Returns a form for an extension instance matching {@link #getExtensionClass()}
+     * of a given project. Note, this method always creates a new form instance.
+     * @param project  the project to which the extension instance is attached.
+     * @param mode  determines if a new project is to be created or an existing project to be edited.
+     * @param context  additional information that influence the form creation.
+     * @return  a new form instance for the extension.
+     */
+    public Form createForm(Project project, ProjectEditContext context);
 
-  /**
-   * Returns <code>true</code> if the form should be re-created when the property
-   * with the given name has changed.
-   * @param propertyId  the name of the property.
-   * @param newValue  the new value of the property.
-   */
-  public boolean listenOnPropertyChanged(String propertyId, Object newValue);
+    /**
+     * Returns <code>true</code> if the form should be re-created when the property
+     * with the given name has changed.
+     * @param propertyId  the name of the property.
+     * @param newValue  the new value of the property.
+     */
+    public boolean listenOnPropertyChanged(String propertyId, Object newValue);
 }
-

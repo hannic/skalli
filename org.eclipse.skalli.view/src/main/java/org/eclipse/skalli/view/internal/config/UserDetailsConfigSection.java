@@ -14,18 +14,17 @@ import org.restlet.resource.ServerResource;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 
-public class UserDetailsConfigSection implements ConfigSection{
+public class UserDetailsConfigSection implements ConfigSection {
 
-  private static final String NAME = "view/userdetails"; //$NON-NLS-1$
+    private static final String NAME = "view/userdetails"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return UserDetailsResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return UserDetailsResource.class;
+    }
 }
-

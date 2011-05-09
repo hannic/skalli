@@ -20,25 +20,24 @@ import org.eclipse.skalli.model.ext.AbstractDataMigration;
 
 public class DataMigration0 extends AbstractDataMigration {
 
-  public DataMigration0() {
-    super(Project.class, 0);
-  }
-
-  private void addNoComparator(Document doc, NodeList elements) {
-    for (int i = 0; i < elements.getLength(); i++) {
-      Element node = (Element) elements.item(i);
-      Element element = doc.createElement("no-comparator");
-      Node firstChild = node.getFirstChild();
-      node.insertBefore(element, firstChild);
+    public DataMigration0() {
+        super(Project.class, 0);
     }
-  }
 
-  @Override
-  public void migrate(Document doc) {
-    addNoComparator(doc, doc.getElementsByTagName("extensions"));
-    addNoComparator(doc, doc.getElementsByTagName("members"));
-    addNoComparator(doc, doc.getElementsByTagName("roles"));
-  }
+    private void addNoComparator(Document doc, NodeList elements) {
+        for (int i = 0; i < elements.getLength(); i++) {
+            Element node = (Element) elements.item(i);
+            Element element = doc.createElement("no-comparator");
+            Node firstChild = node.getFirstChild();
+            node.insertBefore(element, firstChild);
+        }
+    }
+
+    @Override
+    public void migrate(Document doc) {
+        addNoComparator(doc, doc.getElementsByTagName("extensions"));
+        addNoComparator(doc, doc.getElementsByTagName("members"));
+        addNoComparator(doc, doc.getElementsByTagName("roles"));
+    }
 
 }
-

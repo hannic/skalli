@@ -19,35 +19,32 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class AbstractDataMigration implements DataMigration {
 
-  protected final int fromVersion;
-  protected final Class<? extends EntityBase> migratingClass;
+    protected final int fromVersion;
+    protected final Class<? extends EntityBase> migratingClass;
 
+    /**
+     * Constructs a migration for a model entity with the given model version.
+     * @param fromVersion  model version of a model entity to which this
+     * migrator should be applied.
+     */
+    public AbstractDataMigration(Class<? extends EntityBase> migratingClass, int fromVersion) {
+        this.migratingClass = migratingClass;
+        this.fromVersion = fromVersion;
+    }
 
-  /**
-   * Constructs a migration for a model entity with the given model version.
-   * @param fromVersion  model version of a model entity to which this
-   * migrator should be applied.
-   */
-  public AbstractDataMigration(Class<? extends EntityBase> migratingClass, int fromVersion) {
-    this.migratingClass = migratingClass;
-    this.fromVersion = fromVersion;
-  }
+    @Override
+    public int getFromVersion() {
+        return fromVersion;
+    }
 
-  @Override
-  public int getFromVersion() {
-    return fromVersion;
-  }
+    @Override
+    public boolean handlesType(String className) {
+        return StringUtils.equals(className, migratingClass.getName());
+    }
 
-  @Override
-  public boolean handlesType(String className) {
-    return StringUtils.equals(className, migratingClass.getName());
-  }
-
-  @Override
-  public int compareTo(DataMigration o) {
-    return Integer.valueOf(fromVersion).compareTo(o.getFromVersion());
-  }
-
+    @Override
+    public int compareTo(DataMigration o) {
+        return Integer.valueOf(fromVersion).compareTo(o.getFromVersion());
+    }
 
 }
-

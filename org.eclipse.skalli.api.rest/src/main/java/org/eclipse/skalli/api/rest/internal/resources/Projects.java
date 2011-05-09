@@ -20,19 +20,20 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("projects")
 public class Projects {
 
-  private Set<Project> projects;
+    private Set<Project> projects;
 
-  public Projects() { }
+    public Projects() {
+    }
 
-  public Projects(Collection<Project> projects) {
-    this.projects = new HashSet<Project>(projects);
-  }
+    public Projects(Collection<Project> projects) {
+        this.projects = new HashSet<Project>(projects);
+    }
 
-  public Set<Project> getProjects() {
-    return projects;
-  }
+    public Set<Project> getProjects() {
+        return projects;
+    }
 
-  public void setProjects(Set<Project> projects) {
-    this.projects = projects;
-  }
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
 }

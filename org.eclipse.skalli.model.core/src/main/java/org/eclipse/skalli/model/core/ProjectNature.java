@@ -15,6 +15,5 @@ package org.eclipse.skalli.model.core;
  * such as "project of people" or "technical project" (a.k.a. "component"), respectively.
  */
 public enum ProjectNature {
-  PROJECT, COMPONENT
+    PROJECT, COMPONENT
 }
-

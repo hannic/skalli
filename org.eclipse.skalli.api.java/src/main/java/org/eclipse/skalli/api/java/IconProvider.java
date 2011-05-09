@@ -12,11 +12,10 @@ package org.eclipse.skalli.api.java;
 
 public interface IconProvider {
 
-  /**
-   * Returns the path relative to the root directory of
-   * the bundle, from which to retrieve image resources.
-   */
-  public String getIconPath();
+    /**
+     * Returns the path relative to the root directory of
+     * the bundle, from which to retrieve image resources.
+     */
+    public String getIconPath();
 
 }
-

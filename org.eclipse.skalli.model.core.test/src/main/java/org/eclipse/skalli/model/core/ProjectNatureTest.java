@@ -16,21 +16,20 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class ProjectNatureTest {
 
-  @Test
-  public void testValueOf() {
-    Assert.assertEquals(ProjectNature.PROJECT, ProjectNature.valueOf("PROJECT"));
-    Assert.assertEquals(ProjectNature.COMPONENT, ProjectNature.valueOf("COMPONENT"));
-  }
+    @Test
+    public void testValueOf() {
+        Assert.assertEquals(ProjectNature.PROJECT, ProjectNature.valueOf("PROJECT"));
+        Assert.assertEquals(ProjectNature.COMPONENT, ProjectNature.valueOf("COMPONENT"));
+    }
 
-  @Test(expected=IllegalArgumentException.class)
-  public void testValueOf_invalid() {
-    ProjectNature.valueOf("foobar");
-  }
+    @Test(expected = IllegalArgumentException.class)
+    public void testValueOf_invalid() {
+        ProjectNature.valueOf("foobar");
+    }
 
-  @Test
-  public void testValues() {
-    Assert.assertEquals(ProjectNature.PROJECT, ProjectNature.values()[0]);
-    Assert.assertEquals(ProjectNature.COMPONENT, ProjectNature.values()[1]);
-  }
+    @Test
+    public void testValues() {
+        Assert.assertEquals(ProjectNature.PROJECT, ProjectNature.values()[0]);
+        Assert.assertEquals(ProjectNature.COMPONENT, ProjectNature.values()[1]);
+    }
 }
-

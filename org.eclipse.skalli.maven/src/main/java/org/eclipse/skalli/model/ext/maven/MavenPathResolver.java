@@ -23,21 +23,20 @@ import java.net.URL;
  */
 public interface MavenPathResolver {
 
-  /**
-   * Returns <code>true</code> if this path resolver is applicable to the given SCM location.
-   * @param scmLocation  the SCM location to check.
-   */
-  public boolean canResolve(String scmLocation);
+    /**
+     * Returns <code>true</code> if this path resolver is applicable to the given SCM location.
+     * @param scmLocation  the SCM location to check.
+     */
+    public boolean canResolve(String scmLocation);
 
-  /**
-   * Provides the URL for a resource described by the given SCM location and path.
-   * @param scmLocation  the location of the SCM repository where the resource is hosted.
-   * @param relativePath  the path relative to the repository root of the reactor POM file
-   * (without leading or trailing slashes and without file namne).
-   *
-   * @throws MalformedURLException  if the URL constructed from the given parameters is malformed.
-   */
-  public URL resolvePath(String scmLocation, String relativePath) throws MalformedURLException;
+    /**
+     * Provides the URL for a resource described by the given SCM location and path.
+     * @param scmLocation  the location of the SCM repository where the resource is hosted.
+     * @param relativePath  the path relative to the repository root of the reactor POM file
+     * (without leading or trailing slashes and without file namne).
+     *
+     * @throws MalformedURLException  if the URL constructed from the given parameters is malformed.
+     */
+    public URL resolvePath(String scmLocation, String relativePath) throws MalformedURLException;
 
 }
-

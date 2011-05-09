@@ -19,88 +19,87 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("validation")
 public class ValidationConfig {
 
-  private Schedule schedule;
-  private Severity minSeverity;
-  private ValidationAction action;
-  private String userId;
-  private String entityType;
-  private int threshold;
+    private Schedule schedule;
+    private Severity minSeverity;
+    private ValidationAction action;
+    private String userId;
+    private String entityType;
+    private int threshold;
 
-  public ValidationConfig() {
-  }
-
-  public ValidationConfig(ValidationConfig config) {
-    minSeverity = config.getMinSeverity();
-    action = config.getAction();
-    userId = config.getUserId();
-    entityType = config.getEntityType();
-    threshold = config.getThreshold();
-    schedule = config.getSchedule();
-  }
-
-  public Schedule getSchedule() {
-    return schedule;
-  }
-
-  public void setSchedule(Schedule schedule) {
-    this.schedule = schedule;
-  }
-
-  public Severity getMinSeverity() {
-    if (minSeverity == null) {
-      minSeverity = Severity.INFO;
+    public ValidationConfig() {
     }
-    return minSeverity;
-  }
 
-  public void setMinSeverity(Severity minSeverity) {
-    this.minSeverity = minSeverity;
-  }
-
-  public ValidationAction getAction() {
-    return action;
-  }
-
-  public void setAction(ValidationAction action) {
-    this.action = action;
-  }
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
-
-  public String getEntityType() {
-    return entityType;
-  }
-
-  public void setEntityType(String entityType) {
-    this.entityType = entityType;
-  }
-
-  public int getThreshold() {
-    return threshold;
-  }
-
-  public void setThreshold(int threshold) {
-    this.threshold = threshold;
-  }
-
-  @SuppressWarnings("nls")
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(action != null? action : "<no action>").append(' ');
-    if (ValidationAction.QUEUED.equals(action)) {
-      sb.append("threshold=").append(threshold).append(' ');
+    public ValidationConfig(ValidationConfig config) {
+        minSeverity = config.getMinSeverity();
+        action = config.getAction();
+        userId = config.getUserId();
+        entityType = config.getEntityType();
+        threshold = config.getThreshold();
+        schedule = config.getSchedule();
     }
-    sb.append(getMinSeverity()).append(' ');
-    sb.append(StringUtils.isNotBlank(userId)? userId : "<default user>").append(' ');
-    sb.append(StringUtils.isNotBlank(entityType)? entityType : "<all entity types>");
-    return sb.toString();
-  }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    public Severity getMinSeverity() {
+        if (minSeverity == null) {
+            minSeverity = Severity.INFO;
+        }
+        return minSeverity;
+    }
+
+    public void setMinSeverity(Severity minSeverity) {
+        this.minSeverity = minSeverity;
+    }
+
+    public ValidationAction getAction() {
+        return action;
+    }
+
+    public void setAction(ValidationAction action) {
+        this.action = action;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
+    }
+
+    public int getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
+    }
+
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(action != null ? action : "<no action>").append(' ');
+        if (ValidationAction.QUEUED.equals(action)) {
+            sb.append("threshold=").append(threshold).append(' ');
+        }
+        sb.append(getMinSeverity()).append(' ');
+        sb.append(StringUtils.isNotBlank(userId) ? userId : "<default user>").append(' ');
+        sb.append(StringUtils.isNotBlank(entityType) ? entityType : "<all entity types>");
+        return sb.toString();
+    }
 }
-

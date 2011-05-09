@@ -18,30 +18,29 @@ import org.eclipse.skalli.view.ext.ProjectContextLink;
 
 public class AddProjectToJira implements ProjectContextLink {
 
-  @Override
-  public String getCaption(Project project) {
-    return "Add Project to JIRA"; //TODO internationalization ?
-  }
-
-  @Override
-  public URI getUri(Project project) {
-    // TODO depending on UI strategy, this might change in future
-    try {
-      return new URI("/create/jira?id=" + project.getProjectId());
-    } catch (URISyntaxException e) {
-      throw new RuntimeException(e);
+    @Override
+    public String getCaption(Project project) {
+        return "Add Project to JIRA"; //TODO internationalization ?
     }
-  }
 
-  @Override
-  public float getPositionWeight() {
-    return 1.0f;
-  }
+    @Override
+    public URI getUri(Project project) {
+        // TODO depending on UI strategy, this might change in future
+        try {
+            return new URI("/create/jira?id=" + project.getProjectId());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-  @Override
-  public boolean isVisible(Project project, String userId) {
-    return true;
-  }
+    @Override
+    public float getPositionWeight() {
+        return 1.0f;
+    }
+
+    @Override
+    public boolean isVisible(Project project, String userId) {
+        return true;
+    }
 
 }
-

@@ -13,9 +13,7 @@ package org.eclipse.skalli.api.java;
 import org.eclipse.skalli.model.ext.EntityBase;
 
 public interface EntityFilter<T extends EntityBase> {
-  
-  public boolean accept(Class<T> entityClass, T entity);
-  
+
+    public boolean accept(Class<T> entityClass, T entity);
+
 }
-
-

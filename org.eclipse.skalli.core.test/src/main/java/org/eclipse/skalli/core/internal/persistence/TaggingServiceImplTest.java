@@ -28,63 +28,62 @@ import org.eclipse.skalli.model.ext.Taggable;
 
 public class TaggingServiceImplTest {
 
-  private List<Project> projects;
-  private UUID uuid1 = UUID.randomUUID();
-  private UUID uuid2 = UUID.randomUUID();
-  private UUID uuid3 = UUID.randomUUID();
-  private Object[] mocks;
-  private PersistenceService mockIPS;
-  private TaggingServiceImpl ts;
+    private List<Project> projects;
+    private UUID uuid1 = UUID.randomUUID();
+    private UUID uuid2 = UUID.randomUUID();
+    private UUID uuid3 = UUID.randomUUID();
+    private Object[] mocks;
+    private PersistenceService mockIPS;
+    private TaggingServiceImpl ts;
 
-  private Project createProject(UUID uuid, String projectId, Project parent, String[] tags) {
-    Project ret = new Project();
-    ret.setProjectId(projectId);
-    ret.setUuid(uuid);
-    if (parent != null) {
-      ret.setParentEntity(parent);
+    private Project createProject(UUID uuid, String projectId, Project parent, String[] tags) {
+        Project ret = new Project();
+        ret.setProjectId(projectId);
+        ret.setUuid(uuid);
+        if (parent != null) {
+            ret.setParentEntity(parent);
+        }
+        if (tags != null) {
+            for (String tag : tags) {
+                ret.addTag(tag);
+            }
+        }
+        return ret;
     }
-    if (tags != null) {
-      for (String tag : tags) {
-        ret.addTag(tag);
-      }
+
+    @Before
+    public void setup() {
+        projects = new LinkedList<Project>();
+        projects.add(createProject(uuid1, "project1", null, new String[] {})); //$NON-NLS-1$
+        projects.add(createProject(uuid2, "project2", projects.get(0), new String[] { "tagBoth", "tag2" })); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        projects.add(createProject(uuid3, "project3", projects.get(1), new String[] { "tagBoth", "tag3" })); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        mockIPS = createNiceMock(PersistenceService.class);
+        mocks = new Object[] { mockIPS };
+        ts = new TaggingServiceImpl();
+        ts.bindPersistenceService(mockIPS);
+
+        reset(mocks);
+
+        mockIPS.getEntities(eq(Project.class));
+        expectLastCall().andReturn(projects).anyTimes();
+
+        replay(mocks);
     }
-    return ret;
-  }
 
-  @Before
-  public void setup() {
-    projects = new LinkedList<Project>();
-    projects.add(createProject(uuid1, "project1", null, new String[] {})); //$NON-NLS-1$
-    projects.add(createProject(uuid2, "project2", projects.get(0), new String[] {"tagBoth", "tag2"})); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    projects.add(createProject(uuid3, "project3", projects.get(1), new String[] {"tagBoth", "tag3"})); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    mockIPS = createNiceMock(PersistenceService.class);
-    mocks = new Object[] {mockIPS};
-    ts = new TaggingServiceImpl();
-    ts.bindPersistenceService(mockIPS);
+    @Test
+    public void testGetAvailableTags() {
+        Set<String> res = ts.getAvailableTags();
+        Assert.assertNotNull(res);
+        Assert.assertEquals(3, res.size());
+    }
 
-    reset(mocks);
-
-    mockIPS.getEntities(eq(Project.class));
-    expectLastCall().andReturn(projects).anyTimes();
-
-    replay(mocks);
-  }
-
-  @Test
-  public void testGetAvailableTags() {
-    Set<String> res = ts.getAvailableTags();
-    Assert.assertNotNull(res);
-    Assert.assertEquals(3, res.size());
-  }
-
-  @Test
-  public void testGetTaggables() {
-    Map<String, Set<Taggable>> res = ts.getTaggables();
-    Assert.assertNotNull(res);
-    Assert.assertEquals(2, res.get("tagBoth").size());
-    Assert.assertEquals(1, res.get("tag2").size());
-    Assert.assertEquals(1, res.get("tag3").size());
-  }
+    @Test
+    public void testGetTaggables() {
+        Map<String, Set<Taggable>> res = ts.getTaggables();
+        Assert.assertNotNull(res);
+        Assert.assertEquals(2, res.get("tagBoth").size());
+        Assert.assertEquals(1, res.get("tag2").size());
+        Assert.assertEquals(1, res.get("tag3").size());
+    }
 
 }
-

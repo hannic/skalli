@@ -14,24 +14,23 @@ import java.util.UUID;
 
 public class NoSuchTemplateException extends RuntimeException {
 
-  private static final long serialVersionUID = 8191688438685219574L;
+    private static final long serialVersionUID = 8191688438685219574L;
 
-  public NoSuchTemplateException(String message) {
-    super(message);
-  }
+    public NoSuchTemplateException(String message) {
+        super(message);
+    }
 
-  public NoSuchTemplateException(Throwable cause) {
-    super(cause);
-  }
+    public NoSuchTemplateException(Throwable cause) {
+        super(cause);
+    }
 
-  public NoSuchTemplateException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public NoSuchTemplateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public NoSuchTemplateException(UUID projectId, String templateId) {
-    super("Project " + projectId + " references template " + templateId
-        + ", but there is no such template registered");
-  }
+    public NoSuchTemplateException(UUID projectId, String templateId) {
+        super("Project " + projectId + " references template " + templateId
+                + ", but there is no such template registered");
+    }
 
 }
-

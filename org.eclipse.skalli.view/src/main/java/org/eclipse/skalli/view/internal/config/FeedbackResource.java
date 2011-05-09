@@ -14,17 +14,16 @@ import org.eclipse.skalli.api.rest.config.CustomizingResource;
 
 public class FeedbackResource extends CustomizingResource<FeedbackConfig> {
 
-  public static final String FEEDBACK_KEY = "view.feedback"; //$NON-NLS-1$
+    public static final String FEEDBACK_KEY = "view.feedback"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return FEEDBACK_KEY;
-  }
+    @Override
+    protected String getKey() {
+        return FEEDBACK_KEY;
+    }
 
-  @Override
-  protected Class<FeedbackConfig> getConfigClass() {
-    return FeedbackConfig.class;
-  }
+    @Override
+    protected Class<FeedbackConfig> getConfigClass() {
+        return FeedbackConfig.class;
+    }
 
 }
-

@@ -25,44 +25,44 @@ import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 
 public final class CorePeopleProvider implements PeopleProvider {
-  private static final Logger LOG = Log.getLogger(CorePeopleProvider.class);
+    private static final Logger LOG = Log.getLogger(CorePeopleProvider.class);
 
-  private static final String ROLE_LEAD = "projectlead"; //$NON-NLS-1$
-  private static final String ROLE_MEMBER = "projectmember"; //$NON-NLS-1$
+    private static final String ROLE_LEAD = "projectlead"; //$NON-NLS-1$
+    private static final String ROLE_MEMBER = "projectmember"; //$NON-NLS-1$
 
-  protected void activate(ComponentContext context) {
-    LOG.info(this.getClass().getSimpleName() + " component activated"); //$NON-NLS-1$
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info(this.getClass().getSimpleName() + " component deactivated"); //$NON-NLS-1$
-  }
-
-  @Override
-  public Map<String,Set<ProjectMember>> getPeople(Project project) {
-    Map<String,Set<ProjectMember>> ret = new HashMap<String,Set<ProjectMember>>();
-    PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
-    if (ext != null) {
-      ret.put(ROLE_LEAD, ext.getLeads());
-      ret.put(ROLE_MEMBER, ext.getMembers());
+    protected void activate(ComponentContext context) {
+        LOG.info(this.getClass().getSimpleName() + " component activated"); //$NON-NLS-1$
     }
-    return ret;
-  }
 
-  @Override
-  public void addPerson(Project project, String role, ProjectMember person) {
-    if (project.isInherited(PeopleProjectExt.class)) {
-      throw new IllegalArgumentException("Cannot add person to inherited people extension");
+    protected void deactivate(ComponentContext context) {
+        LOG.info(this.getClass().getSimpleName() + " component deactivated"); //$NON-NLS-1$
     }
-    PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
-    if (ext == null) {
-      ext = new PeopleProjectExt();
-      project.addExtension(ext);
+
+    @Override
+    public Map<String, Set<ProjectMember>> getPeople(Project project) {
+        Map<String, Set<ProjectMember>> ret = new HashMap<String, Set<ProjectMember>>();
+        PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
+        if (ext != null) {
+            ret.put(ROLE_LEAD, ext.getLeads());
+            ret.put(ROLE_MEMBER, ext.getMembers());
+        }
+        return ret;
     }
-    if (StringUtils.equalsIgnoreCase(role, ROLE_LEAD)) {
-      ext.addLead(person);
-    } else if (StringUtils.equalsIgnoreCase(role, ROLE_MEMBER)) {
-      ext.addMember(person);
+
+    @Override
+    public void addPerson(Project project, String role, ProjectMember person) {
+        if (project.isInherited(PeopleProjectExt.class)) {
+            throw new IllegalArgumentException("Cannot add person to inherited people extension");
+        }
+        PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
+        if (ext == null) {
+            ext = new PeopleProjectExt();
+            project.addExtension(ext);
+        }
+        if (StringUtils.equalsIgnoreCase(role, ROLE_LEAD)) {
+            ext.addLead(person);
+        } else if (StringUtils.equalsIgnoreCase(role, ROLE_MEMBER)) {
+            ext.addMember(person);
+        }
     }
-  }
 }

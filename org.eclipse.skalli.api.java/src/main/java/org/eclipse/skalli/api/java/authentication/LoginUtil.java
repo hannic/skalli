@@ -24,43 +24,43 @@ import org.eclipse.skalli.common.User;
  */
 public class LoginUtil {
 
-  private String userName;
+    private String userName;
 
-  public LoginUtil(ServletRequest request) {
-    if (request instanceof HttpServletRequest) {
-      Principal userPrincipal = ((HttpServletRequest) request).getUserPrincipal();
-      if (userPrincipal != null) {
-        userName = userPrincipal.getName();
-        if (StringUtils.isNotBlank(userName)) {
-          userName = userName.toLowerCase(Locale.ENGLISH);
+    public LoginUtil(ServletRequest request) {
+        if (request instanceof HttpServletRequest) {
+            Principal userPrincipal = ((HttpServletRequest) request).getUserPrincipal();
+            if (userPrincipal != null) {
+                userName = userPrincipal.getName();
+                if (StringUtils.isNotBlank(userName)) {
+                    userName = userName.toLowerCase(Locale.ENGLISH);
+                }
+            }
         }
-      }
     }
-  }
 
-  /**
-   * Returns the unique identifier of the user that is currently authenticated.
-   *
-   * @return the unique identifier of a user, or <code>null</code>, if no user
-   *         is authenticated or no proper authentication mechanism is in place.
-   */
-  public String getLoggedInUserId() {
-    return userName;
-  }
+    /**
+     * Returns the unique identifier of the user that is currently authenticated.
+     *
+     * @return the unique identifier of a user, or <code>null</code>, if no user
+     *         is authenticated or no proper authentication mechanism is in place.
+     */
+    public String getLoggedInUserId() {
+        return userName;
+    }
 
-  /**
-   * Returns the user that is currently authenticated.
-   *
-   * <p>
-   * Please note: Using this method may invoke a remote call to the user store (i.e. LDAP).
-   * Hence if you only need the UserId of the currently authenticated user,
-   * you should use {@link #getLoggedInUserId()} instead.
-   * </p>
-   *
-   * @return a user, or <code>null</code>, if no user is authenticated or no
-   *         proper authentication mechanism is in place.
-   */
-  public User getLoggedInUser() {
-    return UserUtil.getUser(getLoggedInUserId());
-  }
+    /**
+     * Returns the user that is currently authenticated.
+     *
+     * <p>
+     * Please note: Using this method may invoke a remote call to the user store (i.e. LDAP).
+     * Hence if you only need the UserId of the currently authenticated user,
+     * you should use {@link #getLoggedInUserId()} instead.
+     * </p>
+     *
+     * @return a user, or <code>null</code>, if no user is authenticated or no
+     *         proper authentication mechanism is in place.
+     */
+    public User getLoggedInUser() {
+        return UserUtil.getUser(getLoggedInUserId());
+    }
 }

@@ -24,20 +24,19 @@ import org.eclipse.skalli.testutil.RestUtils;
 @SuppressWarnings("nls")
 public class MavenReactorRestAPITest {
 
-  private List<Project> projects;
-  private ProjectService projectService;
+    private List<Project> projects;
+    private ProjectService projectService;
 
-  @Before
-  public void setup() throws Exception {
-    projectService = ProjectServiceUtils.getProjectService();
-    projects = projectService.getAll();
-    Assert.assertTrue("projects.size() > 0", projects.size() > 0);
-  }
+    @Before
+    public void setup() throws Exception {
+        projectService = ProjectServiceUtils.getProjectService();
+        projects = projectService.getAll();
+        Assert.assertTrue("projects.size() > 0", projects.size() > 0);
+    }
 
-  @Test
-  public void testValidate() throws Exception {
-    RestUtils.validate(projects, MavenReactorProjectExt.class, "extension-maven-reactor.xsd");
-  }
+    @Test
+    public void testValidate() throws Exception {
+        RestUtils.validate(projects, MavenReactorProjectExt.class, "extension-maven-reactor.xsd");
+    }
 
 }
-

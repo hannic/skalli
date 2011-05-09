@@ -14,7 +14,6 @@ import org.eclipse.skalli.api.java.events.AbstractEvent;
 
 public interface EventListener<T extends AbstractEvent> {
 
-  public void onEvent(T event);
+    public void onEvent(T event);
 
 }
-

@@ -28,44 +28,43 @@ import org.eclipse.skalli.testutil.BundleManager;
 @SuppressWarnings("nls")
 public class LocalGroupServiceImplTest {
 
-  private File tmpDir;
+    private File tmpDir;
 
-  private GroupService groupService;
-  private List<Group> groups;
+    private GroupService groupService;
+    private List<Group> groups;
 
-  private static final String FILTER =
-    "(&(" + Constants.OBJECTCLASS + "=" + GroupService.class.getName() + ")" + "(groupService.type=local))";
+    private static final String FILTER =
+            "(&(" + Constants.OBJECTCLASS + "=" + GroupService.class.getName() + ")" + "(groupService.type=local))";
 
-  @Before
-  public void setup() throws Exception {
-    new BundleManager(this.getClass()).startBundles();
-    groupService = Services.getService(GroupService.class, FILTER);
-    if (groupService == null) {
-      Assert.fail("local group service not found.");
+    @Before
+    public void setup() throws Exception {
+        new BundleManager(this.getClass()).startBundles();
+        groupService = Services.getService(GroupService.class, FILTER);
+        if (groupService == null) {
+            Assert.fail("local group service not found.");
+        }
+        groups = groupService.getGroups();
+        Assert.assertEquals(2, groups.size());
     }
-    groups = groupService.getGroups();
-    Assert.assertEquals(2, groups.size());
-  }
 
-  @After
-  public void tearDown() throws Exception {
-    if (tmpDir != null) {
-      FileUtils.forceDelete(tmpDir);
+    @After
+    public void tearDown() throws Exception {
+        if (tmpDir != null) {
+            FileUtils.forceDelete(tmpDir);
+        }
     }
-  }
 
-  @Test
-  public void testIsAdministrator() {
-    Assert.assertTrue(groupService.isAdministrator("lc"));
-    Assert.assertFalse(groupService.isAdministrator("gh"));
-    Assert.assertFalse(groupService.isAdministrator("unknown"));
-  }
+    @Test
+    public void testIsAdministrator() {
+        Assert.assertTrue(groupService.isAdministrator("lc"));
+        Assert.assertFalse(groupService.isAdministrator("gh"));
+        Assert.assertFalse(groupService.isAdministrator("unknown"));
+    }
 
-  @Test
-  public void testIsMemberOfGroup() {
-    Assert.assertTrue(groupService.isMemberOfGroup("gh", "doctors"));
-    Assert.assertFalse(groupService.isMemberOfGroup("lc", "doctors"));
-    Assert.assertFalse(groupService.isMemberOfGroup("unknown", "doctors"));
-  }
+    @Test
+    public void testIsMemberOfGroup() {
+        Assert.assertTrue(groupService.isMemberOfGroup("gh", "doctors"));
+        Assert.assertFalse(groupService.isMemberOfGroup("lc", "doctors"));
+        Assert.assertFalse(groupService.isMemberOfGroup("unknown", "doctors"));
+    }
 }
-

@@ -16,21 +16,20 @@ import org.osgi.framework.FrameworkUtil;
 
 public class BundleManager {
 
-  private final Class<?> hintClass;
+    private final Class<?> hintClass;
 
-  public BundleManager(Class<?> hintClass) {
-    this.hintClass = hintClass;
-  }
-
-  public void startBundles() throws BundleException {
-    Bundle bundle = FrameworkUtil.getBundle(hintClass);
-    bundle.start();
-    for (Bundle b : bundle.getBundleContext().getBundles()) {
-      if (b.getSymbolicName().startsWith("org.eclipse.skalli") && !b.getSymbolicName().endsWith(".test") && b.getState() != Bundle.ACTIVE) { //$NON-NLS-1$ //$NON-NLS-2$
-        b.start();
-      }
+    public BundleManager(Class<?> hintClass) {
+        this.hintClass = hintClass;
     }
-  }
+
+    public void startBundles() throws BundleException {
+        Bundle bundle = FrameworkUtil.getBundle(hintClass);
+        bundle.start();
+        for (Bundle b : bundle.getBundleContext().getBundles()) {
+            if (b.getSymbolicName().startsWith("org.eclipse.skalli") && !b.getSymbolicName().endsWith(".test") && b.getState() != Bundle.ACTIVE) { //$NON-NLS-1$ //$NON-NLS-2$
+                b.start();
+            }
+        }
+    }
 
 }
-

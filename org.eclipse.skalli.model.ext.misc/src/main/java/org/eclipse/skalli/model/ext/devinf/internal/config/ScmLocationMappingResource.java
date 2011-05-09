@@ -19,24 +19,23 @@ import org.eclipse.skalli.model.ext.devinf.ScmLocationMappingsConfig;
 
 public class ScmLocationMappingResource extends CustomizingResource<ScmLocationMappingsConfig> {
 
-  public static final String MAPPINGS_KEY = "devInf.scmLocationMappings"; //$NON-NLS-1$
+    public static final String MAPPINGS_KEY = "devInf.scmLocationMappings"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return MAPPINGS_KEY;
-  };
+    @Override
+    protected String getKey() {
+        return MAPPINGS_KEY;
+    };
 
-  @Override
-  protected Class<ScmLocationMappingsConfig> getConfigClass() {
-    return ScmLocationMappingsConfig.class;
-  };
+    @Override
+    protected Class<ScmLocationMappingsConfig> getConfigClass() {
+        return ScmLocationMappingsConfig.class;
+    };
 
-  @Override
-  protected List<Class<?>> getAdditionalConfigClasses() {
-    List<Class<?>> ret = new LinkedList<Class<?>>();
-    ret.add(ScmLocationMappingConfig.class);
-    return ret;
-  }
+    @Override
+    protected List<Class<?>> getAdditionalConfigClasses() {
+        List<Class<?>> ret = new LinkedList<Class<?>>();
+        ret.add(ScmLocationMappingConfig.class);
+        return ret;
+    }
 
 }
-

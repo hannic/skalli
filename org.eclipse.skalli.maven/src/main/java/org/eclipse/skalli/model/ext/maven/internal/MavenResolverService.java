@@ -13,4 +13,3 @@ package org.eclipse.skalli.model.ext.maven.internal;
 public interface MavenResolverService {
 
 }
-

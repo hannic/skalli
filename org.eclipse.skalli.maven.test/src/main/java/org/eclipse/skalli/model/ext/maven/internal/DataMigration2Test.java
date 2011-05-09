@@ -16,11 +16,10 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class DataMigration2Test {
 
-  @Test
-  public void testMigrate() throws Exception {
-    DataMigration2 migration = new DataMigration2();
-    MigrationTestUtil.testMigration(migration, "skalli");
-  }
+    @Test
+    public void testMigrate() throws Exception {
+        DataMigration2 migration = new DataMigration2();
+        MigrationTestUtil.testMigration(migration, "skalli");
+    }
 
 }
-

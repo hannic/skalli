@@ -20,43 +20,42 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class ProjectsConverter extends AbstractConverter<Projects> {
 
-  private String[] extensions;
+    private String[] extensions;
 
-  public ProjectsConverter(String host, String[] extensions) {
-    super(Projects.class, "projects", host); //$NON-NLS-1$
-    this.extensions = extensions;
-  }
-
-  @Override
-  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-    marshalNSAttributes(writer);
-    marshalApiVersion(writer);
-    for (Project project: ((Projects)source).getProjects()) {
-      writer.startNode("project"); //$NON-NLS-1$
-      new ProjectConverter(getHost(), extensions, true).marshal(project, writer, context);
-      writer.endNode();
+    public ProjectsConverter(String host, String[] extensions) {
+        super(Projects.class, "projects", host); //$NON-NLS-1$
+        this.extensions = extensions;
     }
-  }
 
-  @Override
-  public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
-    // don't support that yet
-    return null;
-  }
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        marshalNSAttributes(writer);
+        marshalApiVersion(writer);
+        for (Project project : ((Projects) source).getProjects()) {
+            writer.startNode("project"); //$NON-NLS-1$
+            new ProjectConverter(getHost(), extensions, true).marshal(project, writer, context);
+            writer.endNode();
+        }
+    }
 
-  @Override
-  public String getApiVersion() {
-    return ProjectConverter.API_VERSION;
-  }
+    @Override
+    public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
+        // don't support that yet
+        return null;
+    }
 
-  @Override
-  public String getNamespace() {
-    return ProjectConverter.NAMESPACE;
-  }
+    @Override
+    public String getApiVersion() {
+        return ProjectConverter.API_VERSION;
+    }
 
-  @Override
-  public String getXsdFileName() {
-    return "projects.xsd"; //$NON-NLS-1$
-  }
+    @Override
+    public String getNamespace() {
+        return ProjectConverter.NAMESPACE;
+    }
+
+    @Override
+    public String getXsdFileName() {
+        return "projects.xsd"; //$NON-NLS-1$
+    }
 }
-

@@ -18,21 +18,20 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class NoopConverter implements Converter {
 
-  @Override
-  public void marshal(Object arg0, HierarchicalStreamWriter arg1, MarshallingContext arg2) {
-    // do nothing
-  }
+    @Override
+    public void marshal(Object arg0, HierarchicalStreamWriter arg1, MarshallingContext arg2) {
+        // do nothing
+    }
 
-  @Override
-  public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
-    // do nothing
-    return null;
-  }
+    @Override
+    public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
+        // do nothing
+        return null;
+    }
 
-  @Override
-  public boolean canConvert(Class className) {
-    return className.equals(Noop.class);
-  }
+    @Override
+    public boolean canConvert(Class className) {
+        return className.equals(Noop.class);
+    }
 
 }
-

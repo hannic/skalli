@@ -15,20 +15,20 @@ import org.junit.Test;
 
 public class NormalizeUtilTest {
 
-  @Test
-  public void test() {
-    Assert.assertEquals("a", NormalizeUtil.normalize("á"));
-    Assert.assertEquals("a", NormalizeUtil.normalize("â"));
-    Assert.assertEquals("i", NormalizeUtil.normalize("ï"));
-    Assert.assertEquals("c", NormalizeUtil.normalize("ç"));
+    @Test
+    public void test() {
+        Assert.assertEquals("a", NormalizeUtil.normalize("á"));
+        Assert.assertEquals("a", NormalizeUtil.normalize("â"));
+        Assert.assertEquals("i", NormalizeUtil.normalize("ï"));
+        Assert.assertEquals("c", NormalizeUtil.normalize("ç"));
 
-    Assert.assertEquals("ae", NormalizeUtil.normalize("ä"));
-    Assert.assertEquals("oe", NormalizeUtil.normalize("ö"));
-    Assert.assertEquals("ue", NormalizeUtil.normalize("ü"));
-    Assert.assertEquals("Ae", NormalizeUtil.normalize("Ä"));
-    Assert.assertEquals("Oe", NormalizeUtil.normalize("Ö"));
-    Assert.assertEquals("Ue", NormalizeUtil.normalize("Ü"));
-    Assert.assertEquals("ss", NormalizeUtil.normalize("ß"));
-  }
+        Assert.assertEquals("ae", NormalizeUtil.normalize("ä"));
+        Assert.assertEquals("oe", NormalizeUtil.normalize("ö"));
+        Assert.assertEquals("ue", NormalizeUtil.normalize("ü"));
+        Assert.assertEquals("Ae", NormalizeUtil.normalize("Ä"));
+        Assert.assertEquals("Oe", NormalizeUtil.normalize("Ö"));
+        Assert.assertEquals("Ue", NormalizeUtil.normalize("Ü"));
+        Assert.assertEquals("ss", NormalizeUtil.normalize("ß"));
+    }
 
 }

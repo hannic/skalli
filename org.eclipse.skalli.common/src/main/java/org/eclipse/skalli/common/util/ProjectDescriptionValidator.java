@@ -34,44 +34,43 @@ import org.eclipse.skalli.model.ext.Severity;
  */
 public class ProjectDescriptionValidator implements Issuer, PropertyValidator {
 
-  private static final String TXT_DESCRIPTION_EMPTY = "The project description is empty. Let others know what this is about.";
-  private static final String TXT_DESCRIPTION_SHORT = "The project description is quite short. Give some more context.";
+    private static final String TXT_DESCRIPTION_EMPTY = "The project description is empty. Let others know what this is about.";
+    private static final String TXT_DESCRIPTION_SHORT = "The project description is quite short. Give some more context.";
 
-  private final Class<? extends ExtensionEntityBase> extension;
-  private final String propertyId;
+    private final Class<? extends ExtensionEntityBase> extension;
+    private final String propertyId;
 
-  public ProjectDescriptionValidator(final Class<? extends ExtensionEntityBase> extension, final String propertyId) {
-    this.extension = extension;
-    this.propertyId = propertyId;
-  }
-
-  @Override
-  public SortedSet<Issue> validate(final UUID entityId, final Object value, final Severity minSeverity) {
-    final SortedSet<Issue> issues = new TreeSet<Issue>();
-
-    // Do not participate in checks with Severity.FATAL
-    if (minSeverity.equals(Severity.FATAL)) {
-      return issues;
+    public ProjectDescriptionValidator(final Class<? extends ExtensionEntityBase> extension, final String propertyId) {
+        this.extension = extension;
+        this.propertyId = propertyId;
     }
 
-    String description = (value != null) ? value.toString() : StringUtils.EMPTY;
+    @Override
+    public SortedSet<Issue> validate(final UUID entityId, final Object value, final Severity minSeverity) {
+        final SortedSet<Issue> issues = new TreeSet<Issue>();
 
-    if (Severity.WARNING.compareTo(minSeverity) <= 0 && StringUtils.isBlank(description)) {
-      issues.add(newIssue(Severity.WARNING, entityId, TXT_DESCRIPTION_EMPTY));
-    } else {
-      int descriptionLength = description.length();
+        // Do not participate in checks with Severity.FATAL
+        if (minSeverity.equals(Severity.FATAL)) {
+            return issues;
+        }
 
-      if (Severity.INFO.compareTo(minSeverity) <= 0 && descriptionLength < 25) {
-        issues.add(newIssue(Severity.INFO, entityId, TXT_DESCRIPTION_SHORT));
-      }
+        String description = (value != null) ? value.toString() : StringUtils.EMPTY;
+
+        if (Severity.WARNING.compareTo(minSeverity) <= 0 && StringUtils.isBlank(description)) {
+            issues.add(newIssue(Severity.WARNING, entityId, TXT_DESCRIPTION_EMPTY));
+        } else {
+            int descriptionLength = description.length();
+
+            if (Severity.INFO.compareTo(minSeverity) <= 0 && descriptionLength < 25) {
+                issues.add(newIssue(Severity.INFO, entityId, TXT_DESCRIPTION_SHORT));
+            }
+        }
+
+        return issues;
     }
 
-    return issues;
-  }
-
-  private Issue newIssue(final Severity severity, final UUID entityId, final String text) {
-    return new Issue(severity, ProjectDescriptionValidator.class, entityId, extension, propertyId, 0, text);
-  }
+    private Issue newIssue(final Severity severity, final UUID entityId, final String text) {
+        return new Issue(severity, ProjectDescriptionValidator.class, entityId, extension, propertyId, 0, text);
+    }
 
 }
-

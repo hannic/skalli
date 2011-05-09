@@ -15,13 +15,15 @@ import java.util.UUID;
 import org.eclipse.skalli.model.ext.EntityBase;
 
 public class TestEntityBase2 extends EntityBase {
-  public TestEntityBase2() {
-  }
-  public TestEntityBase2(UUID uuid) {
-    setUuid(uuid);
-  }
-  public TestEntityBase2(UUID uuid, UUID parentEntityId) {
-    setUuid(uuid);
-    setParentEntityId(parentEntityId);
-  }
+    public TestEntityBase2() {
+    }
+
+    public TestEntityBase2(UUID uuid) {
+        setUuid(uuid);
+    }
+
+    public TestEntityBase2(UUID uuid, UUID parentEntityId) {
+        setUuid(uuid);
+        setParentEntityId(parentEntityId);
+    }
 }

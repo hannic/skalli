@@ -21,31 +21,30 @@ import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
 
 public class DataMigration1 extends AbstractDataMigration {
 
-  public DataMigration1() {
-    super(Project.class, 1);
-  }
-
-  private void remove(NodeList elements) {
-    for (int i = 0; i < elements.getLength(); i++) {
-      Node item = elements.item(i);
-      item.getParentNode().removeChild(item);
+    public DataMigration1() {
+        super(Project.class, 1);
     }
-  }
 
-  private void removeGAVs(NodeList elements) {
-    for (int i = 0; i < elements.getLength(); i++) {
-      Element node = (Element) elements.item(i);
-      remove(node.getElementsByTagName("artifactID")); //$NON-NLS-1$
-      remove(node.getElementsByTagName("groupID")); //$NON-NLS-1$
-      remove(node.getElementsByTagName("version")); //$NON-NLS-1$
-      remove(node.getElementsByTagName("id")); //$NON-NLS-1$
+    private void remove(NodeList elements) {
+        for (int i = 0; i < elements.getLength(); i++) {
+            Node item = elements.item(i);
+            item.getParentNode().removeChild(item);
+        }
     }
-  }
 
-  @Override
-  public void migrate(Document doc) {
-    removeGAVs(doc.getElementsByTagName(MavenProjectExt.class.getName()));
-  }
+    private void removeGAVs(NodeList elements) {
+        for (int i = 0; i < elements.getLength(); i++) {
+            Element node = (Element) elements.item(i);
+            remove(node.getElementsByTagName("artifactID")); //$NON-NLS-1$
+            remove(node.getElementsByTagName("groupID")); //$NON-NLS-1$
+            remove(node.getElementsByTagName("version")); //$NON-NLS-1$
+            remove(node.getElementsByTagName("id")); //$NON-NLS-1$
+        }
+    }
+
+    @Override
+    public void migrate(Document doc) {
+        removeGAVs(doc.getElementsByTagName(MavenProjectExt.class.getName()));
+    }
 
 }
-

@@ -19,29 +19,28 @@ import org.eclipse.skalli.model.ext.AbstractDataMigration;
 
 public class DataMigration2 extends AbstractDataMigration {
 
-  public DataMigration2() {
-    super(Project.class, 2);
-  }
-
-  @Override
-  public void migrate(Document doc) {
-    NodeList wikiUrlNodes = doc.getElementsByTagName("wikiUrl");
-    if (wikiUrlNodes.getLength() > 0) {
-      Element wikiUrlElement = (Element) wikiUrlNodes.item(0);
-      if (wikiUrlElement != null) {
-        String wikiUrl = wikiUrlElement.getTextContent();
-        wikiUrlElement.getParentNode().removeChild(wikiUrlElement);
-
-        NodeList projectNodes = doc.getElementsByTagName("org.eclipse.skalli.model.core.Project");
-        if (projectNodes.getLength() > 0) {
-          Element projectElement = (Element) projectNodes.item(0);
-          Element pageUrlElement = doc.createElement("pageUrl");
-          pageUrlElement.setTextContent(wikiUrl);
-          projectElement.appendChild(pageUrlElement);
-        }
-      }
+    public DataMigration2() {
+        super(Project.class, 2);
     }
-  }
+
+    @Override
+    public void migrate(Document doc) {
+        NodeList wikiUrlNodes = doc.getElementsByTagName("wikiUrl");
+        if (wikiUrlNodes.getLength() > 0) {
+            Element wikiUrlElement = (Element) wikiUrlNodes.item(0);
+            if (wikiUrlElement != null) {
+                String wikiUrl = wikiUrlElement.getTextContent();
+                wikiUrlElement.getParentNode().removeChild(wikiUrlElement);
+
+                NodeList projectNodes = doc.getElementsByTagName("org.eclipse.skalli.model.core.Project");
+                if (projectNodes.getLength() > 0) {
+                    Element projectElement = (Element) projectNodes.item(0);
+                    Element pageUrlElement = doc.createElement("pageUrl");
+                    pageUrlElement.setTextContent(wikiUrl);
+                    projectElement.appendChild(pageUrlElement);
+                }
+            }
+        }
+    }
 
 }
-

@@ -15,29 +15,28 @@ package org.eclipse.skalli.api.java.tasks;
  */
 public abstract class RunnableSchedule extends Schedule {
 
-  /**
-   * Creates a <code>RunnableSchedule</code> from the given schedule.
-   *
-   * @param schedule  the schedule to initialize from.
-   */
-  protected RunnableSchedule(Schedule schedule) {
-    super(schedule);
-  }
+    /**
+     * Creates a <code>RunnableSchedule</code> from the given schedule.
+     *
+     * @param schedule  the schedule to initialize from.
+     */
+    protected RunnableSchedule(Schedule schedule) {
+        super(schedule);
+    }
 
-  /**
-   * Returns the runnable associated with the task that this schedule describes.
-   *
-   * @return  a runnable, or <code>null</code>.
-   */
-  public abstract Runnable getRunnable();
+    /**
+     * Returns the runnable associated with the task that this schedule describes.
+     *
+     * @return  a runnable, or <code>null</code>.
+     */
+    public abstract Runnable getRunnable();
 
-  @SuppressWarnings("nls")
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("'").append(super.toString()).append("'");
-    sb.append(" running " + getRunnable().getClass().getName());
-    return sb.toString();
-  }
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("'").append(super.toString()).append("'");
+        sb.append(" running " + getRunnable().getClass().getName());
+        return sb.toString();
+    }
 }
-

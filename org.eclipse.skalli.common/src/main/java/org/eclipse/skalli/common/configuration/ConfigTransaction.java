@@ -13,4 +13,3 @@ package org.eclipse.skalli.common.configuration;
 public interface ConfigTransaction {
 
 }
-

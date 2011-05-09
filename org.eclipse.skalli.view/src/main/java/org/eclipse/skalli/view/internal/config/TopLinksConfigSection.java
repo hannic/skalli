@@ -14,19 +14,18 @@ import org.restlet.resource.ServerResource;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 
-public class TopLinksConfigSection implements ConfigSection{
+public class TopLinksConfigSection implements ConfigSection {
 
-  private static final String NAME = "view/toplinks"; //$NON-NLS-1$
+    private static final String NAME = "view/toplinks"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return TopLinksResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return TopLinksResource.class;
+    }
 
 }
-

@@ -19,25 +19,23 @@ import org.eclipse.skalli.api.rest.config.ConfigSection;
 import org.eclipse.skalli.log.Log;
 
 public class LDAPConfigSection implements ConfigSection {
-  private static final Logger LOG = Log.getLogger(LDAPConfigSection.class);
+    private static final Logger LOG = Log.getLogger(LDAPConfigSection.class);
 
-  protected void activate(ComponentContext context){
-    LOG.info("LDAPConfig activated");
-  }
+    protected void activate(ComponentContext context) {
+        LOG.info("LDAPConfig activated");
+    }
 
-  protected void deactivate(ComponentContext context) {
-  }
+    protected void deactivate(ComponentContext context) {
+    }
 
-  @Override
-  public String getName() {
-    return "ldap";
-  }
+    @Override
+    public String getName() {
+        return "ldap";
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return LDAPResource.class;
-  }
-
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return LDAPResource.class;
+    }
 
 }
-

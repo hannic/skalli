@@ -15,25 +15,27 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("toplink")
 public class TopLinkConfig {
 
-  private String displayName;
-  private String url;
+    private String displayName;
+    private String url;
 
-  public TopLinkConfig(String displayName, String url) {
-    this.displayName = displayName;
-    this.url = url;
-  }
+    public TopLinkConfig(String displayName, String url) {
+        this.displayName = displayName;
+        this.url = url;
+    }
 
-  public String getDisplayName() {
-    return displayName;
-  }
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
-  }
-  public String getUrl() {
-    return url;
-  }
-  public void setUrl(String url) {
-    this.url = url;
-  }
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }
-

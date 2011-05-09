@@ -15,34 +15,33 @@ import org.eclipse.skalli.common.configuration.ConfigKey;
 @SuppressWarnings("nls")
 public enum ConfigKeyProxy implements ConfigKey {
 
-  HOST("proxy.host", "", false),
-  PORT("proxy.port", "", false),
-  NONPROXYHOSTS("proxy.nonProxyHosts", "", false);
+    HOST("proxy.host", "", false),
+    PORT("proxy.port", "", false),
+    NONPROXYHOSTS("proxy.nonProxyHosts", "", false);
 
-  private final String key;
-  private final String defaultValue;
-  private final boolean isEncrypted;
+    private final String key;
+    private final String defaultValue;
+    private final boolean isEncrypted;
 
-  private ConfigKeyProxy(String key, String defaultValue, boolean isEncrypted) {
-    this.key = key;
-    this.defaultValue = defaultValue;
-    this.isEncrypted = isEncrypted;
-  }
+    private ConfigKeyProxy(String key, String defaultValue, boolean isEncrypted) {
+        this.key = key;
+        this.defaultValue = defaultValue;
+        this.isEncrypted = isEncrypted;
+    }
 
-  @Override
-  public String getKey() {
-    return key;
-  }
+    @Override
+    public String getKey() {
+        return key;
+    }
 
-  @Override
-  public String getDefaultValue() {
-    return defaultValue;
-  }
+    @Override
+    public String getDefaultValue() {
+        return defaultValue;
+    }
 
-  @Override
-  public boolean isEncrypted() {
-    return isEncrypted;
-  }
+    @Override
+    public boolean isEncrypted() {
+        return isEncrypted;
+    }
 
 }
-

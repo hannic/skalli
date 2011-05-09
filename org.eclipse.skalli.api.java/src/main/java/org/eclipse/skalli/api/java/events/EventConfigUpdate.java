@@ -12,19 +12,16 @@ package org.eclipse.skalli.api.java.events;
 
 import org.eclipse.skalli.common.configuration.ConfigKey;
 
-
-
 public class EventConfigUpdate extends AbstractEvent {
 
-  private final ConfigKey[] keys;
+    private final ConfigKey[] keys;
 
-  public EventConfigUpdate(ConfigKey... keys) {
-    this.keys = keys;
-  }
+    public EventConfigUpdate(ConfigKey... keys) {
+        this.keys = keys;
+    }
 
-  public ConfigKey[] getKeys() {
-    return keys;
-  }
+    public ConfigKey[] getKeys() {
+        return keys;
+    }
 
 }
-

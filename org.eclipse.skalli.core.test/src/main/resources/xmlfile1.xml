@@ -8,9 +8,9 @@
     Contributors:
         SAP AG - initial API and implementation
  -->
-<note> 
-  <to>Tove</to> 
-  <from>Jani</from> 
-  <heading>Reminder</heading> 
-  <body>Don't forget me this weekend!</body> 
+<note>
+    <to>Tove</to>
+    <from>Jani</from>
+    <heading>Reminder</heading>
+    <body>Don't forget me this weekend!</body>
 </note> 

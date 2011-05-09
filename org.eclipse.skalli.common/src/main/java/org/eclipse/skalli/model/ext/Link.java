@@ -20,72 +20,71 @@ import java.io.Serializable;
  */
 public class Link implements Serializable {
 
-  private static final long serialVersionUID = -2158401882243718826L;
-  private String label;
-  private String url;
+    private static final long serialVersionUID = -2158401882243718826L;
+    private String label;
+    private String url;
 
-  public Link() {
-    this(null, null);
-  }
-
-  public Link(String url, String label) {
-    this.url = url;
-    this.label = label;
-  }
-
-  public String getLabel() {
-    return label;
-  }
-
-  public void setLabel(String label) {
-    this.label = label;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public String getUrl() {
-    return url;
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((url == null) ? 0 : url.hashCode());
-    result = prime * result + ((label == null) ? 0 : label.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    public Link() {
+        this(null, null);
     }
-    if (obj == null) {
-      return false;
+
+    public Link(String url, String label) {
+        this.url = url;
+        this.label = label;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
+
+    public String getLabel() {
+        return label;
     }
-    Link other = (Link) obj;
-    if (url == null) {
-      if (other.url != null) {
-        return false;
-      }
-    } else if (!url.equals(other.url)) {
-      return false;
+
+    public void setLabel(String label) {
+        this.label = label;
     }
-    if (label == null) {
-      if (other.label != null) {
-        return false;
-      }
-    } else if (!label.equals(other.label)) {
-      return false;
+
+    public void setUrl(String url) {
+        this.url = url;
     }
-    return true;
-  }
+
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((url == null) ? 0 : url.hashCode());
+        result = prime * result + ((label == null) ? 0 : label.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Link other = (Link) obj;
+        if (url == null) {
+            if (other.url != null) {
+                return false;
+            }
+        } else if (!url.equals(other.url)) {
+            return false;
+        }
+        if (label == null) {
+            if (other.label != null) {
+                return false;
+            }
+        } else if (!label.equals(other.label)) {
+            return false;
+        }
+        return true;
+    }
 
 }
-

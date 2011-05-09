@@ -21,163 +21,162 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class Statistics {
 
-  private static class UserInfo {
-    private final String browser;
-    private final String department;
-    private final String location;
-    private final String userId;
+    private static class UserInfo {
+        private final String browser;
+        private final String department;
+        private final String location;
+        private final String userId;
 
-    public UserInfo(String userId, String browser, String department, String location) {
-      super();
-      this.userId = userId;
-      this.browser = browser;
-      this.department = department;
-      this.location = location;
+        public UserInfo(String userId, String browser, String department, String location) {
+            super();
+            this.userId = userId;
+            this.browser = browser;
+            this.department = department;
+            this.location = location;
+        }
+
+        public String getBrowser() {
+            return browser;
+        }
+
+        public String getDepartment() {
+            return department;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
     }
 
-    public String getBrowser() {
-      return browser;
+    private static final Map<String, Long> hits = new HashMap<String, Long>();
+    private static final Map<String, Long> referers = new HashMap<String, Long>();
+    private static final Map<String, UserInfo> browsers = new HashMap<String, UserInfo>();
+    private static final Map<String, Long> searches = new HashMap<String, Long>();
+    private long startTimestamp;
+
+    private Statistics() {
+        startTimestamp = new Date().getTime();
     }
 
-    public String getDepartment() {
-      return department;
+    private static Statistics instance = null;
+
+    public static synchronized Statistics getDefault() {
+        if (instance == null) {
+            instance = new Statistics();
+        }
+        return instance;
     }
 
-    public String getLocation() {
-      return location;
+    private String hash(String userId) {
+        if (userId != null) {
+            return DigestUtils.shaHex(userId);
+        } else {
+            return "null"; //$NON-NLS-1$
+        }
     }
 
-    public String getUserId() {
-      return userId;
+    public long getStartTimestamp() {
+        return startTimestamp;
     }
 
-  }
-
-  private static final Map<String, Long> hits = new HashMap<String, Long>();
-  private static final Map<String, Long> referers = new HashMap<String, Long>();
-  private static final Map<String, UserInfo> browsers = new HashMap<String, UserInfo>();
-  private static final Map<String, Long> searches = new HashMap<String, Long>();
-  private long startTimestamp;
-
-  private Statistics() {
-    startTimestamp = new Date().getTime();
-  }
-
-  private static Statistics instance = null;
-
-  public static synchronized Statistics getDefault() {
-    if (instance == null) {
-      instance = new Statistics();
+    public synchronized void trackUsage(String key) {
+        Long value = hits.get(key);
+        if (value == null) {
+            value = 0L;
+        }
+        value += 1;
+        hits.put(key, value);
     }
-    return instance;
-  }
 
-  private String hash(String userId) {
-    if (userId != null) {
-      return DigestUtils.shaHex(userId);
-    } else {
-      return "null"; //$NON-NLS-1$
+    public synchronized void trackBrowser(String userId, String browser, String department,
+            String location) {
+        browsers.put(hash(userId), new UserInfo(userId, browser, department, location));
     }
-  }
 
-  public long getStartTimestamp() {
-    return startTimestamp;
-  }
-
-  public synchronized void trackUsage(String key) {
-    Long value = hits.get(key);
-    if (value == null) {
-      value = 0L;
+    public synchronized void trackSearch(String searchQuery) {
+        Long value = searches.get(searchQuery);
+        if (value == null) {
+            value = 0L;
+        }
+        value += 1;
+        searches.put(searchQuery, value);
     }
-    value += 1;
-    hits.put(key, value);
-  }
 
-  public synchronized void trackBrowser(String userId, String browser, String department,
-      String location) {
-    browsers.put(hash(userId), new UserInfo(userId, browser, department, location));
-  }
-
-  public synchronized void trackSearch(String searchQuery) {
-    Long value = searches.get(searchQuery);
-    if (value == null) {
-      value = 0L;
+    public synchronized void trackReferer(String referer) {
+        Long value = referers.get(referer);
+        if (value == null) {
+            value = 0L;
+        }
+        value += 1;
+        referers.put(referer, value);
     }
-    value += 1;
-    searches.put(searchQuery, value);
-  }
 
-  public synchronized void trackReferer(String referer) {
-    Long value = referers.get(referer);
-    if (value == null) {
-      value = 0L;
+    public Map<String, Long> getHits() {
+        return Collections.unmodifiableMap(hits);
     }
-    value += 1;
-    referers.put(referer, value);
-  }
 
-  public Map<String, Long> getHits() {
-    return Collections.unmodifiableMap(hits);
-  }
-
-  public long getUniqueUserCount() {
-    return browsers.size();
-  }
-
-  public Set<String> getUsers() {
-    Set<String> ret = new HashSet<String>();
-    for (UserInfo userInfo : browsers.values()) {
-      ret.add(userInfo.getUserId());
+    public long getUniqueUserCount() {
+        return browsers.size();
     }
-    return ret;
-  }
 
-  public Map<String, Integer> getDepartments() {
-    Map<String, Integer> ret = new HashMap<String, Integer>();
-    for (UserInfo userInfo : browsers.values()) {
-      Integer current = ret.get(userInfo.getDepartment());
-      if (current == null) {
-        current = 0;
-      }
-      current++;
-      ret.put(userInfo.getDepartment(), current);
+    public Set<String> getUsers() {
+        Set<String> ret = new HashSet<String>();
+        for (UserInfo userInfo : browsers.values()) {
+            ret.add(userInfo.getUserId());
+        }
+        return ret;
     }
-    return ret;
-  }
 
-  public Map<String, Integer> getLocations() {
-    Map<String, Integer> ret = new HashMap<String, Integer>();
-    for (UserInfo userInfo : browsers.values()) {
-      Integer current = ret.get(userInfo.getLocation());
-      if (current == null) {
-        current = 0;
-      }
-      current++;
-      ret.put(userInfo.getLocation(), current);
+    public Map<String, Integer> getDepartments() {
+        Map<String, Integer> ret = new HashMap<String, Integer>();
+        for (UserInfo userInfo : browsers.values()) {
+            Integer current = ret.get(userInfo.getDepartment());
+            if (current == null) {
+                current = 0;
+            }
+            current++;
+            ret.put(userInfo.getDepartment(), current);
+        }
+        return ret;
     }
-    return ret;
-  }
 
-  public Map<String, Long> getBrowserCount() {
-    Map<String, Long> ret = new HashMap<String, Long>();
-    for (UserInfo userInfo : browsers.values()) {
-      Long value = ret.get(userInfo.browser);
-      if (value == null) {
-        value = 0L;
-      }
-      value += 1;
-      ret.put(userInfo.browser, value);
+    public Map<String, Integer> getLocations() {
+        Map<String, Integer> ret = new HashMap<String, Integer>();
+        for (UserInfo userInfo : browsers.values()) {
+            Integer current = ret.get(userInfo.getLocation());
+            if (current == null) {
+                current = 0;
+            }
+            current++;
+            ret.put(userInfo.getLocation(), current);
+        }
+        return ret;
     }
-    return ret;
-  }
 
-  public Map<String, Long> getRefererCount() {
-    return Collections.unmodifiableMap(referers);
-  }
+    public Map<String, Long> getBrowserCount() {
+        Map<String, Long> ret = new HashMap<String, Long>();
+        for (UserInfo userInfo : browsers.values()) {
+            Long value = ret.get(userInfo.browser);
+            if (value == null) {
+                value = 0L;
+            }
+            value += 1;
+            ret.put(userInfo.browser, value);
+        }
+        return ret;
+    }
 
-  public Map<String, Long> getSearches() {
-    return searches;
-  }
+    public Map<String, Long> getRefererCount() {
+        return Collections.unmodifiableMap(referers);
+    }
+
+    public Map<String, Long> getSearches() {
+        return searches;
+    }
 
 }
-

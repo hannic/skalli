@@ -12,22 +12,21 @@ package org.eclipse.skalli.view.internal.filter;
 
 public class FilterException extends Exception {
 
-  private static final long serialVersionUID = -2916213590980895814L;
+    private static final long serialVersionUID = -2916213590980895814L;
 
-  public FilterException() {
-    super();
-  }
+    public FilterException() {
+        super();
+    }
 
-  public FilterException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public FilterException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public FilterException(String message) {
-    super(message);
-  }
+    public FilterException(String message) {
+        super(message);
+    }
 
-  public FilterException(Throwable cause) {
-    super(cause);
-  }
+    public FilterException(Throwable cause) {
+        super(cause);
+    }
 }
-

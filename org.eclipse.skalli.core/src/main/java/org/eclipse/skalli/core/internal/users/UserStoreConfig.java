@@ -15,21 +15,23 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("userStore")
 public class UserStoreConfig {
 
-  private String type;
-  private String useLocalFallback;
+    private String type;
+    private String useLocalFallback;
 
-  public String getType() {
-    return type;
-  }
-  public void setType(String type) {
-    this.type = type;
-  }
+    public String getType() {
+        return type;
+    }
 
-  public String getUseLocalFallback() {
-    return useLocalFallback;
-  }
-  public void setUseLocalFallback(String useLocalFallback) {
-    this.useLocalFallback = useLocalFallback;
-  }
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUseLocalFallback() {
+        return useLocalFallback;
+    }
+
+    public void setUseLocalFallback(String useLocalFallback) {
+        this.useLocalFallback = useLocalFallback;
+    }
 
 }

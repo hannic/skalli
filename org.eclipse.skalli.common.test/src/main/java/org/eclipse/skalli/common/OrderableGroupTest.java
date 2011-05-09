@@ -15,31 +15,30 @@ import org.junit.Test;
 
 public class OrderableGroupTest {
 
-  @Test
-  @SuppressWarnings("nls")
-  public void testOrderableGroup() throws Exception {
-    OrderableGroup<String> orderableGroup = new OrderableGroup<String>();
-    Assert.assertTrue(orderableGroup.getItems().isEmpty());
+    @Test
+    @SuppressWarnings("nls")
+    public void testOrderableGroup() throws Exception {
+        OrderableGroup<String> orderableGroup = new OrderableGroup<String>();
+        Assert.assertTrue(orderableGroup.getItems().isEmpty());
 
-    Assert.assertTrue(orderableGroup.add("a"));
-    Assert.assertTrue(orderableGroup.add("b"));
-    Assert.assertTrue(orderableGroup.add("c"));
-    Assert.assertEquals(3, orderableGroup.getItems().size());
+        Assert.assertTrue(orderableGroup.add("a"));
+        Assert.assertTrue(orderableGroup.add("b"));
+        Assert.assertTrue(orderableGroup.add("c"));
+        Assert.assertEquals(3, orderableGroup.getItems().size());
 
-    Assert.assertFalse(orderableGroup.add("c"));
+        Assert.assertFalse(orderableGroup.add("c"));
 
-    Assert.assertTrue(orderableGroup.remove("c"));
-    Assert.assertEquals(2, orderableGroup.getItems().size());
+        Assert.assertTrue(orderableGroup.remove("c"));
+        Assert.assertEquals(2, orderableGroup.getItems().size());
 
-    Assert.assertTrue(orderableGroup.moveUp("b"));
-    Assert.assertFalse(orderableGroup.moveUp("b"));
+        Assert.assertTrue(orderableGroup.moveUp("b"));
+        Assert.assertFalse(orderableGroup.moveUp("b"));
 
-    Assert.assertTrue(orderableGroup.moveDown("b"));
-    Assert.assertFalse(orderableGroup.moveDown("b"));
+        Assert.assertTrue(orderableGroup.moveDown("b"));
+        Assert.assertFalse(orderableGroup.moveDown("b"));
 
-    Assert.assertTrue(orderableGroup.hasItem("a"));
-    Assert.assertTrue(orderableGroup.hasItem("b"));
-    Assert.assertFalse(orderableGroup.hasItem("c"));
-  }
+        Assert.assertTrue(orderableGroup.hasItem("a"));
+        Assert.assertTrue(orderableGroup.hasItem("b"));
+        Assert.assertFalse(orderableGroup.hasItem("c"));
+    }
 }
-

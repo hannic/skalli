@@ -14,15 +14,16 @@ import org.eclipse.skalli.model.core.ProjectTemplate;
 
 public interface ProjectEditContext {
 
-  public ProjectEditMode getProjectEditMode();
-  public ProjectTemplate getProjectTemplate();
-  public boolean isAdministrator();
+    public ProjectEditMode getProjectEditMode();
 
-  /**
-   * Raises a property change event.
-   * @param propertyId  the name of the property.
-   * @param newValue  new value of the property.
-   */
-  public void onPropertyChanged(String propertyId, Object newValue);
+    public ProjectTemplate getProjectTemplate();
+
+    public boolean isAdministrator();
+
+    /**
+     * Raises a property change event.
+     * @param propertyId  the name of the property.
+     * @param newValue  new value of the property.
+     */
+    public void onPropertyChanged(String propertyId, Object newValue);
 }
-

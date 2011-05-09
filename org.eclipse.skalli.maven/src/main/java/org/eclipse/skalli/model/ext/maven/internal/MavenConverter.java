@@ -20,40 +20,39 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class MavenConverter extends AbstractConverter<MavenProjectExt> {
 
-  public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Maven"; //$NON-NLS-1$
+    public static final String API_VERSION = "1.0"; //$NON-NLS-1$
+    public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Maven"; //$NON-NLS-1$
 
-  public MavenConverter(String host) {
-    super(MavenProjectExt.class, "maven", host); //$NON-NLS-1$
-  }
+    public MavenConverter(String host) {
+        super(MavenProjectExt.class, "maven", host); //$NON-NLS-1$
+    }
 
-  @Override
-  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-    MavenProjectExt ext = (MavenProjectExt) source;
-    writeNode(writer, "groupID", ext.getGroupID()); //$NON-NLS-1$
-    writeNode(writer, "siteUrl", ext.getSiteUrl()); //$NON-NLS-1$
-    writeNode(writer, "pomPath", ext.getReactorPOM()); //$NON-NLS-1$
-  }
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        MavenProjectExt ext = (MavenProjectExt) source;
+        writeNode(writer, "groupID", ext.getGroupID()); //$NON-NLS-1$
+        writeNode(writer, "siteUrl", ext.getSiteUrl()); //$NON-NLS-1$
+        writeNode(writer, "pomPath", ext.getReactorPOM()); //$NON-NLS-1$
+    }
 
-  @Override
-  public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    // don't support that yet
-    return null;
-  }
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        // don't support that yet
+        return null;
+    }
 
-  @Override
-  public String getApiVersion() {
-    return API_VERSION;
-  }
+    @Override
+    public String getApiVersion() {
+        return API_VERSION;
+    }
 
-  @Override
-  public String getNamespace() {
-    return NAMESPACE;
-  }
+    @Override
+    public String getNamespace() {
+        return NAMESPACE;
+    }
 
-  @Override
-  public String getXsdFileName() {
-    return "extension-maven.xsd"; //$NON-NLS-1$
-  }
+    @Override
+    public String getXsdFileName() {
+        return "extension-maven.xsd"; //$NON-NLS-1$
+    }
 }
-

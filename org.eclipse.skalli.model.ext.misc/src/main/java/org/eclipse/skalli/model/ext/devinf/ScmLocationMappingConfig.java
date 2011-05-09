@@ -16,33 +16,33 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("scmMapping")
 public class ScmLocationMappingConfig extends LinkMappingConfig {
 
-  private String provider;
+    private String provider;
 
-  public ScmLocationMappingConfig(String id, String provider, String purpose, String pattern, String template, String name) {
-    super(id, purpose, pattern, template, name);
-    this.provider = provider;
-  }
+    public ScmLocationMappingConfig(String id, String provider, String purpose, String pattern, String template,
+            String name) {
+        super(id, purpose, pattern, template, name);
+        this.provider = provider;
+    }
 
-  /**
-   * Returns the provider name of the SCM system, e.g. <code>"git"</code> or <code>"svn"</code>.
-   * @see http://maven.apache.org/scm/scm-url-format.html
-   */
-  public String getProvider() {
-    return provider;
-  }
+    /**
+     * Returns the provider name of the SCM system, e.g. <code>"git"</code> or <code>"svn"</code>.
+     * @see http://maven.apache.org/scm/scm-url-format.html
+     */
+    public String getProvider() {
+        return provider;
+    }
 
-  /**
-   * Sets the provider name of the SCM system, e.g. <code>"git"</code> or <code>"svn"</code>.
-   * @see http://maven.apache.org/scm/scm-url-format.html
-   */
-  public void setProvider(String provider) {
-    this.provider = provider;
-  }
+    /**
+     * Sets the provider name of the SCM system, e.g. <code>"git"</code> or <code>"svn"</code>.
+     * @see http://maven.apache.org/scm/scm-url-format.html
+     */
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
-  @SuppressWarnings("nls")
-  @Override
-  public String toString() {
-    return super.toString() + "[provider=" + provider + "]";
-  }
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        return super.toString() + "[provider=" + provider + "]";
+    }
 }
-

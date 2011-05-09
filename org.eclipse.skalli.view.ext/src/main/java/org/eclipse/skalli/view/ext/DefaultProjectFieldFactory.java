@@ -31,132 +31,130 @@ import com.vaadin.ui.Select;
 
 public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> extends DefaultFieldFactory {
 
-  private static final Logger LOG = Log.getLogger(DefaultProjectFieldFactory.class);
-  private static final long serialVersionUID = 162355838708348565L;
-  protected static final int COMMON_TEXT_FIELD_COLUMNS = 30;
+    private static final Logger LOG = Log.getLogger(DefaultProjectFieldFactory.class);
+    private static final long serialVersionUID = 162355838708348565L;
+    protected static final int COMMON_TEXT_FIELD_COLUMNS = 30;
 
-  protected final Project project;
-  protected final ProjectEditContext context;
-  protected final ProjectTemplate projectTemplate;
-  protected final boolean isAdmin;
-  protected final ProjectEditMode mode;
-  protected final String extensionClassName;
-  protected final ExtensionService<T> extensionService;
+    protected final Project project;
+    protected final ProjectEditContext context;
+    protected final ProjectTemplate projectTemplate;
+    protected final boolean isAdmin;
+    protected final ProjectEditMode mode;
+    protected final String extensionClassName;
+    protected final ExtensionService<T> extensionService;
 
-  public DefaultProjectFieldFactory(Project project, Class<T> extensionClass, ProjectEditContext context) {
-    this.project = project;
-    this.extensionClassName = extensionClass.getName();
-    this.extensionService = Services.getExtensionService(extensionClass);
-    this.projectTemplate = context.getProjectTemplate();
-    this.isAdmin = context.isAdministrator();
-    this.mode = context.getProjectEditMode();
-    this.context = context;
-  }
-
-  @Override
-  public Field createField(Item item, Object propertyId, final Component uiContext) {
-    String propertyName = propertyId.toString();
-    String caption = getCaption(propertyName);
-    Field field = createField(propertyId, caption);
-    if (field == null) {
-      field = super.createField(item, propertyId, uiContext);
-      if (field == null) {
-        throw new IllegalStateException("Cannot create field for property " + propertyId);
-      }
-      if (StringUtils.isNotBlank(caption)) {
-        field.setCaption(caption);
-      }
-    }
-    initializeField(propertyId, field);
-
-    setColumns(field, COMMON_TEXT_FIELD_COLUMNS);
-
-    String description = getDescription(propertyName);
-    if (StringUtils.isNotBlank(description)) {
-      field.setDescription(description);
+    public DefaultProjectFieldFactory(Project project, Class<T> extensionClass, ProjectEditContext context) {
+        this.project = project;
+        this.extensionClassName = extensionClass.getName();
+        this.extensionService = Services.getExtensionService(extensionClass);
+        this.projectTemplate = context.getProjectTemplate();
+        this.isAdmin = context.isAdministrator();
+        this.mode = context.getProjectEditMode();
+        this.context = context;
     }
 
-    String inputPrompt = projectTemplate.getInputPrompt(extensionClassName, propertyId);
-    if (StringUtils.isNotBlank(inputPrompt)) {
-      setInputPrompt(field, inputPrompt);
+    @Override
+    public Field createField(Item item, Object propertyId, final Component uiContext) {
+        String propertyName = propertyId.toString();
+        String caption = getCaption(propertyName);
+        Field field = createField(propertyId, caption);
+        if (field == null) {
+            field = super.createField(item, propertyId, uiContext);
+            if (field == null) {
+                throw new IllegalStateException("Cannot create field for property " + propertyId);
+            }
+            if (StringUtils.isNotBlank(caption)) {
+                field.setCaption(caption);
+            }
+        }
+        initializeField(propertyId, field);
+
+        setColumns(field, COMMON_TEXT_FIELD_COLUMNS);
+
+        String description = getDescription(propertyName);
+        if (StringUtils.isNotBlank(description)) {
+            field.setDescription(description);
+        }
+
+        String inputPrompt = projectTemplate.getInputPrompt(extensionClassName, propertyId);
+        if (StringUtils.isNotBlank(inputPrompt)) {
+            setInputPrompt(field, inputPrompt);
+        }
+
+        if (Select.class.isAssignableFrom(field.getClass())) {
+            Select selection = (Select) field;
+            Collection<?> defaultValues = projectTemplate.getDefaultValues(extensionClassName, propertyId);
+            if (defaultValues != null) {
+                field.setValue(defaultValues);
+            }
+            Object defaultValue = projectTemplate.getDefaultValue(extensionClassName, propertyId);
+            if (defaultValue != null) {
+                selection.select(defaultValue);
+            }
+            if (projectTemplate.isNewItemsAllowed(extensionClassName, propertyId)) {
+                selection.setNewItemsAllowed(true);
+            }
+        }
+        else {
+            Object defaultValue = projectTemplate.getDefaultValue(extensionClassName, propertyId);
+            if (defaultValue != null) {
+                field.setValue(defaultValue);
+            }
+        }
+
+        if (projectTemplate.isReadOnly(extensionClassName, propertyId, isAdmin)) {
+            field.setReadOnly(true);
+        }
+
+        if (mode.equals(ProjectEditMode.VIEW_PROJECT)) {
+            field.setReadOnly(true);
+        }
+
+        if (!projectTemplate.isEnabled(extensionClassName, propertyId, isAdmin)) {
+            field.setEnabled(false);
+        }
+
+        return field;
     }
 
-    if (Select.class.isAssignableFrom(field.getClass())) {
-      Select selection = (Select)field;
-      Collection<?> defaultValues = projectTemplate.getDefaultValues(extensionClassName, propertyId);
-      if (defaultValues != null) {
-        field.setValue(defaultValues);
-      }
-      Object defaultValue = projectTemplate.getDefaultValue(extensionClassName, propertyId);
-      if (defaultValue != null) {
-        selection.select(defaultValue);
-      }
-      if (projectTemplate.isNewItemsAllowed(extensionClassName, propertyId)) {
-        selection.setNewItemsAllowed(true);
-      }
-    }
-    else {
-      Object defaultValue = projectTemplate.getDefaultValue(extensionClassName, propertyId);
-      if (defaultValue != null) {
-        field.setValue(defaultValue);
-      }
+    private void setColumns(Field field, int columns) {
+        try {
+            Method method = field.getClass().getMethod("setColumns", int.class); //$NON-NLS-1$
+            method.invoke(field, columns);
+        } catch (Exception e) {
+            // not all Vaadin Field implementations allow to set the columns, so this is ok
+            LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
+        }
     }
 
-    if (projectTemplate.isReadOnly(extensionClassName, propertyId, isAdmin)) {
-       field.setReadOnly(true);
+    private void setInputPrompt(Field field, String inputPrompt) {
+        try {
+            Method method = field.getClass().getMethod("setInputPrompt", String.class); //$NON-NLS-1$
+            method.invoke(field, inputPrompt);
+        } catch (Exception e) {
+            // not all Vaadin Field implementations have an input prompt, so this is ok
+            LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
+        }
     }
 
-    if (mode.equals(ProjectEditMode.VIEW_PROJECT)) {
-      field.setReadOnly(true);
+    protected String getCaption(String propertyName) {
+        String caption = projectTemplate.getCaption(extensionClassName, propertyName);
+        if (StringUtils.isBlank(caption)) {
+            caption = extensionService.getCaption(propertyName);
+        }
+        return caption;
     }
 
-    if (!projectTemplate.isEnabled(extensionClassName, propertyId, isAdmin)) {
-      field.setEnabled(false);
+    protected String getDescription(String propertyName) {
+        String description = projectTemplate.getDescription(extensionClassName, propertyName);
+        if (StringUtils.isBlank(description)) {
+            description = extensionService.getDescription(propertyName);
+        }
+        return description;
     }
 
-    return field;
-  }
+    protected abstract Field createField(Object propertyId, String caption);
 
-  private void setColumns(Field field, int columns) {
-    try {
-      Method method = field.getClass().getMethod("setColumns", int.class); //$NON-NLS-1$
-      method.invoke(field, columns);
-    }
-    catch (Exception e) {
-      // not all Vaadin Field implementations allow to set the columns, so this is ok
-      LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
-    }
-  }
-
-  private void setInputPrompt(Field field, String inputPrompt) {
-    try {
-      Method method = field.getClass().getMethod("setInputPrompt", String.class); //$NON-NLS-1$
-      method.invoke(field, inputPrompt);
-    }
-    catch (Exception e) {
-      // not all Vaadin Field implementations have an input prompt, so this is ok
-      LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
-    }
-  }
-
-  protected String getCaption(String propertyName) {
-    String caption = projectTemplate.getCaption(extensionClassName, propertyName);
-    if (StringUtils.isBlank(caption)) {
-      caption = extensionService.getCaption(propertyName);
-    }
-    return caption;
-  }
-
-  protected String getDescription(String propertyName) {
-    String description = projectTemplate.getDescription(extensionClassName, propertyName);
-    if (StringUtils.isBlank(description)) {
-      description = extensionService.getDescription(propertyName);
-    }
-    return description;
-  }
-
-  protected abstract Field createField(Object propertyId, String caption);
-  protected abstract void initializeField(Object propertyId, Field field);
+    protected abstract void initializeField(Object propertyId, Field field);
 
 }
-

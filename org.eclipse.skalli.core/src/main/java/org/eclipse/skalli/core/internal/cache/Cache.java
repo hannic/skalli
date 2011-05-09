@@ -22,33 +22,33 @@ import java.util.Collection;
  */
 public interface Cache<T_KEY, T_VALUE> {
 
-  /**
-   * Stores a new entry.
-   * <p>
-   * If the cache is filled already, then there will be discarded one entry according to the cache strategy,
-   * before the new entry actually gets added.
-   * </p>
-   * <p>
-   * Please note that the key must implement equals() and hashCode() properly.
-   * </p>
-   * @param key identifies the entry. Must not be null.
-   * @param value
-   */
-  public void put(T_KEY key, T_VALUE value);
+    /**
+     * Stores a new entry.
+     * <p>
+     * If the cache is filled already, then there will be discarded one entry according to the cache strategy,
+     * before the new entry actually gets added.
+     * </p>
+     * <p>
+     * Please note that the key must implement equals() and hashCode() properly.
+     * </p>
+     * @param key identifies the entry. Must not be null.
+     * @param value
+     */
+    public void put(T_KEY key, T_VALUE value);
 
-  /**
-   * Returns an entry from the cache.
-   * <p>
-   * Please be aware of the fact that according to the cache strategy there is no guarantee
-   * that an entry which was stored once in the cache still is in there at a later point in time.
-   * </p>
-   * @param key identifies the entry. Must not be null.
-   * @return the corresponding entry or null, if the entry is not contained in the cache (anymore).
-   */
-  public T_VALUE get(T_KEY key);
+    /**
+     * Returns an entry from the cache.
+     * <p>
+     * Please be aware of the fact that according to the cache strategy there is no guarantee
+     * that an entry which was stored once in the cache still is in there at a later point in time.
+     * </p>
+     * @param key identifies the entry. Must not be null.
+     * @return the corresponding entry or null, if the entry is not contained in the cache (anymore).
+     */
+    public T_VALUE get(T_KEY key);
 
-  public Collection<T_VALUE> getAll();
+    public Collection<T_VALUE> getAll();
 
-  public void clear();
+    public void clear();
 
 }

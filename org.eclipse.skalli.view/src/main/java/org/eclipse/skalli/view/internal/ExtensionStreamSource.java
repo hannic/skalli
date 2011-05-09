@@ -26,40 +26,38 @@ import com.vaadin.terminal.StreamResource;
 
 public final class ExtensionStreamSource implements StreamResource.StreamSource {
 
-  private static final long serialVersionUID = -3343186536633039815L;
-  private static final Logger LOG = Log.getLogger(ExtensionStreamSource.class);
+    private static final long serialVersionUID = -3343186536633039815L;
+    private static final Logger LOG = Log.getLogger(ExtensionStreamSource.class);
 
-  private final Class<? extends IconProvider> clazz;
-  private final String path;
+    private final Class<? extends IconProvider> clazz;
+    private final String path;
 
-  public ExtensionStreamSource(Class<? extends IconProvider> clazz, String path) {
-    this.clazz = clazz;
-    this.path = path;
-  }
+    public ExtensionStreamSource(Class<? extends IconProvider> clazz, String path) {
+        this.clazz = clazz;
+        this.path = path;
+    }
 
-  @Override
-  public InputStream getStream() {
-    Bundle bundle = FrameworkUtil.getBundle(clazz);
-    if (bundle == null) {
-      LOG.warning(MessageFormat.format(
-          "Could not load ''{0}'': icon provider ''{1}'' not found in any bundle", //$NON-NLS-1$
-          path, clazz.getName()));
-      return null;
+    @Override
+    public InputStream getStream() {
+        Bundle bundle = FrameworkUtil.getBundle(clazz);
+        if (bundle == null) {
+            LOG.warning(MessageFormat.format("Could not load ''{0}'': icon provider ''{1}'' not found in any bundle", //$NON-NLS-1$
+                    path, clazz.getName()));
+            return null;
+        }
+        InputStream in = null;
+        URL resource = bundle.getResource(path);
+        if (resource != null) {
+            try {
+                in = resource.openStream();
+            } catch (IOException e) {
+                LOG.log(Level.WARNING, "I/O problems while opening stream", e); //$NON-NLS-1$
+            }
+        }
+        if (in == null) {
+            LOG.warning(MessageFormat.format("Could not load ''{0}'' from ''{1}'' of bundle ''{2}''", //$NON-NLS-1$
+                    path, clazz.getName(), bundle.getSymbolicName()));
+        }
+        return in;
     }
-    InputStream in = null;
-    URL resource = bundle.getResource(path);
-    if (resource != null) {
-      try {
-       in = resource.openStream();
-      } catch (IOException e) {
-        LOG.log(Level.WARNING, "I/O problems while opening stream", e); //$NON-NLS-1$
-      }
-    }
-    if (in == null) {
-      LOG.warning(MessageFormat.format(
-          "Could not load ''{0}'' from ''{1}'' of bundle ''{2}''", //$NON-NLS-1$
-          path, clazz.getName(), bundle.getSymbolicName()));
-    }
-    return in;
-  }
 }

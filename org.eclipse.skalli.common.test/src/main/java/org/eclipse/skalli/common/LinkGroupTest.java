@@ -20,62 +20,61 @@ import org.eclipse.skalli.model.ext.Link;
 @SuppressWarnings("nls")
 public class LinkGroupTest {
 
-  private static final String TESTURL = "testurl";
-  private static final String TESTLABEL = "testlabel";
+    private static final String TESTURL = "testurl";
+    private static final String TESTLABEL = "testlabel";
 
-  @Test
-  public void testLink() throws Exception {
-    Link link = new Link();
-    Assert.assertNull(link.getLabel());
-    Assert.assertNull(link.getUrl());
+    @Test
+    public void testLink() throws Exception {
+        Link link = new Link();
+        Assert.assertNull(link.getLabel());
+        Assert.assertNull(link.getUrl());
 
-    link.setLabel(TESTLABEL);
-    link.setUrl(TESTURL);
-    Assert.assertEquals(TESTLABEL, link.getLabel());
-    Assert.assertEquals(TESTURL, link.getUrl());
+        link.setLabel(TESTLABEL);
+        link.setUrl(TESTURL);
+        Assert.assertEquals(TESTLABEL, link.getLabel());
+        Assert.assertEquals(TESTURL, link.getUrl());
 
-    Link otherLink = new Link(TESTURL, TESTLABEL);
-    Assert.assertEquals(link, otherLink);
-  }
-
-  @Test
-  public void testLinkGroupBasic() throws Exception {
-    LinkGroup linkGroup = new LinkGroup();
-    Assert.assertNull(linkGroup.getCaption());
-
-    linkGroup.setCaption(TESTLABEL);
-    Assert.assertEquals(TESTLABEL, linkGroup.getCaption());
-
-    LinkGroup otherLinkGroup = new LinkGroup(TESTLABEL, Collections.<Link>emptySet());
-    Assert.assertEquals(linkGroup, otherLinkGroup);
-  }
-
-  @Test
-  public void testLinkGroupExtended() throws Exception {
-    LinkGroup linkGroup = new LinkGroup();
-
-    Link movingTarget = new Link(TESTURL, TESTLABEL);
-    Link unknownStranger = new Link("unknown", "stranger");
-
-    linkGroup.add(movingTarget);
-    for (int i = 0; i < 10; i++) {
-      linkGroup.add(new Link(String.valueOf(i), String.valueOf(i)));
+        Link otherLink = new Link(TESTURL, TESTLABEL);
+        Assert.assertEquals(link, otherLink);
     }
 
-    Assert.assertTrue(linkGroup.moveDown(movingTarget));
-    Assert.assertTrue(linkGroup.moveDown(movingTarget));
-    Assert.assertTrue(linkGroup.moveDown(movingTarget));
+    @Test
+    public void testLinkGroupBasic() throws Exception {
+        LinkGroup linkGroup = new LinkGroup();
+        Assert.assertNull(linkGroup.getCaption());
 
-    movingTarget.setLabel(TESTLABEL + "1");
-    movingTarget.setUrl(TESTURL + "1");
+        linkGroup.setCaption(TESTLABEL);
+        Assert.assertEquals(TESTLABEL, linkGroup.getCaption());
 
-    Assert.assertTrue(linkGroup.moveUp(movingTarget));
-    Assert.assertTrue(linkGroup.moveUp(movingTarget));
-    Assert.assertTrue(linkGroup.moveUp(movingTarget));
-    Assert.assertFalse(linkGroup.moveUp(movingTarget));
+        LinkGroup otherLinkGroup = new LinkGroup(TESTLABEL, Collections.<Link> emptySet());
+        Assert.assertEquals(linkGroup, otherLinkGroup);
+    }
 
-    Assert.assertTrue(linkGroup.hasItem(movingTarget));
-    Assert.assertFalse(linkGroup.hasItem(unknownStranger));
-  }
+    @Test
+    public void testLinkGroupExtended() throws Exception {
+        LinkGroup linkGroup = new LinkGroup();
+
+        Link movingTarget = new Link(TESTURL, TESTLABEL);
+        Link unknownStranger = new Link("unknown", "stranger");
+
+        linkGroup.add(movingTarget);
+        for (int i = 0; i < 10; i++) {
+            linkGroup.add(new Link(String.valueOf(i), String.valueOf(i)));
+        }
+
+        Assert.assertTrue(linkGroup.moveDown(movingTarget));
+        Assert.assertTrue(linkGroup.moveDown(movingTarget));
+        Assert.assertTrue(linkGroup.moveDown(movingTarget));
+
+        movingTarget.setLabel(TESTLABEL + "1");
+        movingTarget.setUrl(TESTURL + "1");
+
+        Assert.assertTrue(linkGroup.moveUp(movingTarget));
+        Assert.assertTrue(linkGroup.moveUp(movingTarget));
+        Assert.assertTrue(linkGroup.moveUp(movingTarget));
+        Assert.assertFalse(linkGroup.moveUp(movingTarget));
+
+        Assert.assertTrue(linkGroup.hasItem(movingTarget));
+        Assert.assertFalse(linkGroup.hasItem(unknownStranger));
+    }
 }
-

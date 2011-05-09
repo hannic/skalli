@@ -31,83 +31,85 @@ import org.eclipse.skalli.log.Log;
 import com.thoughtworks.xstream.XStream;
 
 public abstract class AbstractResource<T> extends ServerResource {
-  private final static Logger LOG = Log.getLogger(AbstractResource.class);
+    private final static Logger LOG = Log.getLogger(AbstractResource.class);
 
-  /**
-   * Defines the class that contains all configuration parameters and will be represented in the REST API.
-   * @return
-   */
-  protected abstract Class<T> getConfigClass();
+    /**
+     * Defines the class that contains all configuration parameters and will be represented in the REST API.
+     * @return
+     */
+    protected abstract Class<T> getConfigClass();
 
-  protected abstract T readConfig(ConfigurationService configService);
-  protected abstract void storeConfig(ConfigurationService configService, T configObject);
+    protected abstract T readConfig(ConfigurationService configService);
 
-  protected XStream getXStream() {
-    XStream xstream = new XStream();
-    xstream.setClassLoader(this.getClass().getClassLoader());
-    xstream.processAnnotations(getConfigClass());
-    return xstream;
-  }
+    protected abstract void storeConfig(ConfigurationService configService, T configObject);
 
-  protected ConfigurationService getConfigService() {
-    ConfigurationService configService = Services.getService(ConfigurationService.class);
-    return configService;
-  }
-
-  protected final Representation checkAdminAuthorization() {
-    LoginUtil loginUtil = new LoginUtil(ServletUtils.getRequest(getRequest()));
-    String loggedInUser = loginUtil.getLoggedInUserId();
-    if (!UserUtil.isAdministrator(loggedInUser)) {
-      Representation result = new StringRepresentation("Access denied for user " + loggedInUser, MediaType.TEXT_PLAIN);
-      return result;
-    }
-    return null;
-  }
-
-  @Get
-  public final Representation retrieve() {
-    Representation ret = checkAdminAuthorization();
-    if (ret != null) {
-      return ret;
+    protected XStream getXStream() {
+        XStream xstream = new XStream();
+        xstream.setClassLoader(this.getClass().getClassLoader());
+        xstream.processAnnotations(getConfigClass());
+        return xstream;
     }
 
-    ConfigurationService configService = getConfigService();
-    if (configService != null) {
-      T config = readConfig(configService);
-      XstreamRepresentation<T> representation = new XstreamRepresentation<T>(config);
-      representation.setXstream(getXStream());
-      return representation;
-    } else {
-      String message = "Failed to read configuration (" + getConfigClass().getSimpleName() + ") - no instance of " + ConfigurationService.class.getName() + "available";
-      LOG.warning(message);
-      return new StringRepresentation(message, MediaType.TEXT_PLAIN);
-    }
-  }
-
-  @Put
-  public final Representation store(Representation entity) {
-    Representation result = checkAdminAuthorization();
-    if (result != null) {
-      return result;
+    protected ConfigurationService getConfigService() {
+        ConfigurationService configService = Services.getService(ConfigurationService.class);
+        return configService;
     }
 
-    try {
-      ConfigurationService configService = getConfigService();
-      if (configService != null) {
-        XStream xstream = getXStream();
-        T configObject = (T) xstream.fromXML(entity.getText());
-        storeConfig(configService, configObject);
-        result = new StringRepresentation("Configuration successfully stored", MediaType.TEXT_PLAIN);
-      } else {
-        LOG.warning("Failed to store configuration - no instance of " + ConfigurationService.class.getName() + "available"); //$NON-NLS-1$
-        result = new StringRepresentation("Failed to store configuration", MediaType.TEXT_PLAIN);
-        getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    protected final Representation checkAdminAuthorization() {
+        LoginUtil loginUtil = new LoginUtil(ServletUtils.getRequest(getRequest()));
+        String loggedInUser = loginUtil.getLoggedInUserId();
+        if (!UserUtil.isAdministrator(loggedInUser)) {
+            Representation result = new StringRepresentation("Access denied for user " + loggedInUser,
+                    MediaType.TEXT_PLAIN);
+            return result;
+        }
+        return null;
     }
-    return result;
-  }
+
+    @Get
+    public final Representation retrieve() {
+        Representation ret = checkAdminAuthorization();
+        if (ret != null) {
+            return ret;
+        }
+
+        ConfigurationService configService = getConfigService();
+        if (configService != null) {
+            T config = readConfig(configService);
+            XstreamRepresentation<T> representation = new XstreamRepresentation<T>(config);
+            representation.setXstream(getXStream());
+            return representation;
+        } else {
+            String message = "Failed to read configuration (" + getConfigClass().getSimpleName()
+                    + ") - no instance of " + ConfigurationService.class.getName() + "available";
+            LOG.warning(message);
+            return new StringRepresentation(message, MediaType.TEXT_PLAIN);
+        }
+    }
+
+    @Put
+    public final Representation store(Representation entity) {
+        Representation result = checkAdminAuthorization();
+        if (result != null) {
+            return result;
+        }
+
+        try {
+            ConfigurationService configService = getConfigService();
+            if (configService != null) {
+                XStream xstream = getXStream();
+                T configObject = (T) xstream.fromXML(entity.getText());
+                storeConfig(configService, configObject);
+                result = new StringRepresentation("Configuration successfully stored", MediaType.TEXT_PLAIN);
+            } else {
+                LOG.warning("Failed to store configuration - no instance of " + ConfigurationService.class.getName() + "available"); //$NON-NLS-1$
+                result = new StringRepresentation("Failed to store configuration", MediaType.TEXT_PLAIN);
+                getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
 }
-

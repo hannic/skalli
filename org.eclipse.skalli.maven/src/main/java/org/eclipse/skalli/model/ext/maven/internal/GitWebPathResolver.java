@@ -29,88 +29,87 @@ import org.eclipse.skalli.model.ext.maven.MavenPathResolver;
  */
 public class GitWebPathResolver implements MavenPathResolver {
 
-  private static final String DEFAULT_POM_FILENAME = "pom.xml"; //$NON-NLS-1$
+    private static final String DEFAULT_POM_FILENAME = "pom.xml"; //$NON-NLS-1$
 
-  private String pattern;
-  private String template;
+    private String pattern;
+    private String template;
 
-  /**
-   * Creates a path resolver for a GitWeb server.
-   *
-   * @param pattern  a regular expression that describes SCM locations to which the resolver can be applied,
-   * e.g. <tt>"^scm:git:git://(git\\.example\\.org(:\\d+)?)/(.*\\.git)$"</tt>.
-   * @param template  a string with placeholders that describes the URL schema of the GitWeb,
-   * e.g. <tt>"http://{1}:50000/git/?p={3}"</tt>.
-   */
-  public GitWebPathResolver(String pattern, String template) {
-    if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("argument 'pattern' must not be null or an empty string");
+    /**
+     * Creates a path resolver for a GitWeb server.
+     *
+     * @param pattern  a regular expression that describes SCM locations to which the resolver can be applied,
+     * e.g. <tt>"^scm:git:git://(git\\.example\\.org(:\\d+)?)/(.*\\.git)$"</tt>.
+     * @param template  a string with placeholders that describes the URL schema of the GitWeb,
+     * e.g. <tt>"http://{1}:50000/git/?p={3}"</tt>.
+     */
+    public GitWebPathResolver(String pattern, String template) {
+        if (StringUtils.isBlank(pattern)) {
+            throw new IllegalArgumentException("argument 'pattern' must not be null or an empty string");
+        }
+        if (StringUtils.isBlank(template)) {
+            throw new IllegalArgumentException("argument 'template' must not be null or an empty string");
+        }
+        this.pattern = pattern;
+        this.template = template;
     }
-    if (StringUtils.isBlank(template)) {
-      throw new IllegalArgumentException("argument 'template' must not be null or an empty string");
-    }
-    this.pattern = pattern;
-    this.template = template;
-  }
 
-  @Override
-  public boolean canResolve(String scmLocation) {
-    return MapperUtil.convert("", scmLocation, pattern, template) != null;
-  }
+    @Override
+    public boolean canResolve(String scmLocation) {
+        return MapperUtil.convert("", scmLocation, pattern, template) != null;
+    }
 
-  @Override
-  public URL resolvePath(String scmLocation, String relativePath) throws MalformedURLException {
-    StringBuilder sb = new StringBuilder();
-    if (!isValidNormalizedPath(relativePath)) {
-      throw new IllegalArgumentException("not a valid path: " + relativePath);
+    @Override
+    public URL resolvePath(String scmLocation, String relativePath) throws MalformedURLException {
+        StringBuilder sb = new StringBuilder();
+        if (!isValidNormalizedPath(relativePath)) {
+            throw new IllegalArgumentException("not a valid path: " + relativePath);
+        }
+        String repsitoryRoot = MapperUtil.convert("", scmLocation, pattern, template);
+        if (StringUtils.isBlank(repsitoryRoot)) {
+            throw new IllegalArgumentException(MessageFormat.format(
+                    "{0} is not applicable for scmLocation={1}", getClass(), scmLocation));
+        }
+        sb.append(repsitoryRoot);
+        sb.append(";a=blob_plain;f="); //$NON-NLS-1$
+        if (StringUtils.isBlank(relativePath) || ".".equals(relativePath)) { //$NON-NLS-1$
+            sb.append(DEFAULT_POM_FILENAME);
+        }
+        else if (!relativePath.endsWith(DEFAULT_POM_FILENAME)) {
+            appendPath(sb, relativePath);
+            if (!relativePath.endsWith("/")) { //$NON-NLS-1$
+                sb.append("/"); //$NON-NLS-1$
+            }
+            sb.append(DEFAULT_POM_FILENAME);
+        }
+        else {
+            appendPath(sb, relativePath);
+        }
+        sb.append(";hb=HEAD"); //$NON-NLS-1$
+        return new URL(sb.toString());
     }
-    String repsitoryRoot = MapperUtil.convert("", scmLocation, pattern, template);
-    if (StringUtils.isBlank(repsitoryRoot)) {
-      throw new IllegalArgumentException(MessageFormat.format(
-          "{0} is not applicable for scmLocation={1}", getClass(), scmLocation));
-    }
-    sb.append(repsitoryRoot);
-    sb.append(";a=blob_plain;f="); //$NON-NLS-1$
-    if (StringUtils.isBlank(relativePath) || ".".equals(relativePath)) { //$NON-NLS-1$
-      sb.append(DEFAULT_POM_FILENAME);
-    }
-    else if(!relativePath.endsWith(DEFAULT_POM_FILENAME)) {
-      appendPath(sb, relativePath);
-      if (!relativePath.endsWith("/")) { //$NON-NLS-1$
-        sb.append("/"); //$NON-NLS-1$
-      }
-      sb.append(DEFAULT_POM_FILENAME);
-    }
-    else {
-      appendPath(sb, relativePath);
-    }
-    sb.append(";hb=HEAD"); //$NON-NLS-1$
-    return new URL(sb.toString());
-  }
 
-  private void appendPath(StringBuilder sb, String relativePath) {
-    if (relativePath.charAt(0) == '/') {
-      sb.append(relativePath.substring(1));
-    } else {
-      sb.append(relativePath);
+    private void appendPath(StringBuilder sb, String relativePath) {
+        if (relativePath.charAt(0) == '/') {
+            sb.append(relativePath.substring(1));
+        } else {
+            sb.append(relativePath);
+        }
     }
-  }
 
-  @SuppressWarnings("nls")
-  private boolean isValidNormalizedPath(String path) {
-    if (StringUtils.isNotBlank(path)) {
-      if (path.indexOf('\\') >= 0) {
-        return false;
-      }
-      if (path.indexOf("..") >= 0 ||
-          path.startsWith("./") ||
-          path.endsWith("/.") ||
-          path.indexOf("/./") >= 0) {
-        return false;
-      }
+    @SuppressWarnings("nls")
+    private boolean isValidNormalizedPath(String path) {
+        if (StringUtils.isNotBlank(path)) {
+            if (path.indexOf('\\') >= 0) {
+                return false;
+            }
+            if (path.indexOf("..") >= 0 ||
+                    path.startsWith("./") ||
+                    path.endsWith("/.") ||
+                    path.indexOf("/./") >= 0) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
 
 }
-

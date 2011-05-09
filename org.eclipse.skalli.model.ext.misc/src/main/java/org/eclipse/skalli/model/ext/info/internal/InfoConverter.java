@@ -20,63 +20,63 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class InfoConverter extends AbstractConverter<InfoProjectExt> {
 
-  public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Info"; //$NON-NLS-1$
+    public static final String API_VERSION = "1.0"; //$NON-NLS-1$
+    public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-Info"; //$NON-NLS-1$
 
-  public InfoConverter(String host) {
-    super(InfoProjectExt.class, "info", host); //$NON-NLS-1$
-  }
-
-  @Override
-  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-    InfoProjectExt info = (InfoProjectExt) source;
-    writeNode(writer, "homepage", info.getPageUrl()); //$NON-NLS-1$
-    writeNode(writer, "mailingLists", "mailingList", info.getMailingLists()); //$NON-NLS-1$ //$NON-NLS-2$
-  }
-
-  @Override
-  public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    return iterateNodes(null, reader, context);
-  }
-
-  private InfoProjectExt iterateNodes(InfoProjectExt ext, HierarchicalStreamReader reader, UnmarshallingContext context) {
-    if (ext == null) {
-      ext = new InfoProjectExt();
+    public InfoConverter(String host) {
+        super(InfoProjectExt.class, "info", host); //$NON-NLS-1$
     }
 
-    while (reader.hasMoreChildren()) {
-      reader.moveDown();
-
-      String field = reader.getNodeName();
-      String value = reader.getValue();
-
-      if ("mailingLists".equals(field) && reader.hasMoreChildren()) { //$NON-NLS-1$
-        iterateNodes(ext, reader, context);
-      } else if ("mailingList".equals(field)) { //$NON-NLS-1$
-        ext.addMailingList(value);
-      }else if ("homepage".equals(field)) { //$NON-NLS-1$
-        ext.setPageUrl(value);
-      }
-
-      reader.moveUp();
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        InfoProjectExt info = (InfoProjectExt) source;
+        writeNode(writer, "homepage", info.getPageUrl()); //$NON-NLS-1$
+        writeNode(writer, "mailingLists", "mailingList", info.getMailingLists()); //$NON-NLS-1$ //$NON-NLS-2$
     }
-    return ext;
-  }
 
-  @Override
-  public String getApiVersion() {
-    return API_VERSION;
-  }
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        return iterateNodes(null, reader, context);
+    }
 
-  @Override
-  public String getNamespace() {
-    return NAMESPACE;
-  }
+    private InfoProjectExt iterateNodes(InfoProjectExt ext, HierarchicalStreamReader reader,
+            UnmarshallingContext context) {
+        if (ext == null) {
+            ext = new InfoProjectExt();
+        }
 
-  @Override
-  public String getXsdFileName() {
-    return "extension-info.xsd"; //$NON-NLS-1$
-  }
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+
+            String field = reader.getNodeName();
+            String value = reader.getValue();
+
+            if ("mailingLists".equals(field) && reader.hasMoreChildren()) { //$NON-NLS-1$
+                iterateNodes(ext, reader, context);
+            } else if ("mailingList".equals(field)) { //$NON-NLS-1$
+                ext.addMailingList(value);
+            } else if ("homepage".equals(field)) { //$NON-NLS-1$
+                ext.setPageUrl(value);
+            }
+
+            reader.moveUp();
+        }
+        return ext;
+    }
+
+    @Override
+    public String getApiVersion() {
+        return API_VERSION;
+    }
+
+    @Override
+    public String getNamespace() {
+        return NAMESPACE;
+    }
+
+    @Override
+    public String getXsdFileName() {
+        return "extension-info.xsd"; //$NON-NLS-1$
+    }
 
 }
-

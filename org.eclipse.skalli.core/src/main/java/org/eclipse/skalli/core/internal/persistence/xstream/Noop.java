@@ -13,4 +13,3 @@ package org.eclipse.skalli.core.internal.persistence.xstream;
 public class Noop {
 
 }
-

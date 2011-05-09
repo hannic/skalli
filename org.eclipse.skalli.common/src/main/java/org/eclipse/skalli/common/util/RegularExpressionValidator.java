@@ -25,65 +25,67 @@ import org.eclipse.skalli.model.ext.Severity;
  */
 public class RegularExpressionValidator extends AbstractPropertyValidator {
 
-  private Pattern pattern;
+    private Pattern pattern;
 
-  /**
-   * Creates a regular expression validator for a given regular expression.
-   *
-   * @param severity  the severity that should be assigned to reported issues.
-   * @param extension  the class of the model extension the property belongs to, or <code>null</code>.
-   * @param propertyName  the name of a property (see {@link PropertyName}).
-   * @param regex  the {@link java.util.regexp.Pattern regular expression}.
-   */
-  public RegularExpressionValidator(Severity severity, Class<? extends ExtensionEntityBase> extension, String property, String regex) {
-    this(severity, extension, property, null, regex);
-  }
+    /**
+     * Creates a regular expression validator for a given regular expression.
+     *
+     * @param severity  the severity that should be assigned to reported issues.
+     * @param extension  the class of the model extension the property belongs to, or <code>null</code>.
+     * @param propertyName  the name of a property (see {@link PropertyName}).
+     * @param regex  the {@link java.util.regexp.Pattern regular expression}.
+     */
+    public RegularExpressionValidator(Severity severity, Class<? extends ExtensionEntityBase> extension,
+            String property, String regex) {
+        this(severity, extension, property, null, regex);
+    }
 
-  /**
-   * Creates a regular expression validator for a given regular expression.
-   *
-   * @param severity  the severity that should be assigned to reported issues.
-   * @param extension  the class of the model extension the property belongs to, or <code>null</code>.
-   * @param propertyName  the name of a property (see {@link PropertyName}).
-   * @param caption  the caption of the property as shown to the user in the UI form.
-   * @param regex  the {@link java.util.regexp.Pattern regular expression}.
-   */
-  public RegularExpressionValidator(Severity severity, Class<? extends ExtensionEntityBase> extension, String property,
-      String caption, String regex) {
-    super(severity, extension, property, caption);
-    this.pattern = Pattern.compile(regex);
-  }
+    /**
+     * Creates a regular expression validator for a given regular expression.
+     *
+     * @param severity  the severity that should be assigned to reported issues.
+     * @param extension  the class of the model extension the property belongs to, or <code>null</code>.
+     * @param propertyName  the name of a property (see {@link PropertyName}).
+     * @param caption  the caption of the property as shown to the user in the UI form.
+     * @param regex  the {@link java.util.regexp.Pattern regular expression}.
+     */
+    public RegularExpressionValidator(Severity severity, Class<? extends ExtensionEntityBase> extension,
+            String property,
+            String caption, String regex) {
+        super(severity, extension, property, caption);
+        this.pattern = Pattern.compile(regex);
+    }
 
-  /**
-   * Creates a regular expression validator for a given regular expression.
-   *
-   * @param severity  the severity that should be assigned to reported issues.
-   * @param extension  the class of the model extension the property belongs to, or <code>null</code>.
-   * @param propertyName  the name of a property (see {@link PropertyName}).
-   * @param invalidValueMessage  the message to return in case the value invalid.
-   * @param undefinedValueMessage  the message to return in case the value is undefined.
-   * @param regex  the {@link java.util.regexp.Pattern regular expression}.
-   */
-  public RegularExpressionValidator(Severity severity, Class<? extends ExtensionEntityBase> extension, String property,
-      String invalidValueMessage, String undefinedValueMessage, String regex) {
-    super(severity, extension, property, invalidValueMessage, undefinedValueMessage);
-    this.pattern = Pattern.compile(regex);
-  }
+    /**
+     * Creates a regular expression validator for a given regular expression.
+     *
+     * @param severity  the severity that should be assigned to reported issues.
+     * @param extension  the class of the model extension the property belongs to, or <code>null</code>.
+     * @param propertyName  the name of a property (see {@link PropertyName}).
+     * @param invalidValueMessage  the message to return in case the value invalid.
+     * @param undefinedValueMessage  the message to return in case the value is undefined.
+     * @param regex  the {@link java.util.regexp.Pattern regular expression}.
+     */
+    public RegularExpressionValidator(Severity severity, Class<? extends ExtensionEntityBase> extension,
+            String property,
+            String invalidValueMessage, String undefinedValueMessage, String regex) {
+        super(severity, extension, property, invalidValueMessage, undefinedValueMessage);
+        this.pattern = Pattern.compile(regex);
+    }
 
-  @Override
-  protected String getInvalidMessageFromCaption(Object value) {
-     return MessageFormat.format("''{0}'' does not match the pattern {1}", caption, pattern);
-  }
+    @Override
+    protected String getInvalidMessageFromCaption(Object value) {
+        return MessageFormat.format("''{0}'' does not match the pattern {1}", caption, pattern);
+    }
 
-  @Override
-  protected String getDefaultInvalidMessage(Object value) {
-    return MessageFormat.format("Value of property ''{0}'' does not match the pattern {1}", propertyName, pattern);
-  }
+    @Override
+    protected String getDefaultInvalidMessage(Object value) {
+        return MessageFormat.format("Value of property ''{0}'' does not match the pattern {1}", propertyName, pattern);
+    }
 
-  @Override
-  public boolean isValid(UUID extension, Object value) {
-    Matcher matcher = pattern.matcher(value.toString());
-    return matcher.matches();
-  }
+    @Override
+    public boolean isValid(UUID extension, Object value) {
+        Matcher matcher = pattern.matcher(value.toString());
+        return matcher.matches();
+    }
 }
-

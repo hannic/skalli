@@ -15,27 +15,26 @@ import org.eclipse.skalli.model.core.Project;
 
 public interface Navigator {
 
-  public void navigateProjectView(Project project);
-  
-  public void navigateProjectEditView(Project project);
-  
-  public void navigateProjectNewView();
+    public void navigateProjectView(Project project);
 
-  public void navigateBrowseView();
-  
-  public void navigateWelcomeView();
+    public void navigateProjectEditView(Project project);
 
-  public void navigateTagView(String tag);
-  
-  public void navigateSearchResultView(String query);
-  
-  public void navigateUserView(User user);
-  
-  public void navigateLoginUserView();
-  
-  public void navigateAllTagView();
+    public void navigateProjectNewView();
 
-  public void showFeedbackWindow();
-   
+    public void navigateBrowseView();
+
+    public void navigateWelcomeView();
+
+    public void navigateTagView(String tag);
+
+    public void navigateSearchResultView(String query);
+
+    public void navigateUserView(User user);
+
+    public void navigateLoginUserView();
+
+    public void navigateAllTagView();
+
+    public void showFeedbackWindow();
+
 }
-

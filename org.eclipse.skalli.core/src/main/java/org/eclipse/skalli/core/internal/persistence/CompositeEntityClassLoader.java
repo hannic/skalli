@@ -20,42 +20,41 @@ import org.eclipse.skalli.log.Log;
 
 public class CompositeEntityClassLoader extends ClassLoader {
 
-  private static final Logger LOG = Log.getLogger(CompositeEntityClassLoader.class);
+    private static final Logger LOG = Log.getLogger(CompositeEntityClassLoader.class);
 
-  private final Set<ClassLoader> classLoaders = new HashSet<ClassLoader>(0);
+    private final Set<ClassLoader> classLoaders = new HashSet<ClassLoader>(0);
 
-  public CompositeEntityClassLoader(Set<ClassLoader> classLoaders) {
-    this.classLoaders.addAll(classLoaders);
-  }
+    public CompositeEntityClassLoader(Set<ClassLoader> classLoaders) {
+        this.classLoaders.addAll(classLoaders);
+    }
 
-  @Override
-  public Class<?> loadClass(String name) throws ClassNotFoundException {
-    Class<?> ret = null;
-    for (ClassLoader classLoader : classLoaders) {
-      try {
-        ret = classLoader.loadClass(name);
-        if (ret != null) {
-          return ret;
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+        Class<?> ret = null;
+        for (ClassLoader classLoader : classLoaders) {
+            try {
+                ret = classLoader.loadClass(name);
+                if (ret != null) {
+                    return ret;
+                }
+            } catch (ClassNotFoundException e) {
+                // ingore, cuz that's the point of this composite class loader!
+                LOG.finest(MessageFormat.format("Class {0} not found by class loader {1}", name, classLoader));
+            }
         }
-      } catch (ClassNotFoundException e) {
-        // ingore, cuz that's the point of this composite class loader!
-        LOG.finest(MessageFormat.format("Class {0} not found by class loader {1}", name, classLoader));
-      }
+        throw new ClassNotFoundException("Class not found: " + name);
     }
-    throw new ClassNotFoundException("Class not found: " + name);
-  }
 
-  @Override
-  public InputStream getResourceAsStream(String name) {
-    for (ClassLoader classLoader : classLoaders) {
-      InputStream ret = null;
-      ret = classLoader.getResourceAsStream(name);
-      if (ret != null) {
-        return ret;
-      }
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        for (ClassLoader classLoader : classLoaders) {
+            InputStream ret = null;
+            ret = classLoader.getResourceAsStream(name);
+            if (ret != null) {
+                return ret;
+            }
+        }
+        return null;
     }
-    return null;
-  }
 
 }
-

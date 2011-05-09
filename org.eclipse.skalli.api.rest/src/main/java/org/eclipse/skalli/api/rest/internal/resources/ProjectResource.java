@@ -30,49 +30,50 @@ import org.eclipse.skalli.model.ext.ValidationException;
 
 public class ProjectResource extends AbstractServerResource {
 
+    @Get
+    public Representation retrieve() {
+        Statistics.getDefault().trackUsage("api.rest.project.get"); //$NON-NLS-1$
 
-  @Get
-  public Representation retrieve() {
-    Statistics.getDefault().trackUsage("api.rest.project.get"); //$NON-NLS-1$
-
-    String id = (String) getRequestAttributes().get("id"); //$NON-NLS-1$
-    ProjectService projectService = Services.getRequiredService(ProjectService.class);
-    Project project = null;
-    try {
-      UUID uuid = UUID.fromString(id);
-      project = projectService.getByUUID(uuid);
-    } catch (IllegalArgumentException e) {
-      project = projectService.getProjectByProjectId(id);
-    }
-    if (project == null) {
-      return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" not found.", id); //$NON-NLS-1$
-    }
-
-    IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-        project, new AliasedConverter[] { new ProjectConverter(getRequest().getResourceRef().getHostIdentifier(), false) });
-    return representation;
-  }
-
-  @Put
-  public Representation store(Representation entity) {
-    IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-        entity, new AliasedConverter[] { new ProjectConverter(getRequest().getResourceRef().getHostIdentifier(), false) },
-        new Class[] { Project.class });
-    Project project = representation.getObject();
-    try {
-      LoginUtil loginUtil = new LoginUtil(ServletUtils.getRequest(getRequest()));
-      String loggedInUser = loginUtil.getLoggedInUserId();
-      if (UserUtil.isAdministrator(loggedInUser)) {
+        String id = (String) getRequestAttributes().get("id"); //$NON-NLS-1$
         ProjectService projectService = Services.getRequiredService(ProjectService.class);
-        projectService.persist(project, loggedInUser);
-      } else {
-        return createError(Status.CLIENT_ERROR_FORBIDDEN, "Access denied.", new Object[] {});
-      }
-    } catch (ValidationException e) {
-      createError(Status.CLIENT_ERROR_BAD_REQUEST, "Validating resource with id \"{0}\" failed: " + e.getMessage(), project.getProjectId());
-    }
-    return null;
-  }
+        Project project = null;
+        try {
+            UUID uuid = UUID.fromString(id);
+            project = projectService.getByUUID(uuid);
+        } catch (IllegalArgumentException e) {
+            project = projectService.getProjectByProjectId(id);
+        }
+        if (project == null) {
+            return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" not found.", id); //$NON-NLS-1$
+        }
 
+        IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
+                project, new AliasedConverter[] { new ProjectConverter(getRequest().getResourceRef()
+                        .getHostIdentifier(), false) });
+        return representation;
+    }
+
+    @Put
+    public Representation store(Representation entity) {
+        IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
+                entity, new AliasedConverter[] { new ProjectConverter(
+                        getRequest().getResourceRef().getHostIdentifier(), false) },
+                new Class[] { Project.class });
+        Project project = representation.getObject();
+        try {
+            LoginUtil loginUtil = new LoginUtil(ServletUtils.getRequest(getRequest()));
+            String loggedInUser = loginUtil.getLoggedInUserId();
+            if (UserUtil.isAdministrator(loggedInUser)) {
+                ProjectService projectService = Services.getRequiredService(ProjectService.class);
+                projectService.persist(project, loggedInUser);
+            } else {
+                return createError(Status.CLIENT_ERROR_FORBIDDEN, "Access denied.", new Object[] {});
+            }
+        } catch (ValidationException e) {
+            createError(Status.CLIENT_ERROR_BAD_REQUEST,
+                    "Validating resource with id \"{0}\" failed: " + e.getMessage(), project.getProjectId());
+        }
+        return null;
+    }
 
 }

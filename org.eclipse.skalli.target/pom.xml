@@ -9,45 +9,45 @@
         SAP AG - initial API and implementation
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <artifactId>org.eclipse.skalli.parent</artifactId>
-    <groupId>org.eclipse.skalli</groupId>
-    <version>0.1.0-SNAPSHOT</version>
-    <relativePath>../org.eclipse.skalli.parent</relativePath>
-  </parent>
+    <parent>
+        <artifactId>org.eclipse.skalli.parent</artifactId>
+        <groupId>org.eclipse.skalli</groupId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../org.eclipse.skalli.parent</relativePath>
+    </parent>
 
-  <artifactId>org.eclipse.skalli.target</artifactId>
-  <packaging>pom</packaging>
+    <artifactId>org.eclipse.skalli.target</artifactId>
+    <packaging>pom</packaging>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>skalli-for-tycho.target</file>
-                  <type>target</type>
-                  <classifier>skalli-for-tycho</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>skalli-for-tycho.target</file>
+                                    <type>target</type>
+                                    <classifier>skalli-for-tycho</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

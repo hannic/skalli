@@ -10,6 +10,5 @@
  *******************************************************************************/
 package org.eclipse.skalli.testutil;
 
-
 public class TestExtension1 extends TestExtension {
 }

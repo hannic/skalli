@@ -24,96 +24,96 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class LinkGroupsConverter extends AbstractConverter<LinkGroupsProjectExt> {
 
-  public static final String API_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-LinkGroups"; //$NON-NLS-1$
+    public static final String API_VERSION = "1.0"; //$NON-NLS-1$
+    public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/API/Extension-LinkGroups"; //$NON-NLS-1$
 
-  public LinkGroupsConverter(String host) {
-    super(LinkGroupsProjectExt.class, "linkGroups", host); //$NON-NLS-1$
-  }
+    public LinkGroupsConverter(String host) {
+        super(LinkGroupsProjectExt.class, "linkGroups", host); //$NON-NLS-1$
+    }
 
-  @Override
-  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-    LinkGroupsProjectExt ext = (LinkGroupsProjectExt) source;
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        LinkGroupsProjectExt ext = (LinkGroupsProjectExt) source;
 
-    Collection<LinkGroup> linkGroups = ext.getLinkGroups();
-    if (linkGroups != null && !linkGroups.isEmpty()) {
-      writer.startNode("linkGroups"); //$NON-NLS-1$
-      for (LinkGroup linkGroup : linkGroups) {
-        writer.startNode("linkGroup"); //$NON-NLS-1$
-        writer.addAttribute("caption", linkGroup.getCaption()); //$NON-NLS-1$
-        for (Link link : linkGroup.getItems()) {
-          if (link != null) {
-            writer.startNode("link"); //$NON-NLS-1$
-            writer.addAttribute("ref", link.getUrl()); //$NON-NLS-1$
-            writer.setValue(link.getLabel());
+        Collection<LinkGroup> linkGroups = ext.getLinkGroups();
+        if (linkGroups != null && !linkGroups.isEmpty()) {
+            writer.startNode("linkGroups"); //$NON-NLS-1$
+            for (LinkGroup linkGroup : linkGroups) {
+                writer.startNode("linkGroup"); //$NON-NLS-1$
+                writer.addAttribute("caption", linkGroup.getCaption()); //$NON-NLS-1$
+                for (Link link : linkGroup.getItems()) {
+                    if (link != null) {
+                        writer.startNode("link"); //$NON-NLS-1$
+                        writer.addAttribute("ref", link.getUrl()); //$NON-NLS-1$
+                        writer.setValue(link.getLabel());
+                        writer.endNode();
+                    }
+                }
+                writer.endNode();
+            }
             writer.endNode();
-          }
         }
-        writer.endNode();
-      }
-      writer.endNode();
-    }
-  }
-
-  @Override
-  public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    return iterateNodes(null, reader, context);
-  }
-
-  private LinkGroupsProjectExt iterateNodes(LinkGroupsProjectExt ext, HierarchicalStreamReader reader, UnmarshallingContext context) {
-    if (ext == null) {
-      ext = new LinkGroupsProjectExt();
     }
 
-    while (reader.hasMoreChildren()) {
-      reader.moveDown();
-
-      String field = reader.getNodeName();
-
-      if ("linkGroups".equals(field)) { //$NON-NLS-1$
-        iterateNodes(ext, reader, context);
-      } else if ("linkGroup".equals(field)) { //$NON-NLS-1$
-        String caption = reader.getAttribute("caption"); //$NON-NLS-1$
-        LinkGroup linkGroup = new LinkGroup();
-        linkGroup.setCaption(caption);
-        iterateLinkNodes(linkGroup, reader);
-
-        ext.getLinkGroups().add(linkGroup);
-      }
-
-      reader.moveUp();
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        return iterateNodes(null, reader, context);
     }
-    return ext;
-  }
 
-  private void iterateLinkNodes(LinkGroup linkGroup, HierarchicalStreamReader reader) {
-    while (reader.hasMoreChildren()) {
-      reader.moveDown();
+    private LinkGroupsProjectExt iterateNodes(LinkGroupsProjectExt ext, HierarchicalStreamReader reader,
+            UnmarshallingContext context) {
+        if (ext == null) {
+            ext = new LinkGroupsProjectExt();
+        }
 
-      String field = reader.getNodeName();
-      String value = reader.getValue();
-      if ("link".equals(field)) { //$NON-NLS-1$
-        String ref = reader.getAttribute("ref"); //$NON-NLS-1$
-        linkGroup.add(new Link(ref, value));
-      }
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
 
-      reader.moveUp();
+            String field = reader.getNodeName();
+
+            if ("linkGroups".equals(field)) { //$NON-NLS-1$
+                iterateNodes(ext, reader, context);
+            } else if ("linkGroup".equals(field)) { //$NON-NLS-1$
+                String caption = reader.getAttribute("caption"); //$NON-NLS-1$
+                LinkGroup linkGroup = new LinkGroup();
+                linkGroup.setCaption(caption);
+                iterateLinkNodes(linkGroup, reader);
+
+                ext.getLinkGroups().add(linkGroup);
+            }
+
+            reader.moveUp();
+        }
+        return ext;
     }
-  }
 
-  @Override
-  public String getApiVersion() {
-    return API_VERSION;
-  }
+    private void iterateLinkNodes(LinkGroup linkGroup, HierarchicalStreamReader reader) {
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
 
-  @Override
-  public String getNamespace() {
-    return NAMESPACE;
-  }
+            String field = reader.getNodeName();
+            String value = reader.getValue();
+            if ("link".equals(field)) { //$NON-NLS-1$
+                String ref = reader.getAttribute("ref"); //$NON-NLS-1$
+                linkGroup.add(new Link(ref, value));
+            }
 
-  @Override
-  public String getXsdFileName() {
-    return "extension-linkgroups.xsd"; //$NON-NLS-1$
-  }
+            reader.moveUp();
+        }
+    }
+
+    @Override
+    public String getApiVersion() {
+        return API_VERSION;
+    }
+
+    @Override
+    public String getNamespace() {
+        return NAMESPACE;
+    }
+
+    @Override
+    public String getXsdFileName() {
+        return "extension-linkgroups.xsd"; //$NON-NLS-1$
+    }
 }
-

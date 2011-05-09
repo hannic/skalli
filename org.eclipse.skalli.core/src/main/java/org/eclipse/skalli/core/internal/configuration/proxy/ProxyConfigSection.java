@@ -14,21 +14,18 @@ import org.restlet.resource.ServerResource;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 
-
-
 public class ProxyConfigSection implements ConfigSection {
 
-  private static final String NAME = "proxy"; //$NON-NLS-1$
+    private static final String NAME = "proxy"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return ProxyResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return ProxyResource.class;
+    }
 
 }
-

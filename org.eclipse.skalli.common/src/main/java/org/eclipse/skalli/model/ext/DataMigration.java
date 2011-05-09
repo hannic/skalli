@@ -20,26 +20,25 @@ import org.w3c.dom.Document;
  */
 public interface DataMigration extends Comparable<DataMigration> {
 
-  /**
-   * Migrates the model entity represented by a model DOM.
-   *
-   * @throws ValidationException  if the migration failed because of
-   * an invalid document model.
-   */
-  public void migrate(Document doc) throws ValidationException;
+    /**
+     * Migrates the model entity represented by a model DOM.
+     *
+     * @throws ValidationException  if the migration failed because of
+     * an invalid document model.
+     */
+    public void migrate(Document doc) throws ValidationException;
 
-  /**
-   * Returns the model version of a model entity to which this
-   * migrator should be applied.
-   */
-  public int getFromVersion();
+    /**
+     * Returns the model version of a model entity to which this
+     * migrator should be applied.
+     */
+    public int getFromVersion();
 
-  /**
-   * Returns true if this {@link DataMigration} is able to handle an {@link EntityBase} with the given class name.
-   * @param className
-   * @return
-   */
-  public boolean handlesType(String className);
+    /**
+     * Returns true if this {@link DataMigration} is able to handle an {@link EntityBase} with the given class name.
+     * @param className
+     * @return
+     */
+    public boolean handlesType(String className);
 
 }
-

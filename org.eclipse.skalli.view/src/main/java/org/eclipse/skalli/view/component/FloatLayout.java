@@ -18,35 +18,34 @@ import com.vaadin.ui.Label;
 
 public class FloatLayout extends CssLayout {
 
-  private static final long serialVersionUID = 6837635603865705941L;
+    private static final long serialVersionUID = 6837635603865705941L;
 
-  private LinkedHashMap<Component,String> styles;
+    private LinkedHashMap<Component, String> styles;
 
-  public FloatLayout() {
-    super();
-    setSizeFull();
-  }
-
-  public void addComponent(Component c, String style) {
-    super.addComponent(c);
-    if (styles == null) {
-      styles = new LinkedHashMap<Component,String>();
+    public FloatLayout() {
+        super();
+        setSizeFull();
     }
-    styles.put(c, style);
-  }
 
-  @Override
-  protected String getCss(Component c) {
-    String css = "float:left;";
-    if (styles != null) {
-      if (styles.containsKey(c)) {
-        css += styles.get(c);
-      }
+    public void addComponent(Component c, String style) {
+        super.addComponent(c);
+        if (styles == null) {
+            styles = new LinkedHashMap<Component, String>();
+        }
+        styles.put(c, style);
     }
-    else if (c instanceof Label) {
-      css += "line-height:18px;padding-left:3px;padding-top:3px";
+
+    @Override
+    protected String getCss(Component c) {
+        String css = "float:left;";
+        if (styles != null) {
+            if (styles.containsKey(c)) {
+                css += styles.get(c);
+            }
+        }
+        else if (c instanceof Label) {
+            css += "line-height:18px;padding-left:3px;padding-top:3px";
+        }
+        return css;
     }
-    return css;
-  }
 }
-

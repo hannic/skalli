@@ -32,48 +32,47 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
  */
 public abstract class ConfigResource<K extends ConfigKey, O> extends AbstractResource<O> {
 
-  /**
-   * Converts all configuration parameters into a map.
-   * @param configObject configuration object that should be converted into single values by their corresponding keys.
-   * @return
-   */
-  protected abstract Map<ConfigKey, String> configToMap(O configObject);
+    /**
+     * Converts all configuration parameters into a map.
+     * @param configObject configuration object that should be converted into single values by their corresponding keys.
+     * @return
+     */
+    protected abstract Map<ConfigKey, String> configToMap(O configObject);
 
-  /**
-   * Constructs a configuration object from a map.
-   * @param values map containing the configuration parameters by their keys.
-   * @return
-   */
-  protected abstract O mapToConfig(Map<K, String> values);
+    /**
+     * Constructs a configuration object from a map.
+     * @param values map containing the configuration parameters by their keys.
+     * @return
+     */
+    protected abstract O mapToConfig(Map<K, String> values);
 
-  /**
-   * Defines all available {@link ConfigKey}s that will be used to store the values in the preference store.
-   * @return
-   */
-  protected abstract K[] getAllKeys();
+    /**
+     * Defines all available {@link ConfigKey}s that will be used to store the values in the preference store.
+     * @return
+     */
+    protected abstract K[] getAllKeys();
 
-  @Override
-  protected void storeConfig(ConfigurationService configService, O configObject) {
-    ConfigTransaction tx = configService.startTransaction();
-    for (Entry<ConfigKey, String> entry : configToMap(configObject).entrySet()) {
-      configService.writeString(tx, entry.getKey(), entry.getValue());
+    @Override
+    protected void storeConfig(ConfigurationService configService, O configObject) {
+        ConfigTransaction tx = configService.startTransaction();
+        for (Entry<ConfigKey, String> entry : configToMap(configObject).entrySet()) {
+            configService.writeString(tx, entry.getKey(), entry.getValue());
+        }
+        configService.commit(tx);
     }
-    configService.commit(tx);
-  }
 
-  @Override
-  protected O readConfig(ConfigurationService configService) {
-    Map<K, String> values = new HashMap<K, String>();
-    for (K key : getAllKeys()) {
-      if (key.isEncrypted()) {
-        values.put(key, "*****"); //$NON-NLS-1$
-      } else {
-        values.put(key, configService.readString(key));
-      }
+    @Override
+    protected O readConfig(ConfigurationService configService) {
+        Map<K, String> values = new HashMap<K, String>();
+        for (K key : getAllKeys()) {
+            if (key.isEncrypted()) {
+                values.put(key, "*****"); //$NON-NLS-1$
+            } else {
+                values.put(key, configService.readString(key));
+            }
+        }
+        O config = mapToConfig(values);
+        return config;
     }
-    O config = mapToConfig(values);
-    return config;
-  }
 
 }
-

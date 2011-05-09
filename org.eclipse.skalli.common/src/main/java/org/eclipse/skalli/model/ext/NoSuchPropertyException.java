@@ -12,31 +12,30 @@ package org.eclipse.skalli.model.ext;
 
 public class NoSuchPropertyException extends RuntimeException {
 
-  private static final long serialVersionUID = -5333642036204491847L;
+    private static final long serialVersionUID = -5333642036204491847L;
 
-  public NoSuchPropertyException() {
-    super();
-  }
+    public NoSuchPropertyException() {
+        super();
+    }
 
-  public NoSuchPropertyException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public NoSuchPropertyException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public NoSuchPropertyException(String message) {
-    super(message);
-  }
+    public NoSuchPropertyException(String message) {
+        super(message);
+    }
 
-  public NoSuchPropertyException(Throwable cause) {
-    super(cause);
-  }
+    public NoSuchPropertyException(Throwable cause) {
+        super(cause);
+    }
 
-  public NoSuchPropertyException(ExtensionEntityBase extension, String propertyName) {
-     this(extension, propertyName, null);
-  }
+    public NoSuchPropertyException(ExtensionEntityBase extension, String propertyName) {
+        this(extension, propertyName, null);
+    }
 
-  public NoSuchPropertyException(ExtensionEntityBase extension, String propertyName, Throwable cause) {
-    super("Failed to retrieve property " + propertyName + " of " + extension.getClass().getName(), cause);
-  }
+    public NoSuchPropertyException(ExtensionEntityBase extension, String propertyName, Throwable cause) {
+        super("Failed to retrieve property " + propertyName + " of " + extension.getClass().getName(), cause);
+    }
 
 }
-

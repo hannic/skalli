@@ -19,65 +19,65 @@ import org.eclipse.skalli.model.ext.PropertyName;
 @SuppressWarnings("nls")
 public class TestExtension extends ExtensionEntityBase {
 
-  @PropertyName(position=-1)
-  public static final String PROPERTY_BOOL = "bool";
+    @PropertyName(position = -1)
+    public static final String PROPERTY_BOOL = "bool";
 
-  @PropertyName(position=-1)
-  public static final String PROPERTY_STR = "str";
+    @PropertyName(position = -1)
+    public static final String PROPERTY_STR = "str";
 
-  @PropertyName(position=-1)
-  public static final String PROPERTY_ITEMS = "items";
+    @PropertyName(position = -1)
+    public static final String PROPERTY_ITEMS = "items";
 
-  private boolean bool;
-  private String str = "";
-  private ArrayList<String> items = new ArrayList<String>();
+    private boolean bool;
+    private String str = "";
+    private ArrayList<String> items = new ArrayList<String>();
 
-  public TestExtension() {
-  }
-
-  public boolean isBool() {
-    return bool;
-  }
-
-  public void setBool(boolean bool) {
-    this.bool = bool;
-  }
-
-  public String getStr() {
-    return str;
-  }
-
-  public void setStr(String str) {
-    this.str = str;
-  }
-
-  public List<String> getItems() {
-    return items;
-  }
-
-  public void setItems(List<String> list) {
-    items = new ArrayList<String>(list);
-  }
-
-  public void addItem(String item) {
-    items.add(item);
-  }
-
-  public void removeItem(String item) {
-    items.remove(item);
-  }
-
-  public boolean hasItem(String item) {
-    return getItems().contains(item);
-  }
-
-  public static boolean assertEquals(TestExtension o1, TestExtension o2) {
-    boolean equals = true;
-    equals &= o1.isBool() == o2.isBool();
-    equals &= o1.getStr().equals(o2.getStr());
-    for (int i=0; i<o1.getItems().size(); ++i) {
-      equals &= o1.getItems().get(i).equals(o2.getItems().get(i));
+    public TestExtension() {
     }
-    return equals;
-  }
+
+    public boolean isBool() {
+        return bool;
+    }
+
+    public void setBool(boolean bool) {
+        this.bool = bool;
+    }
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+
+    public List<String> getItems() {
+        return items;
+    }
+
+    public void setItems(List<String> list) {
+        items = new ArrayList<String>(list);
+    }
+
+    public void addItem(String item) {
+        items.add(item);
+    }
+
+    public void removeItem(String item) {
+        items.remove(item);
+    }
+
+    public boolean hasItem(String item) {
+        return getItems().contains(item);
+    }
+
+    public static boolean assertEquals(TestExtension o1, TestExtension o2) {
+        boolean equals = true;
+        equals &= o1.isBool() == o2.isBool();
+        equals &= o1.getStr().equals(o2.getStr());
+        for (int i = 0; i < o1.getItems().size(); ++i) {
+            equals &= o1.getItems().get(i).equals(o2.getItems().get(i));
+        }
+        return equals;
+    }
 }

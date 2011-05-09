@@ -16,27 +16,26 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("mavenResolver")
 public class MavenResolverConfig {
 
-  private Schedule schedule;
-  private String userId;
+    private Schedule schedule;
+    private String userId;
 
-  public MavenResolverConfig() {
-  }
+    public MavenResolverConfig() {
+    }
 
-  public void setSchedule(Schedule schedule) {
-    this.schedule = schedule;
-  }
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
 
-  public Schedule getSchedule() {
-    return schedule;
-  }
+    public Schedule getSchedule() {
+        return schedule;
+    }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-  public String getUserId() {
-    return userId;
-  }
+    public String getUserId() {
+        return userId;
+    }
 
 }
-

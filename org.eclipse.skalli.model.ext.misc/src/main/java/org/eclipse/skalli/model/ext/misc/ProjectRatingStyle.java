@@ -11,6 +11,5 @@
 package org.eclipse.skalli.model.ext.misc;
 
 public enum ProjectRatingStyle {
-  TWO_STATES, FIVE_STATES
+    TWO_STATES, FIVE_STATES
 }
-

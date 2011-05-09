@@ -30,47 +30,44 @@ import org.eclipse.skalli.log.Log;
  */
 // TODO: just a POC...
 public class EventComponent implements EventService {
-  private static final Logger LOG = Log.getLogger(EventComponent.class);
+    private static final Logger LOG = Log.getLogger(EventComponent.class);
 
-  private final Map<String, Set> listeners = new HashMap<String, Set>();
+    private final Map<String, Set> listeners = new HashMap<String, Set>();
 
-  protected void activate(ComponentContext context){
-    LOG.info("Event service activated");
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info("Event service deactivated");
-  }
-
-
-  @Override
-  public <T extends AbstractEvent> void registerListener(Class<T> event, EventListener<T> listener) {
-    Set<EventListener<T>> set = listeners.get(event.getName());
-    if (set == null) {
-      set = new HashSet<EventListener<T>>(1);
-      listeners.put(event.getName(), set);
+    protected void activate(ComponentContext context) {
+        LOG.info("Event service activated");
     }
-    set.add(listener);
-  }
 
-  @Override
-  public <T extends AbstractEvent> void unregisterEventListener(Class<T> event, EventListener<T> listener) {
-    Set<EventListener<T>> set = listeners.get(event.getName());
-    if (set != null) {
-      set.remove(listener);
+    protected void deactivate(ComponentContext context) {
+        LOG.info("Event service deactivated");
     }
-  }
 
-  @Override
-  public <T extends AbstractEvent> void fireEvent(T event) {
-    Set<EventListener<T>> set = listeners.get(event.getClass().getName());
-    if (set != null) {
-      for (EventListener<T> listener : set) {
-        listener.onEvent(event);
-      }
+    @Override
+    public <T extends AbstractEvent> void registerListener(Class<T> event, EventListener<T> listener) {
+        Set<EventListener<T>> set = listeners.get(event.getName());
+        if (set == null) {
+            set = new HashSet<EventListener<T>>(1);
+            listeners.put(event.getName(), set);
+        }
+        set.add(listener);
     }
-  }
 
+    @Override
+    public <T extends AbstractEvent> void unregisterEventListener(Class<T> event, EventListener<T> listener) {
+        Set<EventListener<T>> set = listeners.get(event.getName());
+        if (set != null) {
+            set.remove(listener);
+        }
+    }
+
+    @Override
+    public <T extends AbstractEvent> void fireEvent(T event) {
+        Set<EventListener<T>> set = listeners.get(event.getClass().getName());
+        if (set != null) {
+            for (EventListener<T> listener : set) {
+                listener.onEvent(event);
+            }
+        }
+    }
 
 }
-

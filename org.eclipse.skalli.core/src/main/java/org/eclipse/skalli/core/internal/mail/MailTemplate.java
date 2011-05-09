@@ -12,15 +12,14 @@ package org.eclipse.skalli.core.internal.mail;
 
 public interface MailTemplate {
 
-  /**
-   * @return path in classpath for the body template (velocity).
-   */
-  public String getBodyTemplate();
+    /**
+     * @return path in classpath for the body template (velocity).
+     */
+    public String getBodyTemplate();
 
-  /**
-   * @return path in classpath for the subject template (velocity).
-   */
-  public String getSubjectTemplate();
+    /**
+     * @return path in classpath for the subject template (velocity).
+     */
+    public String getSubjectTemplate();
 
 }
-

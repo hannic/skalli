@@ -24,63 +24,62 @@ import com.vaadin.ui.Layout;
 
 public class ProjectTeamBox extends AbstractInfoBox implements ProjectInfoBox {
 
-  @Override
-  public String getIconPath() {
-    return "res/icons/people.png"; //$NON-NLS-1$
-  }
-
-  @Override
-  public String getCaption() {
-    return "Team";
-  }
-
-  @Override
-  public Component getContent(Project project, ExtensionUtil util) {
-    Layout layout = new CssLayout();
-    layout.setSizeFull();
-    PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
-    if (ext != null) {
-      if (ext.getLeads().size() > 0) {
-        Label projectLeadHeaderLabel = new Label("Project Lead");
-        projectLeadHeaderLabel.addStyleName(STYLE_TEAMLABEL);
-        layout.addComponent(projectLeadHeaderLabel);
-        Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(ext.getLeads());
-        peopleComponent.addStyleName(InformationBox.STYLE);
-        layout.addComponent(peopleComponent);
-      }
-
-      if (ext.getMembers().size() > 0) {
-        Label projectTeamHeaderLabel = new Label("Project Team/Committers");
-        projectTeamHeaderLabel.addStyleName(STYLE_TEAMLABEL);
-        layout.addComponent(projectTeamHeaderLabel);
-
-        Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(ext.getMembers());
-        peopleComponent.addStyleName(InformationBox.STYLE);
-        layout.addComponent(peopleComponent);
-      }
+    @Override
+    public String getIconPath() {
+        return "res/icons/people.png"; //$NON-NLS-1$
     }
-    return layout;
-  }
 
-  @Override
-  public float getPositionWeight() {
-    return 1.4f;
-  }
-
-  @Override
-  public int getPreferredColumn() {
-    return COLUMN_EAST;
-  }
-
-  @Override
-  public boolean isVisible(Project project, String loggedInUserId) {
-    PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
-    if (ext == null || ext.getMembers().isEmpty() && ext.getLeads().isEmpty()) {
-      return false;
-    } else {
-      return true;
+    @Override
+    public String getCaption() {
+        return "Team";
     }
-  }
+
+    @Override
+    public Component getContent(Project project, ExtensionUtil util) {
+        Layout layout = new CssLayout();
+        layout.setSizeFull();
+        PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
+        if (ext != null) {
+            if (ext.getLeads().size() > 0) {
+                Label projectLeadHeaderLabel = new Label("Project Lead");
+                projectLeadHeaderLabel.addStyleName(STYLE_TEAMLABEL);
+                layout.addComponent(projectLeadHeaderLabel);
+                Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(ext.getLeads());
+                peopleComponent.addStyleName(InformationBox.STYLE);
+                layout.addComponent(peopleComponent);
+            }
+
+            if (ext.getMembers().size() > 0) {
+                Label projectTeamHeaderLabel = new Label("Project Team/Committers");
+                projectTeamHeaderLabel.addStyleName(STYLE_TEAMLABEL);
+                layout.addComponent(projectTeamHeaderLabel);
+
+                Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(ext.getMembers());
+                peopleComponent.addStyleName(InformationBox.STYLE);
+                layout.addComponent(peopleComponent);
+            }
+        }
+        return layout;
+    }
+
+    @Override
+    public float getPositionWeight() {
+        return 1.4f;
+    }
+
+    @Override
+    public int getPreferredColumn() {
+        return COLUMN_EAST;
+    }
+
+    @Override
+    public boolean isVisible(Project project, String loggedInUserId) {
+        PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
+        if (ext == null || ext.getMembers().isEmpty() && ext.getLeads().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }
-

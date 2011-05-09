@@ -16,20 +16,19 @@ import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 @Derived
 public class MavenReactorProjectExt extends ExtensionEntityBase {
 
-  public static final String MODEL_VERSION = "1.0"; //$NON-NLS-1$
-  public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/Model/Extension-MavenReactor"; //$NON-NLS-1$
+    public static final String MODEL_VERSION = "1.0"; //$NON-NLS-1$
+    public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/Model/Extension-MavenReactor"; //$NON-NLS-1$
 
-  @Derived
-  public static final String PROPERTY_MAVEN_REACTOR = "mavenReactor"; //$NON-NLS-1$
+    @Derived
+    public static final String PROPERTY_MAVEN_REACTOR = "mavenReactor"; //$NON-NLS-1$
 
-  private MavenReactor mavenReactor;
+    private MavenReactor mavenReactor;
 
-  public MavenReactor getMavenReactor() {
-    return mavenReactor;
-  }
+    public MavenReactor getMavenReactor() {
+        return mavenReactor;
+    }
 
-  public void setMavenReactor(MavenReactor mavenReactor) {
-    this.mavenReactor = mavenReactor;
-  }
+    public void setMavenReactor(MavenReactor mavenReactor) {
+        this.mavenReactor = mavenReactor;
+    }
 }
-

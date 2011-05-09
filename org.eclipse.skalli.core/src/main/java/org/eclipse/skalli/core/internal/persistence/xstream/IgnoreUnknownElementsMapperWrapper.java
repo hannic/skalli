@@ -22,27 +22,27 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * entry http://jira.codehaus.org/browse/XSTR-30
  */
 public class IgnoreUnknownElementsMapperWrapper extends MapperWrapper {
-  private static final Logger LOG = Log.getLogger(IgnoreUnknownElementsMapperWrapper.class);
+    private static final Logger LOG = Log.getLogger(IgnoreUnknownElementsMapperWrapper.class);
 
-  public IgnoreUnknownElementsMapperWrapper(MapperWrapper next) {
-    super(next);
-  }
-
-  @Override
-  public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-    if (definedIn == Object.class) {
-      return false;
+    public IgnoreUnknownElementsMapperWrapper(MapperWrapper next) {
+        super(next);
     }
-    return super.shouldSerializeMember(definedIn, fieldName);
-  }
 
-  @Override
-  public Class realClass(String elementName) {
-    try {
-      return super.realClass(elementName);
-    } catch (CannotResolveClassException e) {
-      LOG.warning("No class for element named '" + elementName + "' found during entity deserialization.");
-      return Noop.class;
+    @Override
+    public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+        if (definedIn == Object.class) {
+            return false;
+        }
+        return super.shouldSerializeMember(definedIn, fieldName);
     }
-  }
+
+    @Override
+    public Class realClass(String elementName) {
+        try {
+            return super.realClass(elementName);
+        } catch (CannotResolveClassException e) {
+            LOG.warning("No class for element named '" + elementName + "' found during entity deserialization.");
+            return Noop.class;
+        }
+    }
 }

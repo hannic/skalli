@@ -27,34 +27,33 @@ import org.eclipse.skalli.model.ext.ValidationException;
  */
 public class DataMigration8 extends AbstractDataMigration {
 
-  public DataMigration8() {
-    super(Project.class, 8);
-  }
-
-  /**
-   * Changes from model version 8->9:
-   * <ol>
-   *   <li>tag "maturity" renamed to "phase"</li>
-   *   <li>map the previously defined enum values "EXPERIMENTAL" and "INCUBATION"
-   *     to "Experimental" and "Incubation"</li>
-   * </ol>
-   */
-  @Override
-  public void migrate(Document doc) throws ValidationException {
-    XMLUtils.renameTag(doc, "maturity", "phase");
-    NodeList nodes = doc.getElementsByTagName("phase");
-    for (int i = 0; i < nodes.getLength(); i++) {
-      Element element = (Element)nodes.item(i);
-      String value = element.getTextContent();
-      if ("EXPERIMENTAL".equals(value)) {
-        value = "Experimental";
-      }
-      if ("INCUBATION".equals(value)) {
-        value = "Incubation";
-      }
-      element.setTextContent(value);
+    public DataMigration8() {
+        super(Project.class, 8);
     }
-  }
+
+    /**
+     * Changes from model version 8->9:
+     * <ol>
+     *   <li>tag "maturity" renamed to "phase"</li>
+     *   <li>map the previously defined enum values "EXPERIMENTAL" and "INCUBATION"
+     *     to "Experimental" and "Incubation"</li>
+     * </ol>
+     */
+    @Override
+    public void migrate(Document doc) throws ValidationException {
+        XMLUtils.renameTag(doc, "maturity", "phase");
+        NodeList nodes = doc.getElementsByTagName("phase");
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Element element = (Element) nodes.item(i);
+            String value = element.getTextContent();
+            if ("EXPERIMENTAL".equals(value)) {
+                value = "Experimental";
+            }
+            if ("INCUBATION".equals(value)) {
+                value = "Incubation";
+            }
+            element.setTextContent(value);
+        }
+    }
 
 }
-

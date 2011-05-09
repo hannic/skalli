@@ -16,9 +16,11 @@ import java.util.Set;
  * Marker interface for model entities that support tagging.
  */
 public interface Taggable {
-  public Set<String> getTags();
-  public void addTag(String tag);
-  public void removeTag(String tag);
-  public boolean hasTag(String tag);
-}
+    public Set<String> getTags();
 
+    public void addTag(String tag);
+
+    public void removeTag(String tag);
+
+    public boolean hasTag(String tag);
+}

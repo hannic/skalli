@@ -11,37 +11,36 @@
 package org.eclipse.skalli.core.internal.users;
 
 public enum LDAPAttributeNames {
-  BITS("userAccountControl"),
-  EMAIL("mail"),
-  USERID("sAMAccountName"),
-  LASTNAME("sn"),
-  FIRSTNAME("givenName"),
-  TELEPHONE("telephoneNumber"),
-  MOBILE("mobile"),
-  ROOM("physicalDeliveryOfficeName"),
-  LOCATION("l"),
-  DEPARTMENT("department"),
-  COMPANY("company"),
-  SIP("msRTCSIP-PrimaryUserAddress");
+    BITS("userAccountControl"),
+    EMAIL("mail"),
+    USERID("sAMAccountName"),
+    LASTNAME("sn"),
+    FIRSTNAME("givenName"),
+    TELEPHONE("telephoneNumber"),
+    MOBILE("mobile"),
+    ROOM("physicalDeliveryOfficeName"),
+    LOCATION("l"),
+    DEPARTMENT("department"),
+    COMPANY("company"),
+    SIP("msRTCSIP-PrimaryUserAddress");
 
-  private final String ldapKey;
+    private final String ldapKey;
 
-  private LDAPAttributeNames(String ldapKey) {
-    this.ldapKey = ldapKey;
-  }
-
-  public String getLdapKey() {
-    return ldapKey;
-  }
-
-  public static String[] getAll() {
-    LDAPAttributeNames[] all = LDAPAttributeNames.values();
-    String[] ret = new String[all.length];
-    for (int i = 0; i < ret.length; i++) {
-      ret[i] = all[i].getLdapKey();
+    private LDAPAttributeNames(String ldapKey) {
+        this.ldapKey = ldapKey;
     }
-    return ret;
-  }
+
+    public String getLdapKey() {
+        return ldapKey;
+    }
+
+    public static String[] getAll() {
+        LDAPAttributeNames[] all = LDAPAttributeNames.values();
+        String[] ret = new String[all.length];
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = all[i].getLdapKey();
+        }
+        return ret;
+    }
 
 }
-

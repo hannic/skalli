@@ -18,14 +18,13 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 
 public class AddProjectToJiraTest {
 
-  @Test
-  public void testGetUri() {
-    Project project = new Project();
-    project.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    project.setProjectId("foobar");
-    AddProjectToJira jira = new AddProjectToJira();
-    Assert.assertEquals("/create/jira?id=foobar", jira.getUri(project).toString());
-  }
+    @Test
+    public void testGetUri() {
+        Project project = new Project();
+        project.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        project.setProjectId("foobar");
+        AddProjectToJira jira = new AddProjectToJira();
+        Assert.assertEquals("/create/jira?id=foobar", jira.getUri(project).toString());
+    }
 
 }
-

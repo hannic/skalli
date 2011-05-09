@@ -17,42 +17,41 @@ import org.eclipse.skalli.model.ext.ValidationException;
 
 public interface FavoritesService extends EntityService<Favorites> {
 
-  /**
-   * Returns the favorites entity for the given user, or
-   * creates a new <code>Favorites</code> entity.
-   *
-   * @param userId
-   *          the unique identifier of a user.
-   * @return the favorites entity assigned to the user.
-   */
-  public Favorites getFavorites(String userId);
+    /**
+     * Returns the favorites entity for the given user, or
+     * creates a new <code>Favorites</code> entity.
+     *
+     * @param userId
+     *          the unique identifier of a user.
+     * @return the favorites entity assigned to the user.
+     */
+    public Favorites getFavorites(String userId);
 
-  /**
-   * Adds a project to the favorites list of the given user.
-   * @param userId
-   *          the unique identifier of a user.
-   * @param project
-   *          the project to add to the
-   *          favorites list of the user
-   * @throws ValidationException
-   *           if the <code>Favorites</code> instance of the user is invalid.
-   */
-  public void addFavorite(String userId, UUID project) throws ValidationException;
+    /**
+     * Adds a project to the favorites list of the given user.
+     * @param userId
+     *          the unique identifier of a user.
+     * @param project
+     *          the project to add to the
+     *          favorites list of the user
+     * @throws ValidationException
+     *           if the <code>Favorites</code> instance of the user is invalid.
+     */
+    public void addFavorite(String userId, UUID project) throws ValidationException;
 
-  /**
-   * Removes a project from the favorites list of the given user.
-   * @param userId
-   *          the unique identifier of a user.
-   * @param project
-   *          the project to remove from the
-   *          favorites list of the user
-   * @throws ValidationException
-   *           if the <code>Favorites</code> instance of the user is invalid.
-   * @throws DuplicateEntityException
-   *           if there exists already another model entity with the same UUID
-   *           (see {@link org.eclipse.skalli.model.ext.EntityBase#getUuid()}).
-   */
-  public void removeFavorite(String userId, UUID project) throws ValidationException;
+    /**
+     * Removes a project from the favorites list of the given user.
+     * @param userId
+     *          the unique identifier of a user.
+     * @param project
+     *          the project to remove from the
+     *          favorites list of the user
+     * @throws ValidationException
+     *           if the <code>Favorites</code> instance of the user is invalid.
+     * @throws DuplicateEntityException
+     *           if there exists already another model entity with the same UUID
+     *           (see {@link org.eclipse.skalli.model.ext.EntityBase#getUuid()}).
+     */
+    public void removeFavorite(String userId, UUID project) throws ValidationException;
 
 }
-

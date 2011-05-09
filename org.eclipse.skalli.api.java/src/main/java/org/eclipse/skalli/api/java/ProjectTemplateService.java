@@ -21,38 +21,38 @@ import org.eclipse.skalli.model.ext.ExtensionEntityBase;
  */
 public interface ProjectTemplateService {
 
-  public Set<ProjectTemplate> getAllTemplates();
+    public Set<ProjectTemplate> getAllTemplates();
 
-  /**
-   * Returns the project template with the given class name.
-   *
-   * @param name
-   *          the class name of a project template
-   * @return the project template with the given identifier, or
-   *         the default template if no such project template exists.
-   */
-  public ProjectTemplate getProjectTemplate(String className);
+    /**
+     * Returns the project template with the given class name.
+     *
+     * @param name
+     *          the class name of a project template
+     * @return the project template with the given identifier, or
+     *         the default template if no such project template exists.
+     */
+    public ProjectTemplate getProjectTemplate(String className);
 
-  /**
-   * Returns the project template with the given symbolic name.
-   *
-   * @param name
-   *          the id of a project template
-   * @return the project template with the given identifier, or
-   *         the default template if no such project template exists.
-   */
-  public ProjectTemplate getProjectTemplateById(String templateId);
+    /**
+     * Returns the project template with the given symbolic name.
+     *
+     * @param name
+     *          the id of a project template
+     * @return the project template with the given identifier, or
+     *         the default template if no such project template exists.
+     */
+    public ProjectTemplate getProjectTemplateById(String templateId);
 
-  /**
-   * Returns all extensions that are allowed for the passed template.
-   *
-   * If a project is passed in, all extensions known to the project are added
-   * as well to remain backward compatibility.
-   *
-   * @param template the template to check
-   * @param project might be null
-   * @return
-   */
-  public Set<Class<? extends ExtensionEntityBase>> getSelectableExtensions(final ProjectTemplate template, final Project project);
+    /**
+     * Returns all extensions that are allowed for the passed template.
+     *
+     * If a project is passed in, all extensions known to the project are added
+     * as well to remain backward compatibility.
+     *
+     * @param template the template to check
+     * @param project might be null
+     * @return
+     */
+    public Set<Class<? extends ExtensionEntityBase>> getSelectableExtensions(final ProjectTemplate template,
+            final Project project);
 }
-

@@ -19,10 +19,9 @@ import org.restlet.resource.ServerResource;
 
 public abstract class AbstractServerResource extends ServerResource {
 
-  protected Representation createError(Status status, String message, Object... args) {
-    getResponse().setStatus(status);
-    return new StringRepresentation(MessageFormat.format(message, args));
-  }
+    protected Representation createError(Status status, String message, Object... args) {
+        getResponse().setStatus(status);
+        return new StringRepresentation(MessageFormat.format(message, args));
+    }
 
 }
-

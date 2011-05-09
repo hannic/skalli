@@ -12,9 +12,10 @@ package org.eclipse.skalli.common.configuration;
 
 public interface ConfigKey {
 
-  public String getKey();
-  public String getDefaultValue();
-  public boolean isEncrypted();
+    public String getKey();
+
+    public String getDefaultValue();
+
+    public boolean isEncrypted();
 
 }
-

@@ -22,28 +22,27 @@ import org.eclipse.skalli.log.internal.listener.ConsoleLogListener;
  */
 public class LoggingComponent {
 
-  private final LogListener consoleLogListener = new ConsoleLogListener();
+    private final LogListener consoleLogListener = new ConsoleLogListener();
 
-  protected void activate(ComponentContext context) {
-  }
+    protected void activate(ComponentContext context) {
+    }
 
-  protected void deactivate(ComponentContext context) {
-  }
+    protected void deactivate(ComponentContext context) {
+    }
 
-  protected void bindLogService(LogService logService) {
-    JdkLogManager.getInstance().bindLogService(logService);
-  }
+    protected void bindLogService(LogService logService) {
+        JdkLogManager.getInstance().bindLogService(logService);
+    }
 
-  protected void unbindLogService(LogService logService) {
-    JdkLogManager.getInstance().unbindLogService(logService);
-  }
+    protected void unbindLogService(LogService logService) {
+        JdkLogManager.getInstance().unbindLogService(logService);
+    }
 
-  protected void bindLogReader(LogReaderService logServiceReader) {
-    logServiceReader.addLogListener(consoleLogListener);
-  }
+    protected void bindLogReader(LogReaderService logServiceReader) {
+        logServiceReader.addLogListener(consoleLogListener);
+    }
 
-  protected void unbindLogReader(LogReaderService logServiceReader) {
-    logServiceReader.removeLogListener(consoleLogListener);
-  }
+    protected void unbindLogReader(LogReaderService logServiceReader) {
+        logServiceReader.removeLogListener(consoleLogListener);
+    }
 }
-

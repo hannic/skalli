@@ -31,71 +31,73 @@ import com.vaadin.ui.Layout;
 
 public class ProjectIssuesBox extends AbstractInfoBox implements ProjectInfoBox {
 
-  private static final String STYLE_ISSUES = "prj-issues"; //$NON-NLS-1$
+    private static final String STYLE_ISSUES = "prj-issues"; //$NON-NLS-1$
 
-  @Override
-  public String getIconPath() {
-    return "res/icons/issues.png"; //$NON-NLS-1$
-  }
+    @Override
+    public String getIconPath() {
+        return "res/icons/issues.png"; //$NON-NLS-1$
+    }
 
-  @Override
-  public String getCaption() {
-    return "Issues";
-  }
+    @Override
+    public String getCaption() {
+        return "Issues";
+    }
 
-  @Override
-  @SuppressWarnings("nls")
-  public Component getContent(Project project, ExtensionUtil util) {
-    Layout layout = new CssLayout();
-    layout.setSizeFull();
+    @Override
+    @SuppressWarnings("nls")
+    public Component getContent(Project project, ExtensionUtil util) {
+        Layout layout = new CssLayout();
+        layout.setSizeFull();
 
-    IssuesService issuesService = Services.getService(IssuesService.class);
-    if (issuesService != null) {
-      Issues issues = issuesService.loadEntity(Issues.class, project.getUuid());
-      StringBuilder sb = new StringBuilder();
-      if (issues != null) {
-        SortedSet<Issue> issueSet = issues.getIssues();
-        if (!issueSet.isEmpty()) {
-          sb.append(Issues.asHTMLList(null, issueSet));
-          sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/").append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=").append(Consts.PARAM_VALUE_EDIT).append("\">here</a> to correct ");
-          sb.append((issueSet.size() == 1) ? "this issue" : "these issues");
-          sb.append(".</p>");
+        IssuesService issuesService = Services.getService(IssuesService.class);
+        if (issuesService != null) {
+            Issues issues = issuesService.loadEntity(Issues.class, project.getUuid());
+            StringBuilder sb = new StringBuilder();
+            if (issues != null) {
+                SortedSet<Issue> issueSet = issues.getIssues();
+                if (!issueSet.isEmpty()) {
+                    sb.append(Issues.asHTMLList(null, issueSet));
+                    sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/")
+                            .append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=")
+                            .append(Consts.PARAM_VALUE_EDIT).append("\">here</a> to correct ");
+                    sb.append((issueSet.size() == 1) ? "this issue" : "these issues");
+                    sb.append(".</p>");
+                }
+                Label issuesLabel = new Label(sb.toString(), Label.CONTENT_XHTML);
+                issuesLabel.addStyleName(STYLE_ISSUES);
+                layout.addComponent(issuesLabel);
+            }
         }
-        Label issuesLabel = new Label(sb.toString(), Label.CONTENT_XHTML);
-        issuesLabel.addStyleName(STYLE_ISSUES);
-        layout.addComponent(issuesLabel);
-      }
+
+        return layout;
     }
 
-    return layout;
-  }
-
-  @Override
-  public float getPositionWeight() {
-    return 2.0f;
-  }
-
-  @Override
-  public int getPreferredColumn() {
-    return COLUMN_EAST;
-  }
-
-  @Override
-  public boolean isVisible(Project project, String loggedInUserId) {
-    if (StringUtils.isBlank(loggedInUserId)) {
-      return false;
+    @Override
+    public float getPositionWeight() {
+        return 2.0f;
     }
 
-    IssuesService issuesService = Services.getService(IssuesService.class);
-    if (issuesService == null) {
-      return false;
+    @Override
+    public int getPreferredColumn() {
+        return COLUMN_EAST;
     }
 
-    boolean showIssues = UserUtil.isAdministrator(loggedInUserId) || UserUtil.isProjectAdminInParentChain(loggedInUserId, project);
-    Issues issues = issuesService.loadEntity(Issues.class, project.getUuid());
+    @Override
+    public boolean isVisible(Project project, String loggedInUserId) {
+        if (StringUtils.isBlank(loggedInUserId)) {
+            return false;
+        }
 
-    return (showIssues && issues != null && !issues.getIssues().isEmpty());
-  }
+        IssuesService issuesService = Services.getService(IssuesService.class);
+        if (issuesService == null) {
+            return false;
+        }
+
+        boolean showIssues = UserUtil.isAdministrator(loggedInUserId)
+                || UserUtil.isProjectAdminInParentChain(loggedInUserId, project);
+        Issues issues = issuesService.loadEntity(Issues.class, project.getUuid());
+
+        return (showIssues && issues != null && !issues.getIssues().isEmpty());
+    }
 
 }
-

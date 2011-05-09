@@ -19,49 +19,50 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.log.Log;
 
 public class UserServiceUtil {
-  private static final Logger LOG = Log.getLogger(UserServiceUtil.class);
+    private static final Logger LOG = Log.getLogger(UserServiceUtil.class);
 
-  private static UserServiceUtil instance = null;
+    private static UserServiceUtil instance = null;
 
-  UserServiceUtil() {
-    // prevent instantiation
-  }
-
-  public static final UserService getUserService() {
-    if (instance == null) {
-      instance = new UserServiceUtil();
+    UserServiceUtil() {
+        // prevent instantiation
     }
-    return instance.getConfiguredUserService();
-  }
 
-  ConfigurationService getConfigService() {
-    return Services.getService(ConfigurationService.class);
-  }
+    public static final UserService getUserService() {
+        if (instance == null) {
+            instance = new UserServiceUtil();
+        }
+        return instance.getConfiguredUserService();
+    }
 
-  UserService getConfiguredUserService() {
-    ConfigurationService configService = getConfigService();
-    UserService ret = null;
-    String type = "(undefined)"; //$NON-NLS-1$
-    if (configService != null) {
-      type = configService.readString(ConfigKeyUserStore.TYPE);
-      ret = getUserServiceByType(type);
+    ConfigurationService getConfigService() {
+        return Services.getService(ConfigurationService.class);
     }
-    // TODO replace by configService.readBoolean(...)
-    if (ret == null && (configService == null || BooleanUtils.toBoolean(configService.readString(ConfigKeyUserStore.USE_LOCAL_FALLBACK)))) {
-      LOG.info("User service '" + type + "' not found, trying fallback 'local'"); //$NON-NLS-1$ //$NON-NLS-2$
-      ret = getUserServiceByType("local"); //$NON-NLS-1$
-    }
-    if (ret == null) {
-      throw new IllegalStateException("No user service registered"); //$NON-NLS-1$
-    }
-    return ret;
-  }
 
-  UserService getUserServiceByType(String type) {
-    String filter = "(&("+Constants.OBJECTCLASS+"="+UserService.class.getName()+")(userService.type=" + type + "))"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-    UserService userService = Services.getService(UserService.class, filter);
-    return userService;
-  }
+    UserService getConfiguredUserService() {
+        ConfigurationService configService = getConfigService();
+        UserService ret = null;
+        String type = "(undefined)"; //$NON-NLS-1$
+        if (configService != null) {
+            type = configService.readString(ConfigKeyUserStore.TYPE);
+            ret = getUserServiceByType(type);
+        }
+        // TODO replace by configService.readBoolean(...)
+        if (ret == null
+                && (configService == null || BooleanUtils.toBoolean(configService
+                        .readString(ConfigKeyUserStore.USE_LOCAL_FALLBACK)))) {
+            LOG.info("User service '" + type + "' not found, trying fallback 'local'"); //$NON-NLS-1$ //$NON-NLS-2$
+            ret = getUserServiceByType("local"); //$NON-NLS-1$
+        }
+        if (ret == null) {
+            throw new IllegalStateException("No user service registered"); //$NON-NLS-1$
+        }
+        return ret;
+    }
+
+    UserService getUserServiceByType(String type) {
+        String filter = "(&(" + Constants.OBJECTCLASS + "=" + UserService.class.getName() + ")(userService.type=" + type + "))"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        UserService userService = Services.getService(UserService.class, filter);
+        return userService;
+    }
 
 }
-

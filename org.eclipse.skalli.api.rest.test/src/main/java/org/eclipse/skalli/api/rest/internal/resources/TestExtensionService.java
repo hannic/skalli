@@ -27,114 +27,125 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 class TestExtensionService implements ExtensionService<TestExtension> {
-  @Override
-  public Class<TestExtension> getExtensionClass() {
-    return TestExtension.class;
-  }
-  @Override
-  public Set<DataMigration> getMigrations() {
-    return null;
-  }
-  @Override
-  public String getShortName() {
-    return "testExtension";
-  }
-  @Override
-  public AliasedConverter getConverter(String host) {
-    return new AliasedConverter() {
-      @Override
-      public void marshal(Object obj, HierarchicalStreamWriter hierarchicalstreamwriter,
-          MarshallingContext marshallingcontext) {
-      }
-
-      @Override
-      public Object unmarshal(HierarchicalStreamReader hierarchicalstreamreader,
-          UnmarshallingContext unmarshallingcontext) {
-        return null;
-      }
-
-      @Override
-      public boolean canConvert(Class class1) {
-        return class1.equals(TestExtension.class);
-      }
-
-      @Override
-      public String getAlias() {
-        return null;
-      }
-
-      @Override
-      public Class<?> getConversionClass() {
+    @Override
+    public Class<TestExtension> getExtensionClass() {
         return TestExtension.class;
-      }
+    }
 
-      @Override
-      public String getApiVersion() {
-        return "1.0";
-      }
+    @Override
+    public Set<DataMigration> getMigrations() {
+        return null;
+    }
 
-      @Override
-      public String getNamespace() {
-        return "tiffy";
-      }
+    @Override
+    public String getShortName() {
+        return "testExtension";
+    }
 
-      @Override
-      public String getXsdFileName() {
-        return "tiffy.xsd";
-      }
+    @Override
+    public AliasedConverter getConverter(String host) {
+        return new AliasedConverter() {
+            @Override
+            public void marshal(Object obj, HierarchicalStreamWriter hierarchicalstreamwriter,
+                    MarshallingContext marshallingcontext) {
+            }
 
-      @Override
-      public String getHost() {
-        return "https://localhost";
-      }};
+            @Override
+            public Object unmarshal(HierarchicalStreamReader hierarchicalstreamreader,
+                    UnmarshallingContext unmarshallingcontext) {
+                return null;
+            }
 
+            @Override
+            public boolean canConvert(Class class1) {
+                return class1.equals(TestExtension.class);
+            }
 
-  }
-  @Override
-  public Set<String> getProjectTemplateIds() {
-    return null;
-  }
+            @Override
+            public String getAlias() {
+                return null;
+            }
 
-  @Override
-  public String getModelVersion() {
-    return null;
-  }
-  @Override
-  public String getNamespace() {
-    return null;
-  }
-  @Override
-  public String getXsdFileName() {
-    return null;
-  }
+            @Override
+            public Class<?> getConversionClass() {
+                return TestExtension.class;
+            }
 
-  @Override
-  public AbstractIndexer<TestExtension> getIndexer() {
-    return null;
-  }
-  @Override
-  public String getCaption(String propertyName) {
-    return null;
-  }
-  @Override
-  public String getDescription(String propertyName) {
-    return null;
-  }
-  @Override
-  public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
-    return Collections.emptySet();
-  }
-  @Override
-  public Set<ExtensionValidator<TestExtension>> getExtensionValidators(Map<String, String> captions) {
-    return Collections.emptySet();
-  }
-  @Override
-  public String getCaption() {
-    return "caption"; //$NON-NLS-1$
-  }
-  @Override
-  public String getDescription() {
-    return "description"; //$NON-NLS-1$
-  }
+            @Override
+            public String getApiVersion() {
+                return "1.0";
+            }
+
+            @Override
+            public String getNamespace() {
+                return "tiffy";
+            }
+
+            @Override
+            public String getXsdFileName() {
+                return "tiffy.xsd";
+            }
+
+            @Override
+            public String getHost() {
+                return "https://localhost";
+            }
+        };
+
+    }
+
+    @Override
+    public Set<String> getProjectTemplateIds() {
+        return null;
+    }
+
+    @Override
+    public String getModelVersion() {
+        return null;
+    }
+
+    @Override
+    public String getNamespace() {
+        return null;
+    }
+
+    @Override
+    public String getXsdFileName() {
+        return null;
+    }
+
+    @Override
+    public AbstractIndexer<TestExtension> getIndexer() {
+        return null;
+    }
+
+    @Override
+    public String getCaption(String propertyName) {
+        return null;
+    }
+
+    @Override
+    public String getDescription(String propertyName) {
+        return null;
+    }
+
+    @Override
+    public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Set<ExtensionValidator<TestExtension>> getExtensionValidators(Map<String, String> captions) {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public String getCaption() {
+        return "caption"; //$NON-NLS-1$
+    }
+
+    @Override
+    public String getDescription() {
+        return "description"; //$NON-NLS-1$
+    }
 };
-

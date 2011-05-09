@@ -47,201 +47,212 @@ import org.eclipse.skalli.model.ext.Severity;
  */
 public class HostReachableValidator implements Issuer, PropertyValidator {
 
-  private static final Logger LOG = Log.getLogger(HostReachableValidator.class);
+    private static final Logger LOG = Log.getLogger(HostReachableValidator.class);
 
-  // TODO: I18N
-  private static final String TXT_RESOURCE_FOUND_REDIRECT = "''{0}'' found, but a redirect is necessary ({1} {2}).";
-  private static final String TXT_VALIDATOR_NEEDS_UPDATE = "Could not valdiate ''{0}''. Validator might need an update ({1} {2}).";
-  private static final String TXT_MISSING_PROXY = "''{0}'' not found due to missing proxy ({1} {2}).";
-  private static final String TXT_AUTH_REQUIRED = "''{0}'' found, but authentication required ({1} {2}).";
-  private static final String TXT_RESOURCE_MOVED = "''{0}'' moved permanently ({1} {2}).";
-  private static final String TXT_RESOURCE_LOCKED = "''{0}'' found, but locked ({1} {2}).";
-  private static final String TXT_TEMP_SERVER_PROBLEM = "''{0}'' not found due to temporary problem on target server ({1} {2}).";
-  private static final String TXT_PERMANENT_SERVER_PROBLEM = "''{0}'' not found due to a permanent problem on target server ({1} {2}).";
-  private static final String TXT_PERMANENT_REQUEST_PROBLEM = "''{0}'' not found due to a permanent problem with the request ({1} {2}).";
-  private static final String TXT_HOST_NOT_REACHABLE = "''{0}'' is not reachable.";
-  private static final String TXT_HOST_UNKNOWN = "''{0}'' is unknown.";
+    // TODO: I18N
+    private static final String TXT_RESOURCE_FOUND_REDIRECT = "''{0}'' found, but a redirect is necessary ({1} {2}).";
+    private static final String TXT_VALIDATOR_NEEDS_UPDATE = "Could not valdiate ''{0}''. Validator might need an update ({1} {2}).";
+    private static final String TXT_MISSING_PROXY = "''{0}'' not found due to missing proxy ({1} {2}).";
+    private static final String TXT_AUTH_REQUIRED = "''{0}'' found, but authentication required ({1} {2}).";
+    private static final String TXT_RESOURCE_MOVED = "''{0}'' moved permanently ({1} {2}).";
+    private static final String TXT_RESOURCE_LOCKED = "''{0}'' found, but locked ({1} {2}).";
+    private static final String TXT_TEMP_SERVER_PROBLEM = "''{0}'' not found due to temporary problem on target server ({1} {2}).";
+    private static final String TXT_PERMANENT_SERVER_PROBLEM = "''{0}'' not found due to a permanent problem on target server ({1} {2}).";
+    private static final String TXT_PERMANENT_REQUEST_PROBLEM = "''{0}'' not found due to a permanent problem with the request ({1} {2}).";
+    private static final String TXT_HOST_NOT_REACHABLE = "''{0}'' is not reachable.";
+    private static final String TXT_HOST_UNKNOWN = "''{0}'' is unknown.";
 
+    // general timeout for connection requests
+    private static final int TIMEOUT = 10000;
 
-  // general timeout for connection requests
-  private static final int TIMEOUT = 10000;
+    private final Class<? extends ExtensionEntityBase> extension;
+    private final String propertyId;
 
-  private final Class<? extends ExtensionEntityBase> extension;
-  private final String propertyId;
-
-  public HostReachableValidator(final Class<? extends ExtensionEntityBase> extension, final String propertyId) {
-    this.extension = extension;
-    this.propertyId = propertyId;
-  }
-
-  @Override
-  public SortedSet<Issue> validate(final UUID entityId, final Object value, final Severity minSeverity) {
-    final SortedSet<Issue> issues = new TreeSet<Issue>();
-
-    // Do not participate in checks with Severity.FATAL & ignore null
-    if (minSeverity.equals(Severity.FATAL) || value == null) {
-      return issues;
+    public HostReachableValidator(final Class<? extends ExtensionEntityBase> extension, final String propertyId) {
+        this.extension = extension;
+        this.propertyId = propertyId;
     }
 
-    if (value instanceof Collection) {
-      int item = 0;
-      for (Object collectionEntry : (Collection<?>) value) {
-        validate(issues, entityId, collectionEntry, minSeverity, item);
-        ++item;
-      }
-    } else {
-      validate(issues, entityId, value, minSeverity, 0);
-    }
+    @Override
+    public SortedSet<Issue> validate(final UUID entityId, final Object value, final Severity minSeverity) {
+        final SortedSet<Issue> issues = new TreeSet<Issue>();
 
-    return issues;
-  }
-
-  protected void validate(final SortedSet<Issue> issues, final UUID entityId, final Object value, final Severity minSeverity, int item) {
-    if (value == null) {
-      return;
-    }
-
-    URL url = null;
-    String label = null;
-    if (value instanceof URL) {
-      url = (URL) value;
-      label = url.toExternalForm();
-    } else if (value instanceof Link) {
-      Link link = (Link) value;
-      try {
-        url = new URL(link.getUrl());
-        label = link.getLabel();
-      } catch (MalformedURLException e) {
-        CollectionUtils.addSafe(issues, getIssueByReachableHost(minSeverity, entityId, item, link.getUrl()));
-      }
-    } else {
-      try {
-        url = new URL(value.toString());
-        label = url.toExternalForm();
-      } catch (MalformedURLException e) {
-        CollectionUtils.addSafe(issues, getIssueByReachableHost(minSeverity, entityId, item, value.toString()));
-      }
-    }
-
-    if (url == null) {
-      return;
-    }
-
-    try {
-      if (HttpUtils.isSupportedProtocol(url)) {
-        // Was a HEAD request, but Confluence Wiki & P4Web did not support that correctly
-        GetMethod method = new GetMethod(url.toExternalForm());
-        method.setFollowRedirects(false); // we want to find 301 (MOVED PERMANTENTLY)
-        HttpUtils.getClient(url).executeMethod(method);
-        CollectionUtils.addSafe(issues, getIssueByResponseCode(minSeverity, entityId, item, method.getStatusCode(), label));
-      } else {
-        CollectionUtils.addSafe(issues, getIssueByReachableHost(minSeverity, entityId, item, url.getHost()));
-      }
-    } catch (UnknownHostException e) {
-      issues.add(newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, url.getHost()));
-    } catch (IOException e) {
-      LOG.warning(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage())); //$NON-NLS-1$
-    }
-  }
-
-   /**
-   * Returning an issue (Severity.ERROR) if host was not reachable, might be null
-   */
-  private Issue getIssueByReachableHost(final Severity minSeverity, final UUID entityId, final int item, final String host) {
-    if (Severity.ERROR.compareTo(minSeverity) <= 0) {
-      try {
-        if (!InetAddress.getByName(host).isReachable(TIMEOUT)) {
-          return newIssue(Severity.ERROR, entityId, item, TXT_HOST_NOT_REACHABLE, host);
+        // Do not participate in checks with Severity.FATAL & ignore null
+        if (minSeverity.equals(Severity.FATAL) || value == null) {
+            return issues;
         }
-      } catch (UnknownHostException e) {
-        return newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, host);
-      } catch (IOException e) {
-        LOG.warning(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage())); //$NON-NLS-1$
+
+        if (value instanceof Collection) {
+            int item = 0;
+            for (Object collectionEntry : (Collection<?>) value) {
+                validate(issues, entityId, collectionEntry, minSeverity, item);
+                ++item;
+            }
+        } else {
+            validate(issues, entityId, value, minSeverity, 0);
+        }
+
+        return issues;
+    }
+
+    protected void validate(final SortedSet<Issue> issues, final UUID entityId, final Object value,
+            final Severity minSeverity, int item) {
+        if (value == null) {
+            return;
+        }
+
+        URL url = null;
+        String label = null;
+        if (value instanceof URL) {
+            url = (URL) value;
+            label = url.toExternalForm();
+        } else if (value instanceof Link) {
+            Link link = (Link) value;
+            try {
+                url = new URL(link.getUrl());
+                label = link.getLabel();
+            } catch (MalformedURLException e) {
+                CollectionUtils.addSafe(issues, getIssueByReachableHost(minSeverity, entityId, item, link.getUrl()));
+            }
+        } else {
+            try {
+                url = new URL(value.toString());
+                label = url.toExternalForm();
+            } catch (MalformedURLException e) {
+                CollectionUtils.addSafe(issues, getIssueByReachableHost(minSeverity, entityId, item, value.toString()));
+            }
+        }
+
+        if (url == null) {
+            return;
+        }
+
+        try {
+            if (HttpUtils.isSupportedProtocol(url)) {
+                // Was a HEAD request, but Confluence Wiki & P4Web did not support that correctly
+                GetMethod method = new GetMethod(url.toExternalForm());
+                method.setFollowRedirects(false); // we want to find 301 (MOVED PERMANTENTLY)
+                HttpUtils.getClient(url).executeMethod(method);
+                CollectionUtils.addSafe(issues,
+                        getIssueByResponseCode(minSeverity, entityId, item, method.getStatusCode(), label));
+            } else {
+                CollectionUtils.addSafe(issues, getIssueByReachableHost(minSeverity, entityId, item, url.getHost()));
+            }
+        } catch (UnknownHostException e) {
+            issues.add(newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, url.getHost()));
+        } catch (IOException e) {
+            LOG.warning(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage())); //$NON-NLS-1$
+        }
+    }
+
+    /**
+    * Returning an issue (Severity.ERROR) if host was not reachable, might be null
+    */
+    private Issue getIssueByReachableHost(final Severity minSeverity, final UUID entityId, final int item,
+            final String host) {
+        if (Severity.ERROR.compareTo(minSeverity) <= 0) {
+            try {
+                if (!InetAddress.getByName(host).isReachable(TIMEOUT)) {
+                    return newIssue(Severity.ERROR, entityId, item, TXT_HOST_NOT_REACHABLE, host);
+                }
+            } catch (UnknownHostException e) {
+                return newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, host);
+            } catch (IOException e) {
+                LOG.warning(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage())); //$NON-NLS-1$
+                return null;
+            }
+        }
         return null;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Returning an issue depending on the HTTP response code, might be null
-   */
-  private Issue getIssueByResponseCode(final Severity minSeverity, final UUID entityId, int item, final int responseCode, String label) {
-    // everything below HTTP 300 is OK. Do not generate issues...
-    if (responseCode < 300) {
-      return null;
     }
 
-    switch (minSeverity) {
-    case INFO:
-      switch (responseCode) {
-      case SC_MULTIPLE_CHOICES:
-      // Confluence Wiki generates a 302 for anonymous requests (for ANY page). This would mess up the entries using SAPs wiki.
-      // case SC_MOVED_TEMPORARILY:
-      case SC_SEE_OTHER:
-      case SC_TEMPORARY_REDIRECT:
-        return newIssue(Severity.INFO, entityId, item, TXT_RESOURCE_FOUND_REDIRECT, label, responseCode, getStatusText(responseCode));
-      case SC_REQUEST_TIMEOUT:
-        return newIssue(Severity.INFO, entityId, item, TXT_VALIDATOR_NEEDS_UPDATE, label, responseCode, getStatusText(responseCode));
-      }
-    case WARNING:
-      switch (responseCode) {
-      case SC_MOVED_PERMANENTLY:
-        return newIssue(Severity.ERROR, entityId, item, TXT_RESOURCE_MOVED, label, responseCode, getStatusText(responseCode));
-      case SC_USE_PROXY:
-      case SC_PROXY_AUTHENTICATION_REQUIRED:
-        return newIssue(Severity.WARNING, entityId, item, TXT_MISSING_PROXY, label, responseCode, getStatusText(responseCode));
-      case SC_UNAUTHORIZED:
-        return newIssue(Severity.WARNING, entityId, item, TXT_AUTH_REQUIRED, label, responseCode, getStatusText(responseCode));
-      // case SC_PAYMENT_REQUIRED:
-      case SC_LOCKED:
-        return newIssue(Severity.WARNING, entityId, item, TXT_RESOURCE_LOCKED, label, responseCode, getStatusText(responseCode));
-      case SC_INTERNAL_SERVER_ERROR:
-      case SC_SERVICE_UNAVAILABLE:
-      case SC_GATEWAY_TIMEOUT:
-      case SC_INSUFFICIENT_STORAGE:
-        return newIssue(Severity.WARNING, entityId, item, TXT_TEMP_SERVER_PROBLEM, label, responseCode, getStatusText(responseCode));
-      }
-    case ERROR:
-      switch (responseCode) {
-      case SC_BAD_REQUEST:
-      case SC_FORBIDDEN:
-      case SC_NOT_FOUND:
-      case SC_METHOD_NOT_ALLOWED:
-      case SC_NOT_ACCEPTABLE:
-      case SC_CONFLICT:
-      case SC_GONE:
-      case SC_LENGTH_REQUIRED:
-      case SC_PRECONDITION_FAILED:
-      case SC_REQUEST_TOO_LONG:
-      case SC_REQUEST_URI_TOO_LONG:
-      case SC_UNSUPPORTED_MEDIA_TYPE:
-      case SC_REQUESTED_RANGE_NOT_SATISFIABLE:
-      case SC_EXPECTATION_FAILED:
-      case SC_UNPROCESSABLE_ENTITY:
-      case SC_FAILED_DEPENDENCY:
-        return newIssue(Severity.ERROR, entityId, item, TXT_PERMANENT_REQUEST_PROBLEM, label, responseCode, getStatusText(responseCode));
-      case SC_NOT_IMPLEMENTED:
-      case SC_BAD_GATEWAY:
-        return newIssue(Severity.ERROR, entityId, item, TXT_PERMANENT_SERVER_PROBLEM, label, responseCode, getStatusText(responseCode));
-      }
+    /**
+     * Returning an issue depending on the HTTP response code, might be null
+     */
+    private Issue getIssueByResponseCode(final Severity minSeverity, final UUID entityId, int item,
+            final int responseCode, String label) {
+        // everything below HTTP 300 is OK. Do not generate issues...
+        if (responseCode < 300) {
+            return null;
+        }
+
+        switch (minSeverity) {
+        case INFO:
+            switch (responseCode) {
+            case SC_MULTIPLE_CHOICES:
+                // Confluence Wiki generates a 302 for anonymous requests (for ANY page). This would mess up the entries using SAPs wiki.
+                // case SC_MOVED_TEMPORARILY:
+            case SC_SEE_OTHER:
+            case SC_TEMPORARY_REDIRECT:
+                return newIssue(Severity.INFO, entityId, item, TXT_RESOURCE_FOUND_REDIRECT, label, responseCode,
+                        getStatusText(responseCode));
+            case SC_REQUEST_TIMEOUT:
+                return newIssue(Severity.INFO, entityId, item, TXT_VALIDATOR_NEEDS_UPDATE, label, responseCode,
+                        getStatusText(responseCode));
+            }
+        case WARNING:
+            switch (responseCode) {
+            case SC_MOVED_PERMANENTLY:
+                return newIssue(Severity.ERROR, entityId, item, TXT_RESOURCE_MOVED, label, responseCode,
+                        getStatusText(responseCode));
+            case SC_USE_PROXY:
+            case SC_PROXY_AUTHENTICATION_REQUIRED:
+                return newIssue(Severity.WARNING, entityId, item, TXT_MISSING_PROXY, label, responseCode,
+                        getStatusText(responseCode));
+            case SC_UNAUTHORIZED:
+                return newIssue(Severity.WARNING, entityId, item, TXT_AUTH_REQUIRED, label, responseCode,
+                        getStatusText(responseCode));
+                // case SC_PAYMENT_REQUIRED:
+            case SC_LOCKED:
+                return newIssue(Severity.WARNING, entityId, item, TXT_RESOURCE_LOCKED, label, responseCode,
+                        getStatusText(responseCode));
+            case SC_INTERNAL_SERVER_ERROR:
+            case SC_SERVICE_UNAVAILABLE:
+            case SC_GATEWAY_TIMEOUT:
+            case SC_INSUFFICIENT_STORAGE:
+                return newIssue(Severity.WARNING, entityId, item, TXT_TEMP_SERVER_PROBLEM, label, responseCode,
+                        getStatusText(responseCode));
+            }
+        case ERROR:
+            switch (responseCode) {
+            case SC_BAD_REQUEST:
+            case SC_FORBIDDEN:
+            case SC_NOT_FOUND:
+            case SC_METHOD_NOT_ALLOWED:
+            case SC_NOT_ACCEPTABLE:
+            case SC_CONFLICT:
+            case SC_GONE:
+            case SC_LENGTH_REQUIRED:
+            case SC_PRECONDITION_FAILED:
+            case SC_REQUEST_TOO_LONG:
+            case SC_REQUEST_URI_TOO_LONG:
+            case SC_UNSUPPORTED_MEDIA_TYPE:
+            case SC_REQUESTED_RANGE_NOT_SATISFIABLE:
+            case SC_EXPECTATION_FAILED:
+            case SC_UNPROCESSABLE_ENTITY:
+            case SC_FAILED_DEPENDENCY:
+                return newIssue(Severity.ERROR, entityId, item, TXT_PERMANENT_REQUEST_PROBLEM, label, responseCode,
+                        getStatusText(responseCode));
+            case SC_NOT_IMPLEMENTED:
+            case SC_BAD_GATEWAY:
+                return newIssue(Severity.ERROR, entityId, item, TXT_PERMANENT_SERVER_PROBLEM, label, responseCode,
+                        getStatusText(responseCode));
+            }
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    /**
+     * centralized issue generation (w/ message arguments)
+     */
+    private Issue newIssue(Severity severity, UUID entityId, int item, String message, Object... messageArguments) {
+        return newIssue(severity, entityId, item, MessageFormat.format(message, messageArguments));
+    }
 
-  /**
-   * centralized issue generation (w/ message arguments)
-   */
-  private Issue newIssue(Severity severity, UUID entityId, int item, String message, Object... messageArguments) {
-    return newIssue(severity, entityId, item, MessageFormat.format(message, messageArguments));
-  }
-
-  /**
-   * centralized issue generation
-   */
-  private Issue newIssue(Severity severity, UUID entityId, int item, String message) {
-    return new Issue(severity, HostReachableValidator.class, entityId, extension, propertyId, item, message);
-  }
+    /**
+     * centralized issue generation
+     */
+    private Issue newIssue(Severity severity, UUID entityId, int item, String message) {
+        return new Issue(severity, HostReachableValidator.class, entityId, extension, propertyId, item, message);
+    }
 }
-

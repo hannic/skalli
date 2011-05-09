@@ -27,32 +27,31 @@ import java.util.Map.Entry;
  */
 public class LeastRecentlyUsedCache<T_KEY, T_VALUE> extends AbstractCache<T_KEY, T_VALUE, Long> {
 
-  public LeastRecentlyUsedCache(int cacheSize) {
-    super(cacheSize);
-  }
-
-  @Override
-  protected Long createMetaInfo(T_KEY key) {
-    return System.currentTimeMillis();
-  }
-
-  @Override
-  protected Long onAccess(T_KEY key, Long metaInfo) {
-    return System.currentTimeMillis();
-  }
-
-  @Override
-  protected T_KEY calcEntryToDiscard(Map<T_KEY, Long> metaInfos) {
-    long oldest = System.currentTimeMillis();
-    T_KEY oldestEntryKey = null;
-    for (Entry<T_KEY, Long> entry : metaInfos.entrySet()) {
-      if (entry.getValue() < oldest) {
-        oldestEntryKey = entry.getKey();
-        oldest = entry.getValue();
-      }
+    public LeastRecentlyUsedCache(int cacheSize) {
+        super(cacheSize);
     }
-    return oldestEntryKey;
-  }
+
+    @Override
+    protected Long createMetaInfo(T_KEY key) {
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    protected Long onAccess(T_KEY key, Long metaInfo) {
+        return System.currentTimeMillis();
+    }
+
+    @Override
+    protected T_KEY calcEntryToDiscard(Map<T_KEY, Long> metaInfos) {
+        long oldest = System.currentTimeMillis();
+        T_KEY oldestEntryKey = null;
+        for (Entry<T_KEY, Long> entry : metaInfos.entrySet()) {
+            if (entry.getValue() < oldest) {
+                oldestEntryKey = entry.getKey();
+                oldest = entry.getValue();
+            }
+        }
+        return oldestEntryKey;
+    }
 
 }
-

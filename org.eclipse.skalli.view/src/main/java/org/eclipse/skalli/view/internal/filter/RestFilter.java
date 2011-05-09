@@ -27,31 +27,30 @@ import org.eclipse.skalli.common.Consts;
 
 public class RestFilter implements Filter {
 
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException {
-
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-    HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-    String requestURI = httpRequest.getRequestURI();
-    String acceptHeader = httpRequest.getHeader("Accept"); //$NON-NLS-1$
-    if (StringUtils.equals(acceptHeader, "text/xml")) { //$NON-NLS-1$
-      httpResponse.sendRedirect(Consts.URL_REST_API + requestURI);
-      return;
+    @Override
+    public void destroy() {
     }
 
-    // proceed along the chain
-    chain.doFilter(request, response);
-  }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
 
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        String requestURI = httpRequest.getRequestURI();
+        String acceptHeader = httpRequest.getHeader("Accept"); //$NON-NLS-1$
+        if (StringUtils.equals(acceptHeader, "text/xml")) { //$NON-NLS-1$
+            httpResponse.sendRedirect(Consts.URL_REST_API + requestURI);
+            return;
+        }
+
+        // proceed along the chain
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
 
 }
-

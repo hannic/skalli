@@ -24,58 +24,58 @@ import org.eclipse.skalli.model.ext.ValidationException;
 
 public class FavoritesServiceImpl extends EntityServiceImpl<Favorites> implements FavoritesService {
 
-  @Override
-  public Class<Favorites> getEntityClass() {
-    return Favorites.class;
-  }
-
-  @Override
-  public Favorites getFavorites(String userId) {
-    Favorites favorites = getPersistenceService().getEntity(Favorites.class, new FavoritesFilter(userId));
-    return favorites != null? favorites : new Favorites(userId);
-  }
-
-  @Override
-  public void addFavorite(String userId, UUID project) throws ValidationException {
-    Favorites favorites = getFavorites(userId);
-    favorites.addProject(project);
-    persist(favorites, userId);
-  }
-
-  @Override
-  public void removeFavorite(String userId, UUID project) throws ValidationException {
-    Favorites favorites = getFavorites(userId);
-    favorites.removeProject(project);
-    persist(favorites, userId);
-  }
-
-  protected static class FavoritesFilter implements EntityFilter<Favorites> {
-    private String userId;
-    public FavoritesFilter(String userId) {
-      this.userId = userId;
-    }
-
-    public String getUserId() {
-      return userId;
+    @Override
+    public Class<Favorites> getEntityClass() {
+        return Favorites.class;
     }
 
     @Override
-    public boolean accept(Class<Favorites> entityClass, Favorites entity) {
-      return entity.getUserId().equals(userId);
+    public Favorites getFavorites(String userId) {
+        Favorites favorites = getPersistenceService().getEntity(Favorites.class, new FavoritesFilter(userId));
+        return favorites != null ? favorites : new Favorites(userId);
     }
-  }
 
-  @Override
-  protected void validateEntity(Favorites entity) throws ValidationException {
-    SortedSet<Issue> issues = validate(entity, Severity.FATAL);
-    if (issues.size() > 0) {
-      throw new ValidationException("Favorites could not be saved due to the following reasons:", issues);
+    @Override
+    public void addFavorite(String userId, UUID project) throws ValidationException {
+        Favorites favorites = getFavorites(userId);
+        favorites.addProject(project);
+        persist(favorites, userId);
     }
-  }
 
-  @Override
-  protected SortedSet<Issue> validateEntity(Favorites entity, Severity minSeverity) {
-    return new TreeSet<Issue>();
-  }
+    @Override
+    public void removeFavorite(String userId, UUID project) throws ValidationException {
+        Favorites favorites = getFavorites(userId);
+        favorites.removeProject(project);
+        persist(favorites, userId);
+    }
+
+    protected static class FavoritesFilter implements EntityFilter<Favorites> {
+        private String userId;
+
+        public FavoritesFilter(String userId) {
+            this.userId = userId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        @Override
+        public boolean accept(Class<Favorites> entityClass, Favorites entity) {
+            return entity.getUserId().equals(userId);
+        }
+    }
+
+    @Override
+    protected void validateEntity(Favorites entity) throws ValidationException {
+        SortedSet<Issue> issues = validate(entity, Severity.FATAL);
+        if (issues.size() > 0) {
+            throw new ValidationException("Favorites could not be saved due to the following reasons:", issues);
+        }
+    }
+
+    @Override
+    protected SortedSet<Issue> validateEntity(Favorites entity, Severity minSeverity) {
+        return new TreeSet<Issue>();
+    }
 }
-

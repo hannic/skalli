@@ -19,18 +19,17 @@ import org.eclipse.skalli.testutil.PropertyHelper;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
 
 public class FavoritesTest {
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    values.put(Favorites.PROPERTY_USERID, "homer");
-    UUIDList projects = new UUIDList();
-    projects.add(PropertyHelperUtils.TEST_UUIDS[0]);
-    projects.add(PropertyHelperUtils.TEST_UUIDS[1]);
-    projects.add(PropertyHelperUtils.TEST_UUIDS[2]);
-    values.put(Favorites.PROPERTY_PROJECTS, projects);
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
-    PropertyHelper.checkPropertyDefinitions(Favorites.class, requiredProperties, values);
-  }
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        values.put(Favorites.PROPERTY_USERID, "homer");
+        UUIDList projects = new UUIDList();
+        projects.add(PropertyHelperUtils.TEST_UUIDS[0]);
+        projects.add(PropertyHelperUtils.TEST_UUIDS[1]);
+        projects.add(PropertyHelperUtils.TEST_UUIDS[2]);
+        values.put(Favorites.PROPERTY_PROJECTS, projects);
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        PropertyHelper.checkPropertyDefinitions(Favorites.class, requiredProperties, values);
+    }
 
 }
-

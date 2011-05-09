@@ -14,19 +14,18 @@ import org.restlet.resource.ServerResource;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 
-public class NewsConfigSection implements ConfigSection{
+public class NewsConfigSection implements ConfigSection {
 
-  private static final String NAME = "view/news"; //$NON-NLS-1$
+    private static final String NAME = "view/news"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return NewsResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return NewsResource.class;
+    }
 
 }
-

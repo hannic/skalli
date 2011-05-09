@@ -33,61 +33,61 @@ import org.w3c.dom.Document;
 @SuppressWarnings("nls")
 public class XMLDiffUtil {
 
-  /**
-   * Asserts that the given {@link Document documents} are equal.
-   */
-  public static void assertEquals(Document docLeft, Document docRight, boolean ignoreWhitespace) throws Exception {
-    XMLUnit.setIgnoreWhitespace(ignoreWhitespace);
-    Diff diff = XMLUnit.compareXML(docRight, docLeft);
-    Assert.assertTrue(detailsToString(diff, docRight, docLeft), diff.similar());
-    Assert.assertTrue(detailsToString(diff, docRight, docLeft), diff.identical());
-  }
-
-  protected static String detailsToString(Diff diff, Document controlDoc, Document modifiedDoc) throws Exception {
-    StringBuffer sb = new StringBuffer();
-    diff.appendMessage(sb);
-
-    if(controlDoc != null) {
-      sb.append("\nControl document:\n");
-      sb.append(toString(controlDoc)).append("\n");
-    }
-    if(modifiedDoc != null) {
-      sb.append("\nModified document:\n");
-      sb.append(toString(modifiedDoc)).append("\n");
+    /**
+     * Asserts that the given {@link Document documents} are equal.
+     */
+    public static void assertEquals(Document docLeft, Document docRight, boolean ignoreWhitespace) throws Exception {
+        XMLUnit.setIgnoreWhitespace(ignoreWhitespace);
+        Diff diff = XMLUnit.compareXML(docRight, docLeft);
+        Assert.assertTrue(detailsToString(diff, docRight, docLeft), diff.similar());
+        Assert.assertTrue(detailsToString(diff, docRight, docLeft), diff.identical());
     }
 
-    return sb.toString();
-  }
+    protected static String detailsToString(Diff diff, Document controlDoc, Document modifiedDoc) throws Exception {
+        StringBuffer sb = new StringBuffer();
+        diff.appendMessage(sb);
 
-  protected static String toString(Document doc) throws Exception {
-    TransformerFactory factory = TransformerFactory.newInstance();
-    Transformer transformer = factory.newTransformer();
-    StringWriter writer = new StringWriter();
-    Result result = new StreamResult(writer);
-    Source source = new DOMSource(doc);
-    transformer.transform(source, result);
-    writer.close();
+        if (controlDoc != null) {
+            sb.append("\nControl document:\n");
+            sb.append(toString(controlDoc)).append("\n");
+        }
+        if (modifiedDoc != null) {
+            sb.append("\nModified document:\n");
+            sb.append(toString(modifiedDoc)).append("\n");
+        }
 
-    return writer.toString();
-  }
-
-  protected static Document getAsDocument(DataMigration migration, String filename) throws Exception {
-    URL urlBefore = migration.getClass().getResource(filename);
-    InputStream isBefore = urlBefore.openStream();
-    try {
-      DocumentBuilder docBuilder = getDocumentBuilder();
-      Document doc = docBuilder.parse(isBefore);
-      return doc;
-    } finally {
-      if (isBefore != null) {
-        isBefore.close();
-      }
+        return sb.toString();
     }
-  }
 
-  protected static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
-    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-    return docBuilder;
-  }
+    protected static String toString(Document doc) throws Exception {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer();
+        StringWriter writer = new StringWriter();
+        Result result = new StreamResult(writer);
+        Source source = new DOMSource(doc);
+        transformer.transform(source, result);
+        writer.close();
+
+        return writer.toString();
+    }
+
+    protected static Document getAsDocument(DataMigration migration, String filename) throws Exception {
+        URL urlBefore = migration.getClass().getResource(filename);
+        InputStream isBefore = urlBefore.openStream();
+        try {
+            DocumentBuilder docBuilder = getDocumentBuilder();
+            Document doc = docBuilder.parse(isBefore);
+            return doc;
+        } finally {
+            if (isBefore != null) {
+                isBefore.close();
+            }
+        }
+    }
+
+    protected static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        return docBuilder;
+    }
 }

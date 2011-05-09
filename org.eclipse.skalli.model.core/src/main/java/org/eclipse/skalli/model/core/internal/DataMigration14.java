@@ -21,27 +21,26 @@ import org.eclipse.skalli.model.ext.AbstractDataMigration;
 
 public class DataMigration14 extends AbstractDataMigration {
 
-  private static final Logger LOG = Log.getLogger(DataMigration14.class);
+    private static final Logger LOG = Log.getLogger(DataMigration14.class);
 
-  public DataMigration14() {
-    super(Project.class, 14);
-  }
-
-  /**
-   * Changes from model version 14 -> 15:
-   * <ol>
-   *   <li>Fixes malformed project IDs</li>
-   * </ol>
-   */
-  @Override
-  public void migrate(Document doc) {
-    Node projectIdNode = doc.getElementsByTagName("projectId").item(0); //$NON-NLS-1$
-    String projectId = projectIdNode.getTextContent();
-    String projectIdTrimmed = projectId.trim();
-    if (projectId.length() != projectIdTrimmed.length()) {
-      projectIdNode.setTextContent(projectIdTrimmed);
-      LOG.info(String.format("Trimmed project ID '%s'.", projectIdTrimmed)); //$NON-NLS-1$
+    public DataMigration14() {
+        super(Project.class, 14);
     }
-  }
-}
 
+    /**
+     * Changes from model version 14 -> 15:
+     * <ol>
+     *   <li>Fixes malformed project IDs</li>
+     * </ol>
+     */
+    @Override
+    public void migrate(Document doc) {
+        Node projectIdNode = doc.getElementsByTagName("projectId").item(0); //$NON-NLS-1$
+        String projectId = projectIdNode.getTextContent();
+        String projectIdTrimmed = projectId.trim();
+        if (projectId.length() != projectIdTrimmed.length()) {
+            projectIdNode.setTextContent(projectIdTrimmed);
+            LOG.info(String.format("Trimmed project ID '%s'.", projectIdTrimmed)); //$NON-NLS-1$
+        }
+    }
+}

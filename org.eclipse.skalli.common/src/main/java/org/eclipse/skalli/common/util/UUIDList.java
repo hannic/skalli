@@ -15,18 +15,17 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class UUIDList extends ArrayList<UUID> {
-  private static final long serialVersionUID = 2216470423158118821L;
+    private static final long serialVersionUID = 2216470423158118821L;
 
-  public UUIDList() {
-    super();
-  }
+    public UUIDList() {
+        super();
+    }
 
-  public UUIDList(Collection<? extends UUID> c) {
-    super(c);
-  }
+    public UUIDList(Collection<? extends UUID> c) {
+        super(c);
+    }
 
-  public UUIDList(int initialCapacity) {
-    super(initialCapacity);
-  }
+    public UUIDList(int initialCapacity) {
+        super(initialCapacity);
+    }
 }
-

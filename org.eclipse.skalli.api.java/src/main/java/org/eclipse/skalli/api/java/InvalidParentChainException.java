@@ -14,24 +14,23 @@ import java.util.UUID;
 
 public class InvalidParentChainException extends RuntimeException {
 
-  private static final long serialVersionUID = -1985554640339070234L;
+    private static final long serialVersionUID = -1985554640339070234L;
 
-  public InvalidParentChainException(String message) {
-    super(message);
-  }
+    public InvalidParentChainException(String message) {
+        super(message);
+    }
 
-  public InvalidParentChainException(Throwable cause) {
-    super(cause);
-  }
+    public InvalidParentChainException(Throwable cause) {
+        super(cause);
+    }
 
-  public InvalidParentChainException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public InvalidParentChainException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public InvalidParentChainException(UUID projectId, UUID parentId) {
-    super("Parent hierarchy of project " + projectId + " references project "
-        + parentId + ", but there is no correponding Project instance");
-  }
+    public InvalidParentChainException(UUID projectId, UUID parentId) {
+        super("Parent hierarchy of project " + projectId + " references project " + parentId
+                + ", but there is no correponding Project instance");
+    }
 
 }
-

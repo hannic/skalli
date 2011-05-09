@@ -15,14 +15,14 @@ import java.util.Map;
 import org.eclipse.skalli.model.ext.EntityBase;
 
 public class FacetedSearchResult<T extends EntityBase> extends SearchResult<T> {
-  private Map<String, Map<String, Integer>> facetInfo;
+    private Map<String, Map<String, Integer>> facetInfo;
 
-  public Map<String, Map<String, Integer>> getFacetInfo() {
-    return facetInfo;
-  }
-  public void setFacetInfo(Map<String, Map<String, Integer>> facetInfo) {
-    this.facetInfo = facetInfo;
-  }
+    public Map<String, Map<String, Integer>> getFacetInfo() {
+        return facetInfo;
+    }
+
+    public void setFacetInfo(Map<String, Map<String, Integer>> facetInfo) {
+        this.facetInfo = facetInfo;
+    }
 
 }
-

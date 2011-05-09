@@ -19,17 +19,16 @@ import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 
 public class ValidatorUtils {
-  public static void assertIsValid(PropertyValidator validator, Object value) {
-    SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.ERROR);
-    Assert.assertNotNull(issues);
-    Assert.assertTrue(issues.isEmpty());
-  }
+    public static void assertIsValid(PropertyValidator validator, Object value) {
+        SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.ERROR);
+        Assert.assertNotNull(issues);
+        Assert.assertTrue(issues.isEmpty());
+    }
 
-  public static void assertNotValid(PropertyValidator validator, Object value, Severity expectedSeverity) {
-    SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, expectedSeverity);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(1, issues.size());
-    Assert.assertEquals(expectedSeverity, issues.first().getSeverity());
-  }
+    public static void assertNotValid(PropertyValidator validator, Object value, Severity expectedSeverity) {
+        SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, expectedSeverity);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(1, issues.size());
+        Assert.assertEquals(expectedSeverity, issues.first().getSeverity());
+    }
 }
-

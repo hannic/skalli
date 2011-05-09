@@ -17,33 +17,33 @@ import org.eclipse.skalli.model.ext.ExtensionService;
 
 public class PersistenceServiceXStreamMock extends PersistenceServiceXStream {
 
-  /** Array of extension services */
-  private ExtensionService<?>[] extensionServices;
+    /** Array of extension services */
+    private ExtensionService<?>[] extensionServices;
 
-  public PersistenceServiceXStreamMock(ExtensionService<?>... extensionServices) {
-    super();
-    this.extensionServices = extensionServices;
-  }
-
-  @Override
-  protected Set<DataMigration> getMigrations() {
-    Set<DataMigration> migrations = super.getMigrations();
-    if (extensionServices != null) {
-      for (ExtensionService<?> extensionService : extensionServices) {
-        migrations.addAll(extensionService.getMigrations());
-      }
+    public PersistenceServiceXStreamMock(ExtensionService<?>... extensionServices) {
+        super();
+        this.extensionServices = extensionServices;
     }
-    return migrations;
-  }
 
-  @Override
-  protected Set<ClassLoader> getEntityClassLoaders() {
-    Set<ClassLoader> classLoaders = super.getEntityClassLoaders();
-    if (extensionServices != null) {
-      for (ExtensionService<?> extensionService : extensionServices) {
-        classLoaders.add(extensionService.getClass().getClassLoader());
-      }
+    @Override
+    protected Set<DataMigration> getMigrations() {
+        Set<DataMigration> migrations = super.getMigrations();
+        if (extensionServices != null) {
+            for (ExtensionService<?> extensionService : extensionServices) {
+                migrations.addAll(extensionService.getMigrations());
+            }
+        }
+        return migrations;
     }
-    return classLoaders;
-  }
+
+    @Override
+    protected Set<ClassLoader> getEntityClassLoaders() {
+        Set<ClassLoader> classLoaders = super.getEntityClassLoaders();
+        if (extensionServices != null) {
+            for (ExtensionService<?> extensionService : extensionServices) {
+                classLoaders.add(extensionService.getClass().getClassLoader());
+            }
+        }
+        return classLoaders;
+    }
 }

@@ -21,49 +21,48 @@ import org.eclipse.skalli.model.ext.devinf.internal.config.ScmLocationMappingRes
 
 public class ScmLocationMapper extends AbstractLinkMapper {
 
-  /** Purpose filter for mappings that allow to browse content of source locations. */
-  public static final String PURPOSE_BROWSE = "browse"; //$NON-NLS-1$
+    /** Purpose filter for mappings that allow to browse content of source locations. */
+    public static final String PURPOSE_BROWSE = "browse"; //$NON-NLS-1$
 
-  /** Purpose filter for mappings that allow to review content of source locations. */
-  public static final String PURPOSE_REVIEW = "review"; //$NON-NLS-1$
+    /** Purpose filter for mappings that allow to review content of source locations. */
+    public static final String PURPOSE_REVIEW = "review"; //$NON-NLS-1$
 
-  /** Purpose filter for mappings that provide activity information about source locations. */
-  public static final String PURPOSE_ACTIVITY = "activity"; //$NON-NLS-1$
+    /** Purpose filter for mappings that provide activity information about source locations. */
+    public static final String PURPOSE_ACTIVITY = "activity"; //$NON-NLS-1$
 
+    public static final String ALL_PROVIDERS = "*"; //$NON-NLS-1$
 
-  public static final String ALL_PROVIDERS = "*"; //$NON-NLS-1$
-
-
-  public List<ScmLocationMappingConfig> getMappings(ConfigurationService configService, String provider, String... purposes) {
-    List<ScmLocationMappingConfig> mappings = new ArrayList<ScmLocationMappingConfig>();
-    if (configService != null) {
-      List<? extends LinkMappingConfig> allMappings = getAllMappings(configService);
-      if (allMappings != null) {
-        for (LinkMappingConfig mapping : allMappings) {
-          if (matches((ScmLocationMappingConfig)mapping, provider, purposes)) {
-            mappings.add((ScmLocationMappingConfig)mapping);
-          }
+    public List<ScmLocationMappingConfig> getMappings(ConfigurationService configService, String provider,
+            String... purposes) {
+        List<ScmLocationMappingConfig> mappings = new ArrayList<ScmLocationMappingConfig>();
+        if (configService != null) {
+            List<? extends LinkMappingConfig> allMappings = getAllMappings(configService);
+            if (allMappings != null) {
+                for (LinkMappingConfig mapping : allMappings) {
+                    if (matches((ScmLocationMappingConfig) mapping, provider, purposes)) {
+                        mappings.add((ScmLocationMappingConfig) mapping);
+                    }
+                }
+            }
         }
-      }
+        return mappings;
     }
-    return mappings;
-  }
 
-  private boolean matches(ScmLocationMappingConfig mapping, String provider, String... purposes) {
-    if (provider == null) {
-      provider = ALL_PROVIDERS;
+    private boolean matches(ScmLocationMappingConfig mapping, String provider, String... purposes) {
+        if (provider == null) {
+            provider = ALL_PROVIDERS;
+        }
+        if (!ALL_PROVIDERS.equals(provider) && !ComparatorUtils.equals(provider, mapping.getProvider())) {
+            return false;
+        }
+        return super.matches(mapping, purposes);
     }
-    if (!ALL_PROVIDERS.equals(provider) && ! ComparatorUtils.equals(provider, mapping.getProvider())){
-      return false;
-    }
-    return super.matches(mapping, purposes);
-  }
 
-  @Override
-  protected List<? extends LinkMappingConfig> getAllMappings(ConfigurationService configService) {
-    ScmLocationMappingsConfig mappingsConfig =
-      configService.readCustomization(ScmLocationMappingResource.MAPPINGS_KEY, ScmLocationMappingsConfig.class);
-    return mappingsConfig != null? mappingsConfig.getScmMappings() : null;
-  }
+    @Override
+    protected List<? extends LinkMappingConfig> getAllMappings(ConfigurationService configService) {
+        ScmLocationMappingsConfig mappingsConfig =
+                configService.readCustomization(ScmLocationMappingResource.MAPPINGS_KEY,
+                        ScmLocationMappingsConfig.class);
+        return mappingsConfig != null ? mappingsConfig.getScmMappings() : null;
+    }
 }
-

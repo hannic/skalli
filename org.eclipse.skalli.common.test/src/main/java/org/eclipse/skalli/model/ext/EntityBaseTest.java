@@ -29,104 +29,103 @@ import org.eclipse.skalli.testutil.TestEntityBase2;
 @SuppressWarnings("nls")
 public class EntityBaseTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
-    PropertyHelper.checkPropertyDefinitions(TestEntityBase1.class, requiredProperties, values);
-  }
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        PropertyHelper.checkPropertyDefinitions(TestEntityBase1.class, requiredProperties, values);
+    }
 
-  @Test
-  public void testSetUUIDTwice() {
-    TestEntityBase1 entity = new TestEntityBase1();
-    entity.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], entity.getUuid());
-    entity.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
-    Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], entity.getUuid()); // still old UUID!
-    entity.setUuid(null);
-    Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], entity.getUuid()); // still old UUID!
-  }
+    @Test
+    public void testSetUUIDTwice() {
+        TestEntityBase1 entity = new TestEntityBase1();
+        entity.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], entity.getUuid());
+        entity.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
+        Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], entity.getUuid()); // still old UUID!
+        entity.setUuid(null);
+        Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], entity.getUuid()); // still old UUID!
+    }
 
-  @Test
-  public void testLastModified() {
-    TestEntityBase1 entity = new TestEntityBase1();
-    Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.ENGLISH); //$NON-NLS-1$
-    String lastModified = DatatypeConverter.printDateTime(now);
-    entity.setLastModified(lastModified);
-    Assert.assertEquals(lastModified, entity.getLastModified());
-    entity.setLastModified(null);
-    Assert.assertNull(entity.getLastModified());
-    entity.setLastModified("");
-    Assert.assertNull(entity.getLastModified());
-  }
+    @Test
+    public void testLastModified() {
+        TestEntityBase1 entity = new TestEntityBase1();
+        Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.ENGLISH); //$NON-NLS-1$
+        String lastModified = DatatypeConverter.printDateTime(now);
+        entity.setLastModified(lastModified);
+        Assert.assertEquals(lastModified, entity.getLastModified());
+        entity.setLastModified(null);
+        Assert.assertNull(entity.getLastModified());
+        entity.setLastModified("");
+        Assert.assertNull(entity.getLastModified());
+    }
 
-  @Test(expected=IllegalArgumentException.class)
-  public void testInvalidLastModified() {
-    long now = System.currentTimeMillis();
-    TestEntityBase1 entity = new TestEntityBase1();
-    entity.setLastModified(DateFormatUtils.ISO_DATE_FORMAT.format(now));
-    entity.setLastModified(DateFormatUtils.ISO_DATE_TIME_ZONE_FORMAT.format(now));
-    entity.setLastModified(DateFormatUtils.ISO_TIME_FORMAT.format(now));
-    entity.setLastModified("foobar");
-    entity.setLastModified(Long.toString(now));
-  }
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidLastModified() {
+        long now = System.currentTimeMillis();
+        TestEntityBase1 entity = new TestEntityBase1();
+        entity.setLastModified(DateFormatUtils.ISO_DATE_FORMAT.format(now));
+        entity.setLastModified(DateFormatUtils.ISO_DATE_TIME_ZONE_FORMAT.format(now));
+        entity.setLastModified(DateFormatUtils.ISO_TIME_FORMAT.format(now));
+        entity.setLastModified("foobar");
+        entity.setLastModified(Long.toString(now));
+    }
 
-  public void testLastModifiedBy() {
-    TestEntityBase1 entity = new TestEntityBase1();
-    entity.setLastModifiedBy("homer");
-    Assert.assertEquals("homer", entity.getLastModifiedBy());
-    entity.setLastModifiedBy(null);
-    Assert.assertNull(entity.getLastModifiedBy());
-    entity.setLastModifiedBy("");
-    Assert.assertNull(entity.getLastModifiedBy());
-  }
+    public void testLastModifiedBy() {
+        TestEntityBase1 entity = new TestEntityBase1();
+        entity.setLastModifiedBy("homer");
+        Assert.assertEquals("homer", entity.getLastModifiedBy());
+        entity.setLastModifiedBy(null);
+        Assert.assertNull(entity.getLastModifiedBy());
+        entity.setLastModifiedBy("");
+        Assert.assertNull(entity.getLastModifiedBy());
+    }
 
-  @Test
-  public void testToString() {
-    TestEntityBase1 entity = new TestEntityBase1();
-    entity.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0].toString(), entity.toString());
-  }
+    @Test
+    public void testToString() {
+        TestEntityBase1 entity = new TestEntityBase1();
+        entity.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0].toString(), entity.toString());
+    }
 
-  @Test
-  public void testHashCode() {
-    TestEntityBase1 entity = new TestEntityBase1();
-    Assert.assertEquals(31, entity.hashCode());
-    entity.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    Assert.assertEquals(31 + PropertyHelperUtils.TEST_UUIDS[0].hashCode(), entity.hashCode());
-  }
+    @Test
+    public void testHashCode() {
+        TestEntityBase1 entity = new TestEntityBase1();
+        Assert.assertEquals(31, entity.hashCode());
+        entity.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        Assert.assertEquals(31 + PropertyHelperUtils.TEST_UUIDS[0].hashCode(), entity.hashCode());
+    }
 
-  @Test
-  public void testEquals() {
-    TestEntityBase1 entity1 = new TestEntityBase1();
-    entity1.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    TestEntityBase1 entity2 = new TestEntityBase1();
-    entity2.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    TestEntityBase1 entity3 = new TestEntityBase1();
-    entity3.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
+    @Test
+    public void testEquals() {
+        TestEntityBase1 entity1 = new TestEntityBase1();
+        entity1.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestEntityBase1 entity2 = new TestEntityBase1();
+        entity2.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestEntityBase1 entity3 = new TestEntityBase1();
+        entity3.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
 
-    Assert.assertTrue(entity1.equals(entity1));
+        Assert.assertTrue(entity1.equals(entity1));
 
-    Assert.assertTrue(entity1.equals(entity2));
-    Assert.assertTrue(entity2.equals(entity1));
+        Assert.assertTrue(entity1.equals(entity2));
+        Assert.assertTrue(entity2.equals(entity1));
 
-    Assert.assertFalse(entity1.equals(entity3));
-    Assert.assertFalse(entity3.equals(entity1));
+        Assert.assertFalse(entity1.equals(entity3));
+        Assert.assertFalse(entity3.equals(entity1));
 
-    Assert.assertFalse(entity1.equals(PropertyHelperUtils.TEST_UUIDS[1]));
-  }
+        Assert.assertFalse(entity1.equals(PropertyHelperUtils.TEST_UUIDS[1]));
+    }
 
-  @Test
-  public void testCompareTo() {
-    TestEntityBase1 entity1 = new TestEntityBase1();
-    entity1.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
-    TestEntityBase2 entity2 = new TestEntityBase2();
-    entity2.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
+    @Test
+    public void testCompareTo() {
+        TestEntityBase1 entity1 = new TestEntityBase1();
+        entity1.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestEntityBase2 entity2 = new TestEntityBase2();
+        entity2.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
 
-    Assert.assertEquals(0, entity1.compareTo(entity1));
-    Assert.assertEquals(0, entity2.compareTo(entity2));
-    Assert.assertTrue(entity1.compareTo(entity2) < 0);
-    Assert.assertTrue(entity2.compareTo(entity1) > 0);
-  }
+        Assert.assertEquals(0, entity1.compareTo(entity1));
+        Assert.assertEquals(0, entity2.compareTo(entity2));
+        Assert.assertTrue(entity1.compareTo(entity2) < 0);
+        Assert.assertTrue(entity2.compareTo(entity1) > 0);
+    }
 }
-

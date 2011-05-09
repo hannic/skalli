@@ -24,20 +24,19 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 @SuppressWarnings("nls")
 public class GroupTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    values.put(Group.PROPERTY_GROUP_ID, "simpsons");
-    TreeSet<String> members = new TreeSet<String>();
-    members.add("homer");
-    members.add("bart");
-    values.put(Group.PROPERTY_GROUP_MEMBERS, members);
-    values.put(EntityBase.PROPERTY_UUID, UUID.fromString("e4d78581-08da-4f04-8a90-a7dac41f6247"));
-    values.put(EntityBase.PROPERTY_DELETED, Boolean.FALSE);
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        values.put(Group.PROPERTY_GROUP_ID, "simpsons");
+        TreeSet<String> members = new TreeSet<String>();
+        members.add("homer");
+        members.add("bart");
+        values.put(Group.PROPERTY_GROUP_MEMBERS, members);
+        values.put(EntityBase.PROPERTY_UUID, UUID.fromString("e4d78581-08da-4f04-8a90-a7dac41f6247"));
+        values.put(EntityBase.PROPERTY_DELETED, Boolean.FALSE);
 
-    Map<Class<?>,String[]> requiredProperties = Collections.emptyMap();
-    PropertyHelper.checkPropertyDefinitions(Group.class, requiredProperties, values);
-  }
+        Map<Class<?>, String[]> requiredProperties = Collections.emptyMap();
+        PropertyHelper.checkPropertyDefinitions(Group.class, requiredProperties, values);
+    }
 
 }
-

@@ -15,10 +15,9 @@ import org.eclipse.skalli.model.ext.info.InfoProjectExt;
 
 public class InfoIndexer extends AbstractIndexer<InfoProjectExt> {
 
-  @Override
-  protected void indexFields(InfoProjectExt infoProjectExt) {
-    addField(InfoProjectExt.PROPERTY_PAGE_URL, infoProjectExt.getPageUrl(), true, false);
-  }
+    @Override
+    protected void indexFields(InfoProjectExt infoProjectExt) {
+        addField(InfoProjectExt.PROPERTY_PAGE_URL, infoProjectExt.getPageUrl(), true, false);
+    }
 
 }
-

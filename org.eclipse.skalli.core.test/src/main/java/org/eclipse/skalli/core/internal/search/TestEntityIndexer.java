@@ -14,11 +14,10 @@ import org.eclipse.skalli.model.ext.AbstractIndexer;
 
 class TestEntityIndexer extends AbstractIndexer<TestEntity> {
 
-  @Override
-  protected void indexFields(TestEntity entity) {
-    addField(LuceneIndexTest.FIELD, entity.getValue(), true, true);
-    addField(LuceneIndexTest.FACET, entity.getFacet(), true, true);
-  }
+    @Override
+    protected void indexFields(TestEntity entity) {
+        addField(LuceneIndexTest.FIELD, entity.getValue(), true, true);
+        addField(LuceneIndexTest.FACET, entity.getFacet(), true, true);
+    }
 
 }
-

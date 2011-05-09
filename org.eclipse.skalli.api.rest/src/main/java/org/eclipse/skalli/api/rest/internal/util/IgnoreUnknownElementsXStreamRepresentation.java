@@ -19,37 +19,37 @@ import com.thoughtworks.xstream.XStream;
 
 public class IgnoreUnknownElementsXStreamRepresentation<T> extends XstreamRepresentation<T> {
 
-  private final Class<?>[] classes;
-  private final AliasedConverter[] converters;
+    private final Class<?>[] classes;
+    private final AliasedConverter[] converters;
 
-  public IgnoreUnknownElementsXStreamRepresentation(Representation representation, AliasedConverter[] converters, Class<?>[] classes) {
-    super(representation);
-    this.converters = converters;
-    this.classes = classes;
-  }
+    public IgnoreUnknownElementsXStreamRepresentation(Representation representation, AliasedConverter[] converters,
+            Class<?>[] classes) {
+        super(representation);
+        this.converters = converters;
+        this.classes = classes;
+    }
 
-  public IgnoreUnknownElementsXStreamRepresentation(T object, AliasedConverter[] converters) {
-    super(object);
-    this.converters = converters;
-    if (object != null) {
-      this.classes = new Class<?>[] {object.getClass()};
-    } else {
-      this.classes = new Class<?>[0];
+    public IgnoreUnknownElementsXStreamRepresentation(T object, AliasedConverter[] converters) {
+        super(object);
+        this.converters = converters;
+        if (object != null) {
+            this.classes = new Class<?>[] { object.getClass() };
+        } else {
+            this.classes = new Class<?>[0];
+        }
     }
-  }
 
-  @Override
-  protected XStream createXstream(MediaType arg0) {
-    XStream xstream = new IgnoreUnknownElementsXStream();
-    for (AliasedConverter converter : converters) {
-      xstream.registerConverter(converter);
-      xstream.alias(converter.getAlias(), converter.getConversionClass());
+    @Override
+    protected XStream createXstream(MediaType arg0) {
+        XStream xstream = new IgnoreUnknownElementsXStream();
+        for (AliasedConverter converter : converters) {
+            xstream.registerConverter(converter);
+            xstream.alias(converter.getAlias(), converter.getConversionClass());
+        }
+        for (Class<?> clazz : classes) {
+            xstream.processAnnotations(clazz);
+        }
+        return xstream;
     }
-    for (Class<?> clazz : classes) {
-      xstream.processAnnotations(clazz);
-    }
-    return xstream;
-  }
 
 }
-

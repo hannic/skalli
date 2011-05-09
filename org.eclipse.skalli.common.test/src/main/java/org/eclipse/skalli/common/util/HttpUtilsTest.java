@@ -27,36 +27,36 @@ import org.eclipse.skalli.testutil.HttpServerMock;
 @SuppressWarnings("nls")
 public class HttpUtilsTest {
 
-  private static HttpServerMock mmus;
-  private static final String TEST_CONTENT = "BODY";
+    private static HttpServerMock mmus;
+    private static final String TEST_CONTENT = "BODY";
 
-  @BeforeClass
-  public static void setUpOnce() throws Exception {
-    new BundleManager(HttpUtilsTest.class).startBundles();
-    mmus = new HttpServerMock();
-    mmus.start();
-  }
-
-  @AfterClass
-  public static void tearDownOnce() throws Exception {
-    mmus.stop();
-  }
-
-  @Test
-  public void testGetContent() throws Exception {
-    mmus.addContent("testGetContent", TEST_CONTENT);
-    assertGetRequest(HttpUtils.HTTP, 200, "testGetContent", TEST_CONTENT);
-  }
-
-  private void assertGetRequest(String protocol, int responseCode, String contentId, String content) throws Exception {
-    URL url = new URL(protocol + "://" + mmus.getHost() + ":" + mmus.getPort() + "/" + contentId + "/" + responseCode);
-    HttpClient client = HttpUtils.getClient(url);
-    assertNotNull(client);
-    GetMethod method = new GetMethod(url.toExternalForm());
-    assertEquals(200, client.executeMethod(method));
-    if (content != null) {
-      assertEquals(content, method.getResponseBodyAsString());
+    @BeforeClass
+    public static void setUpOnce() throws Exception {
+        new BundleManager(HttpUtilsTest.class).startBundles();
+        mmus = new HttpServerMock();
+        mmus.start();
     }
-  }
-}
 
+    @AfterClass
+    public static void tearDownOnce() throws Exception {
+        mmus.stop();
+    }
+
+    @Test
+    public void testGetContent() throws Exception {
+        mmus.addContent("testGetContent", TEST_CONTENT);
+        assertGetRequest(HttpUtils.HTTP, 200, "testGetContent", TEST_CONTENT);
+    }
+
+    private void assertGetRequest(String protocol, int responseCode, String contentId, String content) throws Exception {
+        URL url = new URL(protocol + "://" + mmus.getHost() + ":" + mmus.getPort() + "/" + contentId + "/"
+                + responseCode);
+        HttpClient client = HttpUtils.getClient(url);
+        assertNotNull(client);
+        GetMethod method = new GetMethod(url.toExternalForm());
+        assertEquals(200, client.executeMethod(method));
+        if (content != null) {
+            assertEquals(content, method.getResponseBodyAsString());
+        }
+    }
+}

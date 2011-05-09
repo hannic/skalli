@@ -19,22 +19,21 @@ import org.eclipse.skalli.model.ext.ValidationException;
 
 public class DataMigration13 extends AbstractDataMigration {
 
-  public DataMigration13() {
-    super(Project.class, 13);
-  }
+    public DataMigration13() {
+        super(Project.class, 13);
+    }
 
-  /**
-   * Changes from model version 13 -> 14:
-   * <ol>
-   *   <li>Project members/leads now in separate extension PeopleProjectExt</li>
-   * </ol>
-   */
-  @Override
-  public void migrate(Document doc) throws ValidationException {
-    String extensionClassName = "org.eclipse.skalli.model.ext.people.PeopleProjectExt"; //$NON-NLS-1$
-    XMLUtils.getOrCreateExtensionNode(doc, extensionClassName);
-    XMLUtils.moveTagToExtension(doc, extensionClassName, "members"); //$NON-NLS-1$
-    XMLUtils.moveTagToExtension(doc, extensionClassName, "leads"); //$NON-NLS-1$
-  }
+    /**
+     * Changes from model version 13 -> 14:
+     * <ol>
+     *   <li>Project members/leads now in separate extension PeopleProjectExt</li>
+     * </ol>
+     */
+    @Override
+    public void migrate(Document doc) throws ValidationException {
+        String extensionClassName = "org.eclipse.skalli.model.ext.people.PeopleProjectExt"; //$NON-NLS-1$
+        XMLUtils.getOrCreateExtensionNode(doc, extensionClassName);
+        XMLUtils.moveTagToExtension(doc, extensionClassName, "members"); //$NON-NLS-1$
+        XMLUtils.moveTagToExtension(doc, extensionClassName, "leads"); //$NON-NLS-1$
+    }
 }
-

@@ -15,25 +15,24 @@ import org.apache.lucene.util.PriorityQueue;
 
 final class PPHitQueue extends PriorityQueue<ScoreDoc> {
 
-  private boolean prePopulate;
+    private boolean prePopulate;
 
-  PPHitQueue(int size, boolean prePopulate) {
-    this.prePopulate = prePopulate;
-    initialize(size);
-  }
-
-  @Override
-  protected ScoreDoc getSentinelObject() {
-    return !prePopulate ? null : new ScoreDoc(Integer.MAX_VALUE, Float.NEGATIVE_INFINITY);
-  }
-
-  @Override
-  protected boolean lessThan(ScoreDoc hitA, ScoreDoc hitB) {
-    if (hitA.score == hitB.score) {
-      return hitA.doc > hitB.doc;
-    } else {
-      return hitA.score < hitB.score;
+    PPHitQueue(int size, boolean prePopulate) {
+        this.prePopulate = prePopulate;
+        initialize(size);
     }
-  }
-}
 
+    @Override
+    protected ScoreDoc getSentinelObject() {
+        return !prePopulate ? null : new ScoreDoc(Integer.MAX_VALUE, Float.NEGATIVE_INFINITY);
+    }
+
+    @Override
+    protected boolean lessThan(ScoreDoc hitA, ScoreDoc hitB) {
+        if (hitA.score == hitB.score) {
+            return hitA.doc > hitB.doc;
+        } else {
+            return hitA.score < hitB.score;
+        }
+    }
+}

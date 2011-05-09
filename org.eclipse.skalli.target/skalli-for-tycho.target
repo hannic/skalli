@@ -1,68 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Skalli Target Platform for Tycho Builds at Eclipse.org">
+<target name="LJS on Nexus">
 <locations>
-<location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit">
-
-<!-- depedencies to Equinox/Eclipse platform -->
-<unit id="a.jre.javase" version="1.6.0"/>
-<unit id="org.eclipse.core.jobs" version="0.0.0"/>
-<unit id="org.eclipse.core.contenttype" version="0.0.0"/>
-<unit id="org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="org.eclipse.equinox.app" version="0.0.0"/>
-<unit id="org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="org.eclipse.equinox.ds" version="0.0.0"/>
+<location includeAllPlatforms="false" includeMode="planner" type="InstallableUnit">
+<unit id="com.sap.ldi.projectportal.orbit.feature.feature.group" version="0.0.0"/>
+<repository location="http://nexus:8081/nexus/content/repositories/build.snapshots.unzip/com/sap/ldi/projectportal/orbit/com.sap.ldi.projectportal.orbit.updatesite/0.1.7/com.sap.ldi.projectportal.orbit.updatesite-0.1.7-assembly.zip-unzip/"/>
+<unit id="com.sap.core.js.confman.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.core.js.deployer.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.core.js.logging.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.core.js.monitoring.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.core.supportability.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.js.ach.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.js.log4j.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.js.rfc66.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.js.startup.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.js.tc.logging.feature.feature.group" version="0.0.0"/>
+<unit id="com.sap.js.tomcat.feature.feature.group" version="0.0.0"/>
+<unit id="feature.equinox.3.6.feature.group" version="0.0.0"/>
+<unit id="feature.osgi.webcontainer.feature.group" version="0.0.0"/>
+<unit id="feature.javaee5.api.feature.group" version="0.0.0"/>
+<repository location="http://nexus:8081/nexus/content/repositories/build.milestones.unzip/com/sap/core/distro/jpaas/com.sap.js.distro.jpaas/0.1.6/com.sap.js.distro.jpaas-0.1.6-assembly.zip-unzip/composite/"/>
+<unit id="org.junit4" version="0.0.0"/>
+<unit id="org.hamcrest.core" version="0.0.0"/>
+<repository location="http://nexus:8081/nexus/content/repositories/build.milestones.unzip/org/eclipse/download/eclipse/org.eclipse.jdt.source/3.6.1/org.eclipse.jdt.source-3.6.1.zip-unzip/"/>
+<unit id="org.eclipse.equinox.security" version="0.0.0"/>
+<unit id="org.eclipse.equinox.security.win32.x86" version="0.0.0"/>
 <unit id="org.eclipse.equinox.preferences" version="0.0.0"/>
 <unit id="org.eclipse.equinox.registry" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security" version="0.0.0"/>
-<unit id="org.eclipse.equinox.util" version="0.0.0"/>
-<unit id="org.eclipse.osgi" version="0.0.0"/>
-<unit id="org.eclipse.osgi.services" version="0.0.0"/>
-<unit id="org.eclipse.osgi.util" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7milestones/"/>
-
-<!-- dependencies to Eclipse Orbit project -->
-<unit id="javax.activation" version="1.1.0.v201005080500"/>
-<unit id="javax.el" version="2.1.0.v201004190952"/>
-<unit id="javax.mail" version="1.4.0.v201005080615"/>
-<unit id="javax.servlet" version="2.5.0.v201103041518"/>
-<unit id="javax.servlet.jsp" version="2.1.0.v201103011838"/>
-<unit id="javax.xml" version="1.3.4.v201005080400"/>
-<unit id="javax.xml.stream" version="1.0.1.v201004272200"/>
-<unit id="org.apache.commons.codec" version="1.3.0.v201101211617"/>
-<unit id="org.apache.commons.collections" version="3.2.0.v201005080500"/>
-<unit id="org.apache.commons.httpclient" version="3.1.0.v201012070820"/>
-<unit id="org.apache.commons.io" version="1.4.0.v20081110-1000"/>
-<unit id="org.apache.commons.lang" version="2.4.0.v201005080502"/>
-<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-<unit id="org.apache.velocity" version="1.5.0.v200905192330"/>
-<unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
-<unit id="org.jdom" version="1.1.1.v201101151400"/>
-<unit id="org.junit" version="4.8.1.v4_8_1_v20100427-1100"/>
-<unit id="org.easymock" version="2.4.0.v20090202-0900"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/S20110304120314/repository"/>
-
-<!-- dependencies to Skalli Orbit -->
-<unit id="org.restlet" version="2.0.0.RC4"/>
-<unit id="org.restlet.ext.servlet" version="2.0.0.RC4"/>
-<unit id="org.restlet.ext.xstream" version="2.0.0.RC4"/>
-<unit id="org.codehaus.jettison.jettison" version="1.2.0"/>
-<unit id="com.sap.org.apache.lucene.lucene-core" version="0.1.7"/>
-<unit id="com.sap.org.apache.lucene.lucene-highlighter" version="0.1.7"/>
-<unit id="com.sap.org.apache.lucene.lucene-queries" version="0.1.7"/>
-<unit id="com.springsource.com.thoughtworks.xstream" version="1.3.1"/>
-<unit id="com.springsource.org.custommonkey.xmlunit" version="1.2.0"/>
-<unit id="com.springsource.org.xmlpull" version="1.1.4.c"/>
-<unit id="com.vaadin" version="6.4.0"/>
-
-<!-- TODO replace this once we have an orbit -->
-<repository location="http://download.eclipse.org/skalli"/>
-
-<!-- Jetty Runtime to run it locally during development -->
-<unit id="org.eclipse.jetty.sdk.feature.group" version="7.3.1.201103121747"/>
-<repository location="http://download.eclipse.org/jetty/updates/jetty-rt-3.7milestones/S-3.7.M6-201103121818/"/>
-
+<unit id="org.eclipse.core.jobs" version="0.0.0"/>
+<repository location="http://nexus:8081/nexus/content/repositories/build.milestones.unzip/org/eclipse/download/eclipse/org.eclipse.platform/3.6.1/org.eclipse.platform-3.6.1.zip-unzip/"/>
+<unit id="com.meterware.httpunit" version="0.0.0"/>
+<repository location="http://nexus:8081/nexus/content/repositories/build.milestones.unzip/com/sap/ldi/testingtools/com.sap.ldi.testingtools.updatesite/0.0.4/com.sap.ldi.testingtools.updatesite-0.0.4-assembly.zip-unzip/"/>
 </location>
 </locations>
 <environment>

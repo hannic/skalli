@@ -12,15 +12,14 @@ package org.eclipse.skalli.api.java.events;
 
 public class EventCustomizingUpdate extends AbstractEvent {
 
-  private final String customizationName;
+    private final String customizationName;
 
-  public EventCustomizingUpdate(String customizationName) {
-    this.customizationName = customizationName;
-  }
+    public EventCustomizingUpdate(String customizationName) {
+        this.customizationName = customizationName;
+    }
 
-  public String getCustomizationName() {
-    return customizationName;
-  }
+    public String getCustomizationName() {
+        return customizationName;
+    }
 
 }
-

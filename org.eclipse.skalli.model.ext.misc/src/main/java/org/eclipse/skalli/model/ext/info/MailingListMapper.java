@@ -19,25 +19,23 @@ import org.eclipse.skalli.model.ext.info.internal.config.MailingListMappingResou
 
 public class MailingListMapper extends AbstractLinkMapper {
 
-  /** Purpose filter for mappings that allow to browse content of mailing lists. */
-  public static final String PURPOSE_BROWSE = "browse"; //$NON-NLS-1$
+    /** Purpose filter for mappings that allow to browse content of mailing lists. */
+    public static final String PURPOSE_BROWSE = "browse"; //$NON-NLS-1$
 
-  /** Purpose filter for mappings that allow to browse content of mailing list archives. */
-  public static final String PURPOSE_BROWSE_ARCHIVE = "browse-archive"; //$NON-NLS-1$
+    /** Purpose filter for mappings that allow to browse content of mailing list archives. */
+    public static final String PURPOSE_BROWSE_ARCHIVE = "browse-archive"; //$NON-NLS-1$
 
+    /** Purpose filter for mappings that allow to register to mailing lists. */
+    public static final String PURPOSE_REGISTER = "register"; //$NON-NLS-1$
 
-  /** Purpose filter for mappings that allow to register to mailing lists. */
-  public static final String PURPOSE_REGISTER = "register"; //$NON-NLS-1$
+    /** Purpose filter for mappings that allow to unregister from mailing lists. */
+    public static final String PURPOSE_UNREGISTER = "unregister"; //$NON-NLS-1$
 
-  /** Purpose filter for mappings that allow to unregister from mailing lists. */
-  public static final String PURPOSE_UNREGISTER = "unregister"; //$NON-NLS-1$
-
-
-  @Override
-  protected List<? extends LinkMappingConfig> getAllMappings(ConfigurationService configService) {
-    MailingListMappingsConfig mappingsConfig =
-      configService.readCustomization(MailingListMappingResource.MAPPINGS_KEY, MailingListMappingsConfig.class);
-    return mappingsConfig != null? mappingsConfig.getMailingListMappings() : null;
-  }
+    @Override
+    protected List<? extends LinkMappingConfig> getAllMappings(ConfigurationService configService) {
+        MailingListMappingsConfig mappingsConfig =
+                configService.readCustomization(MailingListMappingResource.MAPPINGS_KEY,
+                        MailingListMappingsConfig.class);
+        return mappingsConfig != null ? mappingsConfig.getMailingListMappings() : null;
+    }
 }
-

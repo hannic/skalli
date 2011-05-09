@@ -24,80 +24,79 @@ import org.eclipse.skalli.testutil.TestExtensibleEntityBase;
 
 public class ExtensibleEntityExtensionService implements ExtensionService<TestExtensibleEntityBase> {
 
-  @Override
-  public Class<TestExtensibleEntityBase> getExtensionClass() {
-    return TestExtensibleEntityBase.class;
-  }
+    @Override
+    public Class<TestExtensibleEntityBase> getExtensionClass() {
+        return TestExtensibleEntityBase.class;
+    }
 
-  @Override
-  public Set<DataMigration> getMigrations() {
-    return Collections.emptySet();
-  }
+    @Override
+    public Set<DataMigration> getMigrations() {
+        return Collections.emptySet();
+    }
 
-  @Override
-  public String getShortName() {
-    return ":-)"; //$NON-NLS-1$
-  }
+    @Override
+    public String getShortName() {
+        return ":-)"; //$NON-NLS-1$
+    }
 
-  @Override
-  public String getCaption() {
-    return "caption"; //$NON-NLS-1$
-  }
+    @Override
+    public String getCaption() {
+        return "caption"; //$NON-NLS-1$
+    }
 
-  @Override
-  public String getDescription() {
-    return "description"; //$NON-NLS-1$
-  }
+    @Override
+    public String getDescription() {
+        return "description"; //$NON-NLS-1$
+    }
 
-  @Override
-  public AliasedConverter getConverter(String host) {
-    return null;
-  }
+    @Override
+    public AliasedConverter getConverter(String host) {
+        return null;
+    }
 
-  @Override
-  public Set<String> getProjectTemplateIds() {
-    return null;
-  }
+    @Override
+    public Set<String> getProjectTemplateIds() {
+        return null;
+    }
 
-  @Override
-  public String getModelVersion() {
-    return null;
-  }
+    @Override
+    public String getModelVersion() {
+        return null;
+    }
 
-  @Override
-  public String getNamespace() {
-    return null;
-  }
+    @Override
+    public String getNamespace() {
+        return null;
+    }
 
-  @Override
-  public String getXsdFileName() {
-    return null;
-  }
+    @Override
+    public String getXsdFileName() {
+        return null;
+    }
 
-  @Override
-  public AbstractIndexer<TestExtensibleEntityBase> getIndexer() {
-    return null;
-  }
+    @Override
+    public AbstractIndexer<TestExtensibleEntityBase> getIndexer() {
+        return null;
+    }
 
-  @Override
-  public String getCaption(String propertyName) {
-    return null;
-  }
+    @Override
+    public String getCaption(String propertyName) {
+        return null;
+    }
 
-  @Override
-  public String getDescription(String propertyName) {
-    return null;
-  }
+    @Override
+    public String getDescription(String propertyName) {
+        return null;
+    }
 
-  @Override
-  public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
-    return Collections.emptySet();
-  }
+    @Override
+    public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
+        return Collections.emptySet();
+    }
 
-  @Override
-  public Set<ExtensionValidator<TestExtensibleEntityBase>> getExtensionValidators(Map<String, String> captions) {
-    return Collections.emptySet();
-  }
+    @Override
+    public Set<ExtensionValidator<TestExtensibleEntityBase>> getExtensionValidators(Map<String, String> captions) {
+        return Collections.emptySet();
+    }
 
 }
-

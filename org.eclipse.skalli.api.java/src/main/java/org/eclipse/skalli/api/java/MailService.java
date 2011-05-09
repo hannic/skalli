@@ -22,36 +22,35 @@ import org.eclipse.skalli.model.core.Project;
  */
 public interface MailService {
 
-  /**
-   * Sends a mail to relevant persons of a certain project. Methods
-   * {@link MailService#getToAddresses(Project)} and {@link MailService#getCCAddresses(Project)}
-   * are used for calculation TO and CC of the email.
-   *
-   * @param project email will be sent to project leads and members of this project.
-   * @param subject subject line of the mail.
-   * @param body mail content.
-   * @param from sender of the mail.
-   */
-  public void sendMailToProject(Project project, String subject, String body, Address from);
+    /**
+     * Sends a mail to relevant persons of a certain project. Methods
+     * {@link MailService#getToAddresses(Project)} and {@link MailService#getCCAddresses(Project)}
+     * are used for calculation TO and CC of the email.
+     *
+     * @param project email will be sent to project leads and members of this project.
+     * @param subject subject line of the mail.
+     * @param body mail content.
+     * @param from sender of the mail.
+     */
+    public void sendMailToProject(Project project, String subject, String body, Address from);
 
-  /**
-   * returns a list of email addresses for a certain project an email should be sent to
-   * as TO. All project members with role {@link Role#PROJECT_LEAD} are added to the result
-   * list.
-   *
-   * @param project project instance
-   * @return list of email addresses
-   */
-  public List<Address> getToAddresses(Project project);
+    /**
+     * returns a list of email addresses for a certain project an email should be sent to
+     * as TO. All project members with role {@link Role#PROJECT_LEAD} are added to the result
+     * list.
+     *
+     * @param project project instance
+     * @return list of email addresses
+     */
+    public List<Address> getToAddresses(Project project);
 
-  /**
-   * returns a list of email addresses for a certain project an email should be sent to
-   * as CC. All project members with role {@link Role#PROJECT_MEMBER} are added to the result
-   * list.
-   *
-   * @param project project instance
-   * @return list of email addresses
-   */
-  public List<Address> getCCAddresses(Project project);
+    /**
+     * returns a list of email addresses for a certain project an email should be sent to
+     * as CC. All project members with role {@link Role#PROJECT_MEMBER} are added to the result
+     * list.
+     *
+     * @param project project instance
+     * @return list of email addresses
+     */
+    public List<Address> getCCAddresses(Project project);
 }
-

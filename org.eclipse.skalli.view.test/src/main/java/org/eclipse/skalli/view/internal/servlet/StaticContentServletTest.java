@@ -26,110 +26,110 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class StaticContentServletTest {
 
-  @Before
-  public void setup() throws Exception {
-    new BundleManager(this.getClass()).startBundles();
-    sb = new StringBuilder();
-  }
+    @Before
+    public void setup() throws Exception {
+        new BundleManager(this.getClass()).startBundles();
+        sb = new StringBuilder();
+    }
 
-  private boolean written = false;
-  private StringBuilder sb;
+    private boolean written = false;
+    private StringBuilder sb;
 
-  @Test
-  public void testDoGetProjectSchema() throws Exception {
-    HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
-    HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
-    Object[] mocks = new Object[] {mockRequest, mockResponse};
-    StaticContentServlet servlet = new StaticContentServlet();
-    reset(mocks);
+    @Test
+    public void testDoGetProjectSchema() throws Exception {
+        HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
+        Object[] mocks = new Object[] { mockRequest, mockResponse };
+        StaticContentServlet servlet = new StaticContentServlet();
+        reset(mocks);
 
-    mockRequest.getRequestURI();
-    expectLastCall().andReturn("/schemas/project.xsd");
+        mockRequest.getRequestURI();
+        expectLastCall().andReturn("/schemas/project.xsd");
 
-    mockResponse.setContentType(eq("text/xml"));
-    expectLastCall();
+        mockResponse.setContentType(eq("text/xml"));
+        expectLastCall();
 
-    mockResponse.getOutputStream();
-    expectLastCall().andReturn(new ServletOutputStream() {
-      @Override
-      public void write(int b) throws IOException {
-        written = true;
-        sb.append((char)b);
-      }
-    });
+        mockResponse.getOutputStream();
+        expectLastCall().andReturn(new ServletOutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                written = true;
+                sb.append((char) b);
+            }
+        });
 
-    replay(mocks);
+        replay(mocks);
 
-    servlet.doGet(mockRequest, mockResponse);
-    Assert.assertTrue(written);
-    String xml = sb.toString();
-    Assert.assertTrue(xml, xml.indexOf(
-        "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-        "xmlns=\"http://www.eclipse.org/skalli/2010/API\" " +
-        "attributeFormDefault=\"unqualified\" " +
-        "elementFormDefault=\"qualified\" " +
-        "targetNamespace=\"http://www.eclipse.org/skalli/2010/API\" " +
-        "version=\"1.2\">") > 0);
+        servlet.doGet(mockRequest, mockResponse);
+        Assert.assertTrue(written);
+        String xml = sb.toString();
+        Assert.assertTrue(xml, xml.indexOf(
+                "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+                        "xmlns=\"http://www.eclipse.org/skalli/2010/API\" " +
+                        "attributeFormDefault=\"unqualified\" " +
+                        "elementFormDefault=\"qualified\" " +
+                        "targetNamespace=\"http://www.eclipse.org/skalli/2010/API\" " +
+                        "version=\"1.2\">") > 0);
 
-    verify(mocks);
-  }
+        verify(mocks);
+    }
 
-  @Test
-  public void testDoGetExtensionSchema() throws Exception {
-    HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
-    HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
-    Object[] mocks = new Object[] {mockRequest, mockResponse};
-    StaticContentServlet servlet = new StaticContentServlet();
-    reset(mocks);
+    @Test
+    public void testDoGetExtensionSchema() throws Exception {
+        HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
+        Object[] mocks = new Object[] { mockRequest, mockResponse };
+        StaticContentServlet servlet = new StaticContentServlet();
+        reset(mocks);
 
-    mockRequest.getRequestURI();
-    expectLastCall().andReturn("/schemas/extension-devinf.xsd");
+        mockRequest.getRequestURI();
+        expectLastCall().andReturn("/schemas/extension-devinf.xsd");
 
-    mockResponse.setContentType(eq("text/xml"));
-    expectLastCall();
+        mockResponse.setContentType(eq("text/xml"));
+        expectLastCall();
 
-    mockResponse.getOutputStream();
-    expectLastCall().andReturn(new ServletOutputStream() {
-      @Override
-      public void write(int b) throws IOException {
-        written = true;
-        sb.append((char)b);
-      }
-    });
+        mockResponse.getOutputStream();
+        expectLastCall().andReturn(new ServletOutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                written = true;
+                sb.append((char) b);
+            }
+        });
 
-    replay(mocks);
+        replay(mocks);
 
-    servlet.doGet(mockRequest, mockResponse);
-    Assert.assertTrue(written);
-    String xml = sb.toString();
-    Assert.assertTrue(xml, xml.indexOf(
-        "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-        "xmlns=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
-        "attributeFormDefault=\"unqualified\" " +
-        "elementFormDefault=\"qualified\" " +
-        "targetNamespace=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
-        "version=\"1.0\">") > 0);
+        servlet.doGet(mockRequest, mockResponse);
+        Assert.assertTrue(written);
+        String xml = sb.toString();
+        Assert.assertTrue(xml, xml.indexOf(
+                "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+                        "xmlns=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
+                        "attributeFormDefault=\"unqualified\" " +
+                        "elementFormDefault=\"qualified\" " +
+                        "targetNamespace=\"http://www.eclipse.org/skalli/2010/API/Extension-DevInf\" " +
+                        "version=\"1.0\">") > 0);
 
-    verify(mocks);
-  }
+        verify(mocks);
+    }
 
-  @Test
-  public void testDoGetUnknown() throws Exception {
-    HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
-    HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
-    Object[] mocks = new Object[] {mockRequest, mockResponse};
-    StaticContentServlet servlet = new StaticContentServlet();
-    reset(mocks);
+    @Test
+    public void testDoGetUnknown() throws Exception {
+        HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
+        Object[] mocks = new Object[] { mockRequest, mockResponse };
+        StaticContentServlet servlet = new StaticContentServlet();
+        reset(mocks);
 
-    mockRequest.getRequestURI();
-    expectLastCall().andReturn("/schemas/gibtsnich");
+        mockRequest.getRequestURI();
+        expectLastCall().andReturn("/schemas/gibtsnich");
 
-    mockResponse.sendError(eq(404));
-    expectLastCall();
+        mockResponse.sendError(eq(404));
+        expectLastCall();
 
-    replay(mocks);
+        replay(mocks);
 
-    servlet.doGet(mockRequest, mockResponse);
-    verify(mocks);
-  }
+        servlet.doGet(mockRequest, mockResponse);
+        verify(mocks);
+    }
 }

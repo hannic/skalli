@@ -33,62 +33,61 @@ import org.osgi.service.component.ComponentContext;
  */
 public class LocalGroupServiceImpl extends EntityServiceImpl<Group> implements GroupService {
 
-  private static final Logger LOG = Log.getLogger(LocalGroupServiceImpl.class);
+    private static final Logger LOG = Log.getLogger(LocalGroupServiceImpl.class);
 
-  /** Unique identifier of the portal admiminstrators group */
-  private static final String ADMIN_GROUP = "administrators"; //$NON-NLS-1$
+    /** Unique identifier of the portal admiminstrators group */
+    private static final String ADMIN_GROUP = "administrators"; //$NON-NLS-1$
 
-  protected void activate(ComponentContext context) {
-    LOG.info("Local Group Service activated"); //$NON-NLS-1$
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info("Local Group Service deactivated"); //$NON-NLS-1$
-  }
-
-  @Override
-  public Class<Group> getEntityClass() {
-    return Group.class;
-  }
-
-  @Override
-  public boolean isAdministrator(String userId) {
-    return isMemberOfGroup(userId, ADMIN_GROUP);
-  }
-
-  @Override
-  public boolean isMemberOfGroup(final String userId, final String groupId) {
-    Group group = getGroup(groupId);
-    return group != null ? group.hasGroupMember(userId) : false;
-  }
-
-  @Override
-  public List<Group> getGroups() {
-    return getAll();
-  }
-
-  @Override
-  protected void validateEntity(Group entity) throws ValidationException {
-    SortedSet<Issue> issues = validate(entity, Severity.FATAL);
-    if (issues.size() > 0) {
-      throw new ValidationException("Group could not be saved due to the following reasons:", issues);
+    protected void activate(ComponentContext context) {
+        LOG.info("Local Group Service activated"); //$NON-NLS-1$
     }
-  }
 
-  @Override
-  protected SortedSet<Issue> validateEntity(Group entity, Severity minSeverity) {
-    return new TreeSet<Issue>();
-  }
+    protected void deactivate(ComponentContext context) {
+        LOG.info("Local Group Service deactivated"); //$NON-NLS-1$
+    }
 
-  @Override
-  public Group getGroup(final String groupId) {
-    Group group = getPersistenceService().getEntity(Group.class, new EntityFilter<Group>() {
-      @Override
-      public boolean accept(Class<Group> entityClass, Group entity) {
-        return entity.getGroupId().equals(groupId);
-      }
-    });
-    return group;
-  }
+    @Override
+    public Class<Group> getEntityClass() {
+        return Group.class;
+    }
+
+    @Override
+    public boolean isAdministrator(String userId) {
+        return isMemberOfGroup(userId, ADMIN_GROUP);
+    }
+
+    @Override
+    public boolean isMemberOfGroup(final String userId, final String groupId) {
+        Group group = getGroup(groupId);
+        return group != null ? group.hasGroupMember(userId) : false;
+    }
+
+    @Override
+    public List<Group> getGroups() {
+        return getAll();
+    }
+
+    @Override
+    protected void validateEntity(Group entity) throws ValidationException {
+        SortedSet<Issue> issues = validate(entity, Severity.FATAL);
+        if (issues.size() > 0) {
+            throw new ValidationException("Group could not be saved due to the following reasons:", issues);
+        }
+    }
+
+    @Override
+    protected SortedSet<Issue> validateEntity(Group entity, Severity minSeverity) {
+        return new TreeSet<Issue>();
+    }
+
+    @Override
+    public Group getGroup(final String groupId) {
+        Group group = getPersistenceService().getEntity(Group.class, new EntityFilter<Group>() {
+            @Override
+            public boolean accept(Class<Group> entityClass, Group entity) {
+                return entity.getGroupId().equals(groupId);
+            }
+        });
+        return group;
+    }
 }
-

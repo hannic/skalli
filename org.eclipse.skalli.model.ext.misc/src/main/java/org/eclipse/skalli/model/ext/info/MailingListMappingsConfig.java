@@ -19,17 +19,15 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("mailingListMappings")
 public class MailingListMappingsConfig {
 
-  @XStreamImplicit
-  private ArrayList<MailingListMappingConfig> mailingListMappings;
+    @XStreamImplicit
+    private ArrayList<MailingListMappingConfig> mailingListMappings;
 
-  public MailingListMappingsConfig(ArrayList<MailingListMappingConfig> mailingListMappings) {
-    this.mailingListMappings = mailingListMappings;
-  }
+    public MailingListMappingsConfig(ArrayList<MailingListMappingConfig> mailingListMappings) {
+        this.mailingListMappings = mailingListMappings;
+    }
 
-  public List<MailingListMappingConfig> getMailingListMappings() {
-    return mailingListMappings;
-  }
-
+    public List<MailingListMappingConfig> getMailingListMappings() {
+        return mailingListMappings;
+    }
 
 }
-

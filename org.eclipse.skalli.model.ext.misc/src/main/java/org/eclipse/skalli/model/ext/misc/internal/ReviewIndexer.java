@@ -16,12 +16,11 @@ import org.eclipse.skalli.model.ext.misc.ReviewProjectExt;
 
 public class ReviewIndexer extends AbstractIndexer<ReviewProjectExt> {
 
-  @Override
-  protected void indexFields(ReviewProjectExt entity) {
-    for (ReviewEntry review : entity.getReviews()) {
-      addField("projectreviewcomment", review.getComment(), true, true); //$NON-NLS-1$
+    @Override
+    protected void indexFields(ReviewProjectExt entity) {
+        for (ReviewEntry review : entity.getReviews()) {
+            addField("projectreviewcomment", review.getComment(), true, true); //$NON-NLS-1$
+        }
     }
-  }
 
 }
-

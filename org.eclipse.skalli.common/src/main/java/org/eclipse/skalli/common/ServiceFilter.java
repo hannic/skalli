@@ -20,16 +20,16 @@ package org.eclipse.skalli.common;
  */
 public interface ServiceFilter<T> {
 
-  /**
-   * Tests if the specified service instance should be included in a list of
-   * service instances.
-   *
-   * @param instance
-   *          an instance of an OSGi service interface.
-   *
-   * @return <code>true</code> if and only if the service instance should be
-   *         included in a list of service instances; <code>false</code>
-   *         otherwise.
-   */
-  boolean accept(T instance);
+    /**
+     * Tests if the specified service instance should be included in a list of
+     * service instances.
+     *
+     * @param instance
+     *          an instance of an OSGi service interface.
+     *
+     * @return <code>true</code> if and only if the service instance should be
+     *         included in a list of service instances; <code>false</code>
+     *         otherwise.
+     */
+    boolean accept(T instance);
 }

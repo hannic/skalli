@@ -35,106 +35,103 @@ import com.vaadin.ui.VerticalLayout;
 
 public class TemplateSelectPanel extends Panel {
 
-  private static final long serialVersionUID = 4432418022051563046L;
+    private static final long serialVersionUID = 4432418022051563046L;
 
-  private static final String STYLE_TEMPLATE_SELECT = "tplsel"; //$NON-NLS-1$
-  private static final String STYLE_TEMPLATE_SELECT_BUTTONS = "tplsel-buttons"; //$NON-NLS-1$
+    private static final String STYLE_TEMPLATE_SELECT = "tplsel"; //$NON-NLS-1$
+    private static final String STYLE_TEMPLATE_SELECT_BUTTONS = "tplsel-buttons"; //$NON-NLS-1$
 
-  private static final String DEBUG_ID_CONTENT = "templateSelectPanelContent"; //$NON-NLS-1$
+    private static final String DEBUG_ID_CONTENT = "templateSelectPanelContent"; //$NON-NLS-1$
 
-  private final ThemeResource ICON_BUTTON_OK = new ThemeResource("icons/button/ok.png"); //$NON-NLS-1$
-  private final ThemeResource ICON_BUTTON_CANCEL = new ThemeResource("icons/button/cancel.png"); //$NON-NLS-1$
+    private final ThemeResource ICON_BUTTON_OK = new ThemeResource("icons/button/ok.png"); //$NON-NLS-1$
+    private final ThemeResource ICON_BUTTON_CANCEL = new ThemeResource("icons/button/cancel.png"); //$NON-NLS-1$
 
+    private final ProjectApplication application;
+    private final Navigator navigator;
+    private final ProjectWindow window;
+    private RadioSelect select;
 
-  private final ProjectApplication application;
-  private final Navigator navigator;
-  private final ProjectWindow window;
-  private RadioSelect select;
+    private final Set<ProjectTemplate> projectTemplates;
 
-  private final Set<ProjectTemplate> projectTemplates;
+    public TemplateSelectPanel(ProjectApplication application, ProjectWindow window, Navigator navigator) {
+        this.application = application;
+        this.navigator = navigator;
+        this.window = window;
 
-  public TemplateSelectPanel(ProjectApplication application, ProjectWindow window, Navigator navigator) {
-    this.application = application;
-    this.navigator = navigator;
-    this.window = window;
+        ProjectTemplateService templateService = Services.getRequiredService(ProjectTemplateService.class);
+        projectTemplates = templateService.getAllTemplates();
 
-    ProjectTemplateService templateService = Services.getRequiredService(ProjectTemplateService.class);
-    projectTemplates = templateService.getAllTemplates();
-
-    setSizeFull();
-    setStyleName(STYLE_TEMPLATE_SELECT);
-    renderContent((VerticalLayout)getContent());
-  }
-
-  /**
-   * Renders the content of the panel.
-   */
-  private void renderContent(VerticalLayout content) {
-
-    CssLayout layout = new CssLayout();
-    layout.setWidth("600px"); //$NON-NLS-1$
-    content.addComponent(layout);
-    content.setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
-
-    Label title = new Label("<h2>" + "Available Project Templates" + "</h2>", Label.CONTENT_XHTML);  //$NON-NLS-1$//$NON-NLS-3$
-    layout.addComponent(title);
-
-    TreeSet<RadioSelect.Entry> entries = new TreeSet<RadioSelect.Entry>();
-    for (ProjectTemplate projectTemplate: projectTemplates) {
-      entries.add(new RadioSelect.Entry(projectTemplate.getId(),
-          projectTemplate.getDisplayName(), projectTemplate.getDescription(), projectTemplate.getRank()));
+        setSizeFull();
+        setStyleName(STYLE_TEMPLATE_SELECT);
+        renderContent((VerticalLayout) getContent());
     }
-    select = new RadioSelect("", entries); //$NON-NLS-1$
-    layout.addComponent(select);
 
-    renderButtons(content);
+    /**
+     * Renders the content of the panel.
+     */
+    private void renderContent(VerticalLayout content) {
 
-    // for ui debugging
-    content.setDebugId(DEBUG_ID_CONTENT);
-  }
+        CssLayout layout = new CssLayout();
+        layout.setWidth("600px"); //$NON-NLS-1$
+        content.addComponent(layout);
+        content.setComponentAlignment(layout, Alignment.MIDDLE_CENTER);
 
-  /**
-   * Renders the OK/Cancel button bar.
-   */
-  private void renderButtons(VerticalLayout content) {
-    CssLayout buttons = new CssLayout();
-    buttons.addStyleName(STYLE_TEMPLATE_SELECT_BUTTONS);
+        Label title = new Label("<h2>" + "Available Project Templates" + "</h2>", Label.CONTENT_XHTML); //$NON-NLS-1$//$NON-NLS-3$
+        layout.addComponent(title);
 
-    Button okButton = new Button("Create Project");
-    okButton.setIcon(ICON_BUTTON_OK);
-    okButton.addListener(new OKButtonListener());
-    buttons.addComponent(okButton);
+        TreeSet<RadioSelect.Entry> entries = new TreeSet<RadioSelect.Entry>();
+        for (ProjectTemplate projectTemplate : projectTemplates) {
+            entries.add(new RadioSelect.Entry(projectTemplate.getId(),
+                    projectTemplate.getDisplayName(), projectTemplate.getDescription(), projectTemplate.getRank()));
+        }
+        select = new RadioSelect("", entries); //$NON-NLS-1$
+        layout.addComponent(select);
 
-    Button cancelButton = new Button("Cancel");
-    cancelButton.setIcon(ICON_BUTTON_CANCEL);
-    cancelButton.addListener(new CancelButtonListener());
-    buttons.addComponent(cancelButton);
+        renderButtons(content);
 
-    content.addComponent(buttons);
-    content.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
-  }
-
-
-  private class OKButtonListener implements Button.ClickListener {
-    private static final long serialVersionUID = 6531396291087032954L;
-
-    @Override
-    public void buttonClick(ClickEvent event) {
-      ProjectService projectService = Services.getRequiredService(ProjectService.class);
-      Project project = projectService.createProject(select.getSelected(), application.getLoggedInUser());
-
-      Component component = new ProjectEditPanel(application, navigator, project, ProjectEditMode.NEW_PROJECT);
-      window.setMainContent(component);
+        // for ui debugging
+        content.setDebugId(DEBUG_ID_CONTENT);
     }
-  }
 
-  private class CancelButtonListener implements Button.ClickListener {
-    private static final long serialVersionUID = 4567366927195161150L;
+    /**
+     * Renders the OK/Cancel button bar.
+     */
+    private void renderButtons(VerticalLayout content) {
+        CssLayout buttons = new CssLayout();
+        buttons.addStyleName(STYLE_TEMPLATE_SELECT_BUTTONS);
 
-    @Override
-    public void buttonClick(ClickEvent event) {
-      navigator.navigateWelcomeView();
+        Button okButton = new Button("Create Project");
+        okButton.setIcon(ICON_BUTTON_OK);
+        okButton.addListener(new OKButtonListener());
+        buttons.addComponent(okButton);
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setIcon(ICON_BUTTON_CANCEL);
+        cancelButton.addListener(new CancelButtonListener());
+        buttons.addComponent(cancelButton);
+
+        content.addComponent(buttons);
+        content.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
     }
-  }
+
+    private class OKButtonListener implements Button.ClickListener {
+        private static final long serialVersionUID = 6531396291087032954L;
+
+        @Override
+        public void buttonClick(ClickEvent event) {
+            ProjectService projectService = Services.getRequiredService(ProjectService.class);
+            Project project = projectService.createProject(select.getSelected(), application.getLoggedInUser());
+
+            Component component = new ProjectEditPanel(application, navigator, project, ProjectEditMode.NEW_PROJECT);
+            window.setMainContent(component);
+        }
+    }
+
+    private class CancelButtonListener implements Button.ClickListener {
+        private static final long serialVersionUID = 4567366927195161150L;
+
+        @Override
+        public void buttonClick(ClickEvent event) {
+            navigator.navigateWelcomeView();
+        }
+    }
 }
-

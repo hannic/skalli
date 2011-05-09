@@ -19,16 +19,15 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 
 public class ProjectMemberTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    values.put(ProjectMember.PROPERTY_USERID, "homer");
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        values.put(ProjectMember.PROPERTY_USERID, "homer");
 
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
-    requiredProperties.put(ProjectMember.class, new String[]{ProjectMember.PROPERTY_USERID});
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        requiredProperties.put(ProjectMember.class, new String[] { ProjectMember.PROPERTY_USERID });
 
-    PropertyHelper.checkPropertyDefinitions(ProjectMember.class, requiredProperties, values);
-  }
+        PropertyHelper.checkPropertyDefinitions(ProjectMember.class, requiredProperties, values);
+    }
 
 }
-

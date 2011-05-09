@@ -15,10 +15,9 @@ import org.eclipse.skalli.model.ext.scrum.ScrumProjectExt;
 
 public class ScrumIndexer extends AbstractIndexer<ScrumProjectExt> {
 
-  @Override
-  protected void indexFields(ScrumProjectExt scrum) {
-    addField(ScrumProjectExt.PROPERTY_BACKLOG_URL, scrum.getBacklogUrl(), true, false);
-  }
+    @Override
+    protected void indexFields(ScrumProjectExt scrum) {
+        addField(ScrumProjectExt.PROPERTY_BACKLOG_URL, scrum.getBacklogUrl(), true, false);
+    }
 
 }
-

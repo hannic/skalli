@@ -17,16 +17,15 @@ import org.eclipse.skalli.log.internal.JdkLogManager;
 
 public class Log {
 
-  public static void setDefaultLogLevel(Level level) {
-    JdkLogManager.getInstance().setDefaultLogLevel(level);
-  }
+    public static void setDefaultLogLevel(Level level) {
+        JdkLogManager.getInstance().setDefaultLogLevel(level);
+    }
 
-  public static Logger getLogger(String name) {
-    return JdkLogManager.getInstance().getLogger(name);
-  }
+    public static Logger getLogger(String name) {
+        return JdkLogManager.getInstance().getLogger(name);
+    }
 
-  public static Logger getLogger(Class<?> c) {
-    return JdkLogManager.getInstance().getLogger(c.getName());
-  }
+    public static Logger getLogger(Class<?> c) {
+        return JdkLogManager.getInstance().getLogger(c.getName());
+    }
 }
-

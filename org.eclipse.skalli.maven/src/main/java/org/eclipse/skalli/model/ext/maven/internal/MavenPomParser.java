@@ -13,19 +13,18 @@ package org.eclipse.skalli.model.ext.maven.internal;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 public interface MavenPomParser {
 
-  /**
-   * Reads and parses the given input stream and returns the content
-   * as <code>MavenPom</code> instance.
-   *
-   * @param in  the stream to read and parse.
-   *
-   * @throws IOException  if an i/o error occured.
-   * @throws MavenValidationException  if the given input
-   * stream contains no valid Maven POM.
-   */
-  public MavenPom parse(InputStream in) throws IOException, MavenValidationException;
+    /**
+     * Reads and parses the given input stream and returns the content
+     * as <code>MavenPom</code> instance.
+     *
+     * @param in  the stream to read and parse.
+     *
+     * @throws IOException  if an i/o error occured.
+     * @throws MavenValidationException  if the given input
+     * stream contains no valid Maven POM.
+     */
+    public MavenPom parse(InputStream in) throws IOException, MavenValidationException;
 
 }

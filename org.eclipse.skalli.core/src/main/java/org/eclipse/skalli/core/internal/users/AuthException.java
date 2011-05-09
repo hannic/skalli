@@ -9,16 +9,16 @@
  *     SAP AG - initial API and implementation
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.users;
+
 class AuthException extends Exception {
-  private static final long serialVersionUID = -768757611391126038L;
+    private static final long serialVersionUID = -768757611391126038L;
 
-  public AuthException(String message) {
-    super(message);
-  }
+    public AuthException(String message) {
+        super(message);
+    }
 
-  public AuthException(Throwable cause) {
-    super(cause);
-  }
+    public AuthException(Throwable cause) {
+        super(cause);
+    }
 
 }
-

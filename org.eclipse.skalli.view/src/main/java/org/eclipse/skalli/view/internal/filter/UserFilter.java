@@ -35,31 +35,30 @@ import org.eclipse.skalli.common.User;
  */
 public class UserFilter implements Filter {
 
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException {
-
-    LoginUtil loginUtil = new LoginUtil(request);
-    String userId = loginUtil.getLoggedInUserId();
-    if (StringUtils.isNotBlank(userId)) {
-      request.setAttribute(Consts.ATTRIBUTE_USERID, userId);
-      User user = UserUtil.getUser(userId);
-      if (user != null) {
-        request.setAttribute(Consts.ATTRIBUTE_USER, user);
-      }
+    @Override
+    public void destroy() {
     }
 
-    // proceed along the chain
-    chain.doFilter(request, response);
-  }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
 
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
+        LoginUtil loginUtil = new LoginUtil(request);
+        String userId = loginUtil.getLoggedInUserId();
+        if (StringUtils.isNotBlank(userId)) {
+            request.setAttribute(Consts.ATTRIBUTE_USERID, userId);
+            User user = UserUtil.getUser(userId);
+            if (user != null) {
+                request.setAttribute(Consts.ATTRIBUTE_USER, user);
+            }
+        }
+
+        // proceed along the chain
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
 
 }
-

@@ -20,15 +20,14 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("validations")
 public class ValidationsConfig {
 
-  @XStreamImplicit
-  private ArrayList<ValidationConfig> validationConfigs;
+    @XStreamImplicit
+    private ArrayList<ValidationConfig> validationConfigs;
 
-  public ValidationsConfig(Collection<ValidationConfig> validationConfigs) {
-    this.validationConfigs = new ArrayList<ValidationConfig>(validationConfigs);
-  }
+    public ValidationsConfig(Collection<ValidationConfig> validationConfigs) {
+        this.validationConfigs = new ArrayList<ValidationConfig>(validationConfigs);
+    }
 
-  public List<ValidationConfig> getValidationConfigs() {
-    return validationConfigs;
-  }
+    public List<ValidationConfig> getValidationConfigs() {
+        return validationConfigs;
+    }
 }
-

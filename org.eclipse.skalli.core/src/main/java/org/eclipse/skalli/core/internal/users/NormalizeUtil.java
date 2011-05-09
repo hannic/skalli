@@ -14,19 +14,18 @@ import java.text.Normalizer;
 
 public class NormalizeUtil {
 
-  public static String normalize(String s) {
-    if (s == null) {
-      return null;
+    public static String normalize(String s) {
+        if (s == null) {
+            return null;
+        }
+        s = s.replaceAll("ä", "ae");
+        s = s.replaceAll("ö", "oe");
+        s = s.replaceAll("ü", "ue");
+        s = s.replaceAll("Ä", "Ae");
+        s = s.replaceAll("Ö", "Oe");
+        s = s.replaceAll("Ü", "Ue");
+        s = s.replaceAll("ß", "ss");
+        return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
-    s = s.replaceAll("ä", "ae");
-    s = s.replaceAll("ö", "oe");
-    s = s.replaceAll("ü", "ue");
-    s = s.replaceAll("Ä", "Ae");
-    s = s.replaceAll("Ö", "Oe");
-    s = s.replaceAll("Ü", "Ue");
-    s = s.replaceAll("ß", "ss");
-    return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
-  }
 
 }
-

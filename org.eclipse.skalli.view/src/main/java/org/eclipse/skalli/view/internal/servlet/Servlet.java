@@ -52,103 +52,104 @@ import org.eclipse.skalli.view.internal.config.NewsResource;
  * and the welcome page (see <tt>welcome.jsp</tt>).
  */
 public class Servlet extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * @see HttpServlet#HttpServlet()
-   */
-  public Servlet() {
-    super();
-  }
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Servlet() {
+        super();
+    }
 
-  /**
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-   */
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    String requestURI = request.getRequestURI();
-    User user = new LoginUtil(request).getLoggedInUser();
+        String requestURI = request.getRequestURI();
+        User user = new LoginUtil(request).getLoggedInUser();
 
-    if (requestURI.endsWith(Consts.URL_NEWS)) {
-      ConfigurationService confService = Services.getRequiredService(ConfigurationService.class);
-      if (confService!=null) {
-        NewsConfig newsConfig = confService.readCustomization(NewsResource.KEY, NewsConfig.class);
-        if (newsConfig != null) {
-          redirect(newsConfig.getUrl(), response);
-          return;
+        if (requestURI.endsWith(Consts.URL_NEWS)) {
+            ConfigurationService confService = Services.getRequiredService(ConfigurationService.class);
+            if (confService != null) {
+                NewsConfig newsConfig = confService.readCustomization(NewsResource.KEY, NewsConfig.class);
+                if (newsConfig != null) {
+                    redirect(newsConfig.getUrl(), response);
+                    return;
+                }
+            }
+            // else - do nothing, news is not configured or configuration service not available,
+            // welcome page should be rendered in this case
+        } else if (requestURI.endsWith(Consts.URL_REINDEX)) {
+            if (UserUtil.isAdministrator(user)) {
+                reindex();
+                redirect(Consts.URL_WELCOME, response);
+                return;
+            }
+        } else if (requestURI.equals(Consts.URL_CREATEPROJECT)) {
+            if (user != null) {
+                forward(Consts.URL_PROJECTS + "/" + UUID.randomUUID(), request, response); //$NON-NLS-1$
+                return;
+            }
+        } else if (requestURI.equals(Consts.URL_FAVICON)) {
+            forward(Consts.FILE_FAVICON, request, response);
+            return;
+        } else if (requestURI.equals(Consts.URL_SEARCH_PLUGIN)) {
+            forward(Consts.FILE_SEARCH_PLUGIN, request, response);
+            return;
+        } else if (requestURI.equals(Consts.URL_MYPROJECTS)) {
+            if (user != null) {
+                forward(Consts.URL_PROJECTS_USER + user.getUserId(), request, response);
+                return;
+            } else {
+                Exception e = new AccessControlException("User is not authorized to call this page.");
+                request.setAttribute("exception", e); //$NON-NLS-1$
+                forward(Consts.URL_ERROR, request, response);
+                return;
+            }
         }
-      }
-      // else - do nothing, news is not configured or configuration service not available,
-      // welcome page should be rendered in this case
-    } else if (requestURI.endsWith(Consts.URL_REINDEX)) {
-      if (UserUtil.isAdministrator(user)) {
-        reindex();
-        redirect(Consts.URL_WELCOME, response);
-        return;
-      }
-    } else if (requestURI.equals(Consts.URL_CREATEPROJECT)) {
-      if (user != null) {
-        forward(Consts.URL_PROJECTS + "/" + UUID.randomUUID(), request, response); //$NON-NLS-1$
-        return;
-      }
-    } else if (requestURI.equals(Consts.URL_FAVICON)) {
-      forward(Consts.FILE_FAVICON, request, response);
-      return;
-    } else if (requestURI.equals(Consts.URL_SEARCH_PLUGIN)) {
-      forward(Consts.FILE_SEARCH_PLUGIN, request, response);
-      return;
-    } else if (requestURI.equals(Consts.URL_MYPROJECTS)) {
-      if (user != null) {
-        forward(Consts.URL_PROJECTS_USER+user.getUserId(), request, response);
-        return;
-      } else {
-        Exception e = new AccessControlException("User is not authorized to call this page.");
-        request.setAttribute("exception", e); //$NON-NLS-1$
-        forward(Consts.URL_ERROR, request, response);
-        return;
-      }
+        forward(Consts.JSP_WELCOME, request, response);
     }
-    forward(Consts.JSP_WELCOME, request, response);
-  }
 
-  /**
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-   *      response)
-   */
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-  }
-
-  /***********
-   * private
-   **********/
-
-  private void reindex() {
-    SearchService searchService = Services.getService(SearchService.class);
-    ProjectService projectService = Services.getService(ProjectService.class);
-
-    Set<Project> projects = new HashSet<Project>();
-    for (Project project : projectService.getAll()) {
-      projects.add(project);
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
     }
-    searchService.reindex(projects);
 
-  }
+    /***********
+     * private
+     **********/
 
-  private void forward(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    if (!response.isCommitted()) {
-      ServletContext context = getServletContext();
-      RequestDispatcher dispatcher = context.getRequestDispatcher(url);
-      dispatcher.forward(request, response);
-    } // else {
-      // do nothing as response is already committed, probably forwarded to error page because of a filter exception
-      // }
-  }
+    private void reindex() {
+        SearchService searchService = Services.getService(SearchService.class);
+        ProjectService projectService = Services.getService(ProjectService.class);
 
-  private void redirect(String url, HttpServletResponse response) throws ServletException, IOException {
-    response.sendRedirect(url);
-  }
+        Set<Project> projects = new HashSet<Project>();
+        for (Project project : projectService.getAll()) {
+            projects.add(project);
+        }
+        searchService.reindex(projects);
+
+    }
+
+    private void forward(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        if (!response.isCommitted()) {
+            ServletContext context = getServletContext();
+            RequestDispatcher dispatcher = context.getRequestDispatcher(url);
+            dispatcher.forward(request, response);
+        } // else {
+          // do nothing as response is already committed, probably forwarded to error page because of a filter exception
+          // }
+    }
+
+    private void redirect(String url, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect(url);
+    }
 
 }
-

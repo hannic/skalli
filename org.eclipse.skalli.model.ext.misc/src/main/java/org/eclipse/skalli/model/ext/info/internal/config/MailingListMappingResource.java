@@ -19,24 +19,23 @@ import org.eclipse.skalli.model.ext.info.MailingListMappingsConfig;
 
 public class MailingListMappingResource extends CustomizingResource<MailingListMappingsConfig> {
 
-  public static final String MAPPINGS_KEY = "info.mailingListMappings"; //$NON-NLS-1$
+    public static final String MAPPINGS_KEY = "info.mailingListMappings"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return MAPPINGS_KEY;
-  };
+    @Override
+    protected String getKey() {
+        return MAPPINGS_KEY;
+    };
 
-  @Override
-  protected Class<MailingListMappingsConfig> getConfigClass() {
-    return MailingListMappingsConfig.class;
-  };
+    @Override
+    protected Class<MailingListMappingsConfig> getConfigClass() {
+        return MailingListMappingsConfig.class;
+    };
 
-  @Override
-  protected List<Class<?>> getAdditionalConfigClasses() {
-    List<Class<?>> ret = new LinkedList<Class<?>>();
-    ret.add(MailingListMappingConfig.class);
-    return ret;
-  }
+    @Override
+    protected List<Class<?>> getAdditionalConfigClasses() {
+        List<Class<?>> ret = new LinkedList<Class<?>>();
+        ret.add(MailingListMappingConfig.class);
+        return ret;
+    }
 
 }
-

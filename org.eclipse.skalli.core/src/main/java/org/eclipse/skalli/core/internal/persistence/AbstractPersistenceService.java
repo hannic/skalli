@@ -21,28 +21,28 @@ import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.ExtensionService;
 
 public abstract class AbstractPersistenceService implements PersistenceService {
-  private static final Logger LOG = Log.getLogger(AbstractPersistenceService.class);
+    private static final Logger LOG = Log.getLogger(AbstractPersistenceService.class);
 
-  private final Set<ExtensionService<?>> extensionServices = new HashSet<ExtensionService<?>>();
-  private final Map<String, ExtensionService<?>> extensionNameRegistry = new HashMap<String, ExtensionService<?>>();
+    private final Set<ExtensionService<?>> extensionServices = new HashSet<ExtensionService<?>>();
+    private final Map<String, ExtensionService<?>> extensionNameRegistry = new HashMap<String, ExtensionService<?>>();
 
-  protected synchronized void bindExtensionService(ExtensionService<?> extensionService) {
-    if (extensionNameRegistry.get(extensionService.getExtensionClass().getName()) != null) {
-      throw new RuntimeException("There is already an extension registered with the following name: " + extensionService.getExtensionClass().getName()); //$NON-NLS-1$
+    protected synchronized void bindExtensionService(ExtensionService<?> extensionService) {
+        if (extensionNameRegistry.get(extensionService.getExtensionClass().getName()) != null) {
+            throw new RuntimeException(
+                    "There is already an extension registered with the following name: " + extensionService.getExtensionClass().getName()); //$NON-NLS-1$
+        }
+        LOG.fine("Registering extension class: " + extensionService.getExtensionClass().getName()); //$NON-NLS-1$
+        extensionNameRegistry.put(extensionService.getExtensionClass().getName(), extensionService);
+        extensionServices.add(extensionService);
     }
-    LOG.fine("Registering extension class: " + extensionService.getExtensionClass().getName()); //$NON-NLS-1$
-    extensionNameRegistry.put(extensionService.getExtensionClass().getName(), extensionService);
-    extensionServices.add(extensionService);
-  }
 
-  protected synchronized void unbindExtensionService(ExtensionService<?> extensionService) {
-    extensionNameRegistry.remove(extensionService.getExtensionClass().getName());
-    extensionServices.remove(extensionService);
-  }
+    protected synchronized void unbindExtensionService(ExtensionService<?> extensionService) {
+        extensionNameRegistry.remove(extensionService.getExtensionClass().getName());
+        extensionServices.remove(extensionService);
+    }
 
-  protected Set<ExtensionService<?>> getExtensionServices() {
-    return extensionServices;
-  }
+    protected Set<ExtensionService<?>> getExtensionServices() {
+        return extensionServices;
+    }
 
 }
-

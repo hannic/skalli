@@ -19,25 +19,23 @@ import org.eclipse.skalli.api.rest.config.ConfigSection;
 import org.eclipse.skalli.log.Log;
 
 public class UserStoreConfigSection implements ConfigSection {
-  private static final Logger LOG = Log.getLogger(UserStoreConfigSection.class);
+    private static final Logger LOG = Log.getLogger(UserStoreConfigSection.class);
 
-  protected void activate(ComponentContext context){
-    LOG.info("UserStoreConfig activated"); //$NON-NLS-1$
-  }
+    protected void activate(ComponentContext context) {
+        LOG.info("UserStoreConfig activated"); //$NON-NLS-1$
+    }
 
-  protected void deactivate(ComponentContext context) {
-  }
+    protected void deactivate(ComponentContext context) {
+    }
 
-  @Override
-  public String getName() {
-    return "userStore"; //$NON-NLS-1$
-  }
+    @Override
+    public String getName() {
+        return "userStore"; //$NON-NLS-1$
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return UserStoreResource.class;
-  }
-
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return UserStoreResource.class;
+    }
 
 }
-

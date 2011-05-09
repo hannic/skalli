@@ -17,8 +17,9 @@ import org.eclipse.skalli.model.ext.Taggable;
 
 public interface TaggingService {
 
-  public Set<String> getAvailableTags();
-  public Set<Taggable> getTaggables(String tag);
-  public Map<String, Set<Taggable>> getTaggables();
-}
+    public Set<String> getAvailableTags();
 
+    public Set<Taggable> getTaggables(String tag);
+
+    public Map<String, Set<Taggable>> getTaggables();
+}

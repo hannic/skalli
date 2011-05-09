@@ -14,17 +14,16 @@ import org.eclipse.skalli.api.rest.config.CustomizingResource;
 
 public class NewsResource extends CustomizingResource<NewsConfig> {
 
-  public static final String KEY = "view.news"; //$NON-NLS-1$
+    public static final String KEY = "view.news"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return KEY;
-  }
+    @Override
+    protected String getKey() {
+        return KEY;
+    }
 
-  @Override
-  protected Class<NewsConfig> getConfigClass() {
-    return NewsConfig.class;
-  }
+    @Override
+    protected Class<NewsConfig> getConfigClass() {
+        return NewsConfig.class;
+    }
 
 }
-

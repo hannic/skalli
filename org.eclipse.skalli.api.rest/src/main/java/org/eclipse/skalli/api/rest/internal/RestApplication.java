@@ -28,38 +28,35 @@ import org.eclipse.skalli.api.rest.internal.resources.UserResource;
 
 public class RestApplication extends Application {
 
-  private final static Set<ConfigSection> configSections = new HashSet<ConfigSection>();
+    private final static Set<ConfigSection> configSections = new HashSet<ConfigSection>();
 
-  @Override
-  public synchronized Restlet createInboundRoot() {
-    Router router = new Router(getContext());
+    @Override
+    public synchronized Restlet createInboundRoot() {
+        Router router = new Router(getContext());
 
-    for (ConfigSection configSection : configSections) {
-      router.attach("/config/" + configSection.getName(), configSection.getServerResource()); //$NON-NLS-1$
+        for (ConfigSection configSection : configSections) {
+            router.attach("/config/" + configSection.getName(), configSection.getServerResource()); //$NON-NLS-1$
+        }
+
+        router.attach("/admin/status", StatusResource.class); //$NON-NLS-1$
+        router.attach("/admin/statistics", StatisticsResource.class); //$NON-NLS-1$
+        router.attach("/admin/backup", ProjectBackupResource.class); //$NON-NLS-1$
+
+        router.attach("/projects", ProjectsResource.class); //$NON-NLS-1$
+        router.attach("/projects/{id}", ProjectResource.class); //$NON-NLS-1$
+        router.attach("/projects/{id}/issues", IssuesResource.class); //$NON-NLS-1$
+
+        router.attach("/user/{id}", UserResource.class); //$NON-NLS-1$
+
+        return router;
     }
 
-    router.attach("/admin/status", StatusResource.class); //$NON-NLS-1$
-    router.attach("/admin/statistics", StatisticsResource.class); //$NON-NLS-1$
-    router.attach("/admin/backup", ProjectBackupResource.class); //$NON-NLS-1$
+    protected void bindConfigSection(ConfigSection configSection) {
+        configSections.add(configSection);
+    }
 
-    router.attach("/projects", ProjectsResource.class); //$NON-NLS-1$
-    router.attach("/projects/{id}", ProjectResource.class); //$NON-NLS-1$
-    router.attach("/projects/{id}/issues", IssuesResource.class);  //$NON-NLS-1$
-
-    router.attach("/user/{id}", UserResource.class); //$NON-NLS-1$
-
-
-    return router;
-  }
-
-
-  protected void bindConfigSection(ConfigSection configSection) {
-    configSections.add(configSection);
-  }
-
-  protected void unbindConfigSection(ConfigSection configSection) {
-    configSections.remove(configSection);
-  }
+    protected void unbindConfigSection(ConfigSection configSection) {
+        configSections.remove(configSection);
+    }
 
 }
-

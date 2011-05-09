@@ -15,22 +15,21 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
-
 class AlwaysTrustX509Manager implements X509TrustManager {
 
-  @Override
-  public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-    // just trust it...
-  }
+    @Override
+    public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+        // just trust it...
+    }
 
-  @Override
-  public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
-    // just trust it...
-  }
+    @Override
+    public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+        // just trust it...
+    }
 
-  @Override
-  public X509Certificate[] getAcceptedIssuers() {
-    return null;
-  }
+    @Override
+    public X509Certificate[] getAcceptedIssuers() {
+        return null;
+    }
 
 }

@@ -16,16 +16,15 @@ import org.eclipse.skalli.model.core.ProjectTemplate;
 
 public interface ExtensionUtil {
 
-  public void persist(Project project);
+    public void persist(Project project);
 
-  public boolean isUserAdmin();
+    public boolean isUserAdmin();
 
-  public boolean isUserProjectAdmin(Project project);
+    public boolean isUserProjectAdmin(Project project);
 
-  public User getLoggedInUser();
+    public User getLoggedInUser();
 
-  public Navigator getNavigator();
+    public Navigator getNavigator();
 
-  public ProjectTemplate getProjectTemplate();
+    public ProjectTemplate getProjectTemplate();
 }
-

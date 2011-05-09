@@ -23,99 +23,104 @@ import org.eclipse.skalli.testutil.TestExtension;
 @SuppressWarnings("nls")
 public class EmailValidatorTest {
 
-  @Test
-  public void testIsValid() throws Exception {
-    EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR, "proj.*");
+    @Test
+    public void testIsValid() throws Exception {
+        EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR,
+                "proj.*");
 
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "Homer@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "Homer@server.springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer.simpson@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer-simpson@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer42@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "Hom.Er._.4-2@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer@[127.0.0.1]"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "_homer@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "-homer@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer+@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer&marge@springfield.org"));
-    Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer!#$%&'*+-/=?^_`{|}~blab.lubb@springfield.org"));
-    Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], ".homer@springfield.org"));
-    Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "ho,mer@springfield.org"));
-    Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer@springfield.x"));
-    Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer°marge@springfield.org"));
-  }
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "Homer@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "Homer@server.springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer.simpson@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer-simpson@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer42@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "Hom.Er._.4-2@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer@[127.0.0.1]"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "_homer@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "-homer@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer+@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer&marge@springfield.org"));
+        Assert.assertTrue(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0],
+                "homer!#$%&'*+-/=?^_`{|}~blab.lubb@springfield.org"));
+        Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], ".homer@springfield.org"));
+        Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "ho,mer@springfield.org"));
+        Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer@springfield.x"));
+        Assert.assertFalse(validator.isValid(PropertyHelperUtils.TEST_UUIDS[0], "homer°marge@springfield.org"));
+    }
 
-  @Test
-  public void testValidate() throws Exception {
-    EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR);
+    @Test
+    public void testValidate() throws Exception {
+        EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR);
 
-    SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], "homer@springfield.org", Severity.FATAL);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(0, issues.size());
+        SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], "homer@springfield.org",
+                Severity.FATAL);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(0, issues.size());
 
-    String value = ".homer@springfield.org";
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(1, issues.size());
-    Assert.assertEquals(validator.getDefaultInvalidMessage(value), issues.first().getMessage());
-    Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], issues.first().getEntityId());
-    Assert.assertEquals(TestExtension.class, issues.first().getExtension());
-    Assert.assertEquals(TestExtension.PROPERTY_STR, issues.first().getPropertyId());
-    Assert.assertEquals(Severity.FATAL, issues.first().getSeverity());
+        String value = ".homer@springfield.org";
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(1, issues.size());
+        Assert.assertEquals(validator.getDefaultInvalidMessage(value), issues.first().getMessage());
+        Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[0], issues.first().getEntityId());
+        Assert.assertEquals(TestExtension.class, issues.first().getExtension());
+        Assert.assertEquals(TestExtension.PROPERTY_STR, issues.first().getPropertyId());
+        Assert.assertEquals(Severity.FATAL, issues.first().getSeverity());
 
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], null, Severity.FATAL);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(0, issues.size());
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], null, Severity.FATAL);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(0, issues.size());
 
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], "", Severity.FATAL);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(0, issues.size());
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], "", Severity.FATAL);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(0, issues.size());
 
-    validator.setValueRequired(true);
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], null, Severity.FATAL);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(1, issues.size());
+        validator.setValueRequired(true);
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], null, Severity.FATAL);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(1, issues.size());
 
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], "", Severity.FATAL);
-    Assert.assertNotNull(issues);
-    Assert.assertEquals(1, issues.size());
-  }
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], "", Severity.FATAL);
+        Assert.assertNotNull(issues);
+        Assert.assertEquals(1, issues.size());
+    }
 
-  @Test
-  public void testInvalidMessages() {
-    String value = ".homer@springfield.org";
+    @Test
+    public void testInvalidMessages() {
+        String value = ".homer@springfield.org";
 
-    EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR, "EMail");
-    SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
-    Assert.assertEquals(validator.getInvalidMessageFromCaption(value), issues.first().getMessage());
+        EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR,
+                "EMail");
+        SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
+        Assert.assertEquals(validator.getInvalidMessageFromCaption(value), issues.first().getMessage());
 
-    validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR, "Invalid EMail", "Undefined EMail");
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
-    Assert.assertEquals("Invalid EMail", issues.first().getMessage());
-  }
+        validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR,
+                "Invalid EMail", "Undefined EMail");
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
+        Assert.assertEquals("Invalid EMail", issues.first().getMessage());
+    }
 
-  @Test
-  public void testUndefinedMessages() throws Exception {
-    assertUndefinedMessages(null);
-    assertUndefinedMessages("");
-  }
+    @Test
+    public void testUndefinedMessages() throws Exception {
+        assertUndefinedMessages(null);
+        assertUndefinedMessages("");
+    }
 
-  private void assertUndefinedMessages(String value) {
-    EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR);
-    validator.setValueRequired(true);
-    SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
-    Assert.assertEquals(validator.getDefaultUndefinedMessage(), issues.first().getMessage());
+    private void assertUndefinedMessages(String value) {
+        EmailValidator validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR);
+        validator.setValueRequired(true);
+        SortedSet<Issue> issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
+        Assert.assertEquals(validator.getDefaultUndefinedMessage(), issues.first().getMessage());
 
-    validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR, "EMail");
-    validator.setValueRequired(true);
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
-    Assert.assertEquals(validator.getUndefinedMessageFromCaption(), issues.first().getMessage());
+        validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR, "EMail");
+        validator.setValueRequired(true);
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
+        Assert.assertEquals(validator.getUndefinedMessageFromCaption(), issues.first().getMessage());
 
-    validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR, "Invalid EMail", "Undefined EMail");
-    validator.setValueRequired(true);
-    issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
-    Assert.assertEquals("Undefined EMail", issues.first().getMessage());
-  }
+        validator = new EmailValidator(Severity.FATAL, TestExtension.class, TestExtension.PROPERTY_STR,
+                "Invalid EMail", "Undefined EMail");
+        validator.setValueRequired(true);
+        issues = validator.validate(PropertyHelperUtils.TEST_UUIDS[0], value, Severity.FATAL);
+        Assert.assertEquals("Undefined EMail", issues.first().getMessage());
+    }
 }
-

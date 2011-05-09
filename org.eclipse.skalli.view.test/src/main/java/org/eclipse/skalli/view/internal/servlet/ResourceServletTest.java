@@ -27,61 +27,60 @@ import org.eclipse.skalli.testutil.BundleManager;
 @SuppressWarnings("nls")
 public class ResourceServletTest {
 
-  @Before
-  public void setup() throws Exception {
-    new BundleManager(this.getClass()).startBundles();
-  }
+    @Before
+    public void setup() throws Exception {
+        new BundleManager(this.getClass()).startBundles();
+    }
 
-  boolean written = false;
+    boolean written = false;
 
-  @Test
-  public void testDoGet() throws Exception {
-    HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
-    HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
-    Object[] mocks = new Object[] {mockRequest, mockResponse};
-    ResourceServlet servlet = new ResourceServlet();
-    reset(mocks);
+    @Test
+    public void testDoGet() throws Exception {
+        HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
+        Object[] mocks = new Object[] { mockRequest, mockResponse };
+        ResourceServlet servlet = new ResourceServlet();
+        reset(mocks);
 
-    mockRequest.getPathInfo();
-    expectLastCall().andReturn("/widgetsets/com.vaadin.terminal.gwt.DefaultWidgetSet/hosted.html");
+        mockRequest.getPathInfo();
+        expectLastCall().andReturn("/widgetsets/com.vaadin.terminal.gwt.DefaultWidgetSet/hosted.html");
 
-    mockResponse.getOutputStream();
-    expectLastCall().andReturn(new ServletOutputStream() {
-      @Override
-      public void write(int b) throws IOException {
-        written = true;
-      }
-    });
+        mockResponse.getOutputStream();
+        expectLastCall().andReturn(new ServletOutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                written = true;
+            }
+        });
 
-    replay(mocks);
+        replay(mocks);
 
-    servlet.doGet(mockRequest, mockResponse);
-    Assert.assertTrue(written);
+        servlet.doGet(mockRequest, mockResponse);
+        Assert.assertTrue(written);
 
-    verify(mocks);
-  }
+        verify(mocks);
+    }
 
-  @Test
-  public void testDoGet_notExisting() throws Exception {
-    HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
-    HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
-    Object[] mocks = new Object[] {mockRequest, mockResponse};
-    ResourceServlet servlet = new ResourceServlet();
+    @Test
+    public void testDoGet_notExisting() throws Exception {
+        HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = createMock(HttpServletResponse.class);
+        Object[] mocks = new Object[] { mockRequest, mockResponse };
+        ResourceServlet servlet = new ResourceServlet();
 
-    reset(mocks);
+        reset(mocks);
 
-    mockRequest.getPathInfo();
-    expectLastCall().andReturn("/widgetsets/com.vaadin.terminal.gwt.DefaultWidgetSet/volllustig.gibtsnich");
+        mockRequest.getPathInfo();
+        expectLastCall().andReturn("/widgetsets/com.vaadin.terminal.gwt.DefaultWidgetSet/volllustig.gibtsnich");
 
-    mockResponse.sendError(eq(404));
-    expectLastCall();
+        mockResponse.sendError(eq(404));
+        expectLastCall();
 
-    replay(mocks);
+        replay(mocks);
 
-    servlet.doGet(mockRequest, mockResponse);
+        servlet.doGet(mockRequest, mockResponse);
 
-    verify(mocks);
-  }
+        verify(mocks);
+    }
 
 }
-

@@ -31,39 +31,38 @@ import org.eclipse.skalli.view.internal.config.TopLinksResource;
 
 public class ConfigFilter implements Filter {
 
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException {
-
-    ConfigurationService confService = Services.getService(ConfigurationService.class);
-    if (confService != null) {
-      FeedbackConfig feedbackConfig = confService
-          .readCustomization(FeedbackResource.FEEDBACK_KEY, FeedbackConfig.class);
-      if (feedbackConfig != null) {
-        request.setAttribute(Consts.ATTRIBUTE_FEEDBACKCONFIG, feedbackConfig);
-      }
-      TopLinksConfig toplinksConfig = confService.readCustomization(TopLinksResource.TOPLINKS_KEY,
-          TopLinksConfig.class);
-      if (toplinksConfig!=null) {
-        request.setAttribute(Consts.ATTRIBUTE_TOPLINKSCONFIG, toplinksConfig);
-      }
-      NewsConfig newsConfig = confService.readCustomization(NewsResource.KEY, NewsConfig.class);
-      if (newsConfig!=null) {
-        request.setAttribute(Consts.ATTRIBUTE_NEWSCONFIG, newsConfig);
-      }
+    @Override
+    public void destroy() {
     }
 
-    // proceed along the chain
-    chain.doFilter(request, response);
-  }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
 
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
+        ConfigurationService confService = Services.getService(ConfigurationService.class);
+        if (confService != null) {
+            FeedbackConfig feedbackConfig = confService
+                    .readCustomization(FeedbackResource.FEEDBACK_KEY, FeedbackConfig.class);
+            if (feedbackConfig != null) {
+                request.setAttribute(Consts.ATTRIBUTE_FEEDBACKCONFIG, feedbackConfig);
+            }
+            TopLinksConfig toplinksConfig = confService.readCustomization(TopLinksResource.TOPLINKS_KEY,
+                    TopLinksConfig.class);
+            if (toplinksConfig != null) {
+                request.setAttribute(Consts.ATTRIBUTE_TOPLINKSCONFIG, toplinksConfig);
+            }
+            NewsConfig newsConfig = confService.readCustomization(NewsResource.KEY, NewsConfig.class);
+            if (newsConfig != null) {
+                request.setAttribute(Consts.ATTRIBUTE_NEWSCONFIG, newsConfig);
+            }
+        }
+
+        // proceed along the chain
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
 
 }
-

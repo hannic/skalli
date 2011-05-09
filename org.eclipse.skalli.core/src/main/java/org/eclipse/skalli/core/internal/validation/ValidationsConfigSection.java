@@ -16,16 +16,15 @@ import org.eclipse.skalli.api.rest.config.ConfigSection;
 
 public class ValidationsConfigSection implements ConfigSection {
 
-  private static final String NAME = "core/validations"; //$NON-NLS-1$
+    private static final String NAME = "core/validations"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return ValidationsResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return ValidationsResource.class;
+    }
 }
-

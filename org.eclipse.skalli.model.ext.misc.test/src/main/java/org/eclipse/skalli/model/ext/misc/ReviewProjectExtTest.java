@@ -21,40 +21,39 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 
 public class ReviewProjectExtTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
 
-    values.put(ReviewProjectExt.PROPERTY_ALLOW_ANONYMOUS, true);
-    values.put(ReviewProjectExt.PROPERTY_RATING_STYLE,ProjectRatingStyle.FIVE_STATES);
+        values.put(ReviewProjectExt.PROPERTY_ALLOW_ANONYMOUS, true);
+        values.put(ReviewProjectExt.PROPERTY_RATING_STYLE, ProjectRatingStyle.FIVE_STATES);
 
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
 
-    PropertyHelper.checkPropertyDefinitions(ReviewProjectExt.class, requiredProperties, values);
-  }
+        PropertyHelper.checkPropertyDefinitions(ReviewProjectExt.class, requiredProperties, values);
+    }
 
-  @Test
-  public void testAddReview() {
-    long timestamp = System.currentTimeMillis();
-    long timestamp1 = System.currentTimeMillis() + 7364L;
-    long timestamp2 = System.currentTimeMillis() + 28454545L;
-    ReviewProjectExt ext = new ReviewProjectExt();
-    ext.setRatingStyle(ProjectRatingStyle.FIVE_STATES);
-    ReviewEntry entry = new ReviewEntry(ProjectRating.FACE_CRYING, "crying", "homer", timestamp);
-    ReviewEntry entry1 = new ReviewEntry(ProjectRating.FACE_PLAIN, "plain", "marge", timestamp1);
-    ReviewEntry entry2 = new ReviewEntry(ProjectRating.FACE_SMILE, "smile", "lise", timestamp2);
-    ext.addReview(entry);
-    ext.addReview(entry1);
-    ext.addReview(entry2);
-    List<ReviewEntry> reviews = ext.getReviews();
-    Assert.assertEquals(entry, reviews.get(0));
-    Assert.assertEquals(entry1, reviews.get(1));
-    Assert.assertEquals(entry2, reviews.get(1));
-    Assert.assertEquals(ProjectRating.FACE_PLAIN, ext.getAverageRating());
-    Assert.assertEquals(3, ext.getNumberVotes());
-    Assert.assertEquals(1, ext.getNumberThumbsUp());
-    Assert.assertEquals(1, ext.getNumberThumbsDown());
-    Assert.assertEquals("33%", ext.getRecommendedRatio());
-  }
+    @Test
+    public void testAddReview() {
+        long timestamp = System.currentTimeMillis();
+        long timestamp1 = System.currentTimeMillis() + 7364L;
+        long timestamp2 = System.currentTimeMillis() + 28454545L;
+        ReviewProjectExt ext = new ReviewProjectExt();
+        ext.setRatingStyle(ProjectRatingStyle.FIVE_STATES);
+        ReviewEntry entry = new ReviewEntry(ProjectRating.FACE_CRYING, "crying", "homer", timestamp);
+        ReviewEntry entry1 = new ReviewEntry(ProjectRating.FACE_PLAIN, "plain", "marge", timestamp1);
+        ReviewEntry entry2 = new ReviewEntry(ProjectRating.FACE_SMILE, "smile", "lise", timestamp2);
+        ext.addReview(entry);
+        ext.addReview(entry1);
+        ext.addReview(entry2);
+        List<ReviewEntry> reviews = ext.getReviews();
+        Assert.assertEquals(entry, reviews.get(0));
+        Assert.assertEquals(entry1, reviews.get(1));
+        Assert.assertEquals(entry2, reviews.get(1));
+        Assert.assertEquals(ProjectRating.FACE_PLAIN, ext.getAverageRating());
+        Assert.assertEquals(3, ext.getNumberVotes());
+        Assert.assertEquals(1, ext.getNumberThumbsUp());
+        Assert.assertEquals(1, ext.getNumberThumbsDown());
+        Assert.assertEquals("33%", ext.getRecommendedRatio());
+    }
 }
-

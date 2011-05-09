@@ -19,13 +19,12 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  */
 public class IgnoreUnknownElementsXStream extends XStream {
 
-  public IgnoreUnknownElementsXStream() {
-  }
+    public IgnoreUnknownElementsXStream() {
+    }
 
-  @Override
-  protected MapperWrapper wrapMapper(MapperWrapper next) {
-    return new MapperWrapperIgnoreUnknownElements(next);
-  }
+    @Override
+    protected MapperWrapper wrapMapper(MapperWrapper next) {
+        return new MapperWrapperIgnoreUnknownElements(next);
+    }
 
 }
-

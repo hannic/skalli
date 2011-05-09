@@ -14,16 +14,15 @@ import org.eclipse.skalli.api.rest.config.CustomizingResource;
 
 public class UserDetailsResource extends CustomizingResource<UserDetailsConfig> {
 
-  public static final String KEY = "view.userdetails"; //$NON-NLS-1$
+    public static final String KEY = "view.userdetails"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return KEY;
-  }
+    @Override
+    protected String getKey() {
+        return KEY;
+    }
 
-  @Override
-  protected Class<UserDetailsConfig> getConfigClass() {
-    return UserDetailsConfig.class;
-  }
+    @Override
+    protected Class<UserDetailsConfig> getConfigClass() {
+        return UserDetailsConfig.class;
+    }
 }
-

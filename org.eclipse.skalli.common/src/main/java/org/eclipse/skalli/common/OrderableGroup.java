@@ -22,92 +22,91 @@ import java.util.Vector;
  */
 public class OrderableGroup<T> implements Serializable {
 
-  private static final long serialVersionUID = 1616532142447649094L;
+    private static final long serialVersionUID = 1616532142447649094L;
 
-  private Vector<T> items;
+    private Vector<T> items;
 
-  public OrderableGroup() {
-    items = new Vector<T>();
-  }
-
-  public OrderableGroup(Collection<T> items) {
-    this.items = new Vector<T>(items);
-  }
-
-  public Collection<T> getItems() {
-    if (items == null) {
-      items = new Vector<T>();
-    }
-    return items;
-  }
-
-  public boolean add(T item) {
-    if (items.contains(item)) {
-      return false;
+    public OrderableGroup() {
+        items = new Vector<T>();
     }
 
-    return items.add(item);
-  }
-
-  public boolean remove(T item) {
-    return items.remove(item);
-  }
-
-  public boolean hasItem(T item) {
-    return items.contains(item);
-  }
-
-  public boolean moveUp(T item) {
-    int oldIndex = items.indexOf(item);
-    if (oldIndex <= 0) {
-      return false;
+    public OrderableGroup(Collection<T> items) {
+        this.items = new Vector<T>(items);
     }
 
-    items.remove(item);
-    items.insertElementAt(item, oldIndex-1);
-    return true;
-  }
-
-  public boolean moveDown(T item) {
-    int oldIndex = items.indexOf(item);
-    if (oldIndex == -1 || oldIndex == items.size()-1) {
-      return false;
+    public Collection<T> getItems() {
+        if (items == null) {
+            items = new Vector<T>();
+        }
+        return items;
     }
 
-    items.remove(item);
-    items.insertElementAt(item, oldIndex+1);
-    return true;
-  }
+    public boolean add(T item) {
+        if (items.contains(item)) {
+            return false;
+        }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((items == null) ? 0 : items.hashCode());
-    return result;
-  }
+        return items.add(item);
+    }
 
-  @Override
-  @SuppressWarnings("rawtypes")
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    public boolean remove(T item) {
+        return items.remove(item);
     }
-    if (obj == null) {
-      return false;
+
+    public boolean hasItem(T item) {
+        return items.contains(item);
     }
-    if (getClass() != obj.getClass()) {
-      return false;
+
+    public boolean moveUp(T item) {
+        int oldIndex = items.indexOf(item);
+        if (oldIndex <= 0) {
+            return false;
+        }
+
+        items.remove(item);
+        items.insertElementAt(item, oldIndex - 1);
+        return true;
     }
-    OrderableGroup other = (OrderableGroup) obj;
-    if (items == null) {
-      if (other.items != null) {
-        return false;
-      }
-    } else if (!items.equals(other.items)) {
-      return false;
+
+    public boolean moveDown(T item) {
+        int oldIndex = items.indexOf(item);
+        if (oldIndex == -1 || oldIndex == items.size() - 1) {
+            return false;
+        }
+
+        items.remove(item);
+        items.insertElementAt(item, oldIndex + 1);
+        return true;
     }
-    return true;
-  }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((items == null) ? 0 : items.hashCode());
+        return result;
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        OrderableGroup other = (OrderableGroup) obj;
+        if (items == null) {
+            if (other.items != null) {
+                return false;
+            }
+        } else if (!items.equals(other.items)) {
+            return false;
+        }
+        return true;
+    }
 }
-

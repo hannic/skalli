@@ -26,76 +26,75 @@ import org.eclipse.skalli.model.ext.linkgroups.LinkGroupValidator;
 import org.eclipse.skalli.model.ext.linkgroups.LinkGroupsProjectExt;
 
 public class ExtensionServiceLinkGroups
-    extends ExtensionServiceBase<LinkGroupsProjectExt>
-    implements ExtensionService<LinkGroupsProjectExt>
+        extends ExtensionServiceBase<LinkGroupsProjectExt>
+        implements ExtensionService<LinkGroupsProjectExt>
 {
 
-  private static final Logger LOG = Log.getLogger(ExtensionServiceLinkGroups.class);
+    private static final Logger LOG = Log.getLogger(ExtensionServiceLinkGroups.class);
 
-  private static final String CAPTION = "Additional Links";
-  private static final String DESCRIPTION = "Information related to the project that is maintained elsewhere and linkable.";
+    private static final String CAPTION = "Additional Links";
+    private static final String DESCRIPTION = "Information related to the project that is maintained elsewhere and linkable.";
 
-  @Override
-  public Class<LinkGroupsProjectExt> getExtensionClass() {
-    return LinkGroupsProjectExt.class;
-  }
-
-  protected void activate(ComponentContext context){
-    LOG.info("activated model extension: " + getShortName()); //$NON-NLS-1$
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info("deactivated model extension: " + getShortName()); //$NON-NLS-1$
-  }
-
-  @Override
-  public String getShortName() {
-    return "linkGroups"; //$NON-NLS-1$
-  }
-
-  @Override
-  public String getCaption() {
-    return CAPTION;
-  }
-
-  @Override
-  public String getDescription() {
-    return DESCRIPTION;
-  }
-
-  @Override
-  public AliasedConverter getConverter(String host) {
-    return new LinkGroupsConverter(host);
-  }
-
-  @Override
-  public String getModelVersion() {
-    return LinkGroupsProjectExt.MODEL_VERSION;
-  }
-
-  @Override
-  public String getNamespace() {
-    return LinkGroupsProjectExt.NAMESPACE;
-  }
-
-  @Override
-  public String getXsdFileName() {
-    return "linksgroups.xsd"; //$NON-NLS-1$
-  }
-
-  @Override
-  public AbstractIndexer<LinkGroupsProjectExt> getIndexer() {
-    return new LinkGroupsIndexer();
-  }
-
-  @Override
-  public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
-    caption = getCaption(propertyName, caption);
-    Set<PropertyValidator> validators = new HashSet<PropertyValidator>();
-    if (LinkGroupsProjectExt.PROPERTY_LINKGROUPS.equals(propertyName)) {
-      validators.add(new LinkGroupValidator(getExtensionClass(), propertyName));
+    @Override
+    public Class<LinkGroupsProjectExt> getExtensionClass() {
+        return LinkGroupsProjectExt.class;
     }
-    return validators;
-  }
-}
 
+    protected void activate(ComponentContext context) {
+        LOG.info("activated model extension: " + getShortName()); //$NON-NLS-1$
+    }
+
+    protected void deactivate(ComponentContext context) {
+        LOG.info("deactivated model extension: " + getShortName()); //$NON-NLS-1$
+    }
+
+    @Override
+    public String getShortName() {
+        return "linkGroups"; //$NON-NLS-1$
+    }
+
+    @Override
+    public String getCaption() {
+        return CAPTION;
+    }
+
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
+    }
+
+    @Override
+    public AliasedConverter getConverter(String host) {
+        return new LinkGroupsConverter(host);
+    }
+
+    @Override
+    public String getModelVersion() {
+        return LinkGroupsProjectExt.MODEL_VERSION;
+    }
+
+    @Override
+    public String getNamespace() {
+        return LinkGroupsProjectExt.NAMESPACE;
+    }
+
+    @Override
+    public String getXsdFileName() {
+        return "linksgroups.xsd"; //$NON-NLS-1$
+    }
+
+    @Override
+    public AbstractIndexer<LinkGroupsProjectExt> getIndexer() {
+        return new LinkGroupsIndexer();
+    }
+
+    @Override
+    public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
+        caption = getCaption(propertyName, caption);
+        Set<PropertyValidator> validators = new HashSet<PropertyValidator>();
+        if (LinkGroupsProjectExt.PROPERTY_LINKGROUPS.equals(propertyName)) {
+            validators.add(new LinkGroupValidator(getExtensionClass(), propertyName));
+        }
+        return validators;
+    }
+}

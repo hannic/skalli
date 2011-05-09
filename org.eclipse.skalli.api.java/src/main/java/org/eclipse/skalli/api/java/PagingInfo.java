@@ -12,22 +12,21 @@ package org.eclipse.skalli.api.java;
 
 public class PagingInfo {
 
-  private final int start;
-  private final int count;
+    private final int start;
+    private final int count;
 
-  public PagingInfo(int start, int count) {
-    super();
-    this.start = start;
-    this.count = count;
-  }
+    public PagingInfo(int start, int count) {
+        super();
+        this.start = start;
+        this.count = count;
+    }
 
-  public int getStart() {
-    return start;
-  }
+    public int getStart() {
+        return start;
+    }
 
-  public int getCount() {
-    return count;
-  }
+    public int getCount() {
+        return count;
+    }
 
 }
-

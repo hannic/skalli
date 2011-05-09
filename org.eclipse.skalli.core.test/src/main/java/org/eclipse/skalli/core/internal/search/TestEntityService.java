@@ -21,49 +21,48 @@ import org.eclipse.skalli.model.ext.Severity;
 
 public class TestEntityService implements EntityService<TestEntity> {
 
-  private final List<TestEntity> entities;
+    private final List<TestEntity> entities;
 
-  public TestEntityService(List<TestEntity> entities) {
-    this.entities = entities;
-  }
-
-  @Override
-  public TestEntity getByUUID(UUID uuid) {
-    for (TestEntity entity : entities) {
-      if (entity.getUuid().equals(uuid)) {
-        return entity;
-      }
+    public TestEntityService(List<TestEntity> entities) {
+        this.entities = entities;
     }
-    return null;
-  }
 
-  @Override
-  public List<TestEntity> getAll() {
-    return entities;
-  }
+    @Override
+    public TestEntity getByUUID(UUID uuid) {
+        for (TestEntity entity : entities) {
+            if (entity.getUuid().equals(uuid)) {
+                return entity;
+            }
+        }
+        return null;
+    }
 
-  @Override
-  public void persist(TestEntity entity, String userId) {
-  }
+    @Override
+    public List<TestEntity> getAll() {
+        return entities;
+    }
 
-  @Override
-  public TestEntity loadEntity(Class<TestEntity> entityClass, UUID uuid) {
-    return null;
-  }
+    @Override
+    public void persist(TestEntity entity, String userId) {
+    }
 
-  @Override
-  public SortedSet<Issue> validate(TestEntity entity, Severity minSeverity) {
-    return new TreeSet<Issue>();
-  }
+    @Override
+    public TestEntity loadEntity(Class<TestEntity> entityClass, UUID uuid) {
+        return null;
+    }
 
-  @Override
-  public SortedSet<Issue> validateAll(Severity minSeverity) {
-    return new TreeSet<Issue>();
-  }
+    @Override
+    public SortedSet<Issue> validate(TestEntity entity, Severity minSeverity) {
+        return new TreeSet<Issue>();
+    }
 
-  @Override
-  public Class<TestEntity> getEntityClass() {
-    return TestEntity.class;
-  }
+    @Override
+    public SortedSet<Issue> validateAll(Severity minSeverity) {
+        return new TreeSet<Issue>();
+    }
+
+    @Override
+    public Class<TestEntity> getEntityClass() {
+        return TestEntity.class;
+    }
 }
-

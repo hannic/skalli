@@ -23,101 +23,100 @@ import org.eclipse.skalli.model.ext.DataMigration;
 
 public class DataMigratorTest {
 
-  private DataMigration mock1;
-  private DataMigration mock2;
-  private Document mockDoc;
-  private Object[] mocks;
-  private Set<DataMigration> migrations;
-  private Element mockRoot;
+    private DataMigration mock1;
+    private DataMigration mock2;
+    private Document mockDoc;
+    private Object[] mocks;
+    private Set<DataMigration> migrations;
+    private Element mockRoot;
 
-  @Before
-  public void setup() {
-    mock1 = EasyMock.createMock(DataMigration.class);
-    mock2 = EasyMock.createMock(DataMigration.class);
-    mockDoc = EasyMock.createMock(Document.class);
-    mockRoot = EasyMock.createMock(Element.class);
-    mocks = new Object[] {mock1, mock2, mockDoc, mockRoot};
+    @Before
+    public void setup() {
+        mock1 = EasyMock.createMock(DataMigration.class);
+        mock2 = EasyMock.createMock(DataMigration.class);
+        mockDoc = EasyMock.createMock(Document.class);
+        mockRoot = EasyMock.createMock(Element.class);
+        mocks = new Object[] { mock1, mock2, mockDoc, mockRoot };
 
-    migrations = new HashSet<DataMigration>();
-    migrations.add(mock1);
-    migrations.add(mock2);
+        migrations = new HashSet<DataMigration>();
+        migrations.add(mock1);
+        migrations.add(mock2);
 
-    EasyMock.reset(mocks);
+        EasyMock.reset(mocks);
 
-    mock1.getFromVersion();
-    EasyMock.expectLastCall().andReturn(1).anyTimes();
-    mock2.getFromVersion();
-    EasyMock.expectLastCall().andReturn(2).anyTimes();
+        mock1.getFromVersion();
+        EasyMock.expectLastCall().andReturn(1).anyTimes();
+        mock2.getFromVersion();
+        EasyMock.expectLastCall().andReturn(2).anyTimes();
 
-    mock1.handlesType(EasyMock.eq("mock"));
-    EasyMock.expectLastCall().andReturn(true).anyTimes();
-    mock2.handlesType(EasyMock.eq("mock"));
-    EasyMock.expectLastCall().andReturn(true).anyTimes();
+        mock1.handlesType(EasyMock.eq("mock"));
+        EasyMock.expectLastCall().andReturn(true).anyTimes();
+        mock2.handlesType(EasyMock.eq("mock"));
+        EasyMock.expectLastCall().andReturn(true).anyTimes();
 
-    mock1.compareTo(EasyMock.isA(DataMigration.class));
-    EasyMock.expectLastCall().andReturn(-1).anyTimes();
-    mock2.compareTo(EasyMock.isA(DataMigration.class));
-    EasyMock.expectLastCall().andReturn(1).anyTimes();
+        mock1.compareTo(EasyMock.isA(DataMigration.class));
+        EasyMock.expectLastCall().andReturn(-1).anyTimes();
+        mock2.compareTo(EasyMock.isA(DataMigration.class));
+        EasyMock.expectLastCall().andReturn(1).anyTimes();
 
-    mockDoc.getDocumentElement();
-    EasyMock.expectLastCall().andReturn(mockRoot).anyTimes();
+        mockDoc.getDocumentElement();
+        EasyMock.expectLastCall().andReturn(mockRoot).anyTimes();
 
-    mockRoot.getNodeName();
-    EasyMock.expectLastCall().andReturn("mock").anyTimes();
-  }
+        mockRoot.getNodeName();
+        EasyMock.expectLastCall().andReturn("mock").anyTimes();
+    }
 
-  @Test
-  public void testMigrate() throws Exception {
-    mock1.migrate(EasyMock.isA(Document.class));
-    mock2.migrate(EasyMock.isA(Document.class));
+    @Test
+    public void testMigrate() throws Exception {
+        mock1.migrate(EasyMock.isA(Document.class));
+        mock2.migrate(EasyMock.isA(Document.class));
 
-    EasyMock.replay(mocks);
+        EasyMock.replay(mocks);
 
-    DataMigrator migrator = new DataMigrator(migrations);
-    migrator.migrate(mockDoc, 0, 3, "mock");
+        DataMigrator migrator = new DataMigrator(migrations);
+        migrator.migrate(mockDoc, 0, 3, "mock");
 
-    EasyMock.verify(mocks);
-  }
+        EasyMock.verify(mocks);
+    }
 
-  @Test
-  public void testMigrate_onlyPart() throws Exception {
-    mock1.migrate(EasyMock.isA(Document.class));
+    @Test
+    public void testMigrate_onlyPart() throws Exception {
+        mock1.migrate(EasyMock.isA(Document.class));
 
-    EasyMock.replay(mocks);
+        EasyMock.replay(mocks);
 
-    DataMigrator migrator = new DataMigrator(migrations);
-    migrator.migrate(mockDoc, 0, 2, "mock");
+        DataMigrator migrator = new DataMigrator(migrations);
+        migrator.migrate(mockDoc, 0, 2, "mock");
 
-    EasyMock.verify(mocks);
-  }
+        EasyMock.verify(mocks);
+    }
 
-  @Test
-  public void testMigrate_onlyLast() throws Exception {
-    mock2.migrate(EasyMock.isA(Document.class));
+    @Test
+    public void testMigrate_onlyLast() throws Exception {
+        mock2.migrate(EasyMock.isA(Document.class));
 
-    EasyMock.replay(mocks);
+        EasyMock.replay(mocks);
 
-    DataMigrator migrator = new DataMigrator(migrations);
-    migrator.migrate(mockDoc, 2, 3, "mock");
+        DataMigrator migrator = new DataMigrator(migrations);
+        migrator.migrate(mockDoc, 2, 3, "mock");
 
-    EasyMock.verify(mocks);
-  }
+        EasyMock.verify(mocks);
+    }
 
-  @Test
-  public void testMigrate_nothingToDo() throws Exception {
-    EasyMock.replay(mocks);
+    @Test
+    public void testMigrate_nothingToDo() throws Exception {
+        EasyMock.replay(mocks);
 
-    DataMigrator migrator = new DataMigrator(migrations);
-    migrator.migrate(mockDoc, 2, 2, "mock");
+        DataMigrator migrator = new DataMigrator(migrations);
+        migrator.migrate(mockDoc, 2, 2, "mock");
 
-    EasyMock.verify(mocks);
-  }
+        EasyMock.verify(mocks);
+    }
 
-  @Test
-  public void testMigrate_noMigrations() throws Exception {
-    DataMigrator migrator = new DataMigrator(null);
-    migrator.migrate(mockDoc, 2, 2, "mock");
-  }
+    @Test
+    public void testMigrate_noMigrations() throws Exception {
+        DataMigrator migrator = new DataMigrator(null);
+        migrator.migrate(mockDoc, 2, 2, "mock");
+    }
 
 }
-

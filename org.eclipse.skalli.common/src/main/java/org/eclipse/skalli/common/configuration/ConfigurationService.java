@@ -12,48 +12,52 @@ package org.eclipse.skalli.common.configuration;
 
 import java.io.File;
 
-
 public interface ConfigurationService {
 
-  public String readString(ConfigKey key);
-  public void writeString(ConfigTransaction tx, ConfigKey key, String value);
+    public String readString(ConfigKey key);
 
-  public Integer readInteger(ConfigKey key);
-  public void writeInteger(ConfigTransaction tx, ConfigKey key, Integer value);
+    public void writeString(ConfigTransaction tx, ConfigKey key, String value);
 
-  public Boolean readBoolean(ConfigKey key);
-  public void writeBoolean(ConfigTransaction tx, ConfigKey key, Boolean value);
+    public Integer readInteger(ConfigKey key);
 
-  public ConfigTransaction startTransaction();
-  public void commit(ConfigTransaction tx);
-  public void rollback(ConfigTransaction tx);
+    public void writeInteger(ConfigTransaction tx, ConfigKey key, Integer value);
 
-  public <T> T readCustomization(String customizationKey, Class<T> customizationClass);
+    public Boolean readBoolean(ConfigKey key);
 
-  /**
-   * Stores a customization object with the given key.
-   *
-   * <p>
-   * In contrast to configurations that are typically technical oriented parameters (passwords, systems),
-   * customizations are more related to controlling the behavior of the system.
-   * </p>
-   * <p>
-   * Please note that customizations will not be encrypted,
-   * so storing passwords and other secrets should be done as configurations.
-   * </p>
-   *
-   * @param <T>
-   * @param customizationKey
-   * @param customization
-   */
-  public <T> void writeCustomization(String customizationKey, T customization);
+    public void writeBoolean(ConfigTransaction tx, ConfigKey key, Boolean value);
 
-  /**
-   * Constructs a {@link File} object for the given path/filename relative to the working directory.
-   *
-   * @param filename name (and relative path)
-   * @return
-   */
-  public File getWorkdirFile(String filename);
+    public ConfigTransaction startTransaction();
+
+    public void commit(ConfigTransaction tx);
+
+    public void rollback(ConfigTransaction tx);
+
+    public <T> T readCustomization(String customizationKey, Class<T> customizationClass);
+
+    /**
+     * Stores a customization object with the given key.
+     *
+     * <p>
+     * In contrast to configurations that are typically technical oriented parameters (passwords, systems),
+     * customizations are more related to controlling the behavior of the system.
+     * </p>
+     * <p>
+     * Please note that customizations will not be encrypted,
+     * so storing passwords and other secrets should be done as configurations.
+     * </p>
+     *
+     * @param <T>
+     * @param customizationKey
+     * @param customization
+     */
+    public <T> void writeCustomization(String customizationKey, T customization);
+
+    /**
+     * Constructs a {@link File} object for the given path/filename relative to the working directory.
+     *
+     * @param filename name (and relative path)
+     * @return
+     */
+    public File getWorkdirFile(String filename);
 
 }

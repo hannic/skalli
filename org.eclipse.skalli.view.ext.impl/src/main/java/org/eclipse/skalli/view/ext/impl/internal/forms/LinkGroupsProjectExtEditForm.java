@@ -23,57 +23,56 @@ import com.vaadin.ui.FormFieldFactory;
 
 public class LinkGroupsProjectExtEditForm extends AbstractExtensionFormService<LinkGroupsProjectExt> {
 
-  @Override
-  public String getIconPath() {
-    return "res/icons/link.png"; //$NON-NLS-1$
-  }
-
-  @Override
-  public float getRank() {
-    return 1.2f;
-  }
-
-  @Override
-  public Class<LinkGroupsProjectExt> getExtensionClass() {
-    return LinkGroupsProjectExt.class;
-  }
-
-  @Override
-  public LinkGroupsProjectExt newExtensionInstance() {
-    return new LinkGroupsProjectExt();
-  }
-
-  @Override
-  protected Item getItemDataSource(Project project) {
-    return new BeanItem<LinkGroupsProjectExt>(getExtension(project));
-  }
-
-  @Override
-  protected FormFieldFactory getFieldFactory(Project project, ProjectEditContext context) {
-    return new FieldFactory(project, context);
-  }
-
-  private class FieldFactory extends DefaultProjectFieldFactory<LinkGroupsProjectExt> {
-    private static final long serialVersionUID = 1997123634123666226L;
-    private LinkGroupsProjectExt extension;
-
-    public FieldFactory(Project project, ProjectEditContext context) {
-      super(project, LinkGroupsProjectExt.class, context);
-      this.extension = getExtension(project);
+    @Override
+    public String getIconPath() {
+        return "res/icons/link.png"; //$NON-NLS-1$
     }
 
     @Override
-    protected Field createField(Object propertyId, String caption) {
-      Field field = null;
-      if (LinkGroupsProjectExt.PROPERTY_LINKGROUPS.equals(propertyId)) {
-        field = new MultiLinkField(caption, extension.getLinkGroups());
-      }
-      return field;
+    public float getRank() {
+        return 1.2f;
     }
 
     @Override
-    protected void initializeField(Object propertyId, Field field) {
+    public Class<LinkGroupsProjectExt> getExtensionClass() {
+        return LinkGroupsProjectExt.class;
     }
-  }
+
+    @Override
+    public LinkGroupsProjectExt newExtensionInstance() {
+        return new LinkGroupsProjectExt();
+    }
+
+    @Override
+    protected Item getItemDataSource(Project project) {
+        return new BeanItem<LinkGroupsProjectExt>(getExtension(project));
+    }
+
+    @Override
+    protected FormFieldFactory getFieldFactory(Project project, ProjectEditContext context) {
+        return new FieldFactory(project, context);
+    }
+
+    private class FieldFactory extends DefaultProjectFieldFactory<LinkGroupsProjectExt> {
+        private static final long serialVersionUID = 1997123634123666226L;
+        private LinkGroupsProjectExt extension;
+
+        public FieldFactory(Project project, ProjectEditContext context) {
+            super(project, LinkGroupsProjectExt.class, context);
+            this.extension = getExtension(project);
+        }
+
+        @Override
+        protected Field createField(Object propertyId, String caption) {
+            Field field = null;
+            if (LinkGroupsProjectExt.PROPERTY_LINKGROUPS.equals(propertyId)) {
+                field = new MultiLinkField(caption, extension.getLinkGroups());
+            }
+            return field;
+        }
+
+        @Override
+        protected void initializeField(Object propertyId, Field field) {
+        }
+    }
 }
-

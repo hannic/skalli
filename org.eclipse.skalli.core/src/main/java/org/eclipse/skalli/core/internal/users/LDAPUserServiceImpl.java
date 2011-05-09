@@ -39,115 +39,114 @@ import org.eclipse.skalli.log.Log;
  */
 public class LDAPUserServiceImpl implements UserService, EventListener<EventConfigUpdate> {
 
-  private static final Logger LOG = Log.getLogger(LDAPUserServiceImpl.class);
-  private final Cache<String, User> cache = new GroundhogCache<String, User>(2000);
-  private EventService eventService;
+    private static final Logger LOG = Log.getLogger(LDAPUserServiceImpl.class);
+    private final Cache<String, User> cache = new GroundhogCache<String, User>(2000);
+    private EventService eventService;
 
-  protected void activate(ComponentContext context) {
-    eventService.registerListener(EventConfigUpdate.class, this);
-    LOG.info("LDAP User Service activated");
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info("LDAP User Service deactivated");
-  }
-
-  protected void bindEventService(EventService eventService) {
-    this.eventService = eventService;
-  }
-
-  protected void unbindEventService(EventService eventService) {
-    this.eventService = null;
-  }
-
-  private LDAPClient getLDAPClient() {
-    String password = null;
-    String username = null;
-    String hostname = null;
-    String factory = null;
-    String usersGroup = null;
-    ConfigurationService configService = Services.getService(ConfigurationService.class);
-    if (configService != null) {
-      password = configService.readString(ConfigKeyLDAP.PASSWORD);
-      username = configService.readString(ConfigKeyLDAP.USERNAME);
-      hostname = configService.readString(ConfigKeyLDAP.HOSTNAME);
-      factory = configService.readString(ConfigKeyLDAP.FACTORY);
-      usersGroup = configService.readString(ConfigKeyLDAP.USERS_GROUP);
-    } else {
-      LOG.warning("Failed to read LDAP configuration - no instance of "
-          + ConfigurationService.class.getName() + "available. Either provide a suitable "
-          + "configuration service or switch to another user service, for example Local User Service.");
+    protected void activate(ComponentContext context) {
+        eventService.registerListener(EventConfigUpdate.class, this);
+        LOG.info("LDAP User Service activated");
     }
-    LDAPClient ldapClient = new LDAPClient(factory, hostname, username, password, usersGroup);
-    return ldapClient;
-  }
 
-  @Override
-  public synchronized List<User> findUser(String searchText) {
-    // get from server
-    LDAPClient ldap = getLDAPClient();
-    List<User> users = ldap.searchUserByName(searchText);
-    for (User user : users) {
-      if (user != null) {
-        cache.put(StringUtils.lowerCase(user.getUserId()), user);
-      }
+    protected void deactivate(ComponentContext context) {
+        LOG.info("LDAP User Service deactivated");
     }
-    return users;
-  }
 
-  @Override
-  public synchronized User getUserById(String userId) {
-    // look in cache
-    String lowerUserId = StringUtils.lowerCase(userId);
-    User user = cache.get(StringUtils.lowerCase(lowerUserId));
-    if (user == null) {
-      // get from server
-      LDAPClient ldap = getLDAPClient();
-      user = ldap.searchUserById(userId);
-      if (user != null) {
-        cache.put(StringUtils.lowerCase(user.getUserId()), user);
-      }
+    protected void bindEventService(EventService eventService) {
+        this.eventService = eventService;
     }
-    return user;
-  }
 
-  @Override
-  public synchronized List<User> getUsers() {
-    return new LinkedList<User>(cache.getAll());
-  }
-
-  @Override
-  public Set<User> getUsersById(Set<String> userIds) {
-    Set<User> users = new HashSet<User>(userIds.size());
-    Set<String> userIdsToSearch = new HashSet<String>(0);
-
-    // look in cache
-    for (String userId : userIds) {
-      User user = cache.get(StringUtils.lowerCase(userId));
-      if (user != null) {
-        users.add(user);
-      } else {
-        userIdsToSearch.add(userId);
-      }
+    protected void unbindEventService(EventService eventService) {
+        this.eventService = null;
     }
-    // search unknown in ldap
-    if (userIdsToSearch.size() > 0) {
-      LDAPClient ldap = getLDAPClient();
-      Set<User> ldapUsers = ldap.searchUsersByIds(userIdsToSearch);
-      for (User user : ldapUsers) {
-        if (user != null) {
-          cache.put(StringUtils.lowerCase(user.getUserId()), user);
-          users.add(user);
+
+    private LDAPClient getLDAPClient() {
+        String password = null;
+        String username = null;
+        String hostname = null;
+        String factory = null;
+        String usersGroup = null;
+        ConfigurationService configService = Services.getService(ConfigurationService.class);
+        if (configService != null) {
+            password = configService.readString(ConfigKeyLDAP.PASSWORD);
+            username = configService.readString(ConfigKeyLDAP.USERNAME);
+            hostname = configService.readString(ConfigKeyLDAP.HOSTNAME);
+            factory = configService.readString(ConfigKeyLDAP.FACTORY);
+            usersGroup = configService.readString(ConfigKeyLDAP.USERS_GROUP);
+        } else {
+            LOG.warning("Failed to read LDAP configuration - no instance of "
+                    + ConfigurationService.class.getName() + "available. Either provide a suitable "
+                    + "configuration service or switch to another user service, for example Local User Service.");
         }
-      }
+        LDAPClient ldapClient = new LDAPClient(factory, hostname, username, password, usersGroup);
+        return ldapClient;
     }
-    return users;
-  }
 
-  @Override
-  public synchronized void onEvent(EventConfigUpdate event) {
-    cache.clear();
-  }
+    @Override
+    public synchronized List<User> findUser(String searchText) {
+        // get from server
+        LDAPClient ldap = getLDAPClient();
+        List<User> users = ldap.searchUserByName(searchText);
+        for (User user : users) {
+            if (user != null) {
+                cache.put(StringUtils.lowerCase(user.getUserId()), user);
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public synchronized User getUserById(String userId) {
+        // look in cache
+        String lowerUserId = StringUtils.lowerCase(userId);
+        User user = cache.get(StringUtils.lowerCase(lowerUserId));
+        if (user == null) {
+            // get from server
+            LDAPClient ldap = getLDAPClient();
+            user = ldap.searchUserById(userId);
+            if (user != null) {
+                cache.put(StringUtils.lowerCase(user.getUserId()), user);
+            }
+        }
+        return user;
+    }
+
+    @Override
+    public synchronized List<User> getUsers() {
+        return new LinkedList<User>(cache.getAll());
+    }
+
+    @Override
+    public Set<User> getUsersById(Set<String> userIds) {
+        Set<User> users = new HashSet<User>(userIds.size());
+        Set<String> userIdsToSearch = new HashSet<String>(0);
+
+        // look in cache
+        for (String userId : userIds) {
+            User user = cache.get(StringUtils.lowerCase(userId));
+            if (user != null) {
+                users.add(user);
+            } else {
+                userIdsToSearch.add(userId);
+            }
+        }
+        // search unknown in ldap
+        if (userIdsToSearch.size() > 0) {
+            LDAPClient ldap = getLDAPClient();
+            Set<User> ldapUsers = ldap.searchUsersByIds(userIdsToSearch);
+            for (User user : ldapUsers) {
+                if (user != null) {
+                    cache.put(StringUtils.lowerCase(user.getUserId()), user);
+                    users.add(user);
+                }
+            }
+        }
+        return users;
+    }
+
+    @Override
+    public synchronized void onEvent(EventConfigUpdate event) {
+        cache.clear();
+    }
 
 }
-

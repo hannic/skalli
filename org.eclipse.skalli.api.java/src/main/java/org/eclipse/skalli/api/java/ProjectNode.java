@@ -19,22 +19,21 @@ import org.eclipse.skalli.model.core.Project;
  */
 public interface ProjectNode {
 
-  /**
-   * Returns a sorted list of child nodes. The hierarchy is sorted all
-   * by the same comparator that is passed to project service
-   * (see {@link org.eclipse.skalli.api.java.ProjectService#getProjectNode(java.util.UUID, java.util.Comparator)}
-   *  and {@link org.eclipse.skalli.api.java.ProjectService#getRootProjectNodes(java.util.Comparator)}).
-   *
-   * @return sorted list of child nodes
-   */
-  public List<ProjectNode> getSubProjects();
+    /**
+     * Returns a sorted list of child nodes. The hierarchy is sorted all
+     * by the same comparator that is passed to project service
+     * (see {@link org.eclipse.skalli.api.java.ProjectService#getProjectNode(java.util.UUID, java.util.Comparator)}
+     *  and {@link org.eclipse.skalli.api.java.ProjectService#getRootProjectNodes(java.util.Comparator)}).
+     *
+     * @return sorted list of child nodes
+     */
+    public List<ProjectNode> getSubProjects();
 
-  /**
-   * Returns the project instance this node points to in the hierarchy.
-   *
-   * @return project instance
-   */
-  public Project getProject();
+    /**
+     * Returns the project instance this node points to in the hierarchy.
+     *
+     * @return project instance
+     */
+    public Project getProject();
 
 }
-

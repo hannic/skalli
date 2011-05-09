@@ -13,9 +13,8 @@ package org.eclipse.skalli.api.rest.config;
 import org.restlet.resource.ServerResource;
 
 public interface ConfigSection {
-  public String getName();
-  public Class<? extends ServerResource> getServerResource();
+    public String getName();
 
+    public Class<? extends ServerResource> getServerResource();
 
 }
-

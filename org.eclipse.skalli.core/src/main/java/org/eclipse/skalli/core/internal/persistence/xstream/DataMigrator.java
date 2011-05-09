@@ -24,37 +24,35 @@ import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.ValidationException;
 
 public class DataMigrator {
-  private static final Logger LOG = Log.getLogger(DataMigrator.class);
+    private static final Logger LOG = Log.getLogger(DataMigrator.class);
 
-  private final List<DataMigration> migrations;
+    private final List<DataMigration> migrations;
 
-
-  public DataMigrator(Set<DataMigration> migrations) {
-    if (migrations != null) {
-      this.migrations = new ArrayList<DataMigration>(migrations);
-      Collections.sort(this.migrations);
-    } else {
-      this.migrations = null;
-    }
-  }
-
-  public void migrate(Document doc, int fromVersion, int toVersion, String fileName) throws ValidationException {
-    if (migrations == null) {
-      return;
-    }
-    if (fromVersion >= toVersion) {
-      return;
-    }
-    String docType = doc.getDocumentElement().getNodeName();
-    for (int i = fromVersion; i < toVersion; i++) {
-      for (DataMigration migration : migrations) {
-        if (migration.getFromVersion() == i && migration.handlesType(docType)) {
-          LOG.info(MessageFormat.format("Migrating {0} with {1}", fileName, migration.getClass().getName()));
-          migration.migrate(doc);
+    public DataMigrator(Set<DataMigration> migrations) {
+        if (migrations != null) {
+            this.migrations = new ArrayList<DataMigration>(migrations);
+            Collections.sort(this.migrations);
+        } else {
+            this.migrations = null;
         }
-      }
     }
-  }
+
+    public void migrate(Document doc, int fromVersion, int toVersion, String fileName) throws ValidationException {
+        if (migrations == null) {
+            return;
+        }
+        if (fromVersion >= toVersion) {
+            return;
+        }
+        String docType = doc.getDocumentElement().getNodeName();
+        for (int i = fromVersion; i < toVersion; i++) {
+            for (DataMigration migration : migrations) {
+                if (migration.getFromVersion() == i && migration.handlesType(docType)) {
+                    LOG.info(MessageFormat.format("Migrating {0} with {1}", fileName, migration.getClass().getName()));
+                    migration.migrate(doc);
+                }
+            }
+        }
+    }
 
 }
-

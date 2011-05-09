@@ -12,19 +12,18 @@ package org.eclipse.skalli.model.ext.maven.internal.config;
 
 import org.eclipse.skalli.api.rest.config.CustomizingResource;
 
-public class MavenResolverResource extends CustomizingResource<MavenResolverConfig>{
+public class MavenResolverResource extends CustomizingResource<MavenResolverConfig> {
 
-  public static final String MAPPINGS_KEY = "ext.maven.resolver"; //$NON-NLS-1$
+    public static final String MAPPINGS_KEY = "ext.maven.resolver"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return MAPPINGS_KEY;
-  }
+    @Override
+    protected String getKey() {
+        return MAPPINGS_KEY;
+    }
 
-  @Override
-  protected Class<MavenResolverConfig> getConfigClass() {
-    return MavenResolverConfig.class;
-  }
+    @Override
+    protected Class<MavenResolverConfig> getConfigClass() {
+        return MavenResolverConfig.class;
+    }
 
 }
-

@@ -27,30 +27,29 @@ import org.osgi.service.log.LogService;
  */
 public class ConsoleLogListener implements LogListener {
 
-  private final static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"); //$NON-NLS-1$
-  private final static PrintStream console = System.out;
+    private final static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"); //$NON-NLS-1$
+    private final static PrintStream console = System.out;
 
-
-  @Override
-  public void logged(LogEntry entry) {
-    if (entry.getMessage() != null) {
-      console.println(sdf.format(new Date(entry.getTime()))+ " "  + levelToString(entry.getLevel()) + " [" + entry.getBundle().getSymbolicName() + "] " + entry.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    @Override
+    public void logged(LogEntry entry) {
+        if (entry.getMessage() != null) {
+            console.println(sdf.format(new Date(entry.getTime()))
+                    + " " + levelToString(entry.getLevel()) + " [" + entry.getBundle().getSymbolicName() + "] " + entry.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        }
     }
-  }
 
-  private String levelToString(int level) {
-    switch (level) {
-    case LogService.LOG_DEBUG:
-      return "DEBUG"; //$NON-NLS-1$
-    case LogService.LOG_INFO:
-      return "INFO"; //$NON-NLS-1$
-    case LogService.LOG_WARNING:
-      return "WARNING"; //$NON-NLS-1$
-    case LogService.LOG_ERROR:
-      return "ERROR"; //$NON-NLS-1$
-    default:
-      return "UNKNOWN"; //$NON-NLS-1$
+    private String levelToString(int level) {
+        switch (level) {
+        case LogService.LOG_DEBUG:
+            return "DEBUG"; //$NON-NLS-1$
+        case LogService.LOG_INFO:
+            return "INFO"; //$NON-NLS-1$
+        case LogService.LOG_WARNING:
+            return "WARNING"; //$NON-NLS-1$
+        case LogService.LOG_ERROR:
+            return "ERROR"; //$NON-NLS-1$
+        default:
+            return "UNKNOWN"; //$NON-NLS-1$
+        }
     }
-  }
 }
-

@@ -18,39 +18,38 @@ import javax.naming.NamingException;
 
 public class MockNamingEnumeration<SearchResult> implements NamingEnumeration<Object> {
 
-  private Iterator<SearchResult> iterator = null;
+    private Iterator<SearchResult> iterator = null;
 
-  public MockNamingEnumeration() {
-    this(null);
-  }
-
-  public MockNamingEnumeration(List<SearchResult> results) {
-    if (results != null) {
-      iterator = results.iterator();
+    public MockNamingEnumeration() {
+        this(null);
     }
-  }
 
-  public void close() throws NamingException {
-  }
+    public MockNamingEnumeration(List<SearchResult> results) {
+        if (results != null) {
+            iterator = results.iterator();
+        }
+    }
 
-  public boolean hasMore() throws NamingException {
-    return hasMoreElements();
-  }
+    public void close() throws NamingException {
+    }
 
-  public SearchResult next() throws NamingException {
-    return nextElement();
-  }
+    public boolean hasMore() throws NamingException {
+        return hasMoreElements();
+    }
 
-  public boolean hasMoreElements() {
-    if (iterator == null)
-      return false;
-    return iterator.hasNext();
-  }
+    public SearchResult next() throws NamingException {
+        return nextElement();
+    }
 
-  public SearchResult nextElement() {
-    if (iterator == null)
-      return null;
-    return iterator.next();
-  }
+    public boolean hasMoreElements() {
+        if (iterator == null)
+            return false;
+        return iterator.hasNext();
+    }
+
+    public SearchResult nextElement() {
+        if (iterator == null)
+            return null;
+        return iterator.next();
+    }
 }
-

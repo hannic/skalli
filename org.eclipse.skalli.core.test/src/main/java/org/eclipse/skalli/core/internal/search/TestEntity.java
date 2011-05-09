@@ -15,29 +15,29 @@ import java.util.UUID;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 
 class TestEntity extends ExtensionEntityBase {
-  private String value;
-  private String facet;
+    private String value;
+    private String facet;
 
-  public TestEntity(String value, String facet) {
-    this.value = value;
-    this.facet = facet;
-    setUuid(UUID.randomUUID());
-  }
+    public TestEntity(String value, String facet) {
+        this.value = value;
+        this.facet = facet;
+        setUuid(UUID.randomUUID());
+    }
 
-  public String getValue() {
-    return value;
-  }
-  public void setValue(String value) {
-    this.value = value;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public String getFacet() {
-    return facet;
-  }
-  public void setFacet(String facet) {
-    this.facet = facet;
-  }
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getFacet() {
+        return facet;
+    }
+
+    public void setFacet(String facet) {
+        this.facet = facet;
+    }
 
 }
-
-

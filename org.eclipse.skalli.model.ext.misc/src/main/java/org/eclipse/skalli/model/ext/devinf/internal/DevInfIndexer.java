@@ -18,26 +18,25 @@ import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 
 public class DevInfIndexer extends AbstractIndexer<DevInfProjectExt> {
 
-  @Override
-  protected void indexFields(DevInfProjectExt devInf) {
-    addField(DevInfProjectExt.PROPERTY_BUGTRACKER_URL, devInf.getBugtrackerUrl(), true, false);
-    addField(DevInfProjectExt.PROPERTY_CI_URL, devInf.getCiUrl(), true, false);
-    addField(DevInfProjectExt.PROPERTY_METRICS_URL, devInf.getMetricsUrl(), true, false);
-    addField(DevInfProjectExt.PROPERTY_SCM_URL, devInf.getScmUrl(), true, false);
-    addField(DevInfProjectExt.PROPERTY_SCM_LOCATIONS, devInf.getScmLocations(), true, true);
-    addField(DevInfProjectExt.PROPERTY_JAVADOCS_URL, devInf.getJavadocs(), true, false);
-  }
+    @Override
+    protected void indexFields(DevInfProjectExt devInf) {
+        addField(DevInfProjectExt.PROPERTY_BUGTRACKER_URL, devInf.getBugtrackerUrl(), true, false);
+        addField(DevInfProjectExt.PROPERTY_CI_URL, devInf.getCiUrl(), true, false);
+        addField(DevInfProjectExt.PROPERTY_METRICS_URL, devInf.getMetricsUrl(), true, false);
+        addField(DevInfProjectExt.PROPERTY_SCM_URL, devInf.getScmUrl(), true, false);
+        addField(DevInfProjectExt.PROPERTY_SCM_LOCATIONS, devInf.getScmLocations(), true, true);
+        addField(DevInfProjectExt.PROPERTY_JAVADOCS_URL, devInf.getJavadocs(), true, false);
+    }
 
-  @Override
-  public Set<String> getDefaultSearchFields() {
-    Set<String> ret = new HashSet<String>();
-    ret.add(DevInfProjectExt.PROPERTY_BUGTRACKER_URL);
-    ret.add(DevInfProjectExt.PROPERTY_CI_URL);
-    ret.add(DevInfProjectExt.PROPERTY_METRICS_URL);
-    ret.add(DevInfProjectExt.PROPERTY_SCM_LOCATIONS);
-    ret.add(DevInfProjectExt.PROPERTY_JAVADOCS_URL);
-    return ret;
-  }
+    @Override
+    public Set<String> getDefaultSearchFields() {
+        Set<String> ret = new HashSet<String>();
+        ret.add(DevInfProjectExt.PROPERTY_BUGTRACKER_URL);
+        ret.add(DevInfProjectExt.PROPERTY_CI_URL);
+        ret.add(DevInfProjectExt.PROPERTY_METRICS_URL);
+        ret.add(DevInfProjectExt.PROPERTY_SCM_LOCATIONS);
+        ret.add(DevInfProjectExt.PROPERTY_JAVADOCS_URL);
+        return ret;
+    }
 
 }
-

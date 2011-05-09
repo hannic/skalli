@@ -37,29 +37,28 @@ import org.eclipse.skalli.view.internal.ViewBundleUtil;
  */
 public class CssCachingFilter implements Filter {
 
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
-
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  @SuppressWarnings("nls")
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException {
-
-    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
-    String queryString = httpServletRequest.getQueryString();
-    if (StringUtils.isBlank(queryString)) {
-      httpServletResponse.sendRedirect(httpServletRequest.getRequestURI() + "?" + ViewBundleUtil.getVersion());
-    } else {
-      chain.doFilter(request, response);
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
     }
-  }
+
+    @Override
+    public void destroy() {
+    }
+
+    @Override
+    @SuppressWarnings("nls")
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
+
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+        String queryString = httpServletRequest.getQueryString();
+        if (StringUtils.isBlank(queryString)) {
+            httpServletResponse.sendRedirect(httpServletRequest.getRequestURI() + "?" + ViewBundleUtil.getVersion());
+        } else {
+            chain.doFilter(request, response);
+        }
+    }
 
 }
-

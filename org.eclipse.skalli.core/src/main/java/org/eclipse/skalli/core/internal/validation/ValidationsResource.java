@@ -17,24 +17,23 @@ import org.eclipse.skalli.api.rest.config.CustomizingResource;
 
 public class ValidationsResource extends CustomizingResource<ValidationsConfig> {
 
-  public static final String MAPPINGS_KEY = "core.validations"; //$NON-NLS-1$
+    public static final String MAPPINGS_KEY = "core.validations"; //$NON-NLS-1$
 
-  @Override
-  protected String getKey() {
-    return MAPPINGS_KEY;
-  }
+    @Override
+    protected String getKey() {
+        return MAPPINGS_KEY;
+    }
 
-  @Override
-  protected Class<ValidationsConfig> getConfigClass() {
-    return ValidationsConfig.class;
-  }
+    @Override
+    protected Class<ValidationsConfig> getConfigClass() {
+        return ValidationsConfig.class;
+    }
 
-  @Override
-  protected List<Class<?>> getAdditionalConfigClasses() {
-    List<Class<?>> ret = new LinkedList<Class<?>>();
-    ret.add(ValidationConfig.class);
-    return ret;
-  }
+    @Override
+    protected List<Class<?>> getAdditionalConfigClasses() {
+        List<Class<?>> ret = new LinkedList<Class<?>>();
+        ret.add(ValidationConfig.class);
+        return ret;
+    }
 
 }
-

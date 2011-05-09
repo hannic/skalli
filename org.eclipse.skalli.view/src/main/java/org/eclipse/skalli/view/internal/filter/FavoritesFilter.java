@@ -29,41 +29,41 @@ import org.eclipse.skalli.model.core.Project;
 
 public class FavoritesFilter extends AbstractSearchFilter {
 
-  @Override
-  protected boolean showNearestProjects(User user, ServletRequest request, ServletResponse response) {
-    return false;
-  }
-
-  @Override
-  protected SearchResult<Project> getSearchHits(User user, ServletRequest request, ServletResponse response, int start, int viewSize)
-  throws IOException, ServletException {
-    List<Project> projects = new ArrayList<Project>();
-    if (user != null) {
-      ProjectService projectService = Services.getRequiredService(ProjectService.class);
-      List<UUID> uuids = getFavorites(user).getProjects();
-      if (start < uuids.size()) {
-        int end = Math.min(start + viewSize, uuids.size());
-        for (int i = start; i < end; ++i) {
-          Project project = projectService.getByUUID(uuids.get(i));
-          if (project != null) {
-            projects.add(project);
-          }
-        }
-      }
+    @Override
+    protected boolean showNearestProjects(User user, ServletRequest request, ServletResponse response) {
+        return false;
     }
-    SearchService searchService = Services.getRequiredService(SearchService.class);
-    List<SearchHit<Project>> searchHits = searchService.asSearchHits(projects);
-    SearchResult<Project> searchResult = new SearchResult<Project>();
-    searchResult.setResult(searchHits);
-    searchResult.setResultCount(searchHits.size());
-    searchResult.setDuration(0);
-    return searchResult;
-  }
 
-  @Override
-  protected String getTitle(User user) {
-    return user != null? "Favorites for " + user.getDisplayName() : "Favorites";
-  }
+    @Override
+    protected SearchResult<Project> getSearchHits(User user, ServletRequest request, ServletResponse response,
+            int start, int viewSize)
+            throws IOException, ServletException {
+        List<Project> projects = new ArrayList<Project>();
+        if (user != null) {
+            ProjectService projectService = Services.getRequiredService(ProjectService.class);
+            List<UUID> uuids = getFavorites(user).getProjects();
+            if (start < uuids.size()) {
+                int end = Math.min(start + viewSize, uuids.size());
+                for (int i = start; i < end; ++i) {
+                    Project project = projectService.getByUUID(uuids.get(i));
+                    if (project != null) {
+                        projects.add(project);
+                    }
+                }
+            }
+        }
+        SearchService searchService = Services.getRequiredService(SearchService.class);
+        List<SearchHit<Project>> searchHits = searchService.asSearchHits(projects);
+        SearchResult<Project> searchResult = new SearchResult<Project>();
+        searchResult.setResult(searchHits);
+        searchResult.setResultCount(searchHits.size());
+        searchResult.setDuration(0);
+        return searchResult;
+    }
+
+    @Override
+    protected String getTitle(User user) {
+        return user != null ? "Favorites for " + user.getDisplayName() : "Favorites";
+    }
 
 }
-

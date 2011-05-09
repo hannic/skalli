@@ -10,26 +10,26 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.cache;
 
-/* package */ class CacheEntry<T_META, T_VALUE> {
+/* package */class CacheEntry<T_META, T_VALUE> {
 
-  private T_META metaInfo;
-  private final T_VALUE value;
+    private T_META metaInfo;
+    private final T_VALUE value;
 
-  public T_META getMetaInfo() {
-    return metaInfo;
-  }
-  public void setMetaInfo(T_META metaInfo) {
-    this.metaInfo = metaInfo;
-  }
+    public T_META getMetaInfo() {
+        return metaInfo;
+    }
 
-  public T_VALUE getValue() {
-    return value;
-  }
+    public void setMetaInfo(T_META metaInfo) {
+        this.metaInfo = metaInfo;
+    }
 
-  /* package */ CacheEntry(T_META metaInfo, T_VALUE value) {
-    super();
-    this.metaInfo = metaInfo;
-    this.value = value;
-  }
+    public T_VALUE getValue() {
+        return value;
+    }
+
+    /* package */CacheEntry(T_META metaInfo, T_VALUE value) {
+        super();
+        this.metaInfo = metaInfo;
+        this.value = value;
+    }
 }
-

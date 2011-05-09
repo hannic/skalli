@@ -44,147 +44,148 @@ import org.eclipse.skalli.view.ext.ProjectContextLink;
 
 public class ProjectDetailsFilter implements Filter {
 
-  private static final Logger LOG = Log.getLogger(ProjectDetailsFilter.class);
+    private static final Logger LOG = Log.getLogger(ProjectDetailsFilter.class);
 
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException {
-
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-
-    final Project project = (Project) request.getAttribute(Consts.ATTRIBUTE_PROJECT);
-    final String userId = (String) request.getAttribute(Consts.ATTRIBUTE_USERID);
-
-    if (project != null) {
-      ProjectTemplateService templateService = Services.getRequiredService(ProjectTemplateService.class);
-      ProjectTemplate projectTemplate = templateService.getProjectTemplateById(project.getProjectTemplateId());
-      FavoritesService favoritesService = Services.getService(FavoritesService.class);
-      Favorites favorites = null;
-      if (favoritesService == null) {
-        favorites = new Favorites(userId);
-      } else {
-        favorites = favoritesService.getFavorites(userId);
-      }
-      boolean isProjectAdmin = UserUtil.isAdministrator(userId) || UserUtil.isProjectAdmin(userId, project);
-      IssuesService issuesService = Services.getService(IssuesService.class);
-      boolean showIssues = isProjectAdmin || UserUtil.isProjectAdminInParentChain(userId, project);
-
-      if (issuesService != null && showIssues) {
-        Issues issues = issuesService.getByUUID(project.getUuid());
-        if (issues != null && !issues.getIssues().isEmpty()) {
-          request.setAttribute(Consts.ATTRIBUTE_ISSUES, issues);
-          request.setAttribute(Consts.ATTRIBUTE_MAX_SEVERITY, issues.getIssues().first().getSeverity().name());
-        }
-      }
-
-      request.setAttribute(Consts.ATTRIBUTE_PROJECTADMIN, isProjectAdmin);
-      request.setAttribute(Consts.ATTRIBUTE_PROJECTTEMPLATE, projectTemplate);
-      request.setAttribute(Consts.ATTRIBUTE_FAVORITES, favorites.asMap());
-      request.setAttribute(Consts.ATTRIBUTE_PROJECTCONTEXTLINKS, getOrderedVisibleProjectContextLinks(project, userId));
-    } else {
-      request.setAttribute(Consts.ATTRIBUTE_PATHINFO, httpRequest.getPathInfo());
-      // do nothing else as we have to support creation of project and search urls also
+    @Override
+    public void destroy() {
     }
 
-    // proceed along the chain
-    chain.doFilter(request, response);
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
 
-  }
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
+        final Project project = (Project) request.getAttribute(Consts.ATTRIBUTE_PROJECT);
+        final String userId = (String) request.getAttribute(Consts.ATTRIBUTE_USERID);
 
-  /**
-   * returns a sorted set of links in context of the current project.
-   */
-  private Set<Link> getOrderedVisibleProjectContextLinks(Project project, final String userId) {
-    final Project p = project;
-    Set<ProjectContextLink> set = Services.getServices(ProjectContextLink.class,
-        new ServiceFilter<ProjectContextLink>() {
-          @Override
-          public boolean accept(ProjectContextLink contextLink) {
-            return contextLink.isVisible(p, userId);
-          }
+        if (project != null) {
+            ProjectTemplateService templateService = Services.getRequiredService(ProjectTemplateService.class);
+            ProjectTemplate projectTemplate = templateService.getProjectTemplateById(project.getProjectTemplateId());
+            FavoritesService favoritesService = Services.getService(FavoritesService.class);
+            Favorites favorites = null;
+            if (favoritesService == null) {
+                favorites = new Favorites(userId);
+            } else {
+                favorites = favoritesService.getFavorites(userId);
+            }
+            boolean isProjectAdmin = UserUtil.isAdministrator(userId) || UserUtil.isProjectAdmin(userId, project);
+            IssuesService issuesService = Services.getService(IssuesService.class);
+            boolean showIssues = isProjectAdmin || UserUtil.isProjectAdminInParentChain(userId, project);
+
+            if (issuesService != null && showIssues) {
+                Issues issues = issuesService.getByUUID(project.getUuid());
+                if (issues != null && !issues.getIssues().isEmpty()) {
+                    request.setAttribute(Consts.ATTRIBUTE_ISSUES, issues);
+                    request.setAttribute(Consts.ATTRIBUTE_MAX_SEVERITY, issues.getIssues().first().getSeverity().name());
+                }
+            }
+
+            request.setAttribute(Consts.ATTRIBUTE_PROJECTADMIN, isProjectAdmin);
+            request.setAttribute(Consts.ATTRIBUTE_PROJECTTEMPLATE, projectTemplate);
+            request.setAttribute(Consts.ATTRIBUTE_FAVORITES, favorites.asMap());
+            request.setAttribute(Consts.ATTRIBUTE_PROJECTCONTEXTLINKS,
+                    getOrderedVisibleProjectContextLinks(project, userId));
+        } else {
+            request.setAttribute(Consts.ATTRIBUTE_PATHINFO, httpRequest.getPathInfo());
+            // do nothing else as we have to support creation of project and search urls also
+        }
+
+        // proceed along the chain
+        chain.doFilter(request, response);
+
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
+
+    /**
+     * returns a sorted set of links in context of the current project.
+     */
+    private Set<Link> getOrderedVisibleProjectContextLinks(Project project, final String userId) {
+        final Project p = project;
+        Set<ProjectContextLink> set = Services.getServices(ProjectContextLink.class,
+                new ServiceFilter<ProjectContextLink>() {
+                    @Override
+                    public boolean accept(ProjectContextLink contextLink) {
+                        return contextLink.isVisible(p, userId);
+                    }
+                });
+
+        Set<Link> result = new TreeSet<Link>(new Comparator<Link>() {
+            @Override
+            public int compare(Link l1, Link l2) {
+                if (l1.getPositionWeight() != l2.getPositionWeight()) {
+                    return new Float(l1.getPositionWeight()).compareTo(l2.getPositionWeight());
+                } else {
+                    // in case the position weight is equal, compare by link caption
+                    // to prevent that one of both links is sorted out of the result set
+                    return (l1.getCaption().compareTo(l2.getCaption()));
+                }
+            }
         });
 
-    Set<Link> result = new TreeSet<Link>(new Comparator<Link>() {
-      @Override
-      public int compare(Link l1, Link l2) {
-        if (l1.getPositionWeight() != l2.getPositionWeight()) {
-          return new Float(l1.getPositionWeight()).compareTo(l2.getPositionWeight());
-        } else {
-          // in case the position weight is equal, compare by link caption
-          // to prevent that one of both links is sorted out of the result set
-          return (l1.getCaption().compareTo(l2.getCaption()));
+        for (ProjectContextLink contextLink : set) {
+            if (StringUtils.isBlank(contextLink.getCaption(project))) {
+                LOG.warning(MessageFormat
+                        .format(
+                                "instance of {0} returned null or blank when calling method getCaption(project) with projectId={1}",
+                                contextLink.getClass(), project.getProjectId()));
+            } else if (contextLink.getUri(project) == null) {
+                LOG.warning(MessageFormat.format(
+                        "instance of {0} returned null when calling method getUri(project) with projectId={1}",
+                        contextLink.getClass(), project.getProjectId()));
+            } else {
+                Link link = new Link();
+                // set the class name as id, this can be used for UI testing
+                link.setId(contextLink.getClass().getName());
+                link.setCaption(contextLink.getCaption(project));
+                link.setUri(contextLink.getUri(project));
+                link.setPositionWeight(contextLink.getPositionWeight());
+                result.add(link);
+            }
         }
-      }
-    });
-
-    for (ProjectContextLink contextLink : set) {
-      if (StringUtils.isBlank(contextLink.getCaption(project))) {
-        LOG.warning(MessageFormat.format(
-            "instance of {0} returned null or blank when calling method getCaption(project) with projectId={1}",
-            contextLink.getClass(), project.getProjectId()));
-      } else if (contextLink.getUri(project) == null) {
-        LOG.warning(MessageFormat.format(
-            "instance of {0} returned null when calling method getUri(project) with projectId={1}",
-            contextLink.getClass(), project.getProjectId()));
-      } else {
-        Link link = new Link();
-        // set the class name as id, this can be used for UI testing
-        link.setId(contextLink.getClass().getName());
-        link.setCaption(contextLink.getCaption(project));
-        link.setUri(contextLink.getUri(project));
-        link.setPositionWeight(contextLink.getPositionWeight());
-        result.add(link);
-      }
-    }
-    return result;
-  }
-
-  public class Link {
-    private String caption;
-    private URI uri;
-    private float positionWeight;
-    private String id;
-
-    public String getCaption() {
-      return caption;
+        return result;
     }
 
-    public void setCaption(String caption) {
-      this.caption = caption;
-    }
+    public class Link {
+        private String caption;
+        private URI uri;
+        private float positionWeight;
+        private String id;
 
-    public URI getUri() {
-      return uri;
-    }
+        public String getCaption() {
+            return caption;
+        }
 
-    public void setUri(URI uri) {
-      this.uri = uri;
-    }
+        public void setCaption(String caption) {
+            this.caption = caption;
+        }
 
-    public float getPositionWeight() {
-      return positionWeight;
-    }
+        public URI getUri() {
+            return uri;
+        }
 
-    public void setPositionWeight(float positionWeight) {
-      this.positionWeight = positionWeight;
-    }
+        public void setUri(URI uri) {
+            this.uri = uri;
+        }
 
-    public void setId(String id) {
-      this.id = id;
-    }
+        public float getPositionWeight() {
+            return positionWeight;
+        }
 
-    public String getId() {
-      return id;
+        public void setPositionWeight(float positionWeight) {
+            this.positionWeight = positionWeight;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
     }
-  }
 
 }
-

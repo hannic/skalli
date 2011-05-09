@@ -24,84 +24,86 @@ import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.misc.ReviewProjectExt;
 
 public class ExtensionServiceReview
-    extends ExtensionServiceBase<ReviewProjectExt>
-    implements ExtensionService<ReviewProjectExt>
+        extends ExtensionServiceBase<ReviewProjectExt>
+        implements ExtensionService<ReviewProjectExt>
 {
 
-  private static final Logger LOG = Log.getLogger(ExtensionServiceReview.class);
+    private static final Logger LOG = Log.getLogger(ExtensionServiceReview.class);
 
-  private static final String CAPTION = "Ratings & Reviews";
-  private static final String DESCRIPTION = "Enables ratings and reviews for the project.";
+    private static final String CAPTION = "Ratings & Reviews";
+    private static final String DESCRIPTION = "Enables ratings and reviews for the project.";
 
-  private static final Map<String,String> CAPTIONS = CollectionUtils.addAll(ExtensionServiceBase.CAPTIONS, new String[][] {
-      {ReviewProjectExt.PROPERTY_ALLOW_ANONYMOUS, "Allow anonymous reviews"},
-      {ReviewProjectExt.PROPERTY_RATING_STYLE, "Rating Style"}});
+    private static final Map<String, String> CAPTIONS = CollectionUtils.addAll(ExtensionServiceBase.CAPTIONS,
+            new String[][] {
+                    { ReviewProjectExt.PROPERTY_ALLOW_ANONYMOUS, "Allow anonymous reviews" },
+                    { ReviewProjectExt.PROPERTY_RATING_STYLE, "Rating Style" } });
 
-  private static final Map<String,String> DESCRIPTIONS = CollectionUtils.addAll(ExtensionServiceBase.DESCRIPTIONS, new String[][] {
-      {ReviewProjectExt.PROPERTY_ALLOW_ANONYMOUS, "If checked, users can review this project anonymously"},
-      {ReviewProjectExt.PROPERTY_RATING_STYLE, "Selects from a variety of rating styles"}});
+    private static final Map<String, String> DESCRIPTIONS = CollectionUtils.addAll(ExtensionServiceBase.DESCRIPTIONS,
+            new String[][] {
+                    { ReviewProjectExt.PROPERTY_ALLOW_ANONYMOUS,
+                            "If checked, users can review this project anonymously" },
+                    { ReviewProjectExt.PROPERTY_RATING_STYLE, "Selects from a variety of rating styles" } });
 
-  @Override
-  public Class<ReviewProjectExt> getExtensionClass() {
-    return ReviewProjectExt.class;
-  }
+    @Override
+    public Class<ReviewProjectExt> getExtensionClass() {
+        return ReviewProjectExt.class;
+    }
 
-  protected void activate(ComponentContext context){
-    LOG.info("activated model extension: " + getShortName()); //$NON-NLS-1$
-  }
+    protected void activate(ComponentContext context) {
+        LOG.info("activated model extension: " + getShortName()); //$NON-NLS-1$
+    }
 
-  protected void deactivate(ComponentContext context) {
-    LOG.info("deactivated model extension: " + getShortName()); //$NON-NLS-1$
-  }
+    protected void deactivate(ComponentContext context) {
+        LOG.info("deactivated model extension: " + getShortName()); //$NON-NLS-1$
+    }
 
-  @Override
-  public String getShortName() {
-    return "reviews"; //$NON-NLS-1$
-  }
+    @Override
+    public String getShortName() {
+        return "reviews"; //$NON-NLS-1$
+    }
 
-  @Override
-  public String getCaption() {
-    return CAPTION;
-  }
+    @Override
+    public String getCaption() {
+        return CAPTION;
+    }
 
-  @Override
-  public String getDescription() {
-    return DESCRIPTION;
-  }
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
+    }
 
-  @Override
-  public AliasedConverter getConverter(String host) {
-    return new ReviewConverter(host);
-  }
+    @Override
+    public AliasedConverter getConverter(String host) {
+        return new ReviewConverter(host);
+    }
 
-  @Override
-  public String getModelVersion() {
-    return ReviewProjectExt.MODEL_VERSION;
-  }
+    @Override
+    public String getModelVersion() {
+        return ReviewProjectExt.MODEL_VERSION;
+    }
 
-  @Override
-  public String getNamespace() {
-    return ReviewProjectExt.NAMESPACE;
-  }
+    @Override
+    public String getNamespace() {
+        return ReviewProjectExt.NAMESPACE;
+    }
 
-  @Override
-  public String getXsdFileName() {
-    return "model-review.xsd"; //$NON-NLS-1$
-  }
+    @Override
+    public String getXsdFileName() {
+        return "model-review.xsd"; //$NON-NLS-1$
+    }
 
-  @Override
-  public AbstractIndexer<ReviewProjectExt> getIndexer() {
-    return new ReviewIndexer();
-  }
+    @Override
+    public AbstractIndexer<ReviewProjectExt> getIndexer() {
+        return new ReviewIndexer();
+    }
 
-  @Override
-  public String getCaption(String propertyName) {
-    return CAPTIONS.get(propertyName);
-  }
+    @Override
+    public String getCaption(String propertyName) {
+        return CAPTIONS.get(propertyName);
+    }
 
-  @Override
-  public String getDescription(String propertyName) {
-    return DESCRIPTIONS.get(propertyName);
-  }
+    @Override
+    public String getDescription(String propertyName) {
+        return DESCRIPTIONS.get(propertyName);
+    }
 }
-

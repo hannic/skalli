@@ -18,15 +18,15 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * entry http://jira.codehaus.org/browse/XSTR-30
  */
 public class MapperWrapperIgnoreUnknownElements extends MapperWrapper {
-  public MapperWrapperIgnoreUnknownElements(MapperWrapper next) {
-    super(next);
-  }
-
-  @Override
-  public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-    if (definedIn == Object.class) {
-      return false;
+    public MapperWrapperIgnoreUnknownElements(MapperWrapper next) {
+        super(next);
     }
-    return super.shouldSerializeMember(definedIn, fieldName);
-  }
+
+    @Override
+    public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+        if (definedIn == Object.class) {
+            return false;
+        }
+        return super.shouldSerializeMember(definedIn, fieldName);
+    }
 }

@@ -15,9 +15,10 @@ import java.util.UUID;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 
 public class TestExtensionEntityBase1 extends ExtensionEntityBase {
-  public TestExtensionEntityBase1() {
-  }
-  public TestExtensionEntityBase1(UUID uuid) {
-    setUuid(uuid);
-  }
+    public TestExtensionEntityBase1() {
+    }
+
+    public TestExtensionEntityBase1(UUID uuid) {
+        setUuid(uuid);
+    }
 }

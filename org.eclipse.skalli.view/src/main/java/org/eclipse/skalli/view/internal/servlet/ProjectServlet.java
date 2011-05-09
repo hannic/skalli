@@ -30,26 +30,26 @@ import com.vaadin.terminal.gwt.server.AbstractApplicationServlet;
 @SuppressWarnings("serial")
 public class ProjectServlet extends AbstractApplicationServlet {
 
-  @Override
-  protected Class<? extends Application> getApplicationClass() {
-    return ProjectApplication.class;
-  }
+    @Override
+    protected Class<? extends Application> getApplicationClass() {
+        return ProjectApplication.class;
+    }
 
-  @Override
-  protected Application getNewApplication(HttpServletRequest request) throws ServletException {
-    return new ProjectApplication(new LoginUtil(request).getLoggedInUser());
-  }
+    @Override
+    protected Application getNewApplication(HttpServletRequest request) throws ServletException {
+        return new ProjectApplication(new LoginUtil(request).getLoggedInUser());
+    }
 
-  @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-    super.service(request, response);
-    String browser = request.getHeader("User-Agent");
-    LoginUtil loginUtil = new LoginUtil(request);
-    User loggedInUser = loginUtil.getLoggedInUser();
-    Statistics.getDefault().trackBrowser(loginUtil.getLoggedInUserId(), browser, (loggedInUser != null) ? loggedInUser.getDepartment() : null,
-        (loggedInUser != null) ? loggedInUser.getLocation() : null);
-  }
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        super.service(request, response);
+        String browser = request.getHeader("User-Agent");
+        LoginUtil loginUtil = new LoginUtil(request);
+        User loggedInUser = loginUtil.getLoggedInUser();
+        Statistics.getDefault().trackBrowser(loginUtil.getLoggedInUserId(), browser,
+                (loggedInUser != null) ? loggedInUser.getDepartment() : null,
+                (loggedInUser != null) ? loggedInUser.getLocation() : null);
+    }
 
 }
-

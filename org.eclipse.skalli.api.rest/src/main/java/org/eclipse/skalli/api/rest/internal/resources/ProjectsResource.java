@@ -33,43 +33,43 @@ import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class ProjectsResource extends ServerResource {
 
+    @Get
+    public Representation retrieve() {
+        try {
+            Statistics.getDefault().trackUsage("api.rest.projects.get"); //$NON-NLS-1$
+            Projects projects = new Projects();
+            projects.setProjects(new HashSet<Project>());
 
-  @Get
-  public Representation retrieve() {
-    try {
-      Statistics.getDefault().trackUsage("api.rest.projects.get"); //$NON-NLS-1$
-      Projects projects = new Projects();
-      projects.setProjects(new HashSet<Project>());
+            Form form = getRequest().getResourceRef().getQueryAsForm();
+            String query = form.getFirstValue(Consts.PARAM_QUERY);
+            String tag = form.getFirstValue(Consts.PARAM_TAG);
 
-      Form form = getRequest().getResourceRef().getQueryAsForm();
-      String query = form.getFirstValue(Consts.PARAM_QUERY);
-      String tag = form.getFirstValue(Consts.PARAM_TAG);
+            List<Project> projectList = null;
+            if (query != null) {
+                SearchService searchService = Services.getRequiredService(SearchService.class);
+                projectList = searchService.findProjectsByQuery(query, new PagingInfo(0, 300)).getEntities();
+            } else if (tag != null) {
+                SearchService searchService = Services.getRequiredService(SearchService.class);
+                projectList = searchService.findProjectsByTag(tag, new PagingInfo(0, 300)).getEntities();
+            } else {
+                ProjectService projectService = Services.getRequiredService(ProjectService.class);
+                projectList = projectService.getAll();
+            }
+            for (Project project : projectList) {
+                projects.getProjects().add(project);
+            }
 
-      List<Project> projectList = null;
-      if (query != null) {
-        SearchService searchService = Services.getRequiredService(SearchService.class);
-        projectList = searchService.findProjectsByQuery(query, new PagingInfo(0, 300)).getEntities();
-      } else if (tag != null) {
-        SearchService searchService = Services.getRequiredService(SearchService.class);
-        projectList = searchService.findProjectsByTag(tag, new PagingInfo(0, 300)).getEntities();
-      } else {
-        ProjectService projectService = Services.getRequiredService(ProjectService.class);
-        projectList = projectService.getAll();
-      }
-      for (Project project : projectList) {
-        projects.getProjects().add(project);
-      }
-
-      String extensionParam = getQuery().getValues(Consts.PARAM_EXTENSIONS);
-      String[] extensions = new String[] {};
-      if (extensionParam != null) {
-        extensions = extensionParam.split(Consts.PARAM_LIST_SEPARATOR);
-      }
-      return new IgnoreUnknownElementsXStreamRepresentation<Projects>(projects,
-          new AliasedConverter[] {new ProjectsConverter(getRequest().getResourceRef().getHostIdentifier(), extensions)});
-    } catch (QueryParseException e) {
-      getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-      return new StringRepresentation("Error parsing query: " + e.getMessage()); //$NON-NLS-1$
+            String extensionParam = getQuery().getValues(Consts.PARAM_EXTENSIONS);
+            String[] extensions = new String[] {};
+            if (extensionParam != null) {
+                extensions = extensionParam.split(Consts.PARAM_LIST_SEPARATOR);
+            }
+            return new IgnoreUnknownElementsXStreamRepresentation<Projects>(projects,
+                    new AliasedConverter[] { new ProjectsConverter(getRequest().getResourceRef().getHostIdentifier(),
+                            extensions) });
+        } catch (QueryParseException e) {
+            getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            return new StringRepresentation("Error parsing query: " + e.getMessage()); //$NON-NLS-1$
+        }
     }
-  }
 }

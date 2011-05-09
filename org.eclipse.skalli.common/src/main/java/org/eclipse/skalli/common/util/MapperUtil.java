@@ -18,29 +18,28 @@ import org.eclipse.skalli.model.ext.LinkMappingConfig;
 
 public class MapperUtil {
 
-  public static boolean matches(String source, LinkMappingConfig mapping) {
-    Pattern regex = Pattern.compile(mapping.getPattern());
-    Matcher matcher = regex.matcher(source);
-    return matcher.matches();
-  }
-
-  public static String convert(String projectId, String source, LinkMappingConfig mapping) {
-    return convert(projectId, source, mapping.getPattern(), mapping.getTemplate());
-  }
-
-  public static String convert(String projectId, String source, String pattern, String template) {
-    Pattern regex = Pattern.compile(pattern);
-    Matcher matcher = regex.matcher(source);
-    if (!matcher.matches()) {
-      return null;
+    public static boolean matches(String source, LinkMappingConfig mapping) {
+        Pattern regex = Pattern.compile(mapping.getPattern());
+        Matcher matcher = regex.matcher(source);
+        return matcher.matches();
     }
-    String[] groups = new String[matcher.groupCount() + 1];
-    groups[0] = projectId;
-    for (int i = 1; i <= matcher.groupCount(); i++) {
-      groups[i] = matcher.group(i);
+
+    public static String convert(String projectId, String source, LinkMappingConfig mapping) {
+        return convert(projectId, source, mapping.getPattern(), mapping.getTemplate());
     }
-    return MessageFormat.format(template, (Object[]) groups);
-  }
+
+    public static String convert(String projectId, String source, String pattern, String template) {
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(source);
+        if (!matcher.matches()) {
+            return null;
+        }
+        String[] groups = new String[matcher.groupCount() + 1];
+        groups[0] = projectId;
+        for (int i = 1; i <= matcher.groupCount(); i++) {
+            groups[i] = matcher.group(i);
+        }
+        return MessageFormat.format(template, (Object[]) groups);
+    }
 
 }
-

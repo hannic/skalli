@@ -19,35 +19,34 @@ import org.eclipse.skalli.common.configuration.proxy.ConfigKeyProxy;
 
 public class ProxyResource extends ConfigResource<ConfigKeyProxy, ProxyConfig> {
 
-  @Override
-  protected Class<ProxyConfig> getConfigClass() {
-    return ProxyConfig.class;
-  }
+    @Override
+    protected Class<ProxyConfig> getConfigClass() {
+        return ProxyConfig.class;
+    }
 
-  @Override
-  protected ConfigKeyProxy[] getAllKeys() {
-    return ConfigKeyProxy.values();
-  }
+    @Override
+    protected ConfigKeyProxy[] getAllKeys() {
+        return ConfigKeyProxy.values();
+    }
 
-  @Override
-  protected Map<ConfigKey, String> configToMap(ProxyConfig configObject) {
-    Map<ConfigKey, String> map = new HashMap<ConfigKey, String>();
-    map.put(ConfigKeyProxy.HOST, configObject.getHost());
-    map.put(ConfigKeyProxy.PORT, configObject.getPort());
-    map.put(ConfigKeyProxy.NONPROXYHOSTS, configObject.getNonProxyHosts());
+    @Override
+    protected Map<ConfigKey, String> configToMap(ProxyConfig configObject) {
+        Map<ConfigKey, String> map = new HashMap<ConfigKey, String>();
+        map.put(ConfigKeyProxy.HOST, configObject.getHost());
+        map.put(ConfigKeyProxy.PORT, configObject.getPort());
+        map.put(ConfigKeyProxy.NONPROXYHOSTS, configObject.getNonProxyHosts());
 
-    return map;
-  }
+        return map;
+    }
 
-  @Override
-  protected ProxyConfig mapToConfig(Map<ConfigKeyProxy, String> values) {
-    ProxyConfig config = new ProxyConfig();
-    config.setHost(values.get(ConfigKeyProxy.HOST));
-    config.setPort(values.get(ConfigKeyProxy.PORT));
-    config.setNonProxyHosts(values.get(ConfigKeyProxy.NONPROXYHOSTS));
+    @Override
+    protected ProxyConfig mapToConfig(Map<ConfigKeyProxy, String> values) {
+        ProxyConfig config = new ProxyConfig();
+        config.setHost(values.get(ConfigKeyProxy.HOST));
+        config.setPort(values.get(ConfigKeyProxy.PORT));
+        config.setNonProxyHosts(values.get(ConfigKeyProxy.NONPROXYHOSTS));
 
-    return config;
-  }
+        return config;
+    }
 
 }
-

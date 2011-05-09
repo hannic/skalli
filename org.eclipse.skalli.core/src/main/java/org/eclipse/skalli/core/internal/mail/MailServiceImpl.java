@@ -39,96 +39,95 @@ import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 
 public class MailServiceImpl implements MailService {
 
-  private static final Logger LOG = Log.getLogger(MailServiceImpl.class);
+    private static final Logger LOG = Log.getLogger(MailServiceImpl.class);
 
-  protected void activate(ComponentContext context) {
-    LOG.info("Mail service activated"); //$NON-NLS-1$
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info("Mail service deactivated"); //$NON-NLS-1$
-  }
-
-  @Override
-  public void sendMailToProject(Project project, String subject, String body, Address from) {
-    List<Address> toAddresses = getToAddresses(project);
-    List<Address> ccAddresses = getCCAddresses(project);
-
-    if (toAddresses.size() > 0) {
-      sendMailInternal(toAddresses.toArray(new Address[toAddresses.size()]),
-          ccAddresses.toArray(new Address[ccAddresses.size()]), null, from, subject, body);
-    } else if (ccAddresses.size()>0) {
-      sendMailInternal(ccAddresses.toArray(new Address[ccAddresses.size()]),
-          null, null, from, subject, body);
+    protected void activate(ComponentContext context) {
+        LOG.info("Mail service activated"); //$NON-NLS-1$
     }
-  }
 
-  @Override
-  public List<Address> getToAddresses(Project project) {
-    PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
-    if (ext == null) {
-      return Collections.emptyList();
+    protected void deactivate(ComponentContext context) {
+        LOG.info("Mail service deactivated"); //$NON-NLS-1$
     }
-    return getAdresses(ext.getLeads());
-  }
 
-  @Override
-  public List<Address> getCCAddresses(Project project) {
-    PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
-    if (ext == null) {
-      return Collections.emptyList();
-    }
-    return getAdresses(ext.getMembers());
-  }
+    @Override
+    public void sendMailToProject(Project project, String subject, String body, Address from) {
+        List<Address> toAddresses = getToAddresses(project);
+        List<Address> ccAddresses = getCCAddresses(project);
 
-  /******************
-   * internal methods
-   ******************/
-
-  private List<Address> getAdresses(Set<ProjectMember> projectMembers) {
-    List<Address> addressList = new ArrayList<Address>();
-    for (ProjectMember projectMember : projectMembers) {
-      User user = UserUtil.getUser(projectMember.getUserID());
-      if (StringUtils.isNotBlank(user.getEmail())) {
-        try {
-          Address address = new InternetAddress(user.getEmail());
-          addressList.add(address);
-        } catch (AddressException e) {
-          throw new RuntimeException(e);
+        if (toAddresses.size() > 0) {
+            sendMailInternal(toAddresses.toArray(new Address[toAddresses.size()]),
+                    ccAddresses.toArray(new Address[ccAddresses.size()]), null, from, subject, body);
+        } else if (ccAddresses.size() > 0) {
+            sendMailInternal(ccAddresses.toArray(new Address[ccAddresses.size()]),
+                    null, null, from, subject, body);
         }
-      }
     }
-    return addressList;
-  }
 
-  private void sendMailInternal(Address[] rcptTo, Address[] rcptCC, Address[] rcptBCC, Address from, String subject,
-      String body) {
-    try {
-      String mailHost = "mail.sap.corp"; //$NON-NLS-1$
-      Properties props = System.getProperties();
-      props.put("mail.smtp.host", mailHost); //$NON-NLS-1$
-      Session session = Session.getInstance(props, null);
-      Message message = new MimeMessage(session);
-      message.setFrom(from);
-      if (rcptTo != null && rcptTo.length>0) {
-        message.setRecipients(Message.RecipientType.TO, rcptTo);
-      }
-      if (rcptCC != null && rcptCC.length>0) {
-        message.setRecipients(Message.RecipientType.CC, rcptCC);
-      }
-      if (rcptBCC != null && rcptBCC.length>0) {
-        message.setRecipients(Message.RecipientType.BCC, rcptBCC);
-      }
-
-      message.setSubject(subject);
-      message.setContent(body, "text/plain"); //$NON-NLS-1$
-      Transport.send(message);
-    } catch (AddressException e) {
-      throw new RuntimeException(e);
-    } catch (MessagingException e) {
-      throw new RuntimeException(e);
+    @Override
+    public List<Address> getToAddresses(Project project) {
+        PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
+        if (ext == null) {
+            return Collections.emptyList();
+        }
+        return getAdresses(ext.getLeads());
     }
-  }
+
+    @Override
+    public List<Address> getCCAddresses(Project project) {
+        PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
+        if (ext == null) {
+            return Collections.emptyList();
+        }
+        return getAdresses(ext.getMembers());
+    }
+
+    /******************
+     * internal methods
+     ******************/
+
+    private List<Address> getAdresses(Set<ProjectMember> projectMembers) {
+        List<Address> addressList = new ArrayList<Address>();
+        for (ProjectMember projectMember : projectMembers) {
+            User user = UserUtil.getUser(projectMember.getUserID());
+            if (StringUtils.isNotBlank(user.getEmail())) {
+                try {
+                    Address address = new InternetAddress(user.getEmail());
+                    addressList.add(address);
+                } catch (AddressException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return addressList;
+    }
+
+    private void sendMailInternal(Address[] rcptTo, Address[] rcptCC, Address[] rcptBCC, Address from, String subject,
+            String body) {
+        try {
+            String mailHost = "mail.sap.corp"; //$NON-NLS-1$
+            Properties props = System.getProperties();
+            props.put("mail.smtp.host", mailHost); //$NON-NLS-1$
+            Session session = Session.getInstance(props, null);
+            Message message = new MimeMessage(session);
+            message.setFrom(from);
+            if (rcptTo != null && rcptTo.length > 0) {
+                message.setRecipients(Message.RecipientType.TO, rcptTo);
+            }
+            if (rcptCC != null && rcptCC.length > 0) {
+                message.setRecipients(Message.RecipientType.CC, rcptCC);
+            }
+            if (rcptBCC != null && rcptBCC.length > 0) {
+                message.setRecipients(Message.RecipientType.BCC, rcptBCC);
+            }
+
+            message.setSubject(subject);
+            message.setContent(body, "text/plain"); //$NON-NLS-1$
+            Transport.send(message);
+        } catch (AddressException e) {
+            throw new RuntimeException(e);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
-

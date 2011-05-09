@@ -18,15 +18,14 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 @XStreamAlias("toplinks")
 public class TopLinksConfig {
 
-  @XStreamImplicit
-  private ArrayList<TopLinkConfig> topLinks;
+    @XStreamImplicit
+    private ArrayList<TopLinkConfig> topLinks;
 
-  public TopLinksConfig(ArrayList<TopLinkConfig> topLinks) {
-    this.topLinks = topLinks;
-  }
+    public TopLinksConfig(ArrayList<TopLinkConfig> topLinks) {
+        this.topLinks = topLinks;
+    }
 
-  public ArrayList<TopLinkConfig> getTopLinks() {
-    return topLinks;
-  }
+    public ArrayList<TopLinkConfig> getTopLinks() {
+        return topLinks;
+    }
 }
-

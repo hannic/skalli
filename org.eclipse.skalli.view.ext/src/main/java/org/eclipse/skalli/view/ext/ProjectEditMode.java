@@ -14,5 +14,5 @@
 package org.eclipse.skalli.view.ext;
 
 public enum ProjectEditMode {
-  NEW_PROJECT, EDIT_PROJECT, VIEW_PROJECT;
+    NEW_PROJECT, EDIT_PROJECT, VIEW_PROJECT;
 }

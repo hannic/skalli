@@ -11,9 +11,9 @@
 package org.eclipse.skalli.core.internal.configuration;
 
 public class CustomizationData {
-  public String prop1;
-  public String prop2;
+    public String prop1;
+    public String prop2;
 
-  public CustomizationData() {
-  }
+    public CustomizationData() {
+    }
 }

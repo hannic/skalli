@@ -19,62 +19,61 @@ import org.eclipse.skalli.model.ext.EntityBase;
 
 public final class SearchHit<T extends EntityBase> {
 
-  private T entity;
-  private Map<String, List<String>> storedValues;
-  private Map<String, List<String>> highlightedValues;
+    private T entity;
+    private Map<String, List<String>> storedValues;
+    private Map<String, List<String>> highlightedValues;
 
-  public SearchHit(T entity, Map<String, List<String>> storedValues, Map<String, List<String>> highlightedValues) {
-    this.entity = entity;
-    this.storedValues = storedValues;
-    this.highlightedValues = highlightedValues;
-  }
-
-  public String getValue(String key, boolean highlighted) {
-    List<String> values = getMultiValue(key, highlighted);
-    if (values != null && values.size() > 0) {
-      return values.get(0);
-    } else {
-      return null;
+    public SearchHit(T entity, Map<String, List<String>> storedValues, Map<String, List<String>> highlightedValues) {
+        this.entity = entity;
+        this.storedValues = storedValues;
+        this.highlightedValues = highlightedValues;
     }
-  }
 
-  public Map<String, String> getSingleValuesHighlighted() {
-    Map<String, String> ret = new HashMap<String, String>();
-    for (Entry<String, List<String>> entry : highlightedValues.entrySet()) {
-      ret.put(entry.getKey(), entry.getValue().get(0));
+    public String getValue(String key, boolean highlighted) {
+        List<String> values = getMultiValue(key, highlighted);
+        if (values != null && values.size() > 0) {
+            return values.get(0);
+        } else {
+            return null;
+        }
     }
-    return ret;
-  }
 
-  public Map<String, String> getSingleValues() {
-    Map<String, String> ret = new HashMap<String, String>();
-    for (Entry<String, List<String>> entry : storedValues.entrySet()) {
-      ret.put(entry.getKey(), entry.getValue().get(0));
+    public Map<String, String> getSingleValuesHighlighted() {
+        Map<String, String> ret = new HashMap<String, String>();
+        for (Entry<String, List<String>> entry : highlightedValues.entrySet()) {
+            ret.put(entry.getKey(), entry.getValue().get(0));
+        }
+        return ret;
     }
-    return ret;
-  }
 
-  public Map<String, List<String>> getMultiValues() {
-    return storedValues;
-  }
-
-  public Map<String, List<String>> getMultiValuesHighlighted() {
-    return highlightedValues;
-  }
-
-  public List<String> getMultiValue(String key, boolean highlighted) {
-    List<String> values;
-    if (highlighted) {
-      values = highlightedValues.get(key);
-    } else {
-      values = storedValues.get(key);
+    public Map<String, String> getSingleValues() {
+        Map<String, String> ret = new HashMap<String, String>();
+        for (Entry<String, List<String>> entry : storedValues.entrySet()) {
+            ret.put(entry.getKey(), entry.getValue().get(0));
+        }
+        return ret;
     }
-    return values;
-  }
 
-  public T getEntity() {
-    return entity;
-  }
+    public Map<String, List<String>> getMultiValues() {
+        return storedValues;
+    }
+
+    public Map<String, List<String>> getMultiValuesHighlighted() {
+        return highlightedValues;
+    }
+
+    public List<String> getMultiValue(String key, boolean highlighted) {
+        List<String> values;
+        if (highlighted) {
+            values = highlightedValues.get(key);
+        } else {
+            values = storedValues.get(key);
+        }
+        return values;
+    }
+
+    public T getEntity() {
+        return entity;
+    }
 
 }
-

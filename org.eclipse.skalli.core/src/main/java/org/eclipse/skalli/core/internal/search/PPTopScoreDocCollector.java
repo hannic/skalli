@@ -20,40 +20,41 @@ import org.apache.lucene.search.TopDocsCollector;
 
 public abstract class PPTopScoreDocCollector extends TopDocsCollector<ScoreDoc> {
 
-  ScoreDoc pqTop;
-  int docBase = 0;
-  Scorer scorer;
+    ScoreDoc pqTop;
+    int docBase = 0;
+    Scorer scorer;
 
-  PPTopScoreDocCollector(int numHits) {
-    super(new PPHitQueue(numHits, true));
-    pqTop = pq.top();
-  }
-
-  @Override
-  protected TopDocs newTopDocs(ScoreDoc[] results, int start) {
-    if (results == null) {
-      return EMPTY_TOPDOCS;
+    PPTopScoreDocCollector(int numHits) {
+        super(new PPHitQueue(numHits, true));
+        pqTop = pq.top();
     }
 
-    float maxScore = Float.NaN;
-    if (start == 0) {
-      maxScore = results[0].score;
-    } else {
-      for (int i = pq.size(); i > 1; i--) { pq.pop(); }
-      maxScore = pq.pop().score;
+    @Override
+    protected TopDocs newTopDocs(ScoreDoc[] results, int start) {
+        if (results == null) {
+            return EMPTY_TOPDOCS;
+        }
+
+        float maxScore = Float.NaN;
+        if (start == 0) {
+            maxScore = results[0].score;
+        } else {
+            for (int i = pq.size(); i > 1; i--) {
+                pq.pop();
+            }
+            maxScore = pq.pop().score;
+        }
+
+        return new TopDocs(totalHits, results, maxScore);
     }
 
-    return new TopDocs(totalHits, results, maxScore);
-  }
+    @Override
+    public void setNextReader(IndexReader reader, int base) {
+        docBase = base;
+    }
 
-  @Override
-  public void setNextReader(IndexReader reader, int base) {
-    docBase = base;
-  }
-
-  @Override
-  public void setScorer(Scorer scorer) throws IOException {
-    this.scorer = scorer;
-  }
+    @Override
+    public void setScorer(Scorer scorer) throws IOException {
+        this.scorer = scorer;
+    }
 }
-

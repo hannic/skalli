@@ -27,124 +27,121 @@ import org.eclipse.skalli.testutil.TestUtils;
 
 public class LocalUserServiceImplTest {
 
-  private File tmpDir;
+    private File tmpDir;
 
-  private LocalUserServiceImpl userService;
-  private List<User> users;
+    private LocalUserServiceImpl userService;
+    private List<User> users;
 
-  @Before
-  public void setup() throws Exception {
-    new BundleManager(this.getClass()).startBundles();
+    @Before
+    public void setup() throws Exception {
+        new BundleManager(this.getClass()).startBundles();
 
-    userService = new LocalUserServiceImpl();
-    users = userService.getUsers();
-    Assert.assertEquals(5, users.size());
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    if (tmpDir != null) {
-      FileUtils.forceDelete(tmpDir);
+        userService = new LocalUserServiceImpl();
+        users = userService.getUsers();
+        Assert.assertEquals(5, users.size());
     }
-  }
 
-  @Test
-  public void testGetUserById() {
-    for (User user: users) {
-      Assert.assertEquals(user, userService.getUserById(user.getUserId()));
+    @After
+    public void tearDown() throws Exception {
+        if (tmpDir != null) {
+            FileUtils.forceDelete(tmpDir);
+        }
     }
-    Assert.assertEquals(User.createUserWithoutDetails("anonymous"), userService.getUserById("anonymous"));
-  }
 
-  @Test
-  public void testGetUsersById() {
-    Set<User> userSet = userService.getUsersById(CollectionUtils.asSet("gh", "lc", "jw"));
-    Assert.assertTrue(userSet.contains(userService.getUserById("gh")));
-    Assert.assertTrue(userSet.contains(userService.getUserById("lc")));
-    Assert.assertTrue(userSet.contains(userService.getUserById("jw")));
+    @Test
+    public void testGetUserById() {
+        for (User user : users) {
+            Assert.assertEquals(user, userService.getUserById(user.getUserId()));
+        }
+        Assert.assertEquals(User.createUserWithoutDetails("anonymous"), userService.getUserById("anonymous"));
+    }
 
-    userSet = userService.getUsersById(CollectionUtils.asSet("gh", "unknown"));
-    Assert.assertTrue(userSet.contains(userService.getUserById("gh")));
-    Assert.assertTrue(userSet.contains(User.createUserWithoutDetails("unknown")));
+    @Test
+    public void testGetUsersById() {
+        Set<User> userSet = userService.getUsersById(CollectionUtils.asSet("gh", "lc", "jw"));
+        Assert.assertTrue(userSet.contains(userService.getUserById("gh")));
+        Assert.assertTrue(userSet.contains(userService.getUserById("lc")));
+        Assert.assertTrue(userSet.contains(userService.getUserById("jw")));
 
-    userSet = userService.getUsersById(null);
-    Assert.assertEquals(0, userSet.size());
-  }
+        userSet = userService.getUsersById(CollectionUtils.asSet("gh", "unknown"));
+        Assert.assertTrue(userSet.contains(userService.getUserById("gh")));
+        Assert.assertTrue(userSet.contains(User.createUserWithoutDetails("unknown")));
 
-  @Test
-  public void testFindUser() {
-    User userGregHouse = userService.getUserById("gh");
+        userSet = userService.getUsersById(null);
+        Assert.assertEquals(0, userSet.size());
+    }
 
-    List<User> findResult = userService.findUser("Gregory House");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals(userGregHouse, findResult.get(0));
+    @Test
+    public void testFindUser() {
+        User userGregHouse = userService.getUserById("gh");
 
-    findResult = userService.findUser("Greg House");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals(userGregHouse, findResult.get(0));
+        List<User> findResult = userService.findUser("Gregory House");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("grEg HoUse"); // case-insensitive!
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals(userGregHouse, findResult.get(0));
+        findResult = userService.findUser("Greg House");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("Gregory");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals(userGregHouse, findResult.get(0));
+        findResult = userService.findUser("grEg HoUse"); // case-insensitive!
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("Greg");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals(userGregHouse, findResult.get(0));
+        findResult = userService.findUser("Gregory");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("House");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals(userGregHouse, findResult.get(0));
+        findResult = userService.findUser("Greg");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("House, Greg");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("House");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("Greg House, M.D.");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("House, Greg");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("Dr. Greg House");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("Greg House, M.D.");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("Greg 'MasterOfCuddy' House");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("Dr. Greg House");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("gh");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("Greg 'MasterOfCuddy' House");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("greg.house@princeton-plainsborough.com");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("gh");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("diagnost");
-    Assert.assertEquals(1, findResult.size());
-    Assert.assertEquals( userGregHouse, findResult.get(0));
+        findResult = userService.findUser("greg.house@princeton-plainsborough.com");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-    findResult = userService.findUser("");
-    Assert.assertEquals(0, findResult.size());
-    findResult = userService.findUser(null);
-    Assert.assertEquals(0, findResult.size());
-  }
+        findResult = userService.findUser("diagnost");
+        Assert.assertEquals(1, findResult.size());
+        Assert.assertEquals(userGregHouse, findResult.get(0));
 
-  @Test
-  public void testSaveToFile() throws Exception {
-    tmpDir = TestUtils.createTempDir("LocalUserServiceImplTest");
-    File file = new File(tmpDir, "gh.xml");
-    User expected = userService.getUserById("gh");
-    userService.saveToFile(file, expected);
-    Assert.assertTrue(file.exists());
-    User loaded = userService.loadFromFile(file);
-    Assert.assertEquals(expected, loaded);
-  }
+        findResult = userService.findUser("");
+        Assert.assertEquals(0, findResult.size());
+        findResult = userService.findUser(null);
+        Assert.assertEquals(0, findResult.size());
+    }
 
-
+    @Test
+    public void testSaveToFile() throws Exception {
+        tmpDir = TestUtils.createTempDir("LocalUserServiceImplTest");
+        File file = new File(tmpDir, "gh.xml");
+        User expected = userService.getUserById("gh");
+        userService.saveToFile(file, expected);
+        Assert.assertTrue(file.exists());
+        User loaded = userService.loadFromFile(file);
+        Assert.assertEquals(expected, loaded);
+    }
 
 }
-

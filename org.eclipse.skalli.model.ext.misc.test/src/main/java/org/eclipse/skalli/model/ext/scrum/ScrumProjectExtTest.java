@@ -19,19 +19,18 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 import org.junit.Test;
 
 public class ScrumProjectExtTest {
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    values.put(ScrumProjectExt.PROPERTY_BACKLOG_URL, "http://devinf.example.org/skalli/backlog");
-    TreeSet<ProjectMember> scrumMasters = new TreeSet<ProjectMember>();
-    scrumMasters.add(new ProjectMember("homer"));
-    scrumMasters.add(new ProjectMember("marge"));
-    values.put(ScrumProjectExt.PROPERTY_SCRUM_MASTERS, scrumMasters);
-    TreeSet<ProjectMember> productOwners = new TreeSet<ProjectMember>();
-    productOwners.add(new ProjectMember("matt"));
-    values.put(ScrumProjectExt.PROPERTY_PRODUCT_OWNERS, productOwners);
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
-    PropertyHelper.checkPropertyDefinitions(ScrumProjectExt.class, requiredProperties, values);
-  }
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        values.put(ScrumProjectExt.PROPERTY_BACKLOG_URL, "http://devinf.example.org/skalli/backlog");
+        TreeSet<ProjectMember> scrumMasters = new TreeSet<ProjectMember>();
+        scrumMasters.add(new ProjectMember("homer"));
+        scrumMasters.add(new ProjectMember("marge"));
+        values.put(ScrumProjectExt.PROPERTY_SCRUM_MASTERS, scrumMasters);
+        TreeSet<ProjectMember> productOwners = new TreeSet<ProjectMember>();
+        productOwners.add(new ProjectMember("matt"));
+        values.put(ScrumProjectExt.PROPERTY_PRODUCT_OWNERS, productOwners);
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        PropertyHelper.checkPropertyDefinitions(ScrumProjectExt.class, requiredProperties, values);
+    }
 }
-

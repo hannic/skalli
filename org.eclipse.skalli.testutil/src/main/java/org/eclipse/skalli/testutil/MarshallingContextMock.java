@@ -18,29 +18,34 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class MarshallingContextMock implements MarshallingContext {
-  protected HierarchicalStreamWriter writer;
-  protected HashMap map = new HashMap();
+    protected HierarchicalStreamWriter writer;
+    protected HashMap map = new HashMap();
 
-  public MarshallingContextMock(HierarchicalStreamWriter writer) {
-    this.writer = writer;
-  }
-  @Override
-  public Object get(Object key) {
-    return map.get(key);
-  }
-  @Override
-  public Iterator keys() {
-    return map.keySet().iterator();
-  }
-  @Override
-  public void put(Object key, Object value) {
-    map.put(key, value);
-  }
-  @Override
-  public void convertAnother(Object nextItem) {
-  }
-  @Override
-  public void convertAnother(Object nextItem, Converter converter) {
-    converter.marshal(nextItem, writer, this);
-  }
+    public MarshallingContextMock(HierarchicalStreamWriter writer) {
+        this.writer = writer;
+    }
+
+    @Override
+    public Object get(Object key) {
+        return map.get(key);
+    }
+
+    @Override
+    public Iterator keys() {
+        return map.keySet().iterator();
+    }
+
+    @Override
+    public void put(Object key, Object value) {
+        map.put(key, value);
+    }
+
+    @Override
+    public void convertAnother(Object nextItem) {
+    }
+
+    @Override
+    public void convertAnother(Object nextItem, Converter converter) {
+        converter.marshal(nextItem, writer, this);
+    }
 }

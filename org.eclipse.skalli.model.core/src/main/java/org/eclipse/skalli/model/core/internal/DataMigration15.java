@@ -18,22 +18,21 @@ import org.eclipse.skalli.model.ext.AbstractDataMigration;
 
 public class DataMigration15 extends AbstractDataMigration {
 
-  public DataMigration15() {
-    super(Project.class, 15);
-  }
-
-  /**
-   * Changes from model version 15 -> 16:
-   * <ol>
-   *   <li>Link was refactored and hence the fully qualified name changed.</li>
-   * </ol>
-   */
-  @Override
-  public void migrate(Document doc) {
-    NodeList nodes = doc.getElementsByTagName("org.eclipse.skalli.common.Link"); //$NON-NLS-1$
-    for (int i = 0; i < nodes.getLength(); i++) {
-      doc.renameNode(nodes.item(i), null, "org.eclipse.skalli.model.ext.Link"); //$NON-NLS-1$
+    public DataMigration15() {
+        super(Project.class, 15);
     }
-  }
-}
 
+    /**
+     * Changes from model version 15 -> 16:
+     * <ol>
+     *   <li>Link was refactored and hence the fully qualified name changed.</li>
+     * </ol>
+     */
+    @Override
+    public void migrate(Document doc) {
+        NodeList nodes = doc.getElementsByTagName("org.eclipse.skalli.common.Link"); //$NON-NLS-1$
+        for (int i = 0; i < nodes.getLength(); i++) {
+            doc.renameNode(nodes.item(i), null, "org.eclipse.skalli.model.ext.Link"); //$NON-NLS-1$
+        }
+    }
+}

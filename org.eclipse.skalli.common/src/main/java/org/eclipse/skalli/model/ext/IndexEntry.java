@@ -12,42 +12,41 @@ package org.eclipse.skalli.model.ext;
 
 public class IndexEntry {
 
-  public enum Indexed {
-    TOKENIZED, UN_TOKENIZED, NO;
-  }
+    public enum Indexed {
+        TOKENIZED, UN_TOKENIZED, NO;
+    }
 
-  public enum Stored {
-    YES, NO;
-  }
+    public enum Stored {
+        YES, NO;
+    }
 
-  private final String fieldName;
-  private final String value;
-  private final Indexed indexed;
-  private final Stored stored;
+    private final String fieldName;
+    private final String value;
+    private final Indexed indexed;
+    private final Stored stored;
 
-  public IndexEntry(String fieldName, String value, Stored stored, Indexed indexed) {
-    super();
-    this.fieldName = fieldName;
-    this.value = value;
-    this.indexed = indexed;
-    this.stored = stored;
-  }
+    public IndexEntry(String fieldName, String value, Stored stored, Indexed indexed) {
+        super();
+        this.fieldName = fieldName;
+        this.value = value;
+        this.indexed = indexed;
+        this.stored = stored;
+    }
 
-  public String getFieldName() {
-    return fieldName;
-  }
+    public String getFieldName() {
+        return fieldName;
+    }
 
-  public String getValue() {
-    return value;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public Indexed getIndexed() {
-    return indexed;
-  }
+    public Indexed getIndexed() {
+        return indexed;
+    }
 
-  public Stored getStored() {
-    return stored;
-  }
+    public Stored getStored() {
+        return stored;
+    }
 
 }
-

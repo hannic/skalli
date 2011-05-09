@@ -14,19 +14,18 @@ import org.restlet.resource.ServerResource;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 
-public class MavenResolverConfigSection implements ConfigSection  {
+public class MavenResolverConfigSection implements ConfigSection {
 
-  private static final String NAME = "ext/maven/resolver"; //$NON-NLS-1$
+    private static final String NAME = "ext/maven/resolver"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return MavenResolverResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return MavenResolverResource.class;
+    }
 
 }
-

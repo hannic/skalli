@@ -37,99 +37,98 @@ import org.eclipse.skalli.view.internal.filter.FilterUtil;
 
 public class P4Filter implements Filter {
 
-  public static final String REQUEST_ATTRIBUTE_PROJECTURL = "projectUrl"; //$NON-NLS-1$
-  public static final String REQUEST_ATTRIBUTE_PROPOSED_NAME = "proposedName"; //$NON-NLS-1$
-  public static final String REQUEST_ATTRIBUTE_COMMITTERS = "committers"; //$NON-NLS-1$
+    public static final String REQUEST_ATTRIBUTE_PROJECTURL = "projectUrl"; //$NON-NLS-1$
+    public static final String REQUEST_ATTRIBUTE_PROPOSED_NAME = "proposedName"; //$NON-NLS-1$
+    public static final String REQUEST_ATTRIBUTE_COMMITTERS = "committers"; //$NON-NLS-1$
 
-
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
-
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-  throws IOException, ServletException {
-    HttpServletRequest httpRequest = (HttpServletRequest)request;
-
-    // get some attributes from request provided by other filters
-    String projectId = (String) request.getAttribute(Consts.ATTRIBUTE_PROJECTID);
-    Project project = (Project) request.getAttribute(Consts.ATTRIBUTE_PROJECT);
-    User user = (User) request.getAttribute(Consts.ATTRIBUTE_USER);
-
-    FilterException fe = null;
-    if (StringUtils.isBlank(projectId)) {
-      fe = new FilterException("projectId is blank.");
-    } else if (project==null) {
-      fe =  new FilterException("project is null.");
-    } else if (user==null) {
-      fe = new FilterException("user is null.");
-    }
-    if (fe!=null) {
-      FilterUtil.handleException(request, response, fe);
-      // abort this filter, forward to error page is triggered
-      return;
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
     }
 
-    // Create: Project URL
-    String projectUrl = getProjectUrl(httpRequest, projectId);
-    request.setAttribute(REQUEST_ATTRIBUTE_PROJECTURL, projectUrl);
-
-    // Create: Depot Proposal
-    String depotProposal = getDepotProposal(project);
-    request.setAttribute(REQUEST_ATTRIBUTE_PROPOSED_NAME, depotProposal);
-
-    // Create: User(s)
-    String comitters = getCommitters(project);
-    request.setAttribute(REQUEST_ATTRIBUTE_COMMITTERS, comitters);
-
-    // Filter
-    chain.doFilter(request, response);
-  }
-
-  @SuppressWarnings("nls")
-  private String getProjectUrl(HttpServletRequest httpRequest, String projectId) {
-    return httpRequest.getRequestURL().toString().replaceFirst(httpRequest.getServletPath(), "") + Consts.URL_PROJECTS + "/" + projectId;
-  }
-
-  private String getDepotProposal(Project project) {
-    StringBuffer sb = new StringBuffer();
-    List<Project> parents = Services.getRequiredService(ProjectService.class).getParentChain(project.getUuid());
-    for (Project parent : parents) {
-      if (parent.getProjectId() == project.getProjectId()) {
-        sb.insert(0, parent.getProjectId());
-      } else {
-        sb.insert(0, "/"); //$NON-NLS-1$
-        sb.insert(0, parent.getOrConstructShortName());
-      }
+    @Override
+    public void destroy() {
     }
-    sb.insert(0, "//"); //$NON-NLS-1$
-    return sb.toString();
-  }
 
-  private String getCommitters(Project project) {
-    StringBuffer sb = new StringBuffer();
-    PeopleProjectExt peopleExt = project.getExtension(PeopleProjectExt.class);
-    if (peopleExt != null) {
-      Set<String> committers = new TreeSet<String>();
-      for (ProjectMember lead: peopleExt.getLeads()) {
-        committers.add(lead.getUserID());
-      }
-      for (ProjectMember comitter: peopleExt.getMembers()) {
-        committers.add(comitter.getUserID());
-      }
-      for (String comitter: committers) {
-        if (sb.length() > 0) {
-          sb.append(";"); //$NON-NLS-1$
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        // get some attributes from request provided by other filters
+        String projectId = (String) request.getAttribute(Consts.ATTRIBUTE_PROJECTID);
+        Project project = (Project) request.getAttribute(Consts.ATTRIBUTE_PROJECT);
+        User user = (User) request.getAttribute(Consts.ATTRIBUTE_USER);
+
+        FilterException fe = null;
+        if (StringUtils.isBlank(projectId)) {
+            fe = new FilterException("projectId is blank.");
+        } else if (project == null) {
+            fe = new FilterException("project is null.");
+        } else if (user == null) {
+            fe = new FilterException("user is null.");
         }
-        sb.append(comitter);
-      }
+        if (fe != null) {
+            FilterUtil.handleException(request, response, fe);
+            // abort this filter, forward to error page is triggered
+            return;
+        }
+
+        // Create: Project URL
+        String projectUrl = getProjectUrl(httpRequest, projectId);
+        request.setAttribute(REQUEST_ATTRIBUTE_PROJECTURL, projectUrl);
+
+        // Create: Depot Proposal
+        String depotProposal = getDepotProposal(project);
+        request.setAttribute(REQUEST_ATTRIBUTE_PROPOSED_NAME, depotProposal);
+
+        // Create: User(s)
+        String comitters = getCommitters(project);
+        request.setAttribute(REQUEST_ATTRIBUTE_COMMITTERS, comitters);
+
+        // Filter
+        chain.doFilter(request, response);
     }
-    return sb.toString();
-  }
+
+    @SuppressWarnings("nls")
+    private String getProjectUrl(HttpServletRequest httpRequest, String projectId) {
+        return httpRequest.getRequestURL().toString().replaceFirst(httpRequest.getServletPath(), "")
+                + Consts.URL_PROJECTS + "/" + projectId;
+    }
+
+    private String getDepotProposal(Project project) {
+        StringBuffer sb = new StringBuffer();
+        List<Project> parents = Services.getRequiredService(ProjectService.class).getParentChain(project.getUuid());
+        for (Project parent : parents) {
+            if (parent.getProjectId() == project.getProjectId()) {
+                sb.insert(0, parent.getProjectId());
+            } else {
+                sb.insert(0, "/"); //$NON-NLS-1$
+                sb.insert(0, parent.getOrConstructShortName());
+            }
+        }
+        sb.insert(0, "//"); //$NON-NLS-1$
+        return sb.toString();
+    }
+
+    private String getCommitters(Project project) {
+        StringBuffer sb = new StringBuffer();
+        PeopleProjectExt peopleExt = project.getExtension(PeopleProjectExt.class);
+        if (peopleExt != null) {
+            Set<String> committers = new TreeSet<String>();
+            for (ProjectMember lead : peopleExt.getLeads()) {
+                committers.add(lead.getUserID());
+            }
+            for (ProjectMember comitter : peopleExt.getMembers()) {
+                committers.add(comitter.getUserID());
+            }
+            for (String comitter : committers) {
+                if (sb.length() > 0) {
+                    sb.append(";"); //$NON-NLS-1$
+                }
+                sb.append(comitter);
+            }
+        }
+        return sb.toString();
+    }
 
 }
-

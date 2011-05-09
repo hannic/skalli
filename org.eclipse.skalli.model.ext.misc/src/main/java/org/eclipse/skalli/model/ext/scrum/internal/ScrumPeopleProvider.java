@@ -25,39 +25,39 @@ import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.scrum.ScrumProjectExt;
 
 public final class ScrumPeopleProvider implements PeopleProvider {
-  private static final Logger LOG = Log.getLogger(ScrumPeopleProvider.class);
+    private static final Logger LOG = Log.getLogger(ScrumPeopleProvider.class);
 
-  private static final String ROLE_SM = "scrummaster"; //$NON-NLS-1$
-  private static final String ROLE_PO = "productowner"; //$NON-NLS-1$
+    private static final String ROLE_SM = "scrummaster"; //$NON-NLS-1$
+    private static final String ROLE_PO = "productowner"; //$NON-NLS-1$
 
-  protected void activate(ComponentContext context) {
-    LOG.info(this.getClass().getSimpleName() + " component activated"); //$NON-NLS-1$
-  }
-
-  protected void deactivate(ComponentContext context) {
-    LOG.info(this.getClass().getSimpleName() + " component deactivated"); //$NON-NLS-1$
-  }
-
-  @Override
-  public Map<String,Set<ProjectMember>> getPeople(Project project) {
-    Map<String,Set<ProjectMember>> ret = new HashMap<String,Set<ProjectMember>>();
-    ScrumProjectExt ext = project.getExtension(ScrumProjectExt.class);
-    if (ext != null) {
-      ret.put(ROLE_SM, ext.getScrumMasters());
-      ret.put(ROLE_PO, ext.getProductOwners());
+    protected void activate(ComponentContext context) {
+        LOG.info(this.getClass().getSimpleName() + " component activated"); //$NON-NLS-1$
     }
-    return ret;
-  }
 
-  @Override
-  public void addPerson(Project project, String role, ProjectMember person) {
-    ScrumProjectExt ext = project.getExtension(ScrumProjectExt.class);
-    if (ext != null) {
-      if (StringUtils.equalsIgnoreCase(role, ROLE_SM)) {
-        ext.addScrumMaster(person);
-      } else if (StringUtils.equalsIgnoreCase(role, ROLE_PO)) {
-        ext.addProductOwner(person);
-      }
+    protected void deactivate(ComponentContext context) {
+        LOG.info(this.getClass().getSimpleName() + " component deactivated"); //$NON-NLS-1$
     }
-  }
+
+    @Override
+    public Map<String, Set<ProjectMember>> getPeople(Project project) {
+        Map<String, Set<ProjectMember>> ret = new HashMap<String, Set<ProjectMember>>();
+        ScrumProjectExt ext = project.getExtension(ScrumProjectExt.class);
+        if (ext != null) {
+            ret.put(ROLE_SM, ext.getScrumMasters());
+            ret.put(ROLE_PO, ext.getProductOwners());
+        }
+        return ret;
+    }
+
+    @Override
+    public void addPerson(Project project, String role, ProjectMember person) {
+        ScrumProjectExt ext = project.getExtension(ScrumProjectExt.class);
+        if (ext != null) {
+            if (StringUtils.equalsIgnoreCase(role, ROLE_SM)) {
+                ext.addScrumMaster(person);
+            } else if (StringUtils.equalsIgnoreCase(role, ROLE_PO)) {
+                ext.addProductOwner(person);
+            }
+        }
+    }
 }

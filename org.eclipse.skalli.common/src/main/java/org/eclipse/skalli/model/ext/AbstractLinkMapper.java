@@ -17,41 +17,40 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.ComparatorUtils;
 import org.eclipse.skalli.common.util.MapperUtil;
 
-
 public abstract class AbstractLinkMapper implements LinkMapper {
 
-  @Override
-  public List<Link> getMappedLinks(ConfigurationService configService, String projectId, String source, String... purposes) {
-    List<Link> ret = new ArrayList<Link>();
-    if (configService != null) {
-      List<? extends LinkMappingConfig> allMappings = getAllMappings(configService);
-      if (allMappings != null) {
-        for (LinkMappingConfig mapping : allMappings) {
-          if (matches(mapping, purposes)) {
-            String url = MapperUtil.convert(projectId, source, mapping);
-            if (url != null) {
-              Link location = new Link(url, mapping.getName());
-              ret.add(location);
+    @Override
+    public List<Link> getMappedLinks(ConfigurationService configService, String projectId, String source,
+            String... purposes) {
+        List<Link> ret = new ArrayList<Link>();
+        if (configService != null) {
+            List<? extends LinkMappingConfig> allMappings = getAllMappings(configService);
+            if (allMappings != null) {
+                for (LinkMappingConfig mapping : allMappings) {
+                    if (matches(mapping, purposes)) {
+                        String url = MapperUtil.convert(projectId, source, mapping);
+                        if (url != null) {
+                            Link location = new Link(url, mapping.getName());
+                            ret.add(location);
+                        }
+                    }
+                }
             }
-          }
         }
-      }
+        return ret;
     }
-    return ret;
-  }
 
-  protected boolean matches(LinkMappingConfig mapping, String... purposes) {
-    if (purposes == null) {
-      purposes = ALL_PURPOSES;
+    protected boolean matches(LinkMappingConfig mapping, String... purposes) {
+        if (purposes == null) {
+            purposes = ALL_PURPOSES;
+        }
+        for (String purpose : purposes) {
+            if (ALL_PURPOSES[0].equals(purpose) || ComparatorUtils.equals(purpose, mapping.getPurpose())) {
+                return true;
+            }
+        }
+        return false;
     }
-    for (String purpose: purposes)  {
-      if (ALL_PURPOSES[0].equals(purpose) || ComparatorUtils.equals(purpose, mapping.getPurpose())) {
-        return true;
-      }
-    }
-    return false;
-  }
 
-  protected abstract List<? extends LinkMappingConfig> getAllMappings(ConfigurationService configService);
+    protected abstract List<? extends LinkMappingConfig> getAllMappings(ConfigurationService configService);
 }
-

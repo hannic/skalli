@@ -21,38 +21,37 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class NoopConverterTest {
 
-  @Test
-  public void testCanConvert() {
-    NoopConverter nc = new NoopConverter();
-    Assert.assertTrue(nc.canConvert(Noop.class));
-    Assert.assertFalse(nc.canConvert(Object.class));
-  }
+    @Test
+    public void testCanConvert() {
+        NoopConverter nc = new NoopConverter();
+        Assert.assertTrue(nc.canConvert(Noop.class));
+        Assert.assertFalse(nc.canConvert(Object.class));
+    }
 
-  @Test
-  public void testMarshal() {
-    NoopConverter nc = new NoopConverter();
-    HierarchicalStreamWriter mockWriter = EasyMock.createMock(HierarchicalStreamWriter.class);
-    MarshallingContext mockContext = EasyMock.createMock(MarshallingContext.class);
-    Object[] mocks = new Object[] { mockWriter, mockContext };
-    EasyMock.reset(mocks);
-    // expect no calls
-    EasyMock.replay(mocks);
-    nc.marshal(new Object(), mockWriter, mockContext);
-    EasyMock.verify(mocks);
-  }
+    @Test
+    public void testMarshal() {
+        NoopConverter nc = new NoopConverter();
+        HierarchicalStreamWriter mockWriter = EasyMock.createMock(HierarchicalStreamWriter.class);
+        MarshallingContext mockContext = EasyMock.createMock(MarshallingContext.class);
+        Object[] mocks = new Object[] { mockWriter, mockContext };
+        EasyMock.reset(mocks);
+        // expect no calls
+        EasyMock.replay(mocks);
+        nc.marshal(new Object(), mockWriter, mockContext);
+        EasyMock.verify(mocks);
+    }
 
-  @Test
-  public void testUnmarshal() {
-    NoopConverter nc = new NoopConverter();
-    HierarchicalStreamReader mockWriter = EasyMock.createMock(HierarchicalStreamReader.class);
-    UnmarshallingContext mockContext = EasyMock.createMock(UnmarshallingContext.class);
-    Object[] mocks = new Object[] { mockWriter, mockContext };
-    EasyMock.reset(mocks);
-    // expect no calls
-    EasyMock.replay(mocks);
-    Object res = nc.unmarshal(mockWriter, mockContext);
-    Assert.assertNull(res);
-    EasyMock.verify(mocks);
-  }
+    @Test
+    public void testUnmarshal() {
+        NoopConverter nc = new NoopConverter();
+        HierarchicalStreamReader mockWriter = EasyMock.createMock(HierarchicalStreamReader.class);
+        UnmarshallingContext mockContext = EasyMock.createMock(UnmarshallingContext.class);
+        Object[] mocks = new Object[] { mockWriter, mockContext };
+        EasyMock.reset(mocks);
+        // expect no calls
+        EasyMock.replay(mocks);
+        Object res = nc.unmarshal(mockWriter, mockContext);
+        Assert.assertNull(res);
+        EasyMock.verify(mocks);
+    }
 }
-

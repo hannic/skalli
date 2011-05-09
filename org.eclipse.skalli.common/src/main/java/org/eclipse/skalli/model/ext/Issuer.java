@@ -15,4 +15,3 @@ package org.eclipse.skalli.model.ext;
  */
 public interface Issuer {
 }
-

@@ -20,38 +20,37 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class ComparatorUtilsTest {
 
-  @Test
-  public void testEquals() {
-    assertTrue(ComparatorUtils.equals(null, null));
-    assertFalse(ComparatorUtils.equals(null, ""));
-    assertFalse(ComparatorUtils.equals("", null));
-    assertTrue(ComparatorUtils.equals("hugo", "hugo"));
-    assertFalse(ComparatorUtils.equals("hugo", "foobar"));
-    assertFalse(ComparatorUtils.equals("hugo", new Integer(1)));
-    assertFalse(ComparatorUtils.equals(new Integer(1), "hugo"));
-    assertTrue(ComparatorUtils.equals(Arrays.asList("a", "b"), Arrays.asList("a", "b")));
-  }
+    @Test
+    public void testEquals() {
+        assertTrue(ComparatorUtils.equals(null, null));
+        assertFalse(ComparatorUtils.equals(null, ""));
+        assertFalse(ComparatorUtils.equals("", null));
+        assertTrue(ComparatorUtils.equals("hugo", "hugo"));
+        assertFalse(ComparatorUtils.equals("hugo", "foobar"));
+        assertFalse(ComparatorUtils.equals("hugo", new Integer(1)));
+        assertFalse(ComparatorUtils.equals(new Integer(1), "hugo"));
+        assertTrue(ComparatorUtils.equals(Arrays.asList("a", "b"), Arrays.asList("a", "b")));
+    }
 
-  @Test
-  public void testCompareComparables() {
-    assertTrue(ComparatorUtils.compare(null, null) == 0);
-    assertTrue(ComparatorUtils.compare(null, "hugo") < 0);
-    assertTrue(ComparatorUtils.compare("hugo", null) > 0);
-    assertTrue(ComparatorUtils.compare("hugo", "hugo") == 0);
-    assertTrue(ComparatorUtils.compare("a", "b") < 0);
-    assertTrue(ComparatorUtils.compare("b", "a") > 0);
-  }
+    @Test
+    public void testCompareComparables() {
+        assertTrue(ComparatorUtils.compare(null, null) == 0);
+        assertTrue(ComparatorUtils.compare(null, "hugo") < 0);
+        assertTrue(ComparatorUtils.compare("hugo", null) > 0);
+        assertTrue(ComparatorUtils.compare("hugo", "hugo") == 0);
+        assertTrue(ComparatorUtils.compare("a", "b") < 0);
+        assertTrue(ComparatorUtils.compare("b", "a") > 0);
+    }
 
-  @Test
-  public void testCompareAsStrings() throws Exception {
-    Class<?> c = getClass();
-    assertTrue(ComparatorUtils.compareAsStrings(null, null) == 0);
-    assertTrue(ComparatorUtils.compareAsStrings(null, c) < 0);
-    assertTrue(ComparatorUtils.compareAsStrings(c, null) > 0);
-    assertTrue(ComparatorUtils.compareAsStrings(c, c) == 0);
-    assertTrue(ComparatorUtils.compareAsStrings(c, "hugo") < 0);
-    assertTrue(ComparatorUtils.compareAsStrings("hugo", c) > 0);
-  }
+    @Test
+    public void testCompareAsStrings() throws Exception {
+        Class<?> c = getClass();
+        assertTrue(ComparatorUtils.compareAsStrings(null, null) == 0);
+        assertTrue(ComparatorUtils.compareAsStrings(null, c) < 0);
+        assertTrue(ComparatorUtils.compareAsStrings(c, null) > 0);
+        assertTrue(ComparatorUtils.compareAsStrings(c, c) == 0);
+        assertTrue(ComparatorUtils.compareAsStrings(c, "hugo") < 0);
+        assertTrue(ComparatorUtils.compareAsStrings("hugo", c) > 0);
+    }
 
 }
-

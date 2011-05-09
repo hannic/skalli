@@ -20,28 +20,27 @@ import org.eclipse.skalli.model.ext.EntityBase;
  */
 public interface PersistenceService {
 
-  /**
-   * Persists the given model entity.
-   *
-   * @param entity
-   *          the model entity to persist.
-   * @param userId
-   *          unique identifier of the user performing the modification
-   *          (relevant for the audit trail).
-   */
-  public void persist(EntityBase entity, String userId);
+    /**
+     * Persists the given model entity.
+     *
+     * @param entity
+     *          the model entity to persist.
+     * @param userId
+     *          unique identifier of the user performing the modification
+     *          (relevant for the audit trail).
+     */
+    public void persist(EntityBase entity, String userId);
 
-  public <T extends EntityBase> T loadEntity(Class<T> entityClass, UUID uuid);
+    public <T extends EntityBase> T loadEntity(Class<T> entityClass, UUID uuid);
 
-  public <T extends EntityBase> T getEntity(Class<T> entityClass, UUID uuid);
+    public <T extends EntityBase> T getEntity(Class<T> entityClass, UUID uuid);
 
-  public <T extends EntityBase> List<T> getEntities(Class<T> entityClass);
+    public <T extends EntityBase> List<T> getEntities(Class<T> entityClass);
 
-  public <T extends EntityBase> T getEntity(Class<T> entityClass, EntityFilter<T> filter);
+    public <T extends EntityBase> T getEntity(Class<T> entityClass, EntityFilter<T> filter);
 
-  public <T extends EntityBase> T getDeletedEntity(Class<T> entityClass, UUID uuid);
+    public <T extends EntityBase> T getDeletedEntity(Class<T> entityClass, UUID uuid);
 
-  public <T extends EntityBase> List<T> getDeletedEntities(Class<T> entityClass);
+    public <T extends EntityBase> List<T> getDeletedEntities(Class<T> entityClass);
 
 }
-

@@ -25,111 +25,114 @@ import com.vaadin.ui.Layout;
 
 public class PhaseSelect extends CustomField {
 
-  private static final long serialVersionUID = -8351312392930159187L;
+    private static final long serialVersionUID = -8351312392930159187L;
 
-  private Project project;
-  private List<String> phases;
-  private ComboBox cb;
-  private CheckBox deleted;
-  private boolean readOnly;
+    private Project project;
+    private List<String> phases;
+    private ComboBox cb;
+    private CheckBox deleted;
+    private boolean readOnly;
 
-  public PhaseSelect(String caption, Collection<?> phases, Project project, boolean showDeletedCheckbox) {
-    setCaption(caption);
-    this.project = project;
-    this.phases = new ArrayList<String>();
-    if (phases != null) {
-      if (!phases.contains(project.getPhase())) {
-        addPhase(project.getPhase());
-      }
-      for (Object phase: phases) {
-        addPhase(phase.toString());
-      }
+    public PhaseSelect(String caption, Collection<?> phases, Project project, boolean showDeletedCheckbox) {
+        setCaption(caption);
+        this.project = project;
+        this.phases = new ArrayList<String>();
+        if (phases != null) {
+            if (!phases.contains(project.getPhase())) {
+                addPhase(project.getPhase());
+            }
+            for (Object phase : phases) {
+                addPhase(phase.toString());
+            }
+        }
+        Layout layout = createLayout(showDeletedCheckbox);
+        setCompositionRoot(layout);
     }
-    Layout layout = createLayout(showDeletedCheckbox);
-    setCompositionRoot(layout);
-  }
 
-  private void addPhase(String phase) {
-    phases.add(phase);
-  }
-
-  private Layout createLayout(boolean showDeletedCheckbox) {
-    final FloatLayout layout = new FloatLayout();
-    cb = new ComboBox(null, phases);
-    layout.addComponent(cb);
-    if (showDeletedCheckbox) {
-      deleted = new CheckBox("Deleted", project.isDeleted());
-      layout.addComponent(deleted, "margin-left:20px;margin-top:3px");
+    private void addPhase(String phase) {
+        phases.add(phase);
     }
-    return layout;
-  }
 
-  public void setFilteringMode(int filteringMode) {
-    cb.setFilteringMode(filteringMode);
-  }
-
-  public void setNewItemsAllowed(boolean allowNewOptions) {
-    cb.setNewItemsAllowed(allowNewOptions);
-  }
-
-  public void setNullSelectionAllowed(boolean nullSelectionAllowed) {
-    cb.setNullSelectionAllowed(nullSelectionAllowed);
-  }
-
-  public void select(Object itemId) {
-    cb.select(itemId);
-  }
-
-  public boolean isDeleted() {
-    return deleted != null? ((Boolean)deleted.getValue()).booleanValue() : project.isDeleted();
-  }
-
-  @Override
-  public void setReadOnly(boolean readOnly) {
-    this.readOnly = readOnly;
-    cb.setReadOnly(readOnly);
-    if (deleted != null) {
-      deleted.setReadOnly(readOnly);
+    private Layout createLayout(boolean showDeletedCheckbox) {
+        final FloatLayout layout = new FloatLayout();
+        cb = new ComboBox(null, phases);
+        layout.addComponent(cb);
+        if (showDeletedCheckbox) {
+            deleted = new CheckBox("Deleted", project.isDeleted());
+            layout.addComponent(deleted, "margin-left:20px;margin-top:3px");
+        }
+        return layout;
     }
-  }
 
-  @Override
-  public boolean isReadOnly() {
-    return readOnly;
-  }
-
-  @Override
-  public void commit() throws SourceException, InvalidValueException {
-      validate();
-      cb.commit();
-      project.setDeleted(isDeleted());
-      project.setPhase((String)cb.getValue());
-  }
-
-  @Override
-  public boolean isValid() {
-    boolean isValid = super.isValid();
-    if (isValid && isDeleted()) {
-      ProjectService projectService = Services.getRequiredService(ProjectService.class);
-      if (!projectService.getSubProjects(project.getUuid()).isEmpty()) {
-        isValid = false;
-      }
+    public void setFilteringMode(int filteringMode) {
+        cb.setFilteringMode(filteringMode);
     }
-    return isValid;
-  }
 
-  @Override
-  public void validate() throws InvalidValueException {
-    if (!isValid()) {
-      throw new InvalidValueException("Project \"" + project.getName() + "\" has subprojects and " +
-          "cannot be deleted - first delete all subprojects or assign them to other projects. Then try again.");
+    public void setNewItemsAllowed(boolean allowNewOptions) {
+        cb.setNewItemsAllowed(allowNewOptions);
     }
-    super.validate();
-  }
 
-  @Override
-  public Class<?> getType() {
-    return String.class;
-  }
+    public void setNullSelectionAllowed(boolean nullSelectionAllowed) {
+        cb.setNullSelectionAllowed(nullSelectionAllowed);
+    }
+
+    public void select(Object itemId) {
+        cb.select(itemId);
+    }
+
+    public boolean isDeleted() {
+        return deleted != null ? ((Boolean) deleted.getValue()).booleanValue() : project.isDeleted();
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        cb.setReadOnly(readOnly);
+        if (deleted != null) {
+            deleted.setReadOnly(readOnly);
+        }
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    @Override
+    public void commit() throws SourceException, InvalidValueException {
+        validate();
+        cb.commit();
+        project.setDeleted(isDeleted());
+        project.setPhase((String) cb.getValue());
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean isValid = super.isValid();
+        if (isValid && isDeleted()) {
+            ProjectService projectService = Services.getRequiredService(ProjectService.class);
+            if (!projectService.getSubProjects(project.getUuid()).isEmpty()) {
+                isValid = false;
+            }
+        }
+        return isValid;
+    }
+
+    @Override
+    public void validate() throws InvalidValueException {
+        if (!isValid()) {
+            throw new InvalidValueException(
+                    "Project \""
+                            + project.getName()
+                            + "\" has subprojects and "
+                            +
+                            "cannot be deleted - first delete all subprojects or assign them to other projects. Then try again.");
+        }
+        super.validate();
+    }
+
+    @Override
+    public Class<?> getType() {
+        return String.class;
+    }
 }
-

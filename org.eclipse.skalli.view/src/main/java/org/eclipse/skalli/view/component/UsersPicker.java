@@ -32,193 +32,191 @@ import com.vaadin.ui.VerticalLayout;
 
 public class UsersPicker extends CustomField implements IPeopleSelectHandler {
 
-  private static final long serialVersionUID = -8373359795470666228L;
+    private static final long serialVersionUID = -8373359795470666228L;
 
-  private static final String STYLE_TABLE = "usrpk-tbl";
-  private static final String STYLE_BUTTON = "multitext-btn"; // use the same style as used in multitext component
-  public static final String COLUMN_USER = "user";
-  public static final String COLUMN_REMOVE = "remove";
+    private static final String STYLE_TABLE = "usrpk-tbl";
+    private static final String STYLE_BUTTON = "multitext-btn"; // use the same style as used in multitext component
+    public static final String COLUMN_USER = "user";
+    public static final String COLUMN_REMOVE = "remove";
 
-  private final VerticalLayout layout;
-  private final UsersPickerContainer tableDateSource;
-  private final Collection<ProjectMember> members;
-  private boolean modified;
-  private boolean readOnly;
+    private final VerticalLayout layout;
+    private final UsersPickerContainer tableDateSource;
+    private final Collection<ProjectMember> members;
+    private boolean modified;
+    private boolean readOnly;
 
-  private Table table;
+    private Table table;
 
+    public UsersPicker(String caption, Collection<ProjectMember> members) {
+        modified = false;
+        this.members = members;
 
-  public UsersPicker(String caption, Collection<ProjectMember> members) {
-    modified = false;
-    this.members = members;
+        tableDateSource = UsersPickerContainer.newInstance(new ArrayList<User>());
+        initializeTableDataSource();
 
-    tableDateSource = UsersPickerContainer.newInstance(new ArrayList<User>());
-    initializeTableDataSource();
-
-    layout = new VerticalLayout();
-    layout.setWidth("100%"); // do not change that! otherwise right border of table is hidden in IE!
-    renderTable();
-    setCaption(caption);
-    setCompositionRoot(layout);
-  }
-
-  private void initializeTableDataSource() {
-    if (members != null) {
-      for (ProjectMember member: members) {
-        User user = UserContainer.getUser(member);
-        if (user != null) {
-          tableDateSource.addItem(user);
-        }
-      }
+        layout = new VerticalLayout();
+        layout.setWidth("100%"); // do not change that! otherwise right border of table is hidden in IE!
+        renderTable();
+        setCaption(caption);
+        setCompositionRoot(layout);
     }
-  }
 
-  @SuppressWarnings({ "serial", "deprecation" })
-  private void renderTable() {
-    table = new Table();
-    table.addStyleName(STYLE_TABLE);
-    table.setSelectable(true);
-    table.setContainerDataSource(tableDateSource);
-
-    table.addGeneratedColumn(COLUMN_USER, new Table.ColumnGenerator() {
-      @Override
-      public Component generateCell(Table source, Object itemId, Object columnId) {
-        String userId = itemId.toString();
-        User user = UserUtil.getUser(userId);
-        PeopleComponent peopleComponent = new PeopleComponent(user);
-        return peopleComponent;
-      }
-    });
-
-    if (!readOnly) {
-      table.addGeneratedColumn(COLUMN_REMOVE, new Table.ColumnGenerator() {
-        @Override
-        public Component generateCell(Table source, final Object itemId, Object columnId) {
-          Button b = new Button("remove");
-          b.setStyleName(Button.STYLE_LINK);
-          b.addStyleName(STYLE_BUTTON);
-          b.setDescription("Remove this member");
-          b.addListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-              removeItem(itemId);
-              adjustPageLength(table);
+    private void initializeTableDataSource() {
+        if (members != null) {
+            for (ProjectMember member : members) {
+                User user = UserContainer.getUser(member);
+                if (user != null) {
+                    tableDateSource.addItem(user);
+                }
             }
-          });
-          return b;
         }
-      });
     }
 
-    table.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
-    if (!readOnly) {
-      table.setVisibleColumns(new String[] {COLUMN_USER, COLUMN_REMOVE});
-      table.setColumnExpandRatio(COLUMN_USER, 0.5f);
-      table.setColumnWidth(COLUMN_REMOVE, 50);
-      table.setColumnHeaders(new String[] { "User", "Remove" });
-    } else {
-      table.setVisibleColumns(new String[] {COLUMN_USER});
-      table.setColumnHeaders(new String[] { "User", });
-    }
+    @SuppressWarnings({ "serial", "deprecation" })
+    private void renderTable() {
+        table = new Table();
+        table.addStyleName(STYLE_TABLE);
+        table.setSelectable(true);
+        table.setContainerDataSource(tableDateSource);
 
-    table.setSelectable(false);
-    table.setWidth("100%"); // do not change that! otherwise right border of table is hidden in IE!
-    table.setReadOnly(readOnly);
-    adjustPageLength(table);
+        table.addGeneratedColumn(COLUMN_USER, new Table.ColumnGenerator() {
+            @Override
+            public Component generateCell(Table source, Object itemId, Object columnId) {
+                String userId = itemId.toString();
+                User user = UserUtil.getUser(userId);
+                PeopleComponent peopleComponent = new PeopleComponent(user);
+                return peopleComponent;
+            }
+        });
 
-    layout.addComponent(table);
-    layout.setExpandRatio(table, 1.0f);
-
-    if (!readOnly) {
-      Button searchButton = new Button("Add user", new Button.ClickListener() {
-        @Override
-        public void buttonClick(ClickEvent event) {
-          PeopleSearchWindow search = new PeopleSearchWindow(UsersPicker.this, UsersPicker.this);
-          search.show();
-          adjustPageLength(table);
+        if (!readOnly) {
+            table.addGeneratedColumn(COLUMN_REMOVE, new Table.ColumnGenerator() {
+                @Override
+                public Component generateCell(Table source, final Object itemId, Object columnId) {
+                    Button b = new Button("remove");
+                    b.setStyleName(Button.STYLE_LINK);
+                    b.addStyleName(STYLE_BUTTON);
+                    b.setDescription("Remove this member");
+                    b.addListener(new Button.ClickListener() {
+                        @Override
+                        public void buttonClick(ClickEvent event) {
+                            removeItem(itemId);
+                            adjustPageLength(table);
+                        }
+                    });
+                    return b;
+                }
+            });
         }
-      });
-      searchButton.setStyle(Button.STYLE_LINK);
-      searchButton.setDescription("Add user");
-      searchButton.setWidth("80px");
-      layout.addComponent(searchButton);
-    }
-  }
 
-  private void removeItem(Object itemId) {
-    if (itemId != null) {
-      tableDateSource.removeItem(itemId);
-      modified = true;
-    }
-  }
-
-  private void adjustPageLength(Table table) {
-    if (tableDateSource.size() > 0) {
-      table.setPageLength(0);
-    } else {
-      table.setPageLength(1);
-    }
-  }
-
-  @Override
-  public void onPeopleSelected(Set<User> users) {
-    for (User user : users) {
-      tableDateSource.addItem(user);
-    }
-    modified = true;
-    adjustPageLength(table);
-  }
-
-  @Override
-  public void commit() throws SourceException, InvalidValueException {
-    // add all existing
-    for (Object itemId : tableDateSource.getItemIds()) {
-      String userId = (String) itemId;
-      ProjectMember member = null;
-      for (ProjectMember m : members) {
-        if (m.getUserID().equalsIgnoreCase(userId)) {
-          member = m;
-          break;
+        table.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
+        if (!readOnly) {
+            table.setVisibleColumns(new String[] { COLUMN_USER, COLUMN_REMOVE });
+            table.setColumnExpandRatio(COLUMN_USER, 0.5f);
+            table.setColumnWidth(COLUMN_REMOVE, 50);
+            table.setColumnHeaders(new String[] { "User", "Remove" });
+        } else {
+            table.setVisibleColumns(new String[] { COLUMN_USER });
+            table.setColumnHeaders(new String[] { "User", });
         }
-      }
-      if (member == null) {
-        member = new ProjectMember((String) itemId);
-      }
-      members.add(member);
+
+        table.setSelectable(false);
+        table.setWidth("100%"); // do not change that! otherwise right border of table is hidden in IE!
+        table.setReadOnly(readOnly);
+        adjustPageLength(table);
+
+        layout.addComponent(table);
+        layout.setExpandRatio(table, 1.0f);
+
+        if (!readOnly) {
+            Button searchButton = new Button("Add user", new Button.ClickListener() {
+                @Override
+                public void buttonClick(ClickEvent event) {
+                    PeopleSearchWindow search = new PeopleSearchWindow(UsersPicker.this, UsersPicker.this);
+                    search.show();
+                    adjustPageLength(table);
+                }
+            });
+            searchButton.setStyle(Button.STYLE_LINK);
+            searchButton.setDescription("Add user");
+            searchButton.setWidth("80px");
+            layout.addComponent(searchButton);
+        }
     }
 
-    // remove all nonexisting
-    Iterator<ProjectMember> iterator = members.iterator();
-    while (iterator.hasNext()) {
-      ProjectMember member = iterator.next();
-      Item item = tableDateSource.getItem(member.getUserID().toLowerCase(Locale.ENGLISH));
-      if (item == null) {
-        iterator.remove();
-      }
+    private void removeItem(Object itemId) {
+        if (itemId != null) {
+            tableDateSource.removeItem(itemId);
+            modified = true;
+        }
     }
-  }
 
-  @Override
-  public boolean isModified() {
-    return modified;
-  }
+    private void adjustPageLength(Table table) {
+        if (tableDateSource.size() > 0) {
+            table.setPageLength(0);
+        } else {
+            table.setPageLength(1);
+        }
+    }
 
-  @Override
-  public void setReadOnly(boolean readOnly) {
-   this.readOnly = readOnly;
-   layout.removeAllComponents();
-   renderTable();
-  }
+    @Override
+    public void onPeopleSelected(Set<User> users) {
+        for (User user : users) {
+            tableDateSource.addItem(user);
+        }
+        modified = true;
+        adjustPageLength(table);
+    }
 
-  @Override
-  public boolean isReadOnly() {
-    return readOnly;
-  }
+    @Override
+    public void commit() throws SourceException, InvalidValueException {
+        // add all existing
+        for (Object itemId : tableDateSource.getItemIds()) {
+            String userId = (String) itemId;
+            ProjectMember member = null;
+            for (ProjectMember m : members) {
+                if (m.getUserID().equalsIgnoreCase(userId)) {
+                    member = m;
+                    break;
+                }
+            }
+            if (member == null) {
+                member = new ProjectMember((String) itemId);
+            }
+            members.add(member);
+        }
 
-  @Override
-  public Class<?> getType() {
-    return Set.class;
-  }
+        // remove all nonexisting
+        Iterator<ProjectMember> iterator = members.iterator();
+        while (iterator.hasNext()) {
+            ProjectMember member = iterator.next();
+            Item item = tableDateSource.getItem(member.getUserID().toLowerCase(Locale.ENGLISH));
+            if (item == null) {
+                iterator.remove();
+            }
+        }
+    }
+
+    @Override
+    public boolean isModified() {
+        return modified;
+    }
+
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+        layout.removeAllComponents();
+        renderTable();
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    @Override
+    public Class<?> getType() {
+        return Set.class;
+    }
 
 }
-

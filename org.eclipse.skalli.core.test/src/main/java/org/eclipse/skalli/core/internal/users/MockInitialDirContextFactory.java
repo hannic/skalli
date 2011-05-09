@@ -21,24 +21,23 @@ import org.easymock.EasyMock;
 
 public class MockInitialDirContextFactory implements InitialContextFactory {
 
-  private static DirContext mockContext = null;
+    private static DirContext mockContext = null;
 
-  public static DirContext getLatestMockContext() {
-    return getOrCreateMockContext();
-  }
-
-  public Context getInitialContext(Hashtable<?, ?> environment) throws NamingException {
-    return getOrCreateMockContext();
-  }
-
-  private static DirContext getOrCreateMockContext() {
-    synchronized (MockInitialDirContextFactory.class) {
-      if (mockContext == null) {
-        mockContext = (DirContext) EasyMock.createMock(DirContext.class);
-      }
+    public static DirContext getLatestMockContext() {
+        return getOrCreateMockContext();
     }
-    return mockContext;
-  }
+
+    public Context getInitialContext(Hashtable<?, ?> environment) throws NamingException {
+        return getOrCreateMockContext();
+    }
+
+    private static DirContext getOrCreateMockContext() {
+        synchronized (MockInitialDirContextFactory.class) {
+            if (mockContext == null) {
+                mockContext = (DirContext) EasyMock.createMock(DirContext.class);
+            }
+        }
+        return mockContext;
+    }
 
 }
-

@@ -16,25 +16,25 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class UUIDUtilsTest {
 
-  @Test
-  public void testIsUUID() {
-    Assert.assertTrue(UUIDUtils.isUUID("5856b08a-0f87-4d91-b007-ac367ced247a"));
-    Assert.assertFalse(UUIDUtils.isUUID("foobar"));
-    Assert.assertFalse(UUIDUtils.isUUID(Long.toString(System.currentTimeMillis())));
-    Assert.assertFalse(UUIDUtils.isUUID(null));
-    Assert.assertFalse(UUIDUtils.isUUID(""));
-  }
+    @Test
+    public void testIsUUID() {
+        Assert.assertTrue(UUIDUtils.isUUID("5856b08a-0f87-4d91-b007-ac367ced247a"));
+        Assert.assertFalse(UUIDUtils.isUUID("foobar"));
+        Assert.assertFalse(UUIDUtils.isUUID(Long.toString(System.currentTimeMillis())));
+        Assert.assertFalse(UUIDUtils.isUUID(null));
+        Assert.assertFalse(UUIDUtils.isUUID(""));
+    }
 
-  @Test
-  public void testAsUUID() {
-    Assert.assertNotNull(UUIDUtils.asUUID("5856b08a-0f87-4d91-b007-ac367ced247a"));
-    Assert.assertEquals("5856b08a-0f87-4d91-b007-ac367ced247a", UUIDUtils.asUUID("5856b08a-0f87-4d91-b007-ac367ced247a").toString());
+    @Test
+    public void testAsUUID() {
+        Assert.assertNotNull(UUIDUtils.asUUID("5856b08a-0f87-4d91-b007-ac367ced247a"));
+        Assert.assertEquals("5856b08a-0f87-4d91-b007-ac367ced247a",
+                UUIDUtils.asUUID("5856b08a-0f87-4d91-b007-ac367ced247a").toString());
 
-    Assert.assertNotNull(UUIDUtils.asUUID("foobar"));
-    Assert.assertFalse("foobar".equals(UUIDUtils.asUUID("foobar").toString()));
+        Assert.assertNotNull(UUIDUtils.asUUID("foobar"));
+        Assert.assertFalse("foobar".equals(UUIDUtils.asUUID("foobar").toString()));
 
-    Assert.assertNotNull(UUIDUtils.asUUID(null));
-    Assert.assertNotNull(UUIDUtils.asUUID(""));
-  }
+        Assert.assertNotNull(UUIDUtils.asUUID(null));
+        Assert.assertNotNull(UUIDUtils.asUUID(""));
+    }
 }
-

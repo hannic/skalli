@@ -16,17 +16,16 @@ import org.eclipse.skalli.api.rest.config.ConfigSection;
 
 public class ScmLocationMappingConfigSection implements ConfigSection {
 
-  private static final String NAME = "devInf/scmMappings"; //$NON-NLS-1$
+    private static final String NAME = "devInf/scmMappings"; //$NON-NLS-1$
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-  @Override
-  public Class<? extends ServerResource> getServerResource() {
-    return ScmLocationMappingResource.class;
-  }
+    @Override
+    public Class<? extends ServerResource> getServerResource() {
+        return ScmLocationMappingResource.class;
+    }
 
 }
-

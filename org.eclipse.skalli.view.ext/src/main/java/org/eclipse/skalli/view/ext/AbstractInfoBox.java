@@ -12,9 +12,8 @@ package org.eclipse.skalli.view.ext;
 
 public abstract class AbstractInfoBox {
 
-  protected static final String STYLE_LABEL = "infolabel";
-  protected static final String STYLE_LINK = "infolink";
-  protected static final String STYLE_TEAMLABEL = "teamlabel";
+    protected static final String STYLE_LABEL = "infolabel";
+    protected static final String STYLE_LINK = "infolink";
+    protected static final String STYLE_TEAMLABEL = "teamlabel";
 
 }
-

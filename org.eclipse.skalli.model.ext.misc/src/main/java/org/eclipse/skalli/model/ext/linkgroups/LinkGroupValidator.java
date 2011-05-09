@@ -24,37 +24,36 @@ import org.eclipse.skalli.model.ext.Severity;
 
 public class LinkGroupValidator extends HostReachableValidator {
 
-  public LinkGroupValidator(Class<? extends ExtensionEntityBase> extension, String propertyId) {
-    super(extension, propertyId);
-  }
-
-  @Override
-  public SortedSet<Issue> validate(UUID entityId, Object value, Severity minSeverity) {
-    final SortedSet<Issue> issues = new TreeSet<Issue>();
-
-    // Do not participate in checks with Severity.FATAL & ignore null
-    if (minSeverity.equals(Severity.FATAL) || value == null) {
-      return issues;
+    public LinkGroupValidator(Class<? extends ExtensionEntityBase> extension, String propertyId) {
+        super(extension, propertyId);
     }
 
-    if (value instanceof Collection) {
-      int item = 0;
-      for (Object collectionEntry : (Collection<?>) value) {
-        if (collectionEntry == null || !(collectionEntry instanceof LinkGroup)) {
-          continue;
-        }
-        for (Object groupEntry : LinkGroup.class.cast(collectionEntry).getItems()) {
-          if (groupEntry == null || !(groupEntry instanceof Link)) {
-            continue;
-          }
-          validate(issues, entityId, groupEntry, minSeverity, item);
-          ++item;
-        }
-      }
-    }
+    @Override
+    public SortedSet<Issue> validate(UUID entityId, Object value, Severity minSeverity) {
+        final SortedSet<Issue> issues = new TreeSet<Issue>();
 
-    return issues;
-  }
+        // Do not participate in checks with Severity.FATAL & ignore null
+        if (minSeverity.equals(Severity.FATAL) || value == null) {
+            return issues;
+        }
+
+        if (value instanceof Collection) {
+            int item = 0;
+            for (Object collectionEntry : (Collection<?>) value) {
+                if (collectionEntry == null || !(collectionEntry instanceof LinkGroup)) {
+                    continue;
+                }
+                for (Object groupEntry : LinkGroup.class.cast(collectionEntry).getItems()) {
+                    if (groupEntry == null || !(groupEntry instanceof Link)) {
+                        continue;
+                    }
+                    validate(issues, entityId, groupEntry, minSeverity, item);
+                    ++item;
+                }
+            }
+        }
+
+        return issues;
+    }
 
 }
-

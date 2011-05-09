@@ -19,19 +19,18 @@ import org.eclipse.skalli.model.ext.ValidationException;
 
 public class DataMigration10 extends AbstractDataMigration {
 
-  public DataMigration10() {
-    super(Project.class, 10);
-  }
+    public DataMigration10() {
+        super(Project.class, 10);
+    }
 
-  /**
-   * Changes from model version 10->11:
-   * <ol>
-   *   <li>renamed parentProject -> parentEntityId</li>
-   * </ol>
-   */
-  @Override
-  public void migrate(Document doc) throws ValidationException {
-    XMLUtils.renameTag(doc, "parentProject", "parentEntityId");
-  }
+    /**
+     * Changes from model version 10->11:
+     * <ol>
+     *   <li>renamed parentProject -> parentEntityId</li>
+     * </ol>
+     */
+    @Override
+    public void migrate(Document doc) throws ValidationException {
+        XMLUtils.renameTag(doc, "parentProject", "parentEntityId");
+    }
 }
-

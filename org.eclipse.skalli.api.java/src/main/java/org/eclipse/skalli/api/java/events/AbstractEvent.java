@@ -13,4 +13,3 @@ package org.eclipse.skalli.api.java.events;
 public class AbstractEvent {
 
 }
-

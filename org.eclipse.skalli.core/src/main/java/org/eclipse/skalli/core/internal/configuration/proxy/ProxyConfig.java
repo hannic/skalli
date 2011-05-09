@@ -15,28 +15,32 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("proxy")
 public class ProxyConfig {
 
-  private String host;
-  private String port;
-  private String nonProxyHosts;
+    private String host;
+    private String port;
+    private String nonProxyHosts;
 
-  public String getHost() {
-    return host;
-  }
-  public void setHost(String host) {
-    this.host = host;
-  }
-  public String getPort() {
-    return port;
-  }
-  public void setPort(String port) {
-    this.port = port;
-  }
-  public void setNonProxyHosts(String nonProxyHosts) {
-    this.nonProxyHosts = nonProxyHosts;
-  }
-  public String getNonProxyHosts() {
-    return nonProxyHosts;
-  }
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public void setNonProxyHosts(String nonProxyHosts) {
+        this.nonProxyHosts = nonProxyHosts;
+    }
+
+    public String getNonProxyHosts() {
+        return nonProxyHosts;
+    }
 
 }
-

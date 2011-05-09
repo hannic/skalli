@@ -19,15 +19,14 @@ import org.eclipse.skalli.model.ext.ValidationException;
 
 public class DataMigration5 extends AbstractDataMigration {
 
-  public DataMigration5() {
-    super(Project.class, 5);
-  }
+    public DataMigration5() {
+        super(Project.class, 5);
+    }
 
-  @Override
-  public void migrate(Document doc) throws ValidationException {
-    XMLUtils.migrateStringToStringSet(doc, "mailingList", "mailingLists", false);
-    XMLUtils.migrateStringToStringSet(doc, "scmLocation", "scmLocations", false);
-  }
+    @Override
+    public void migrate(Document doc) throws ValidationException {
+        XMLUtils.migrateStringToStringSet(doc, "mailingList", "mailingLists", false);
+        XMLUtils.migrateStringToStringSet(doc, "scmLocation", "scmLocations", false);
+    }
 
 }
-

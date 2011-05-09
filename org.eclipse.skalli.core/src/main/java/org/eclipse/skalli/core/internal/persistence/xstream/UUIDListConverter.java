@@ -21,35 +21,34 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class UUIDListConverter implements Converter {
 
-  @Override
-  public boolean canConvert(Class type) {
-    return UUIDList.class.isAssignableFrom(type);
-  }
-
-  @Override
-  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-    UUIDList uuids = (UUIDList)source;
-    for (UUID uuid: uuids) {
-      writer.startNode("uuid");
-      writer.setValue(uuid.toString());
-      writer.endNode();
+    @Override
+    public boolean canConvert(Class type) {
+        return UUIDList.class.isAssignableFrom(type);
     }
-  }
 
-  @Override
-  public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    UUIDList uuids = new UUIDList();
-    while (reader.hasMoreChildren()) {
-      reader.moveDown();
-      String name = reader.getNodeName();
-      String value = reader.getValue();
-      if ("uuid".equals(name)) {
-        uuids.add(UUID.fromString(value));
-      }
-      reader.moveUp();
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        UUIDList uuids = (UUIDList) source;
+        for (UUID uuid : uuids) {
+            writer.startNode("uuid");
+            writer.setValue(uuid.toString());
+            writer.endNode();
+        }
     }
-    return uuids;
-  }
+
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        UUIDList uuids = new UUIDList();
+        while (reader.hasMoreChildren()) {
+            reader.moveDown();
+            String name = reader.getNodeName();
+            String value = reader.getValue();
+            if ("uuid".equals(name)) {
+                uuids.add(UUID.fromString(value));
+            }
+            reader.moveUp();
+        }
+        return uuids;
+    }
 
 }
-

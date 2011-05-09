@@ -20,11 +20,10 @@ import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class StatisticsResource extends ServerResource {
 
-
-  @Get
-  public Representation retrieve() {
-    Statistics stats = Statistics.getDefault();
-    return new IgnoreUnknownElementsXStreamRepresentation<Statistics>(stats,
-        new AliasedConverter[] {new StatisticsConverter(getRequest().getResourceRef().getHostIdentifier())});
-  }
+    @Get
+    public Representation retrieve() {
+        Statistics stats = Statistics.getDefault();
+        return new IgnoreUnknownElementsXStreamRepresentation<Statistics>(stats,
+                new AliasedConverter[] { new StatisticsConverter(getRequest().getResourceRef().getHostIdentifier()) });
+    }
 }

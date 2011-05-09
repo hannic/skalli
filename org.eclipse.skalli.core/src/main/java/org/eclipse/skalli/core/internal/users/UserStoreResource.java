@@ -19,30 +19,29 @@ import org.eclipse.skalli.common.configuration.ConfigKey;
 
 public class UserStoreResource extends ConfigResource<ConfigKeyUserStore, UserStoreConfig> {
 
-  @Override
-  protected Class<UserStoreConfig> getConfigClass() {
-    return UserStoreConfig.class;
-  }
+    @Override
+    protected Class<UserStoreConfig> getConfigClass() {
+        return UserStoreConfig.class;
+    }
 
-  @Override
-  protected Map<ConfigKey, String> configToMap(UserStoreConfig configObject) {
-    Map<ConfigKey, String> ret = new HashMap<ConfigKey, String>();
-    ret.put(ConfigKeyUserStore.TYPE, configObject.getType());
-    ret.put(ConfigKeyUserStore.USE_LOCAL_FALLBACK, configObject.getUseLocalFallback());
-    return ret;
-  }
+    @Override
+    protected Map<ConfigKey, String> configToMap(UserStoreConfig configObject) {
+        Map<ConfigKey, String> ret = new HashMap<ConfigKey, String>();
+        ret.put(ConfigKeyUserStore.TYPE, configObject.getType());
+        ret.put(ConfigKeyUserStore.USE_LOCAL_FALLBACK, configObject.getUseLocalFallback());
+        return ret;
+    }
 
-  @Override
-  protected ConfigKeyUserStore[] getAllKeys() {
-    return ConfigKeyUserStore.values();
-  }
+    @Override
+    protected ConfigKeyUserStore[] getAllKeys() {
+        return ConfigKeyUserStore.values();
+    }
 
-  @Override
-  protected UserStoreConfig mapToConfig(Map<ConfigKeyUserStore, String> values) {
-    UserStoreConfig ret = new UserStoreConfig();
-    ret.setType(values.get(ConfigKeyUserStore.TYPE));
-    ret.setUseLocalFallback(values.get(ConfigKeyUserStore.USE_LOCAL_FALLBACK));
-    return ret;
-  }
+    @Override
+    protected UserStoreConfig mapToConfig(Map<ConfigKeyUserStore, String> values) {
+        UserStoreConfig ret = new UserStoreConfig();
+        ret.setType(values.get(ConfigKeyUserStore.TYPE));
+        ret.setUseLocalFallback(values.get(ConfigKeyUserStore.USE_LOCAL_FALLBACK));
+        return ret;
+    }
 }
-

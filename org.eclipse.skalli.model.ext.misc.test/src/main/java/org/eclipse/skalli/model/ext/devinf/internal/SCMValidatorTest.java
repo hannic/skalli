@@ -18,32 +18,35 @@ import org.eclipse.skalli.testutil.ValidatorUtils;
 @SuppressWarnings("nls")
 public class SCMValidatorTest {
 
-  @Test
-  public void test() {
-    SCMValidator validator = new SCMValidator("SCM Location");
-    ValidatorUtils.assertIsValid(validator, null);
-    ValidatorUtils.assertIsValid(validator, "");
+    @Test
+    public void test() {
+        SCMValidator validator = new SCMValidator("SCM Location");
+        ValidatorUtils.assertIsValid(validator, null);
+        ValidatorUtils.assertIsValid(validator, "");
 
-    // git
-    ValidatorUtils.assertIsValid(validator, "scm:git:git://git.wdf.sap.corp/helloWorld.git");
-    ValidatorUtils.assertIsValid(validator, "scm:git:git://git.wdf.sap.corp/NGP/LDI/ldi.hudson.jobgenerator.git");
+        // git
+        ValidatorUtils.assertIsValid(validator, "scm:git:git://git.wdf.sap.corp/helloWorld.git");
+        ValidatorUtils.assertIsValid(validator, "scm:git:git://git.wdf.sap.corp/NGP/LDI/ldi.hudson.jobgenerator.git");
 
-    ValidatorUtils.assertNotValid(validator, "scm:git:git://git.wdf.sap.corp/helloWorld", Severity.ERROR);
-    ValidatorUtils.assertNotValid(validator, "scm:git://git.wdf.sap.corp/helloWorld", Severity.ERROR);
+        ValidatorUtils.assertNotValid(validator, "scm:git:git://git.wdf.sap.corp/helloWorld", Severity.ERROR);
+        ValidatorUtils.assertNotValid(validator, "scm:git://git.wdf.sap.corp/helloWorld", Severity.ERROR);
 
-    // perforce
-    ValidatorUtils.assertIsValid(validator, "scm:perforce:perforce3227.wdf.sap.corp:3227://LDI/ldi.helloworld/");
-    ValidatorUtils.assertIsValid(validator, "scm:perforce:perforce3227:3227://LDI/ldi.helloworld/");
+        // perforce
+        ValidatorUtils.assertIsValid(validator, "scm:perforce:perforce3227.wdf.sap.corp:3227://LDI/ldi.helloworld/");
+        ValidatorUtils.assertIsValid(validator, "scm:perforce:perforce3227:3227://LDI/ldi.helloworld/");
 
-    ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227.wdf.sap.corp:3227://LDI/ldi.helloworld", Severity.ERROR);
+        ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227.wdf.sap.corp:3227://LDI/ldi.helloworld",
+                Severity.ERROR);
 
-    ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227.wdf.sap.corp:3227:/LDI/ldi.helloworld/", Severity.ERROR);
-    ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227:3217://LDI/ldi.helloworld/", Severity.ERROR);
-    ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227.wdfxsap.corp:3227://LDI/ldi.helloworld/", Severity.ERROR);
+        ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227.wdf.sap.corp:3227:/LDI/ldi.helloworld/",
+                Severity.ERROR);
+        ValidatorUtils
+                .assertNotValid(validator, "scm:perforce:perforce3227:3217://LDI/ldi.helloworld/", Severity.ERROR);
+        ValidatorUtils.assertNotValid(validator, "scm:perforce:perforce3227.wdfxsap.corp:3227://LDI/ldi.helloworld/",
+                Severity.ERROR);
 
-    // others
-    ValidatorUtils.assertNotValid(validator, "scn:git:git://git.wdf.sap.corp/helloWorld", Severity.FATAL);
-    ValidatorUtils.assertNotValid(validator, "scm:hg:http://host/v3", Severity.FATAL);
-  }
+        // others
+        ValidatorUtils.assertNotValid(validator, "scn:git:git://git.wdf.sap.corp/helloWorld", Severity.FATAL);
+        ValidatorUtils.assertNotValid(validator, "scm:hg:http://host/v3", Severity.FATAL);
+    }
 }
-

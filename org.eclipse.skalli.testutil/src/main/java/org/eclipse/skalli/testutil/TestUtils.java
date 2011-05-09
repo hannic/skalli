@@ -15,12 +15,11 @@ import java.io.IOException;
 
 public class TestUtils {
 
-  public static File createTempDir(String prefix) throws IOException {
-    File tmpFile = File.createTempFile(prefix, "-tmp");
-    if (tmpFile.delete() && tmpFile.mkdirs()) {
-      return tmpFile;
+    public static File createTempDir(String prefix) throws IOException {
+        File tmpFile = File.createTempFile(prefix, "-tmp");
+        if (tmpFile.delete() && tmpFile.mkdirs()) {
+            return tmpFile;
+        }
+        throw new IOException("Failed to create tmpDir " + tmpFile);
     }
-    throw new IOException("Failed to create tmpDir " + tmpFile);
-  }
 }
-

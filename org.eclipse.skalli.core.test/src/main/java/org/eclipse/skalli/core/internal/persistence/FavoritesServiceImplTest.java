@@ -25,66 +25,66 @@ import org.eclipse.skalli.testutil.AssertUtils;
 
 public class FavoritesServiceImplTest extends ProjectServiceImplTest {
 
-  private static class TestFavoritesServiceImpl extends FavoritesServiceImpl {
-    private final PersistenceService persistenceService;
-    public TestFavoritesServiceImpl(PersistenceService persistenceService) {
-      this.persistenceService = persistenceService;
+    private static class TestFavoritesServiceImpl extends FavoritesServiceImpl {
+        private final PersistenceService persistenceService;
+
+        public TestFavoritesServiceImpl(PersistenceService persistenceService) {
+            this.persistenceService = persistenceService;
+        }
+
+        @Override
+        protected PersistenceService getPersistenceService() {
+            return persistenceService;
+        }
     }
+
+    private static final String USERID1 = "Homer";
+    private static final String USERID2 = "Marge";
+
+    private Favorites favorites1;
+    private Favorites favorites2;
+    private FavoritesService fs;
+
     @Override
-    protected PersistenceService getPersistenceService() {
-      return persistenceService;
+    @Before
+    public void setup() throws BundleException {
+        super.setup();
+        favorites1 = new Favorites(USERID1);
+        favorites1.addProject(uuids[1]);
+        favorites1.addProject(uuids[2]);
+        favorites1.addProject(uuids[3]);
+        favorites2 = new Favorites(USERID2);
+        favorites2.addProject(uuids[2]);
+        favorites2.addProject(uuids[5]); // reference to a deleted project!
+        fs = new TestFavoritesServiceImpl(mockIPS);
     }
-  }
 
-  private static final String USERID1 = "Homer";
-  private static final String USERID2 = "Marge";
+    @Override
+    protected void recordMocks() {
+        super.recordMocks();
 
-  private Favorites favorites1;
-  private Favorites favorites2;
-  private FavoritesService fs;
+        mockIPS.getEntity(eq(Favorites.class), isA(FavoritesFilter.class));
+        expectLastCall().andAnswer(new IAnswer<Favorites>() {
+            @Override
+            public Favorites answer() throws Throwable {
+                Object[] args = getCurrentArguments();
+                String userId = ((FavoritesFilter) args[1]).getUserId();
+                if (USERID1.equals(userId)) {
+                    return favorites1;
+                }
+                if (USERID2.equals(userId)) {
+                    return favorites2;
+                }
+                return null;
+            }
+        }).anyTimes();
+    }
 
-  @Override
-  @Before
-  public void setup() throws BundleException {
-    super.setup();
-    favorites1 = new Favorites(USERID1);
-    favorites1.addProject(uuids[1]);
-    favorites1.addProject(uuids[2]);
-    favorites1.addProject(uuids[3]);
-    favorites2 = new Favorites(USERID2);
-    favorites2.addProject(uuids[2]);
-    favorites2.addProject(uuids[5]); // reference to a deleted project!
-    fs = new TestFavoritesServiceImpl(mockIPS);
-  }
+    @Test
+    public void testGetFavorites() {
+        Favorites fav1 = fs.getFavorites(USERID1);
+        AssertUtils.assertEquals("favorites of " + USERID1, favorites1.getProjects(), fav1.getProjects());
 
-  @Override
-  protected void recordMocks() {
-    super.recordMocks();
-
-    mockIPS.getEntity(eq(Favorites.class), isA(FavoritesFilter.class));
-    expectLastCall().andAnswer(new IAnswer<Favorites>(){
-      @Override
-      public Favorites answer() throws Throwable {
-        Object[] args = getCurrentArguments();
-        String userId = ((FavoritesFilter)args[1]).getUserId();
-        if (USERID1.equals(userId)) {
-          return favorites1;
-        }
-        if (USERID2.equals(userId)) {
-          return favorites2;
-        }
-        return null;
-      }
-    }).anyTimes();
-  }
-
-
-  @Test
-  public void testGetFavorites() {
-    Favorites fav1 = fs.getFavorites(USERID1);
-    AssertUtils.assertEquals("favorites of " + USERID1, favorites1.getProjects(), fav1.getProjects());
-
-    verify(mocks);
-  }
+        verify(mocks);
+    }
 }
-

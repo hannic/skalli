@@ -26,53 +26,52 @@ import com.vaadin.ui.Link;
 
 public class RelatedProjectsInfoBox extends AbstractInfoBox implements ProjectInfoBox {
 
-  @Override
-  public String getIconPath() {
-    return "res/icons/relProjects.png"; //$NON-NLS-1$
-  }
-
-  @Override
-  public String getCaption() {
-    return "Related Projects";
-  }
-
-  @Override
-  public Component getContent(Project project, ExtensionUtil util) {
-    Layout layout = new CssLayout();
-    layout.setSizeFull();
-
-    SearchService searchService = Services.getService(SearchService.class);
-    if (searchService != null) {
-      SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 5);
-      for (SearchHit<Project> hit : relatedProjects.getResult()) {
-        Link link = new Link();
-        link.setCaption(hit.getEntity().getName());
-        link.setResource(new ExternalResource("/projects/" + hit.getEntity().getProjectId())); //$NON-NLS-1$
-        layout.addComponent(link);
-      }
+    @Override
+    public String getIconPath() {
+        return "res/icons/relProjects.png"; //$NON-NLS-1$
     }
 
-    return layout;
-  }
-
-  @Override
-  public float getPositionWeight() {
-    return 1.8f;
-  }
-
-  @Override
-  public int getPreferredColumn() {
-    return COLUMN_EAST;
-  }
-
-  @Override
-  public boolean isVisible(Project project, String loggedInUserId) {
-    if (project.isDeleted()) {
-      return false;
-    } else {
-      return true;
+    @Override
+    public String getCaption() {
+        return "Related Projects";
     }
-  }
+
+    @Override
+    public Component getContent(Project project, ExtensionUtil util) {
+        Layout layout = new CssLayout();
+        layout.setSizeFull();
+
+        SearchService searchService = Services.getService(SearchService.class);
+        if (searchService != null) {
+            SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 5);
+            for (SearchHit<Project> hit : relatedProjects.getResult()) {
+                Link link = new Link();
+                link.setCaption(hit.getEntity().getName());
+                link.setResource(new ExternalResource("/projects/" + hit.getEntity().getProjectId())); //$NON-NLS-1$
+                layout.addComponent(link);
+            }
+        }
+
+        return layout;
+    }
+
+    @Override
+    public float getPositionWeight() {
+        return 1.8f;
+    }
+
+    @Override
+    public int getPreferredColumn() {
+        return COLUMN_EAST;
+    }
+
+    @Override
+    public boolean isVisible(Project project, String loggedInUserId) {
+        if (project.isDeleted()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }
-

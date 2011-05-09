@@ -17,12 +17,10 @@ import org.eclipse.skalli.testutil.MigrationTestUtil;
 @SuppressWarnings("nls")
 public class DataMigration15Test {
 
-  @Test
-  public void testMigrate() throws Exception {
-    DataMigration15 migration1 = new DataMigration15();
-    MigrationTestUtil.testMigration(migration1, "links");
-  }
-
+    @Test
+    public void testMigrate() throws Exception {
+        DataMigration15 migration1 = new DataMigration15();
+        MigrationTestUtil.testMigration(migration1, "links");
+    }
 
 }
-

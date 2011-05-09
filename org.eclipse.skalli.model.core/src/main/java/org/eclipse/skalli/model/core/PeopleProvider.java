@@ -27,9 +27,8 @@ import java.util.Set;
  */
 public interface PeopleProvider {
 
-  public Map<String,Set<ProjectMember>> getPeople(Project project);
+    public Map<String, Set<ProjectMember>> getPeople(Project project);
 
-  public void addPerson(Project project, String role, ProjectMember person);
+    public void addPerson(Project project, String role, ProjectMember person);
 
 }
-

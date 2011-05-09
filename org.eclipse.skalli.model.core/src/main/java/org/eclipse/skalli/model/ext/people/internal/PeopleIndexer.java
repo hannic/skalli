@@ -15,10 +15,9 @@ import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 
 public class PeopleIndexer extends AbstractIndexer<PeopleProjectExt> {
 
-  @Override
-  protected void indexFields(PeopleProjectExt entity) {
-    // TODO replace "allMembers" indexing in ProjectIndexer
-  }
+    @Override
+    protected void indexFields(PeopleProjectExt entity) {
+        // TODO replace "allMembers" indexing in ProjectIndexer
+    }
 
 }
-

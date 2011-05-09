@@ -27,49 +27,48 @@ import org.eclipse.skalli.testutil.TestExtension;
 @SuppressWarnings("nls")
 public class ExtensionEntityBaseTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    values.put(TestExtension.PROPERTY_BOOL, true);
-    values.put(TestExtension.PROPERTY_STR, "string");
-    values.put(TestExtension.PROPERTY_ITEMS, Arrays.asList("item1", "item2", "item3"));
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
-    PropertyHelper.checkPropertyDefinitions(TestExtension.class, requiredProperties, values);
-  }
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        values.put(TestExtension.PROPERTY_BOOL, true);
+        values.put(TestExtension.PROPERTY_STR, "string");
+        values.put(TestExtension.PROPERTY_ITEMS, Arrays.asList("item1", "item2", "item3"));
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        PropertyHelper.checkPropertyDefinitions(TestExtension.class, requiredProperties, values);
+    }
 
-  @Test
-  public void testGetSetExtensibleEntity() {
-    TestExtensibleEntityBase base = new TestExtensibleEntityBase(PropertyHelperUtils.TEST_UUIDS[0]);
-    TestExtension ext = new TestExtension();
-    ext.setExtensibleEntity(base);
-    Assert.assertEquals(base, ext.getExtensibleEntity());
-  }
+    @Test
+    public void testGetSetExtensibleEntity() {
+        TestExtensibleEntityBase base = new TestExtensibleEntityBase(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestExtension ext = new TestExtension();
+        ext.setExtensibleEntity(base);
+        Assert.assertEquals(base, ext.getExtensibleEntity());
+    }
 
-  @Test
-  public void testGetPropertyNames() {
-    TestExtensibleEntityBase base = new TestExtensibleEntityBase(PropertyHelperUtils.TEST_UUIDS[0]);
-    TestExtension ext = new TestExtension();
-    ext.setExtensibleEntity(base);
-    AssertUtils.assertEqualsAnyOrder("getPropertyNames",
-        CollectionUtils.asSet("parentEntity", "str", "items", "parentEntityId",
-            "uuid", "bool", "deleted", "lastModified", "lastModifiedBy"),
-        ext.getPropertyNames());
-  }
+    @Test
+    public void testGetPropertyNames() {
+        TestExtensibleEntityBase base = new TestExtensibleEntityBase(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestExtension ext = new TestExtension();
+        ext.setExtensibleEntity(base);
+        AssertUtils.assertEqualsAnyOrder("getPropertyNames",
+                CollectionUtils.asSet("parentEntity", "str", "items", "parentEntityId",
+                        "uuid", "bool", "deleted", "lastModified", "lastModifiedBy"),
+                ext.getPropertyNames());
+    }
 
-  @Test
-  public void testGetProperty() throws Exception {
-    TestExtensibleEntityBase base = new TestExtensibleEntityBase(PropertyHelperUtils.TEST_UUIDS[0]);
-    TestExtension extBase = new TestExtension();
-    extBase.setExtensibleEntity(base);
-    extBase.setBool(true);
-    extBase.setStr("Homer");
-    List<String> list = Arrays.asList("Marge", "Lisa", "Bart");
-    extBase.setItems(list);
+    @Test
+    public void testGetProperty() throws Exception {
+        TestExtensibleEntityBase base = new TestExtensibleEntityBase(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestExtension extBase = new TestExtension();
+        extBase.setExtensibleEntity(base);
+        extBase.setBool(true);
+        extBase.setStr("Homer");
+        List<String> list = Arrays.asList("Marge", "Lisa", "Bart");
+        extBase.setItems(list);
 
-    Assert.assertEquals(Boolean.TRUE, (Boolean)extBase.getProperty(TestExtension.PROPERTY_BOOL));
-    Assert.assertEquals("Homer", (String)extBase.getProperty(TestExtension.PROPERTY_STR));
-    AssertUtils.assertEquals("List", list, (List<String>)extBase.getProperty(TestExtension.PROPERTY_ITEMS));
-  }
+        Assert.assertEquals(Boolean.TRUE, (Boolean) extBase.getProperty(TestExtension.PROPERTY_BOOL));
+        Assert.assertEquals("Homer", (String) extBase.getProperty(TestExtension.PROPERTY_STR));
+        AssertUtils.assertEquals("List", list, (List<String>) extBase.getProperty(TestExtension.PROPERTY_ITEMS));
+    }
 
 }
-

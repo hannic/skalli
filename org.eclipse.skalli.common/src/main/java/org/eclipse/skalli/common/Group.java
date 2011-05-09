@@ -21,56 +21,55 @@ import org.eclipse.skalli.model.ext.PropertyName;
  */
 public class Group extends EntityBase {
 
-  @PropertyName(position=0)
-  public static final String PROPERTY_GROUP_ID = "groupId"; //$NON-NLS-1$
+    @PropertyName(position = 0)
+    public static final String PROPERTY_GROUP_ID = "groupId"; //$NON-NLS-1$
 
-  @PropertyName(position=1)
-  public static final String PROPERTY_GROUP_MEMBERS = "groupMembers"; //$NON-NLS-1$
+    @PropertyName(position = 1)
+    public static final String PROPERTY_GROUP_MEMBERS = "groupMembers"; //$NON-NLS-1$
 
-  private String groupId;
-  private TreeSet<String> groupMembers = new TreeSet<String>();
+    private String groupId;
+    private TreeSet<String> groupMembers = new TreeSet<String>();
 
-  public Group() {
-  }
-
-  public Group(String groupId) {
-    this.groupId = groupId;
-  }
-
-  public String getGroupId() {
-    return groupId;
-  }
-
-  public void setGroupId(String groupId) {
-    this.groupId = groupId;
-  }
-
-  public synchronized SortedSet<String> getGroupMembers() {
-    if (groupMembers == null) {
-      groupMembers = new TreeSet<String>();
+    public Group() {
     }
-    return groupMembers;
-  }
 
-  public void addGroupMember(String userId) {
-    if (userId != null) {
-      getGroupMembers().add(userId);
+    public Group(String groupId) {
+        this.groupId = groupId;
     }
-  }
 
-  public void removeGroupMember(String userId) {
-    if (userId != null) {
-      getGroupMembers().remove(userId);
+    public String getGroupId() {
+        return groupId;
     }
-  }
 
-  public boolean hasGroupMember(String userId) {
-    for (String g : getGroupMembers()) {
-      if (g.equals(userId)) {
-        return true;
-      }
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
-    return false;
-  }
+
+    public synchronized SortedSet<String> getGroupMembers() {
+        if (groupMembers == null) {
+            groupMembers = new TreeSet<String>();
+        }
+        return groupMembers;
+    }
+
+    public void addGroupMember(String userId) {
+        if (userId != null) {
+            getGroupMembers().add(userId);
+        }
+    }
+
+    public void removeGroupMember(String userId) {
+        if (userId != null) {
+            getGroupMembers().remove(userId);
+        }
+    }
+
+    public boolean hasGroupMember(String userId) {
+        for (String g : getGroupMembers()) {
+            if (g.equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
-

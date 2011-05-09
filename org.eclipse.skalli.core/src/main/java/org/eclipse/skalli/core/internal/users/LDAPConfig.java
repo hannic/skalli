@@ -15,51 +15,50 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("ldap")
 public class LDAPConfig {
 
-  private String password;
-  private String username;
-  private String hostname;
-  private String ctxFactory;
-  private String usersGroup;
+    private String password;
+    private String username;
+    private String hostname;
+    private String ctxFactory;
+    private String usersGroup;
 
-  public String getPassword() {
-    return password;
-  }
+    public String getPassword() {
+        return password;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public String getHostname() {
-    return hostname;
-  }
+    public String getHostname() {
+        return hostname;
+    }
 
-  public void setHostname(String hostname) {
-    this.hostname = hostname;
-  }
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
 
-  public String getCtxFactory() {
-    return ctxFactory;
-  }
+    public String getCtxFactory() {
+        return ctxFactory;
+    }
 
-  public void setCtxFactory(String ctxFactory) {
-    this.ctxFactory = ctxFactory;
-  }
+    public void setCtxFactory(String ctxFactory) {
+        this.ctxFactory = ctxFactory;
+    }
 
-  public String getUsersGroup() {
-    return usersGroup;
-  }
+    public String getUsersGroup() {
+        return usersGroup;
+    }
 
-  public void setUsersGroup(String usersGroup) {
-    this.usersGroup = usersGroup;
-  }
+    public void setUsersGroup(String usersGroup) {
+        this.usersGroup = usersGroup;
+    }
 
 }
-

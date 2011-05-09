@@ -19,52 +19,51 @@ import org.junit.Assert;
 @SuppressWarnings("nls")
 public class AssertUtils {
 
-  public static void assertEquals(String message, String[][] collection, String[]...values) {
-    Assert.assertEquals(message+"[size]", values.length, collection.length);
-    for (int i=0; i<collection.length; ++i) {
-      for (int j=0; j<4; ++j) {
-        Assert.assertEquals(message+"["+i+","+j+"]", collection[i][j], values[i][j]);
-      }
+    public static void assertEquals(String message, String[][] collection, String[]... values) {
+        Assert.assertEquals(message + "[size]", values.length, collection.length);
+        for (int i = 0; i < collection.length; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                Assert.assertEquals(message + "[" + i + "," + j + "]", collection[i][j], values[i][j]);
+            }
+        }
     }
-  }
 
-  public static <T> void assertEquals(String message, Collection<T> collection, T...values) {
-    Assert.assertEquals(message+"[size]", values.length, collection.size());
-    int i=0;
-    for (T o: collection) {
-      Assert.assertEquals(message+"["+i+"]", values[i], o);
-      ++i;
+    public static <T> void assertEquals(String message, Collection<T> collection, T... values) {
+        Assert.assertEquals(message + "[size]", values.length, collection.size());
+        int i = 0;
+        for (T o : collection) {
+            Assert.assertEquals(message + "[" + i + "]", values[i], o);
+            ++i;
+        }
     }
-  }
 
-  public static void assertEquals(String message, SortedMap<?,?> map, String...values) {
-    Assert.assertEquals(message+"[size]", values.length, map.size());
-    int i=0;
-    for (Object o: map.keySet()) {
-      Assert.assertEquals(message+"["+i+"]", values[i], o.toString());
-      ++i;
+    public static void assertEquals(String message, SortedMap<?, ?> map, String... values) {
+        Assert.assertEquals(message + "[size]", values.length, map.size());
+        int i = 0;
+        for (Object o : map.keySet()) {
+            Assert.assertEquals(message + "[" + i + "]", values[i], o.toString());
+            ++i;
+        }
     }
-  }
 
-  public static <T> void assertEquals(String message, Collection<T> collection1, Collection<T> collection2) {
-    Assert.assertEquals(message+"[size]", collection1.size(), collection2.size());
-    Iterator<T> it1 = collection1.iterator();
-    Iterator<T> it2 = collection2.iterator();
-    while (it1.hasNext()) {
-      T next1 = it1.next();
-      T next2 = it2.next();
-      Assert.assertTrue(message+"["+next1+"equals("+next2+")]", next1.equals(next2));
+    public static <T> void assertEquals(String message, Collection<T> collection1, Collection<T> collection2) {
+        Assert.assertEquals(message + "[size]", collection1.size(), collection2.size());
+        Iterator<T> it1 = collection1.iterator();
+        Iterator<T> it2 = collection2.iterator();
+        while (it1.hasNext()) {
+            T next1 = it1.next();
+            T next2 = it2.next();
+            Assert.assertTrue(message + "[" + next1 + "equals(" + next2 + ")]", next1.equals(next2));
+        }
     }
-  }
 
-  public static <T> void assertEqualsAnyOrder(String message, Collection<T> collection1, Collection<T> collection2) {
-    Assert.assertEquals(message+"[size]", collection1.size(), collection2.size());
-    Iterator<T> it1 = collection1.iterator();
-    while (it1.hasNext()) {
-      T next1 = it1.next();
-      Assert.assertTrue(message+"["+next1+" found]", collection2.contains(next1));
+    public static <T> void assertEqualsAnyOrder(String message, Collection<T> collection1, Collection<T> collection2) {
+        Assert.assertEquals(message + "[size]", collection1.size(), collection2.size());
+        Iterator<T> it1 = collection1.iterator();
+        while (it1.hasNext()) {
+            T next1 = it1.next();
+            Assert.assertTrue(message + "[" + next1 + " found]", collection2.contains(next1));
+        }
     }
-  }
 
 }
-

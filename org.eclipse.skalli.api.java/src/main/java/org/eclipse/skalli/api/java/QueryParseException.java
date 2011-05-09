@@ -10,13 +10,11 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.java;
 
-
 public class QueryParseException extends Exception {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  public QueryParseException(final Throwable cause) {
-    super(cause);
-  }
+    public QueryParseException(final Throwable cause) {
+        super(cause);
+    }
 
 }
-

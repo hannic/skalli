@@ -18,9 +18,8 @@ import org.eclipse.skalli.common.Services;
 @SuppressWarnings("nls")
 public class ProjectServiceUtils {
 
-  public static ProjectService getProjectService() throws BundleException {
-    new BundleManager(ProjectServiceUtils.class).startBundles();
-    return Services.getRequiredService(ProjectService.class);
-  }
+    public static ProjectService getProjectService() throws BundleException {
+        new BundleManager(ProjectServiceUtils.class).startBundles();
+        return Services.getRequiredService(ProjectService.class);
+    }
 }
-

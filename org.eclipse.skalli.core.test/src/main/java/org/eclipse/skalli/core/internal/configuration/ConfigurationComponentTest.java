@@ -27,266 +27,271 @@ import org.eclipse.skalli.common.configuration.ConfigTransaction;
 @SuppressWarnings("nls")
 public class ConfigurationComponentTest {
 
-  private ISecurePreferences mockFactory;
-  private Object[] mocks;
-  private ConfigurationComponent cc;
-  class TestCC extends ConfigurationComponent {
-    public TestCC() {
-    }
-    @Override
-    ISecurePreferences getFactory() {
-      return mockFactory;
-    }
-  }
+    private ISecurePreferences mockFactory;
+    private Object[] mocks;
+    private ConfigurationComponent cc;
 
-  ConfigKey testConfigKey1 = new ConfigKey() {
-    @Override
-    public boolean isEncrypted() {
-      return false;
+    class TestCC extends ConfigurationComponent {
+        public TestCC() {
+        }
+
+        @Override
+        ISecurePreferences getFactory() {
+            return mockFactory;
+        }
     }
 
-    @Override
-    public String getKey() {
-      return "key1";
+    ConfigKey testConfigKey1 = new ConfigKey() {
+        @Override
+        public boolean isEncrypted() {
+            return false;
+        }
+
+        @Override
+        public String getKey() {
+            return "key1";
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return "default1";
+        }
+    };
+    ConfigKey testConfigKeyInt = new ConfigKey() {
+        @Override
+        public boolean isEncrypted() {
+            return false;
+        }
+
+        @Override
+        public String getKey() {
+            return "keyInt";
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return "42";
+        }
+    };
+    ConfigKey testConfigKeyBoolean = new ConfigKey() {
+        @Override
+        public boolean isEncrypted() {
+            return false;
+        }
+
+        @Override
+        public String getKey() {
+            return "keyBool";
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return "false";
+        }
+    };
+
+    @Before
+    public void setup() {
+        mockFactory = EasyMock.createMock(ISecurePreferences.class);
+        mocks = new Object[] { mockFactory };
+        cc = new TestCC();
+
+        EasyMock.reset(mocks);
     }
 
-    @Override
-    public String getDefaultValue() {
-      return "default1";
-    }
-  };
-  ConfigKey testConfigKeyInt = new ConfigKey() {
-    @Override
-    public boolean isEncrypted() {
-      return false;
-    }
+    @Test
+    public void testCustomization() {
+        EventService mockEventService = EasyMock.createMock(EventService.class);
 
-    @Override
-    public String getKey() {
-      return "keyInt";
-    }
+        EasyMock.reset(mockEventService);
 
-    @Override
-    public String getDefaultValue() {
-      return "42";
-    }
-  };
-  ConfigKey testConfigKeyBoolean = new ConfigKey() {
-    @Override
-    public boolean isEncrypted() {
-      return false;
+        mockEventService.fireEvent(EasyMock.isA(EventCustomizingUpdate.class));
+
+        EasyMock.replay(mockEventService);
+
+        CustomizationData c1 = new CustomizationData();
+        c1.prop1 = "Hello";
+        c1.prop2 = "World";
+
+        ConfigurationComponent ccOrig = new ConfigurationComponent();
+        ccOrig.bindEventService(mockEventService);
+
+        ccOrig.writeCustomization("key1", c1);
+        EasyMock.verify(mockEventService);
+        CustomizationData res = ccOrig.readCustomization("key1", CustomizationData.class);
+        Assert.assertNotNull(res);
+        Assert.assertEquals(c1.prop1, res.prop1);
+        Assert.assertEquals(c1.prop2, res.prop2);
     }
 
-    @Override
-    public String getKey() {
-      return "keyBool";
+    @Test
+    public void testRWString() throws StorageException, IOException {
+        mockFactory.get(EasyMock.eq("key1"), EasyMock.eq("default1"));
+        EasyMock.expectLastCall().andReturn("default1");
+
+        mockFactory.put(EasyMock.eq("key1"), EasyMock.eq("value1"), EasyMock.eq(false));
+        EasyMock.expectLastCall();
+        mockFactory.flush();
+        EasyMock.expectLastCall();
+
+        mockFactory.get(EasyMock.eq("key1"), EasyMock.eq("default1"));
+        EasyMock.expectLastCall().andReturn("value1");
+
+        EasyMock.replay(mocks);
+
+        String res1 = cc.readString(testConfigKey1);
+        Assert.assertEquals("default1", res1);
+
+        ConfigTransaction tx = cc.startTransaction();
+        cc.writeString(tx, testConfigKey1, "value1");
+        cc.commit(tx);
+
+        String res2 = cc.readString(testConfigKey1);
+        Assert.assertEquals("value1", res2);
+
+        EasyMock.verify(mocks);
     }
 
-    @Override
-    public String getDefaultValue() {
-      return "false";
+    @Test
+    public void testReadInteger() throws StorageException {
+        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("42");
+
+        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("1");
+
+        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("");
+
+        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn(null);
+
+        EasyMock.replay(mocks);
+
+        Assert.assertEquals(42, (int) cc.readInteger(testConfigKeyInt));
+        Assert.assertEquals(1, (int) cc.readInteger(testConfigKeyInt));
+        Assert.assertNull(cc.readInteger(testConfigKeyInt));
+        Assert.assertNull(cc.readInteger(testConfigKeyInt));
+
+        EasyMock.verify(mocks);
     }
-  };
 
-  @Before
-  public void setup() {
-    mockFactory = EasyMock.createMock(ISecurePreferences.class);
-    mocks = new Object[] {mockFactory};
-    cc = new TestCC();
+    @Test(expected = NumberFormatException.class)
+    public void testReadInteger_invalid() throws StorageException {
+        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("hello");
 
-    EasyMock.reset(mocks);
-  }
+        EasyMock.replay(mocks);
 
-  @Test
-  public void testCustomization() {
-    EventService mockEventService = EasyMock.createMock(EventService.class);
+        cc.readInteger(testConfigKeyInt);
 
-    EasyMock.reset(mockEventService);
+        EasyMock.verify(mocks);
+    }
 
-    mockEventService.fireEvent(EasyMock.isA(EventCustomizingUpdate.class));
+    @Test
+    public void testWriteInteger() throws StorageException, IOException {
+        mockFactory.put(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq("2"), EasyMock.eq(false));
+        EasyMock.expectLastCall();
+        mockFactory.flush();
+        EasyMock.expectLastCall();
 
-    EasyMock.replay(mockEventService);
+        mockFactory.put(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq((String) null), EasyMock.eq(false));
+        EasyMock.expectLastCall();
+        mockFactory.flush();
+        EasyMock.expectLastCall();
 
-    CustomizationData c1 = new CustomizationData();
-    c1.prop1 = "Hello";
-    c1.prop2 = "World";
+        EasyMock.replay(mocks);
 
-    ConfigurationComponent ccOrig = new ConfigurationComponent();
-    ccOrig.bindEventService(mockEventService);
+        ConfigTransaction tx;
 
-    ccOrig.writeCustomization("key1", c1);
-    EasyMock.verify(mockEventService);
-    CustomizationData res = ccOrig.readCustomization("key1", CustomizationData.class);
-    Assert.assertNotNull(res);
-    Assert.assertEquals(c1.prop1, res.prop1);
-    Assert.assertEquals(c1.prop2, res.prop2);
-  }
+        tx = cc.startTransaction();
+        cc.writeInteger(tx, testConfigKeyInt, 2);
+        cc.commit(tx);
 
-  @Test
-  public void testRWString() throws StorageException, IOException {
-    mockFactory.get(EasyMock.eq("key1"), EasyMock.eq("default1"));
-    EasyMock.expectLastCall().andReturn("default1");
+        tx = cc.startTransaction();
+        cc.writeInteger(tx, testConfigKeyInt, null);
+        cc.commit(tx);
 
-    mockFactory.put(EasyMock.eq("key1"), EasyMock.eq("value1"), EasyMock.eq(false));
-    EasyMock.expectLastCall();
-    mockFactory.flush();
-    EasyMock.expectLastCall();
+        EasyMock.verify(mocks);
+    }
 
-    mockFactory.get(EasyMock.eq("key1"), EasyMock.eq("default1"));
-    EasyMock.expectLastCall().andReturn("value1");
+    @Test
+    public void testReadBoolean() throws StorageException {
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn(Boolean.FALSE.toString());
 
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn(Boolean.TRUE.toString());
 
-    EasyMock.replay(mocks);
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("true");
 
-    String res1 = cc.readString(testConfigKey1);
-    Assert.assertEquals("default1", res1);
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("yes");
 
-    ConfigTransaction tx = cc.startTransaction();
-    cc.writeString(tx, testConfigKey1, "value1");
-    cc.commit(tx);
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("");
 
-    String res2 = cc.readString(testConfigKey1);
-    Assert.assertEquals("value1", res2);
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn(null);
 
-    EasyMock.verify(mocks);
-  }
+        mockFactory
+                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
+        EasyMock.expectLastCall().andReturn("hello");
 
-  @Test
-  public void testReadInteger() throws StorageException {
-    mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("42");
+        EasyMock.replay(mocks);
 
-    mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("1");
+        Assert.assertEquals(false, cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
 
-    mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("");
+        EasyMock.verify(mocks);
+    }
 
-    mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn(null);
+    @Test
+    public void testWriteBoolean() throws StorageException, IOException {
+        mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq("true"), EasyMock.eq(false));
+        EasyMock.expectLastCall();
+        mockFactory.flush();
+        EasyMock.expectLastCall();
 
-    EasyMock.replay(mocks);
+        mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq("false"), EasyMock.eq(false));
+        EasyMock.expectLastCall();
+        mockFactory.flush();
+        EasyMock.expectLastCall();
 
-    Assert.assertEquals(42, (int) cc.readInteger(testConfigKeyInt));
-    Assert.assertEquals(1, (int) cc.readInteger(testConfigKeyInt));
-    Assert.assertNull(cc.readInteger(testConfigKeyInt));
-    Assert.assertNull(cc.readInteger(testConfigKeyInt));
+        mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq((String) null), EasyMock.eq(false));
+        EasyMock.expectLastCall();
+        mockFactory.flush();
+        EasyMock.expectLastCall();
 
-    EasyMock.verify(mocks);
-  }
+        EasyMock.replay(mocks);
 
-  @Test(expected=NumberFormatException.class)
-  public void testReadInteger_invalid() throws StorageException {
-    mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("hello");
+        ConfigTransaction tx;
 
-    EasyMock.replay(mocks);
+        tx = cc.startTransaction();
+        cc.writeBoolean(tx, testConfigKeyBoolean, true);
+        cc.commit(tx);
 
-    cc.readInteger(testConfigKeyInt);
+        tx = cc.startTransaction();
+        cc.writeBoolean(tx, testConfigKeyBoolean, false);
+        cc.commit(tx);
 
-    EasyMock.verify(mocks);
-  }
+        tx = cc.startTransaction();
+        cc.writeBoolean(tx, testConfigKeyBoolean, null);
+        cc.commit(tx);
 
-  @Test
-  public void testWriteInteger() throws StorageException, IOException {
-    mockFactory.put(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq("2"), EasyMock.eq(false));
-    EasyMock.expectLastCall();
-    mockFactory.flush();
-    EasyMock.expectLastCall();
-
-    mockFactory.put(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq((String) null), EasyMock.eq(false));
-    EasyMock.expectLastCall();
-    mockFactory.flush();
-    EasyMock.expectLastCall();
-
-    EasyMock.replay(mocks);
-
-    ConfigTransaction tx;
-
-    tx = cc.startTransaction();
-    cc.writeInteger(tx, testConfigKeyInt, 2);
-    cc.commit(tx);
-
-    tx = cc.startTransaction();
-    cc.writeInteger(tx, testConfigKeyInt, null);
-    cc.commit(tx);
-
-    EasyMock.verify(mocks);
-  }
-
-  @Test
-  public void testReadBoolean() throws StorageException {
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn(Boolean.FALSE.toString());
-
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn(Boolean.TRUE.toString());
-
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("true");
-
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("yes");
-
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("");
-
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn(null);
-
-    mockFactory.get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-    EasyMock.expectLastCall().andReturn("hello");
-
-    EasyMock.replay(mocks);
-
-    Assert.assertEquals(false, cc.readBoolean(testConfigKeyBoolean));
-    Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
-    Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
-    Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
-    Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
-    Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
-    Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
-
-    EasyMock.verify(mocks);
-  }
-
-  @Test
-  public void testWriteBoolean() throws StorageException, IOException {
-    mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq("true"), EasyMock.eq(false));
-    EasyMock.expectLastCall();
-    mockFactory.flush();
-    EasyMock.expectLastCall();
-
-    mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq("false"), EasyMock.eq(false));
-    EasyMock.expectLastCall();
-    mockFactory.flush();
-    EasyMock.expectLastCall();
-
-    mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq((String) null), EasyMock.eq(false));
-    EasyMock.expectLastCall();
-    mockFactory.flush();
-    EasyMock.expectLastCall();
-
-    EasyMock.replay(mocks);
-
-    ConfigTransaction tx;
-
-    tx = cc.startTransaction();
-    cc.writeBoolean(tx, testConfigKeyBoolean, true);
-    cc.commit(tx);
-
-    tx = cc.startTransaction();
-    cc.writeBoolean(tx, testConfigKeyBoolean, false);
-    cc.commit(tx);
-
-    tx = cc.startTransaction();
-    cc.writeBoolean(tx, testConfigKeyBoolean, null);
-    cc.commit(tx);
-
-
-    EasyMock.verify(mocks);
-  }
-
+        EasyMock.verify(mocks);
+    }
 
 }
-

@@ -26,102 +26,104 @@ import org.eclipse.skalli.api.java.tasks.Task;
 @SuppressWarnings("nls")
 public class SchedulerServiceImplTest {
 
-  private static final int TIMEOUT = 10*1000;
-  private SchedulerServiceImpl instance;
+    private static final int TIMEOUT = 10 * 1000;
+    private SchedulerServiceImpl instance;
 
-  @Before
-  public void setup() {
-    instance = new SchedulerServiceImpl();
-  }
-
-  @After
-  public void tearDown() {
-    if (instance != null) {
-      instance.deactivate(null);
+    @Before
+    public void setup() {
+        instance = new SchedulerServiceImpl();
     }
-  }
 
-  private static class TestRunnable implements Runnable {
-    int count;
-    @Override
-    public void run() {
-      ++count;
+    @After
+    public void tearDown() {
+        if (instance != null) {
+            instance.deactivate(null);
+        }
     }
-  }
 
-  private static class TestRunnableSchedule extends RunnableSchedule {
-    TestRunnable runnable = new TestRunnable();
+    private static class TestRunnable implements Runnable {
+        int count;
 
-    public TestRunnableSchedule(Schedule schedule) {
-      super(schedule);
+        @Override
+        public void run() {
+            ++count;
+        }
     }
-    @Override
-    public boolean isDue(Calendar now) {
-      return true; // always claim to be due
+
+    private static class TestRunnableSchedule extends RunnableSchedule {
+        TestRunnable runnable = new TestRunnable();
+
+        public TestRunnableSchedule(Schedule schedule) {
+            super(schedule);
+        }
+
+        @Override
+        public boolean isDue(Calendar now) {
+            return true; // always claim to be due
+        }
+
+        @Override
+        public Runnable getRunnable() {
+            return runnable;
+        }
     }
-    @Override
-    public Runnable getRunnable() {
-      return runnable;
+
+    private void waitForExecution(int expectedCountAtLeast, TestRunnable runnable) {
+        long start = System.currentTimeMillis();
+        while (runnable.count < expectedCountAtLeast) {
+            try {
+                Thread.sleep(5L);
+            } catch (InterruptedException e) {
+                Assert.fail(e.getMessage());
+            }
+            if (System.currentTimeMillis() > (start + TIMEOUT)) {
+                Assert.fail("Task was not run, timeout (" + TIMEOUT + "ms) reached");
+            }
+        }
     }
-  }
 
-  private void waitForExecution(int expectedCountAtLeast, TestRunnable runnable) {
-    long start = System.currentTimeMillis();
-    while (runnable.count < expectedCountAtLeast) {
-      try {
-        Thread.sleep(5L);
-      } catch (InterruptedException e) {
-        Assert.fail(e.getMessage());
-      }
-      if (System.currentTimeMillis() > (start + TIMEOUT)) {
-        Assert.fail("Task was not run, timeout (" + TIMEOUT + "ms) reached");
-      }
+    @Test
+    public void testRegisterSingleShot() {
+        TestRunnable testRunnable = new TestRunnable();
+        Task task = new Task(testRunnable, 0, -1L);
+        UUID taskId = instance.registerTask(task);
+        Assert.assertTrue(instance.isRegisteredTask(taskId));
+
+        waitForExecution(1, testRunnable);
+        Assert.assertEquals(1, testRunnable.count); // ensure that the runnable has been called once
+        Assert.assertTrue(instance.isDone(taskId));
+        Assert.assertFalse(instance.cancel(taskId, true));
+        instance.unregisterTask(taskId);
+        Assert.assertFalse(instance.isRegisteredTask(taskId));
     }
-  }
 
-  @Test
-  public void testRegisterSingleShot() {
-    TestRunnable testRunnable = new TestRunnable();
-    Task task = new Task(testRunnable, 0, -1L);
-    UUID taskId = instance.registerTask(task);
-    Assert.assertTrue(instance.isRegisteredTask(taskId));
+    @Test
+    public void testRegisterUnregisterPeriodic() {
+        TestRunnable testRunnable = new TestRunnable();
+        Task task = new Task(testRunnable, 0, 10L);
+        UUID taskId = instance.registerTask(task);
+        Assert.assertTrue(instance.isRegisteredTask(taskId));
 
-    waitForExecution(1, testRunnable);
-    Assert.assertEquals(1, testRunnable.count); // ensure that the runnable has been called once
-    Assert.assertTrue(instance.isDone(taskId));
-    Assert.assertFalse(instance.cancel(taskId, true));
-    instance.unregisterTask(taskId);
-    Assert.assertFalse(instance.isRegisteredTask(taskId));
-  }
+        waitForExecution(2, testRunnable);
+        Assert.assertTrue(testRunnable.count > 1); // ensure that the runnable has been called multiple times
+        Assert.assertFalse(instance.isDone(taskId));
+        Assert.assertTrue(instance.cancel(taskId, true));
+        Assert.assertTrue(instance.isDone(taskId));
+        instance.unregisterTask(taskId);
+        Assert.assertFalse(instance.isRegisteredTask(taskId));
+    }
 
-  @Test
-  public void testRegisterUnregisterPeriodic() {
-    TestRunnable testRunnable = new TestRunnable();
-    Task task = new Task(testRunnable, 0, 10L);
-    UUID taskId = instance.registerTask(task);
-    Assert.assertTrue(instance.isRegisteredTask(taskId));
+    @Test
+    public void testRegisterUnregisterSchedule() {
+        Schedule schedule = new Schedule();
+        TestRunnableSchedule runnableSchedule = new TestRunnableSchedule(schedule);
+        instance.registerRecurringTaskRunner(100, TimeUnit.MILLISECONDS); // set the cron period to 10ms
+        UUID scheduleId = instance.registerSchedule(runnableSchedule);
 
-    waitForExecution(2, testRunnable);
-    Assert.assertTrue(testRunnable.count > 1); // ensure that the runnable has been called multiple times
-    Assert.assertFalse(instance.isDone(taskId));
-    Assert.assertTrue(instance.cancel(taskId, true));
-    Assert.assertTrue(instance.isDone(taskId));
-    instance.unregisterTask(taskId);
-    Assert.assertFalse(instance.isRegisteredTask(taskId));
-  }
-
-  @Test
-  public void testRegisterUnregisterSchedule() {
-    Schedule schedule = new Schedule();
-    TestRunnableSchedule runnableSchedule = new TestRunnableSchedule(schedule);
-    instance.registerRecurringTaskRunner(100, TimeUnit.MILLISECONDS); // set the cron period to 10ms
-    UUID scheduleId = instance.registerSchedule(runnableSchedule);
-
-    waitForExecution(2, runnableSchedule.runnable);
-    int count = runnableSchedule.runnable.count;
-    Assert.assertTrue(count > 1); // ensure that the runnable has been called multiple times
-    instance.unregisterSchedule(scheduleId);
-    Assert.assertEquals(count, runnableSchedule.runnable.count); // ensure that the runnable has not been called further
-  }
+        waitForExecution(2, runnableSchedule.runnable);
+        int count = runnableSchedule.runnable.count;
+        Assert.assertTrue(count > 1); // ensure that the runnable has been called multiple times
+        instance.unregisterSchedule(scheduleId);
+        Assert.assertEquals(count, runnableSchedule.runnable.count); // ensure that the runnable has not been called further
+    }
 }
-

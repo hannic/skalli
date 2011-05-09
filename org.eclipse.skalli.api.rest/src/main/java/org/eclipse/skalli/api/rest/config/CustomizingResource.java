@@ -29,39 +29,37 @@ import com.thoughtworks.xstream.XStream;
  */
 public abstract class CustomizingResource<T> extends AbstractResource<T> {
 
-  /**
-   * Defines the name which will be used to store the customizing entity in the file system.
-   * @return
-   */
-  protected abstract String getKey();
+    /**
+     * Defines the name which will be used to store the customizing entity in the file system.
+     * @return
+     */
+    protected abstract String getKey();
 
-  /**
-   * Defines classes (in addition to  {@link #getConfigClass()}) that should be known to (and parsed for annotations by) the serializer.
-   * @return
-   */
-  protected List<Class<?>> getAdditionalConfigClasses() {
-    return Collections.emptyList();
-  };
+    /**
+     * Defines classes (in addition to  {@link #getConfigClass()}) that should be known to (and parsed for annotations by) the serializer.
+     * @return
+     */
+    protected List<Class<?>> getAdditionalConfigClasses() {
+        return Collections.emptyList();
+    };
 
-  @Override
-  protected final XStream getXStream() {
-    XStream xstream = super.getXStream();
-    for (Class<?> additionalClass : getAdditionalConfigClasses()) {
-      xstream.processAnnotations(additionalClass);
+    @Override
+    protected final XStream getXStream() {
+        XStream xstream = super.getXStream();
+        for (Class<?> additionalClass : getAdditionalConfigClasses()) {
+            xstream.processAnnotations(additionalClass);
+        }
+        return xstream;
     }
-    return xstream;
-  }
 
-  @Override
-  protected final void storeConfig(ConfigurationService configService, T configObject) {
-    configService.writeCustomization(getKey(), configObject);
-  }
+    @Override
+    protected final void storeConfig(ConfigurationService configService, T configObject) {
+        configService.writeCustomization(getKey(), configObject);
+    }
 
-  @Override
-  protected final T readConfig(ConfigurationService configService) {
-    return configService.readCustomization(getKey(), getConfigClass());
-  }
-
+    @Override
+    protected final T readConfig(ConfigurationService configService) {
+        return configService.readCustomization(getKey(), getConfigClass());
+    }
 
 }
-

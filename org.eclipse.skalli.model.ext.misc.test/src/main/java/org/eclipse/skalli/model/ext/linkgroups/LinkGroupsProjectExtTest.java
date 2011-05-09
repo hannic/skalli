@@ -23,30 +23,29 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 @SuppressWarnings("nls")
 public class LinkGroupsProjectExtTest {
 
-  private static final String BASE_URL = "http://links.example.org/";
+    private static final String BASE_URL = "http://links.example.org/";
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
-    LinkedHashSet<LinkGroup> linkGroups = new LinkedHashSet<LinkGroup>();
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
+        LinkedHashSet<LinkGroup> linkGroups = new LinkedHashSet<LinkGroup>();
 
-    LinkGroup linkGroup1 = new LinkGroup();
-    linkGroup1.setCaption("Group1");
-    linkGroup1.add(new Link(BASE_URL + "1.1", "1.1"));
-    linkGroup1.add(new Link(BASE_URL + "1.2", "1.2"));
-    linkGroups.add(linkGroup1);
+        LinkGroup linkGroup1 = new LinkGroup();
+        linkGroup1.setCaption("Group1");
+        linkGroup1.add(new Link(BASE_URL + "1.1", "1.1"));
+        linkGroup1.add(new Link(BASE_URL + "1.2", "1.2"));
+        linkGroups.add(linkGroup1);
 
-    LinkGroup linkGroup2 = new LinkGroup();
-    linkGroup2.setCaption("Group2");
-    linkGroup2.add(new Link(BASE_URL + "2.1", "2.1"));
-    linkGroup2.add(new Link(BASE_URL + "2.2", "2.2"));
-    linkGroups.add(linkGroup2);
+        LinkGroup linkGroup2 = new LinkGroup();
+        linkGroup2.setCaption("Group2");
+        linkGroup2.add(new Link(BASE_URL + "2.1", "2.1"));
+        linkGroup2.add(new Link(BASE_URL + "2.2", "2.2"));
+        linkGroups.add(linkGroup2);
 
-    values.put(LinkGroupsProjectExt.PROPERTY_LINKGROUPS, linkGroups);
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        values.put(LinkGroupsProjectExt.PROPERTY_LINKGROUPS, linkGroups);
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
 
-    PropertyHelper.checkPropertyDefinitions(LinkGroupsProjectExt.class, requiredProperties, values);
-  }
+        PropertyHelper.checkPropertyDefinitions(LinkGroupsProjectExt.class, requiredProperties, values);
+    }
 
 }
-

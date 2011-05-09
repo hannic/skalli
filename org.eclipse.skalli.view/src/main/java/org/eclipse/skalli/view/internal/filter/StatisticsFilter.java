@@ -28,40 +28,39 @@ import org.eclipse.skalli.log.Statistics;
 
 public class StatisticsFilter implements Filter {
 
-  private static final String ANONYMOUS = "anonymous"; //$NON-NLS-1$
+    private static final String ANONYMOUS = "anonymous"; //$NON-NLS-1$
 
-  @Override
-  public void destroy() {
-  }
-
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-      ServletException {
-
-    // browser statistics
-    User user = (User) request.getAttribute(Consts.ATTRIBUTE_USER);
-    String userId = (String) request.getAttribute(Consts.ATTRIBUTE_USERID);
-    String department = StatisticsFilter.ANONYMOUS;
-    String location = StatisticsFilter.ANONYMOUS;
-    if (StringUtils.isBlank(userId)) {
-      userId = StatisticsFilter.ANONYMOUS;
-    } else if (user!=null ) {
-      department = user.getDepartment();
-      location = user.getLocation();
+    @Override
+    public void destroy() {
     }
-    HttpServletRequest httpRequest = (HttpServletRequest) request;
-    String browser = httpRequest.getHeader("User-Agent"); //$NON-NLS-1$
-    Statistics.getDefault().trackBrowser(userId, browser, department, location);
 
-    Statistics.getDefault().trackUsage(httpRequest.getRequestURI());
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
 
-    // proceed along the chain
-    chain.doFilter(request, response);
-  }
+        // browser statistics
+        User user = (User) request.getAttribute(Consts.ATTRIBUTE_USER);
+        String userId = (String) request.getAttribute(Consts.ATTRIBUTE_USERID);
+        String department = StatisticsFilter.ANONYMOUS;
+        String location = StatisticsFilter.ANONYMOUS;
+        if (StringUtils.isBlank(userId)) {
+            userId = StatisticsFilter.ANONYMOUS;
+        } else if (user != null) {
+            department = user.getDepartment();
+            location = user.getLocation();
+        }
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String browser = httpRequest.getHeader("User-Agent"); //$NON-NLS-1$
+        Statistics.getDefault().trackBrowser(userId, browser, department, location);
 
-  @Override
-  public void init(FilterConfig arg0) throws ServletException {
-  }
+        Statistics.getDefault().trackUsage(httpRequest.getRequestURI());
+
+        // proceed along the chain
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
 
 }
-

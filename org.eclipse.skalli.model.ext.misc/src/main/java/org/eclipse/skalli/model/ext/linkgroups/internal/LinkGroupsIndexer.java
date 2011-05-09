@@ -18,15 +18,14 @@ import org.eclipse.skalli.model.ext.linkgroups.LinkGroupsProjectExt;
 
 public class LinkGroupsIndexer extends AbstractIndexer<LinkGroupsProjectExt> {
 
-  @Override
-  protected void indexFields(LinkGroupsProjectExt linkGroupsExt) {
-  }
+    @Override
+    protected void indexFields(LinkGroupsProjectExt linkGroupsExt) {
+    }
 
-  @Override
-  public Set<String> getDefaultSearchFields() {
-    Set<String> ret = new HashSet<String>();
-    return ret;
-  }
+    @Override
+    public Set<String> getDefaultSearchFields() {
+        Set<String> ret = new HashSet<String>();
+        return ret;
+    }
 
 }
-

@@ -28,55 +28,55 @@ import org.eclipse.skalli.model.core.Project;
 
 public class SearchFilter extends AbstractSearchFilter {
 
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, javax.servlet.FilterChain chain)
-      throws IOException, ServletException {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, javax.servlet.FilterChain chain)
+            throws IOException, ServletException {
 
-    String view = request.getParameter(Consts.PARAM_VIEW);
+        String view = request.getParameter(Consts.PARAM_VIEW);
 
-    if (StringUtils.equals(view, Consts.PARAM_VALUE_VIEW_HIERARCHY)) {
-      FilterUtil.forward(request, response, Consts.URL_HIERARCHY);
+        if (StringUtils.equals(view, Consts.PARAM_VALUE_VIEW_HIERARCHY)) {
+            FilterUtil.forward(request, response, Consts.URL_HIERARCHY);
+        }
+
+        super.doFilter(request, response, chain);
     }
 
-    super.doFilter(request, response, chain);
-  }
-
-  @Override
-  protected boolean showNearestProjects(User user, ServletRequest request, ServletResponse response) {
-    String userquery = request.getParameter(Consts.PARAM_USER);
-    return userquery == null || user == null || !userquery.equals(user.getUserId());
-  }
-
-  @Override
-  protected SearchResult<Project> getSearchHits(User user, ServletRequest request, ServletResponse response, int start,
-      int viewSize) throws IOException, ServletException {
-
-    String query = request.getParameter(Consts.PARAM_QUERY);
-    String tagquery = request.getParameter(Consts.PARAM_TAG);
-    String userquery = request.getParameter(Consts.PARAM_USER);
-
-    SearchService searchService = Services.getService(SearchService.class);
-    SearchResult<Project> result = null;
-
-    try {
-      if (query != null) {
-        result = searchService.findProjectsByQuery(query, new PagingInfo(start, viewSize));
-      } else if (tagquery != null) {
-        result = searchService.findProjectsByTag(tagquery, new PagingInfo(start, viewSize));
-      } else if (userquery != null) {
-        result = searchService.findProjectsByUser(userquery, new PagingInfo(start, viewSize));
-      } else {
-        result = searchService.findProjectsByQuery("*", new PagingInfo(start, viewSize)); //$NON-NLS-1$
-      }
-    } catch (Exception e) {
-      FilterUtil.handleException(request, response, e);
+    @Override
+    protected boolean showNearestProjects(User user, ServletRequest request, ServletResponse response) {
+        String userquery = request.getParameter(Consts.PARAM_USER);
+        return userquery == null || user == null || !userquery.equals(user.getUserId());
     }
 
-    request.setAttribute(Consts.ATTRIBUTE_QUERY, query);
-    request.setAttribute(Consts.ATTRIBUTE_USERQUERY, userquery);
-    request.setAttribute(Consts.ATTRIBUTE_TAGQUERY, tagquery);
+    @Override
+    protected SearchResult<Project> getSearchHits(User user, ServletRequest request, ServletResponse response,
+            int start,
+            int viewSize) throws IOException, ServletException {
 
-    return result;
-  }
+        String query = request.getParameter(Consts.PARAM_QUERY);
+        String tagquery = request.getParameter(Consts.PARAM_TAG);
+        String userquery = request.getParameter(Consts.PARAM_USER);
+
+        SearchService searchService = Services.getService(SearchService.class);
+        SearchResult<Project> result = null;
+
+        try {
+            if (query != null) {
+                result = searchService.findProjectsByQuery(query, new PagingInfo(start, viewSize));
+            } else if (tagquery != null) {
+                result = searchService.findProjectsByTag(tagquery, new PagingInfo(start, viewSize));
+            } else if (userquery != null) {
+                result = searchService.findProjectsByUser(userquery, new PagingInfo(start, viewSize));
+            } else {
+                result = searchService.findProjectsByQuery("*", new PagingInfo(start, viewSize)); //$NON-NLS-1$
+            }
+        } catch (Exception e) {
+            FilterUtil.handleException(request, response, e);
+        }
+
+        request.setAttribute(Consts.ATTRIBUTE_QUERY, query);
+        request.setAttribute(Consts.ATTRIBUTE_USERQUERY, userquery);
+        request.setAttribute(Consts.ATTRIBUTE_TAGQUERY, tagquery);
+
+        return result;
+    }
 }
-

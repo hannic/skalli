@@ -17,15 +17,13 @@ import org.eclipse.skalli.testutil.MigrationTestUtil;
 @SuppressWarnings("nls")
 public class DataMigration14Test {
 
-  @Test
-  public void testMigrate() throws Exception {
-    DataMigration14 migration1 = new DataMigration14();
-    MigrationTestUtil.testMigration(migration1, "whitespaces");
+    @Test
+    public void testMigrate() throws Exception {
+        DataMigration14 migration1 = new DataMigration14();
+        MigrationTestUtil.testMigration(migration1, "whitespaces");
 
-    DataMigration14 migration2 = new DataMigration14();
-    MigrationTestUtil.testMigration(migration2, "nowhitespaces");
-  }
-
+        DataMigration14 migration2 = new DataMigration14();
+        MigrationTestUtil.testMigration(migration2, "nowhitespaces");
+    }
 
 }
-

@@ -14,13 +14,15 @@ import com.thoughtworks.xstream.converters.Converter;
 
 public interface AliasedConverter extends Converter {
 
-  public String getAlias();
-  public Class<?> getConversionClass();
+    public String getAlias();
 
-  public String getApiVersion();
-  public String getNamespace();
-  public String getXsdFileName();
+    public Class<?> getConversionClass();
 
-  public String getHost();
+    public String getApiVersion();
+
+    public String getNamespace();
+
+    public String getXsdFileName();
+
+    public String getHost();
 }
-

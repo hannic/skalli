@@ -16,16 +16,15 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class CacheEntryTest {
 
-  @Test
-  public void testAll() {
-    CacheEntry<String, String> ce = new CacheEntry<String, String>("info", "value");
+    @Test
+    public void testAll() {
+        CacheEntry<String, String> ce = new CacheEntry<String, String>("info", "value");
 
-    Assert.assertEquals("getMetaInfo()", "info", ce.getMetaInfo());
-    Assert.assertEquals("getValue()", "value", ce.getValue());
+        Assert.assertEquals("getMetaInfo()", "info", ce.getMetaInfo());
+        Assert.assertEquals("getValue()", "value", ce.getValue());
 
-    ce.setMetaInfo("info2");
-    Assert.assertEquals("getMetaInfo()", "info2", ce.getMetaInfo());
-  }
+        ce.setMetaInfo("info2");
+        Assert.assertEquals("getMetaInfo()", "info2", ce.getMetaInfo());
+    }
 
 }
-

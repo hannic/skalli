@@ -18,28 +18,28 @@ import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 
 public class TestExtensibleEntityBase extends ExtensibleEntityBase {
 
-  public TestExtensibleEntityBase() {
-  }
-
-  public TestExtensibleEntityBase(UUID uuid) {
-    setUuid(uuid);
-  }
-
-  public static boolean assertEquals(TestExtensibleEntityBase o1, TestExtensibleEntityBase o2) {
-    boolean equals = true;
-    equals &= o1.getUuid().equals(o2.getUuid());
-    equals &= o1.isDeleted() && o2.isDeleted();
-    UUID parentId = o1.getParentEntityId();
-    if (parentId != null) {
-      equals &= parentId.equals(o2.getParentEntityId());
-    } else {
-      equals &= o2.getParentEntityId() == null;
+    public TestExtensibleEntityBase() {
     }
-    Iterator<ExtensionEntityBase> it = o1.getAllExtensions().iterator();
-    for (ExtensionEntityBase ext: o2.getAllExtensions()) {
-      equals &= TestExtension.assertEquals((TestExtension)ext, (TestExtension)it.next());
-      equals &= o1.isInherited(ext.getClass()) && o2.isInherited(ext.getClass());
+
+    public TestExtensibleEntityBase(UUID uuid) {
+        setUuid(uuid);
     }
-    return equals;
-  }
+
+    public static boolean assertEquals(TestExtensibleEntityBase o1, TestExtensibleEntityBase o2) {
+        boolean equals = true;
+        equals &= o1.getUuid().equals(o2.getUuid());
+        equals &= o1.isDeleted() && o2.isDeleted();
+        UUID parentId = o1.getParentEntityId();
+        if (parentId != null) {
+            equals &= parentId.equals(o2.getParentEntityId());
+        } else {
+            equals &= o2.getParentEntityId() == null;
+        }
+        Iterator<ExtensionEntityBase> it = o1.getAllExtensions().iterator();
+        for (ExtensionEntityBase ext : o2.getAllExtensions()) {
+            equals &= TestExtension.assertEquals((TestExtension) ext, (TestExtension) it.next());
+            equals &= o1.isInherited(ext.getClass()) && o2.isInherited(ext.getClass());
+        }
+        return equals;
+    }
 }

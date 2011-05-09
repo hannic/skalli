@@ -34,56 +34,55 @@ import java.util.Map.Entry;
  */
 public class GroundhogCache<T_KEY, T_VALUE> extends AbstractCache<T_KEY, T_VALUE, Long> {
 
-  private int activeDayOfYear;
-  private int activeYear;
+    private int activeDayOfYear;
+    private int activeYear;
 
-  public GroundhogCache(int maxSize) {
-    super(maxSize);
-    initializeIfNeeded();
-  }
-
-  Calendar getCalendar() {
-    return new GregorianCalendar();
-  }
-
-  private void initializeIfNeeded() {
-    Calendar cal = getCalendar();
-    int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
-    int year = cal.get(Calendar.YEAR);
-    if (dayOfYear != activeDayOfYear || year != activeYear) {
-      activeDayOfYear = dayOfYear;
-      activeYear = year;
-      clear();
+    public GroundhogCache(int maxSize) {
+        super(maxSize);
+        initializeIfNeeded();
     }
-  }
 
-  @Override
-  protected Long createMetaInfo(T_KEY key) {
-    return System.nanoTime();
-  }
-
-  @Override
-  protected void beforeAccess(T_KEY key) {
-    initializeIfNeeded();
-  };
-
-  @Override
-  protected Long onAccess(T_KEY key, Long metaInfo) {
-    return System.nanoTime();
-  }
-
-  @Override
-  protected T_KEY calcEntryToDiscard(Map<T_KEY, Long> metaInfos) {
-    long oldest = System.nanoTime();
-    T_KEY oldestEntryKey = null;
-    for (Entry<T_KEY, Long> entry : metaInfos.entrySet()) {
-      if (entry.getValue() < oldest) {
-        oldestEntryKey = entry.getKey();
-        oldest = entry.getValue();
-      }
+    Calendar getCalendar() {
+        return new GregorianCalendar();
     }
-    return oldestEntryKey;
-  }
+
+    private void initializeIfNeeded() {
+        Calendar cal = getCalendar();
+        int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+        int year = cal.get(Calendar.YEAR);
+        if (dayOfYear != activeDayOfYear || year != activeYear) {
+            activeDayOfYear = dayOfYear;
+            activeYear = year;
+            clear();
+        }
+    }
+
+    @Override
+    protected Long createMetaInfo(T_KEY key) {
+        return System.nanoTime();
+    }
+
+    @Override
+    protected void beforeAccess(T_KEY key) {
+        initializeIfNeeded();
+    };
+
+    @Override
+    protected Long onAccess(T_KEY key, Long metaInfo) {
+        return System.nanoTime();
+    }
+
+    @Override
+    protected T_KEY calcEntryToDiscard(Map<T_KEY, Long> metaInfos) {
+        long oldest = System.nanoTime();
+        T_KEY oldestEntryKey = null;
+        for (Entry<T_KEY, Long> entry : metaInfos.entrySet()) {
+            if (entry.getValue() < oldest) {
+                oldestEntryKey = entry.getKey();
+                oldest = entry.getValue();
+            }
+        }
+        return oldestEntryKey;
+    }
 
 }
-

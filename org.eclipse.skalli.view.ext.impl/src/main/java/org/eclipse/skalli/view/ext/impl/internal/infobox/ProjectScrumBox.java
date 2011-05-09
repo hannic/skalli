@@ -29,77 +29,77 @@ import com.vaadin.ui.Link;
 
 public class ProjectScrumBox extends AbstractInfoBox implements ProjectInfoBox {
 
-  @Override
-  public String getIconPath() {
-    return "res/icons/scrum.png"; //$NON-NLS-1$
-  }
-
-  @Override
-  public String getCaption() {
-    return "Scrum";
-  }
-
-  @Override
-  public Component getContent(Project project, ExtensionUtil util) {
-    Layout layout = new CssLayout();
-    layout.setSizeFull();
-
-    boolean rendered = false;
-    ScrumProjectExt scrumExt = project.getExtension(ScrumProjectExt.class);
-    if (scrumExt != null) {
-      if (CollectionUtils.isNotBlank(scrumExt.getProductOwners())) {
-        Label projectProductOwnersLabel = new Label("Product Owner");
-        projectProductOwnersLabel.addStyleName(STYLE_TEAMLABEL);
-        layout.addComponent(projectProductOwnersLabel);
-        Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(scrumExt.getProductOwners());
-        peopleComponent.addStyleName(InformationBox.STYLE);
-        layout.addComponent(peopleComponent);
-        rendered = true;
-      }
-
-      if (CollectionUtils.isNotBlank(scrumExt.getScrumMasters())) {
-        Label projectScrumMasterLabel = new Label("Scrum Master");
-        projectScrumMasterLabel.addStyleName(STYLE_TEAMLABEL);
-        layout.addComponent(projectScrumMasterLabel);
-        Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(scrumExt.getScrumMasters());
-        peopleComponent.addStyleName(InformationBox.STYLE);
-        layout.addComponent(peopleComponent);
-        rendered = true;
-      }
-
-      if (StringUtils.isNotBlank(scrumExt.getBacklogUrl())) {
-        Link backlogLink = new Link("Scrum Backlog", new ExternalResource(scrumExt.getBacklogUrl()));
-        backlogLink.addStyleName(STYLE_LINK);
-        layout.addComponent(backlogLink);
-        rendered = true;
-      }
+    @Override
+    public String getIconPath() {
+        return "res/icons/scrum.png"; //$NON-NLS-1$
     }
-    if (!rendered) {
-      Label label = new Label("SCRUM extension added but no data maintained.");
-      label.addStyleName(STYLE_LABEL);
-      layout.addComponent(label);
+
+    @Override
+    public String getCaption() {
+        return "Scrum";
     }
-    return layout;
-  }
 
-  @Override
-  public float getPositionWeight() {
-    return 1.6f;
-  }
+    @Override
+    public Component getContent(Project project, ExtensionUtil util) {
+        Layout layout = new CssLayout();
+        layout.setSizeFull();
 
-  @Override
-  public int getPreferredColumn() {
-    return COLUMN_EAST;
-  }
+        boolean rendered = false;
+        ScrumProjectExt scrumExt = project.getExtension(ScrumProjectExt.class);
+        if (scrumExt != null) {
+            if (CollectionUtils.isNotBlank(scrumExt.getProductOwners())) {
+                Label projectProductOwnersLabel = new Label("Product Owner");
+                projectProductOwnersLabel.addStyleName(STYLE_TEAMLABEL);
+                layout.addComponent(projectProductOwnersLabel);
+                Component peopleComponent = PeopleComponent
+                        .getPeopleListComponentForMember(scrumExt.getProductOwners());
+                peopleComponent.addStyleName(InformationBox.STYLE);
+                layout.addComponent(peopleComponent);
+                rendered = true;
+            }
 
-  @Override
-  public boolean isVisible(Project project, String loggedInUserId) {
-    if (project.getExtension(ScrumProjectExt.class)!=null) {
-      return true;
-    } else {
-      return false;
+            if (CollectionUtils.isNotBlank(scrumExt.getScrumMasters())) {
+                Label projectScrumMasterLabel = new Label("Scrum Master");
+                projectScrumMasterLabel.addStyleName(STYLE_TEAMLABEL);
+                layout.addComponent(projectScrumMasterLabel);
+                Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(scrumExt.getScrumMasters());
+                peopleComponent.addStyleName(InformationBox.STYLE);
+                layout.addComponent(peopleComponent);
+                rendered = true;
+            }
+
+            if (StringUtils.isNotBlank(scrumExt.getBacklogUrl())) {
+                Link backlogLink = new Link("Scrum Backlog", new ExternalResource(scrumExt.getBacklogUrl()));
+                backlogLink.addStyleName(STYLE_LINK);
+                layout.addComponent(backlogLink);
+                rendered = true;
+            }
+        }
+        if (!rendered) {
+            Label label = new Label("SCRUM extension added but no data maintained.");
+            label.addStyleName(STYLE_LABEL);
+            layout.addComponent(label);
+        }
+        return layout;
     }
-  }
+
+    @Override
+    public float getPositionWeight() {
+        return 1.6f;
+    }
+
+    @Override
+    public int getPreferredColumn() {
+        return COLUMN_EAST;
+    }
+
+    @Override
+    public boolean isVisible(Project project, String loggedInUserId) {
+        if (project.getExtension(ScrumProjectExt.class) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
-

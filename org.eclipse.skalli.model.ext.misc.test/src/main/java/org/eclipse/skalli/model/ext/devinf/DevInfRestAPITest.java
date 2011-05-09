@@ -23,19 +23,18 @@ import org.eclipse.skalli.testutil.RestUtils;
 
 public class DevInfRestAPITest {
 
-  private List<Project> projects;
-  private ProjectService projectService;
+    private List<Project> projects;
+    private ProjectService projectService;
 
-  @Before
-  public void setup() throws Exception {
-    projectService = ProjectServiceUtils.getProjectService();
-    projects = projectService.getAll();
-    Assert.assertTrue("projects.size() > 0", projects.size() > 0);
-  }
+    @Before
+    public void setup() throws Exception {
+        projectService = ProjectServiceUtils.getProjectService();
+        projects = projectService.getAll();
+        Assert.assertTrue("projects.size() > 0", projects.size() > 0);
+    }
 
-  @Test
-  public void testValidate() throws Exception {
-    RestUtils.validate(projects, DevInfProjectExt.class, "extension-devinf.xsd");
-  }
+    @Test
+    public void testValidate() throws Exception {
+        RestUtils.validate(projects, DevInfProjectExt.class, "extension-devinf.xsd");
+    }
 }
-

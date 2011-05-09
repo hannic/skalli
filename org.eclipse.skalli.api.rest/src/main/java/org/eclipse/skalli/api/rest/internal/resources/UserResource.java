@@ -22,17 +22,18 @@ import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class UserResource extends AbstractServerResource {
 
-  @Get
-  public Representation retrieve() {
-    Statistics.getDefault().trackUsage("api.rest.user.get"); //$NON-NLS-1$
+    @Get
+    public Representation retrieve() {
+        Statistics.getDefault().trackUsage("api.rest.user.get"); //$NON-NLS-1$
 
-    String id = (String) getRequestAttributes().get("id"); //$NON-NLS-1$
+        String id = (String) getRequestAttributes().get("id"); //$NON-NLS-1$
 
-    User user = UserUtil.getUser(id);
-    if (user == null) {
-      return createError(Status.CLIENT_ERROR_NOT_FOUND, "User \"{0}\" not found.", id); //$NON-NLS-1$
+        User user = UserUtil.getUser(id);
+        if (user == null) {
+            return createError(Status.CLIENT_ERROR_NOT_FOUND, "User \"{0}\" not found.", id); //$NON-NLS-1$
+        }
+
+        return new IgnoreUnknownElementsXStreamRepresentation<User>(user, new AliasedConverter[] { new UserConverter(
+                getRequest().getResourceRef().getHostIdentifier()) });
     }
-
-    return new IgnoreUnknownElementsXStreamRepresentation<User>(user, new AliasedConverter[] {new UserConverter(getRequest().getResourceRef().getHostIdentifier())});
-  }
 }

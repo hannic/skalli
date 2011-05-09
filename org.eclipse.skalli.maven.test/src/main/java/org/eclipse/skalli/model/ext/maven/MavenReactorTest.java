@@ -22,21 +22,19 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 
 public class MavenReactorTest {
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String,Object> values = PropertyHelperUtils.getValues();
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
 
-    values.put(MavenReactor.PROPERTY_COORDINATE, MavenCoordinateUtil.TEST_COORD);
+        values.put(MavenReactor.PROPERTY_COORDINATE, MavenCoordinateUtil.TEST_COORD);
 
-    TreeSet<MavenCoordinate> modules = new TreeSet<MavenCoordinate>();
-    modules.addAll(MavenCoordinateUtil.TEST_MODULES);
+        TreeSet<MavenCoordinate> modules = new TreeSet<MavenCoordinate>();
+        modules.addAll(MavenCoordinateUtil.TEST_MODULES);
 
-    values.put(MavenReactor.PROPERTY_MODULES, modules);
+        values.put(MavenReactor.PROPERTY_MODULES, modules);
 
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
-    PropertyHelper.checkPropertyDefinitions(MavenReactor.class, requiredProperties, values);
-  }
-
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        PropertyHelper.checkPropertyDefinitions(MavenReactor.class, requiredProperties, values);
+    }
 
 }
-

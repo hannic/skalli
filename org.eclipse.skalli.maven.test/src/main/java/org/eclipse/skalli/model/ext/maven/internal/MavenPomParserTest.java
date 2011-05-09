@@ -22,56 +22,54 @@ import org.junit.Test;
 
 public class MavenPomParserTest {
 
-  @Test
-  public void testParsePomNoParent() throws Exception {
-    MavenPom expectedPom = new MavenPom();
-    expectedPom.setSelf(getCoordinatesWithGroupId());
+    @Test
+    public void testParsePomNoParent() throws Exception {
+        MavenPom expectedPom = new MavenPom();
+        expectedPom.setSelf(getCoordinatesWithGroupId());
 
-    parseAndAssertPom(getPomNoParent(), expectedPom);
-  }
-
-  @Test
-  public void testParsePomWithParent() throws Exception {
-    MavenPom expectedPom = new MavenPom();
-    expectedPom.setSelf(getCoordinatesWithoutGroupId());
-    expectedPom.setParent(getParentCoordinates());
-    expectedPom.setParentRelativePath(PARENT_RELATIVE_PATH);
-
-    parseAndAssertPom(getPomWithParent(), expectedPom);
-  }
-
-  @Test
-  public void testParsePomWithModules() throws Exception {
-    MavenPom expectedPom = new MavenPom();
-    expectedPom.setSelf(getCoordinatesWithGroupId());
-    addModules(expectedPom);
-
-    parseAndAssertPom(getPomWithModules(), expectedPom);
-  }
-
-  @Test
-  public void testParsePomWithParentAndModules() throws Exception {
-    MavenPom expectedPom = new MavenPom();
-    expectedPom.setSelf(getCoordinatesWithoutGroupId());
-    expectedPom.setParent(getParentCoordinates());
-    expectedPom.setParentRelativePath(PARENT_RELATIVE_PATH);
-    addModules(expectedPom);
-
-    parseAndAssertPom(getPomWithParentAndModules(), expectedPom);
-  }
-
-  private void parseAndAssertPom(String testContent, MavenPom expectedPom) throws Exception {
-    MavenPomParser parser = new MavenPomParserImpl();
-    InputStream in = null;
-    try {
-      in = new ByteArrayInputStream(testContent.getBytes());
-      MavenPom pom = parser.parse(in);
-      assertEquals(expectedPom, pom);
-    } finally {
-      IOUtils.closeQuietly(in);
+        parseAndAssertPom(getPomNoParent(), expectedPom);
     }
-  }
 
+    @Test
+    public void testParsePomWithParent() throws Exception {
+        MavenPom expectedPom = new MavenPom();
+        expectedPom.setSelf(getCoordinatesWithoutGroupId());
+        expectedPom.setParent(getParentCoordinates());
+        expectedPom.setParentRelativePath(PARENT_RELATIVE_PATH);
+
+        parseAndAssertPom(getPomWithParent(), expectedPom);
+    }
+
+    @Test
+    public void testParsePomWithModules() throws Exception {
+        MavenPom expectedPom = new MavenPom();
+        expectedPom.setSelf(getCoordinatesWithGroupId());
+        addModules(expectedPom);
+
+        parseAndAssertPom(getPomWithModules(), expectedPom);
+    }
+
+    @Test
+    public void testParsePomWithParentAndModules() throws Exception {
+        MavenPom expectedPom = new MavenPom();
+        expectedPom.setSelf(getCoordinatesWithoutGroupId());
+        expectedPom.setParent(getParentCoordinates());
+        expectedPom.setParentRelativePath(PARENT_RELATIVE_PATH);
+        addModules(expectedPom);
+
+        parseAndAssertPom(getPomWithParentAndModules(), expectedPom);
+    }
+
+    private void parseAndAssertPom(String testContent, MavenPom expectedPom) throws Exception {
+        MavenPomParser parser = new MavenPomParserImpl();
+        InputStream in = null;
+        try {
+            in = new ByteArrayInputStream(testContent.getBytes());
+            MavenPom pom = parser.parse(in);
+            assertEquals(expectedPom, pom);
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+    }
 
 }
-

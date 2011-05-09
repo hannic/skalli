@@ -13,8 +13,9 @@ package org.eclipse.skalli.api.java;
 import org.eclipse.skalli.api.java.events.AbstractEvent;
 
 public interface EventService {
-  public <T extends AbstractEvent> void registerListener(Class<T> event, EventListener<T> listener);
-  public <T extends AbstractEvent> void unregisterEventListener(Class<T> event, EventListener<T> listener);
-  public <T extends AbstractEvent> void fireEvent(T event);
-}
+    public <T extends AbstractEvent> void registerListener(Class<T> event, EventListener<T> listener);
 
+    public <T extends AbstractEvent> void unregisterEventListener(Class<T> event, EventListener<T> listener);
+
+    public <T extends AbstractEvent> void fireEvent(T event);
+}

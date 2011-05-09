@@ -27,32 +27,34 @@ import org.eclipse.skalli.model.ext.Issues;
 
 public class IssuesResource extends AbstractServerResource {
 
-  @Get
-  public Representation retrieve() {
-    Statistics.getDefault().trackUsage("api.rest.issues.get"); //$NON-NLS-1$
+    @Get
+    public Representation retrieve() {
+        Statistics.getDefault().trackUsage("api.rest.issues.get"); //$NON-NLS-1$
 
-    String id = (String) getRequestAttributes().get("id"); //$NON-NLS-1$
+        String id = (String) getRequestAttributes().get("id"); //$NON-NLS-1$
 
-    ProjectService projectService = Services.getRequiredService(ProjectService.class);
-    Project project = null;
-    try {
-      UUID uuid = UUID.fromString(id);
-      project = projectService.getByUUID(uuid);
-    } catch (IllegalArgumentException e) {
-      project = projectService.getProjectByProjectId(id);
+        ProjectService projectService = Services.getRequiredService(ProjectService.class);
+        Project project = null;
+        try {
+            UUID uuid = UUID.fromString(id);
+            project = projectService.getByUUID(uuid);
+        } catch (IllegalArgumentException e) {
+            project = projectService.getProjectByProjectId(id);
+        }
+        if (project == null) {
+            return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" not found.", id);
+        }
+
+        IssuesService issuesService = Services.getService(IssuesService.class);
+
+        if (issuesService == null) {
+            return createError(Status.SERVER_ERROR_SERVICE_UNAVAILABLE,
+                    "Issues service is currently unavailable. Try again later.");
+        }
+
+        Issues issues = issuesService.getByUUID(project.getUuid());
+
+        return new IgnoreUnknownElementsXStreamRepresentation<Issues>(issues,
+                new AliasedConverter[] { new IssuesConverter(getRequest().getResourceRef().getHostIdentifier()) });
     }
-    if (project == null) {
-      return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" not found.", id);
-    }
-
-    IssuesService issuesService = Services.getService(IssuesService.class);
-
-    if (issuesService == null) {
-      return createError(Status.SERVER_ERROR_SERVICE_UNAVAILABLE, "Issues service is currently unavailable. Try again later.");
-    }
-
-    Issues issues = issuesService.getByUUID(project.getUuid());
-
-    return new IgnoreUnknownElementsXStreamRepresentation<Issues>(issues, new AliasedConverter[] {new IssuesConverter(getRequest().getResourceRef().getHostIdentifier())});
-  }
 }

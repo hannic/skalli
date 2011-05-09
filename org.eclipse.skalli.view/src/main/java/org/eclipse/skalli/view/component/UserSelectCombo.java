@@ -16,16 +16,15 @@ import com.vaadin.ui.ComboBox;
 
 public class UserSelectCombo extends ComboBox {
 
-  private static final long serialVersionUID = 3342826866111425927L;
+    private static final long serialVersionUID = 3342826866111425927L;
 
-  public UserSelectCombo(String caption, String width) {
-    super(caption);
-    setWidth(width);
-    setContainerDataSource(UserContainer.createWithData());
-    setItemCaptionPropertyId(User.PROPERTY_DISPLAY_NAME);
-    setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
-    setImmediate(true);
-  }
+    public UserSelectCombo(String caption, String width) {
+        super(caption);
+        setWidth(width);
+        setContainerDataSource(UserContainer.createWithData());
+        setItemCaptionPropertyId(User.PROPERTY_DISPLAY_NAME);
+        setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+        setImmediate(true);
+    }
 
 }
-

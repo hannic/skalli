@@ -22,39 +22,38 @@ import org.eclipse.skalli.model.core.Project;
 
 public class ProjectNodeImpl implements ProjectNode {
 
-  protected Project project = null;
-  protected List<ProjectNode> children = new LinkedList<ProjectNode>();
+    protected Project project = null;
+    protected List<ProjectNode> children = new LinkedList<ProjectNode>();
 
-  protected ProjectNodeImpl(ProjectService service, UUID uuid, Comparator<Project> c) {
-    Project project = service.getByUUID(uuid);
-    initialize(service, project, c);
-  }
-
-  protected ProjectNodeImpl(ProjectService service, Project project, Comparator<Project> c) {
-    initialize(service, project, c);
-  }
-
-  protected void initialize(ProjectService service, Project project, Comparator<Project> c) {
-    this.project = project;
-    List<Project> orderedSubProjects = service.getSubProjects(project.getUuid());
-    if (c != null) {
-      Collections.sort(orderedSubProjects, c);
+    protected ProjectNodeImpl(ProjectService service, UUID uuid, Comparator<Project> c) {
+        Project project = service.getByUUID(uuid);
+        initialize(service, project, c);
     }
-    for (Project subProject : orderedSubProjects) {
-      ProjectNodeImpl subNode = new ProjectNodeImpl(service, subProject, c);
-      children.add(subNode);
+
+    protected ProjectNodeImpl(ProjectService service, Project project, Comparator<Project> c) {
+        initialize(service, project, c);
     }
-  }
 
-  @Override
-  public List<ProjectNode> getSubProjects() {
-    return children;
-  }
+    protected void initialize(ProjectService service, Project project, Comparator<Project> c) {
+        this.project = project;
+        List<Project> orderedSubProjects = service.getSubProjects(project.getUuid());
+        if (c != null) {
+            Collections.sort(orderedSubProjects, c);
+        }
+        for (Project subProject : orderedSubProjects) {
+            ProjectNodeImpl subNode = new ProjectNodeImpl(service, subProject, c);
+            children.add(subNode);
+        }
+    }
 
-  @Override
-  public Project getProject() {
-    return project;
-  }
+    @Override
+    public List<ProjectNode> getSubProjects() {
+        return children;
+    }
+
+    @Override
+    public Project getProject() {
+        return project;
+    }
 
 }
-

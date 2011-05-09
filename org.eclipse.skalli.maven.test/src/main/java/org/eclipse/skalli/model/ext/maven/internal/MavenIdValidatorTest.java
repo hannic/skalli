@@ -19,20 +19,20 @@ import org.eclipse.skalli.testutil.ValidatorUtils;
 @SuppressWarnings("nls")
 public class MavenIdValidatorTest {
 
-  @Test
-  public void test() {
-    MavenIdValidator validator = new MavenIdValidator(Severity.FATAL, MavenProjectExt.class, MavenProjectExt.PROPERTY_GROUPID, "Maven ID");
-    ValidatorUtils.assertIsValid(validator, null);
-    ValidatorUtils.assertIsValid(validator, "");
+    @Test
+    public void test() {
+        MavenIdValidator validator = new MavenIdValidator(Severity.FATAL, MavenProjectExt.class,
+                MavenProjectExt.PROPERTY_GROUPID, "Maven ID");
+        ValidatorUtils.assertIsValid(validator, null);
+        ValidatorUtils.assertIsValid(validator, "");
 
-    ValidatorUtils.assertIsValid(validator, "com.sap.ldi");
-    ValidatorUtils.assertIsValid(validator, "com.sap.ldi_something");
-    ValidatorUtils.assertIsValid(validator, "com");
+        ValidatorUtils.assertIsValid(validator, "com.sap.ldi");
+        ValidatorUtils.assertIsValid(validator, "com.sap.ldi_something");
+        ValidatorUtils.assertIsValid(validator, "com");
 
-    ValidatorUtils.assertNotValid(validator, ".", Severity.FATAL);
-    ValidatorUtils.assertNotValid(validator, "com.sap.", Severity.FATAL);
-    ValidatorUtils.assertNotValid(validator, ".com.sap.", Severity.FATAL);
-  }
+        ValidatorUtils.assertNotValid(validator, ".", Severity.FATAL);
+        ValidatorUtils.assertNotValid(validator, "com.sap.", Severity.FATAL);
+        ValidatorUtils.assertNotValid(validator, ".com.sap.", Severity.FATAL);
+    }
 
 }
-

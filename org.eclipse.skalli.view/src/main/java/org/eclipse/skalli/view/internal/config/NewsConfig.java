@@ -15,18 +15,18 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("news")
 public class NewsConfig {
 
-  private String url;
+    private String url;
 
-  public NewsConfig(String url) {
-    super();
-    this.url = url;
-  }
+    public NewsConfig(String url) {
+        super();
+        this.url = url;
+    }
 
-  public String getUrl() {
-    return url;
-  }
-  public void setUrl(String url) {
-    this.url = url;
-  }
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }
-

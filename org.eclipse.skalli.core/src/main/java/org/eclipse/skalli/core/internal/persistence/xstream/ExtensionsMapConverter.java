@@ -22,27 +22,26 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class ExtensionsMapConverter implements Converter {
 
-  @Override
-  public boolean canConvert(Class type) {
-    return ExtensionsMap.class.isAssignableFrom(type);
-  }
-
-  @Override
-  public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-    ExtensionsMap map = (ExtensionsMap)source;
-    TreeSet<ExtensionEntityBase> set = new TreeSet<ExtensionEntityBase>(map.getAllExtensions());
-    context.convertAnother(set);
-  }
-
-  @Override
-  public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    ExtensionsMap map = new ExtensionsMap();
-    TreeSet<?> set = (TreeSet<?>)context.convertAnother(map, TreeSet.class);
-    for (Object o: set) {
-      map.putExtension((ExtensionEntityBase)o);
+    @Override
+    public boolean canConvert(Class type) {
+        return ExtensionsMap.class.isAssignableFrom(type);
     }
-    return map;
-  }
+
+    @Override
+    public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
+        ExtensionsMap map = (ExtensionsMap) source;
+        TreeSet<ExtensionEntityBase> set = new TreeSet<ExtensionEntityBase>(map.getAllExtensions());
+        context.convertAnother(set);
+    }
+
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+        ExtensionsMap map = new ExtensionsMap();
+        TreeSet<?> set = (TreeSet<?>) context.convertAnother(map, TreeSet.class);
+        for (Object o : set) {
+            map.putExtension((ExtensionEntityBase) o);
+        }
+        return map;
+    }
 
 }
-

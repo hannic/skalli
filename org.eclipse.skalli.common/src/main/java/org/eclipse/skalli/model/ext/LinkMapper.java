@@ -22,21 +22,21 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
  */
 public interface LinkMapper {
 
-  public static final String[] ALL_PURPOSES = new String[]{"*"}; //$NON-NLS-1$
+    public static final String[] ALL_PURPOSES = new String[] { "*" }; //$NON-NLS-1$
 
-  /**
-   * Maps a given string to a list of links. The mappings are provided by the
-   * {@link ConfigurationService}. The <code>purposes</code> arguments serve as filter for
-   * mappings retrieved from the configuration service: only mappings that match the named
-   * purposes should be applied to the given string.
-   *
-   * @param configService  the configuration service that provides the mappings.
-   * @param projectId  the identifier of a the project.
-   * @param source the string to map.
-   * @param purposes  a list of purpose filters, or {@value #ALL_PURPOSES},
-   * i.e. mappings for any purpose should be applied.
-   * @return a list of links, or an empty list.
-   */
-  public List<Link> getMappedLinks(ConfigurationService configService, String projectId, String source,  String... purposes);
+    /**
+     * Maps a given string to a list of links. The mappings are provided by the
+     * {@link ConfigurationService}. The <code>purposes</code> arguments serve as filter for
+     * mappings retrieved from the configuration service: only mappings that match the named
+     * purposes should be applied to the given string.
+     *
+     * @param configService  the configuration service that provides the mappings.
+     * @param projectId  the identifier of a the project.
+     * @param source the string to map.
+     * @param purposes  a list of purpose filters, or {@value #ALL_PURPOSES},
+     * i.e. mappings for any purpose should be applied.
+     * @return a list of links, or an empty list.
+     */
+    public List<Link> getMappedLinks(ConfigurationService configService, String projectId, String source,
+            String... purposes);
 }
-

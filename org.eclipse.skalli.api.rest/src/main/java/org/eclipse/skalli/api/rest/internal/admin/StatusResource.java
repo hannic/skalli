@@ -19,11 +19,10 @@ import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class StatusResource extends ServerResource {
 
-  @Get
-  public Representation retrieve() {
-    return new IgnoreUnknownElementsXStreamRepresentation<Object>(new Object(),
-        new AliasedConverter[] {new StatusConverter(getRequest().getResourceRef().getHostIdentifier())});
-  }
+    @Get
+    public Representation retrieve() {
+        return new IgnoreUnknownElementsXStreamRepresentation<Object>(new Object(),
+                new AliasedConverter[] { new StatusConverter(getRequest().getResourceRef().getHostIdentifier()) });
+    }
 
 }
-

@@ -20,22 +20,21 @@ import org.eclipse.skalli.testutil.PropertyHelperUtils;
 
 public class InfoProjectExtTest {
 
-  private static final String PAGE_URL = "http://example.org/home"; //$NON-NLS-1$
+    private static final String PAGE_URL = "http://example.org/home"; //$NON-NLS-1$
 
-  @Test
-  public void testPropertyDefinitions() throws Exception {
-    Map<String, Object> values = PropertyHelperUtils.getValues();
+    @Test
+    public void testPropertyDefinitions() throws Exception {
+        Map<String, Object> values = PropertyHelperUtils.getValues();
 
-    values.put(InfoProjectExt.PROPERTY_PAGE_URL, PAGE_URL);
-    LinkedHashSet<String> mailingLists = new LinkedHashSet<String>();
-    mailingLists.add("homer@listserv.springfield.net");
-    mailingLists.add("marge@listserv.springfield.net");
-    values.put(InfoProjectExt.PROPERTY_MAILING_LIST, mailingLists);
+        values.put(InfoProjectExt.PROPERTY_PAGE_URL, PAGE_URL);
+        LinkedHashSet<String> mailingLists = new LinkedHashSet<String>();
+        mailingLists.add("homer@listserv.springfield.net");
+        mailingLists.add("marge@listserv.springfield.net");
+        values.put(InfoProjectExt.PROPERTY_MAILING_LIST, mailingLists);
 
-    Map<Class<?>,String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
+        Map<Class<?>, String[]> requiredProperties = PropertyHelperUtils.getRequiredProperties();
 
-    PropertyHelper.checkPropertyDefinitions(InfoProjectExt.class, requiredProperties, values);
+        PropertyHelper.checkPropertyDefinitions(InfoProjectExt.class, requiredProperties, values);
 
-  }
+    }
 }
-

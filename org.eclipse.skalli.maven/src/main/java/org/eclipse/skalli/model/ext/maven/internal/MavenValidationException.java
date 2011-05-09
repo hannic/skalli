@@ -24,53 +24,52 @@ import org.eclipse.skalli.model.ext.ValidationException;
  */
 public class MavenValidationException extends ValidationException {
 
-  private static final long serialVersionUID = 3359414384751958058L;
+    private static final long serialVersionUID = 3359414384751958058L;
 
-  public MavenValidationException() {
-    super();
-  }
+    public MavenValidationException() {
+        super();
+    }
 
-  public MavenValidationException(Class<? extends Issuer> issuer, UUID entityId,
-      Class<? extends ExtensionEntityBase> extension, String propertyId, String message) {
-    super(issuer, entityId, extension, propertyId, message);
-  }
+    public MavenValidationException(Class<? extends Issuer> issuer, UUID entityId,
+            Class<? extends ExtensionEntityBase> extension, String propertyId, String message) {
+        super(issuer, entityId, extension, propertyId, message);
+    }
 
-  public MavenValidationException(Class<? extends Issuer> issuer, UUID entityId,
-      Class<? extends ExtensionEntityBase> extension, String propertyId) {
-    super(issuer, entityId, extension, propertyId);
-  }
+    public MavenValidationException(Class<? extends Issuer> issuer, UUID entityId,
+            Class<? extends ExtensionEntityBase> extension, String propertyId) {
+        super(issuer, entityId, extension, propertyId);
+    }
 
-  public MavenValidationException(Class<? extends Issuer> issuer, UUID entityId,
-      Class<? extends ExtensionEntityBase> extension) {
-    super(issuer, entityId, extension);
-  }
+    public MavenValidationException(Class<? extends Issuer> issuer, UUID entityId,
+            Class<? extends ExtensionEntityBase> extension) {
+        super(issuer, entityId, extension);
+    }
 
-  public MavenValidationException(Collection<Issue> issues) {
-    super(issues);
-  }
+    public MavenValidationException(Collection<Issue> issues) {
+        super(issues);
+    }
 
-  public MavenValidationException(Issue... issues) {
-    super(issues);
-  }
+    public MavenValidationException(Issue... issues) {
+        super(issues);
+    }
 
-  public MavenValidationException(String message, Collection<Issue> issues) {
-    super(message, issues);
-  }
+    public MavenValidationException(String message, Collection<Issue> issues) {
+        super(message, issues);
+    }
 
-  public MavenValidationException(String message, Issue... issues) {
-    super(message, issues);
-  }
+    public MavenValidationException(String message, Issue... issues) {
+        super(message, issues);
+    }
 
-  public MavenValidationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public MavenValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public MavenValidationException(String message) {
-    super(message);
-  }
+    public MavenValidationException(String message) {
+        super(message);
+    }
 
-  public MavenValidationException(Throwable cause) {
-    super(cause);
-  }
+    public MavenValidationException(Throwable cause) {
+        super(cause);
+    }
 }
-
