@@ -24,8 +24,7 @@
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
-<!-- 
-<script src="/js/jquery/1.4.4/jquery.min.js"></script>
+<script src="/js/jquery/1.4.1/jquery.min.js"></script>
 <script type="text/javascript">
 function toggle(objId) {
     $('#' + objId).css('display', function(index, oldValue) {
@@ -43,7 +42,6 @@ function collapseAll() {
 	});	
 }
 </script>
- -->
 </head>
 <body>
 
