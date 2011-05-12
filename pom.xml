@@ -31,33 +31,20 @@
     <module>org.eclipse.skalli.view.theme</module>
     <module>org.eclipse.skalli.maven</module>
     <module>org.eclipse.skalli.testutil</module>
+    <module>org.eclipse.skalli.core.test</module>
+    <module>org.eclipse.skalli.model.core.test</module>
+    <module>org.eclipse.skalli.model.ext.misc.test</module>
+    <module>org.eclipse.skalli.view.test</module>
+    <module>org.eclipse.skalli.api.java.test</module>
+    <module>org.eclipse.skalli.api.rest.test</module>
+    <module>org.eclipse.skalli.common.test</module>
+    <module>org.eclipse.skalli.view.ext.impl.test</module>
+    <module>org.eclipse.skalli.maven.test</module>
+    <!-- modules building the update site:-->
+    <module>org.eclipse.skalli.feature</module>
+    <module>org.eclipse.skalli.eclipse.feature</module>
+    <module>org.eclipse.skalli.source.feature</module>
+    <module>org.eclipse.skalli.testing.feature</module>
+    <module>org.eclipse.skalli.site</module>
   </modules>
-
-  <profiles>
-    <profile>
-      <id>qa</id>
-      <modules>
-        <module>org.eclipse.skalli.core.test</module>
-        <module>org.eclipse.skalli.model.core.test</module>
-        <module>org.eclipse.skalli.model.ext.misc.test</module>
-        <module>org.eclipse.skalli.view.test</module>
-        <module>org.eclipse.skalli.api.java.test</module>
-        <module>org.eclipse.skalli.api.rest.test</module>
-        <module>org.eclipse.skalli.common.test</module>
-        <module>org.eclipse.skalli.view.ext.impl.test</module>
-        <module>org.eclipse.skalli.maven.test</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>site</id>
-      <modules>
-        <module>org.eclipse.skalli.feature</module>
-        <module>org.eclipse.skalli.eclipse.feature</module>
-        <module>org.eclipse.skalli.source.feature</module>
-        <module>org.eclipse.skalli.testing.feature</module>
-        <module>org.eclipse.skalli.site</module>
-      </modules>
-    </profile>
-  </profiles>
-
 </project>
