@@ -16,6 +16,7 @@ import org.eclipse.skalli.view.component.UsersPicker;
 import org.eclipse.skalli.view.ext.AbstractExtensionFormService;
 import org.eclipse.skalli.view.ext.DefaultProjectFieldFactory;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
@@ -71,10 +72,6 @@ public class PeopleProjectExtEditForm extends AbstractExtensionFormService<Peopl
                 field = new UsersPicker(caption, extension.getLeads());
             }
             return field;
-        }
-
-        @Override
-        protected void initializeField(Object propertyId, Field field) {
         }
     }
 }

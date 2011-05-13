@@ -16,6 +16,7 @@ import org.eclipse.skalli.model.ext.misc.ReviewProjectExt;
 import org.eclipse.skalli.view.ext.AbstractExtensionFormService;
 import org.eclipse.skalli.view.ext.DefaultProjectFieldFactory;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.IndexedContainer;
@@ -77,10 +78,6 @@ public class ReviewProjectExtEditForm extends AbstractExtensionFormService<Revie
                 field = cb;
             }
             return field;
-        }
-
-        @Override
-        protected void initializeField(Object propertyId, Field field) {
         }
 
         public IndexedContainer getStylesContainer() {

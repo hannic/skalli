@@ -15,9 +15,9 @@ import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
 import org.eclipse.skalli.view.ext.AbstractExtensionFormService;
 import org.eclipse.skalli.view.ext.DefaultProjectFieldFactory;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.FormFieldFactory;
 
 public class MavenProjectExtEditForm extends AbstractExtensionFormService<MavenProjectExt> {
@@ -47,15 +47,6 @@ public class MavenProjectExtEditForm extends AbstractExtensionFormService<MavenP
 
         public FieldFactory(Project project, ProjectEditContext context) {
             super(project, MavenProjectExt.class, context);
-        }
-
-        @Override
-        protected Field createField(Object propertyId, String caption) {
-            return null;
-        }
-
-        @Override
-        protected void initializeField(Object propertyId, Field field) {
         }
     }
 

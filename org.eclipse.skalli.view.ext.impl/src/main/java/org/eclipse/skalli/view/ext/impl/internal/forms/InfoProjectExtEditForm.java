@@ -16,6 +16,7 @@ import org.eclipse.skalli.view.component.MultiTextField;
 import org.eclipse.skalli.view.ext.AbstractExtensionFormService;
 import org.eclipse.skalli.view.ext.DefaultProjectFieldFactory;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
@@ -57,10 +58,6 @@ public class InfoProjectExtEditForm extends AbstractExtensionFormService<InfoPro
             }
 
             return field;
-        }
-
-        @Override
-        protected void initializeField(Object propertyId, Field field) {
         }
     }
 

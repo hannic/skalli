@@ -16,13 +16,13 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+
 import com.vaadin.data.Item;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -153,8 +153,14 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
         return description;
     }
 
-    protected abstract Field createField(Object propertyId, String caption);
+    protected Field createField(Object propertyId, String caption)
+    {
+        return null;
+    }
 
-    protected abstract void initializeField(Object propertyId, Field field);
-
+    protected void initializeField(Object propertyId, Field field)
+    {
+        //nothing to do
+        return;
+    }
 }
