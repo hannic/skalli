@@ -17,7 +17,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console -consoleLog"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dorg.eclipse.equinox.http.jetty.http.port=8080 -Dequinox.ds.print=true -Djetty.home=${workspace_loc:org.eclipse.skalli.target}/jetty -Dlogback.configurationFile=${workspace_loc:org.eclipse.skalli.target}/jetty/etc/logback.xml"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dorg.osgi.service.http.port=8080 -Dequinox.ds.print=true -Djetty.home=${workspace_loc:org.eclipse.skalli.target}/jetty -Dlogback.configurationFile=${workspace_loc:org.eclipse.skalli.target}/jetty/etc/logback.xml"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:org.eclipse.skalli.target/workdir}"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <booleanAttribute key="show_selected_only" value="false"/>
