@@ -53,6 +53,7 @@
       <modules>
         <module>org.eclipse.skalli.feature</module>
         <module>org.eclipse.skalli.eclipse.feature</module>
+        <module>org.eclipse.skalli.source.feature</module>
         <module>org.eclipse.skalli.testing.feature</module>
         <module>org.eclipse.skalli.site</module>
       </modules>

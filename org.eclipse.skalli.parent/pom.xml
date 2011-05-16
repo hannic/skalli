@@ -58,6 +58,19 @@
             </plugin>
             <plugin>
                 <groupId>org.sonatype.tycho</groupId>
+                <artifactId>maven-osgi-source-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <executions>
+                    <execution>
+                        <id>plugin-source</id>
+                        <goals>
+                            <goal>plugin-source</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.tycho</groupId>
                 <artifactId>target-platform-configuration</artifactId>
                 <version>${tycho-version}</version>
                 <configuration>
@@ -107,7 +120,7 @@
                     <artifactId>maven-osgi-packaging-plugin</artifactId>
                     <version>${tycho-version}</version>
                     <configuration>
-            <!-- workaround for TYCHO-349 or TYCHO-313 -->
+                    <!-- workaround for TYCHO-349 or TYCHO-313 -->
                         <strictVersions>false</strictVersions>
                     </configuration>
                 </plugin>

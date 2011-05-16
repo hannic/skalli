@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.skalli.source.feature"
+      label="Skalli Sources (Incubation)"
+      version="0.1.0.qualifier">
+
+   <description url="http://www.eclipse.org/skalli">
+        The sources for Skalli.
+   </description>
+
+   <copyright>
+      Copyright (c) 2010, 2011 SAP AG and others.
+      All rights reserved. This program and the accompanying materials
+      are made available under the terms of the Eclipse Public License
+      v1.0 which accompanies this distribution, and is available at
+      http://www.eclipse.org/legal/epl-v10.html
+
+      Contributors:
+         SAP AG - initial API and implementation
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+         Eclipse Public License (EPL) 1.0
+   </license>
+
+   <plugin
+         id="org.eclipse.skalli.api.java.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.core.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.log.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.model.core.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.model.ext.misc.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.view.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.view.ext.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.view.ext.impl.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.api.rest.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.common.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.commands.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.maven.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
