@@ -13,6 +13,11 @@ package org.eclipse.skalli.api.rest.config;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import org.eclipse.skalli.api.java.authentication.LoginUtil;
+import org.eclipse.skalli.api.java.authentication.UserUtil;
+import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.common.configuration.ConfigurationService;
+import org.eclipse.skalli.log.Log;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.servlet.ServletUtils;
@@ -23,11 +28,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 
-import org.eclipse.skalli.api.java.authentication.LoginUtil;
-import org.eclipse.skalli.api.java.authentication.UserUtil;
-import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.common.configuration.ConfigurationService;
-import org.eclipse.skalli.log.Log;
 import com.thoughtworks.xstream.XStream;
 
 public abstract class AbstractResource<T> extends ServerResource {
@@ -55,12 +55,13 @@ public abstract class AbstractResource<T> extends ServerResource {
         return configService;
     }
 
-    protected final Representation checkAdminAuthorization() {
+    private final Representation checkAdminAuthorization() {
         LoginUtil loginUtil = new LoginUtil(ServletUtils.getRequest(getRequest()));
         String loggedInUser = loginUtil.getLoggedInUserId();
         if (!UserUtil.isAdministrator(loggedInUser)) {
-            Representation result = new StringRepresentation("Access denied for user " + loggedInUser,
-                    MediaType.TEXT_PLAIN);
+            String msg = "Access denied for user " + loggedInUser;
+            Representation result = new StringRepresentation(msg, MediaType.TEXT_PLAIN);
+            setStatus(Status.CLIENT_ERROR_FORBIDDEN, msg);
             return result;
         }
         return null;
