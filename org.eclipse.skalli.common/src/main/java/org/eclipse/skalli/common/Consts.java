@@ -80,6 +80,7 @@ public class Consts {
     protected static final String JSP_TAGCLOUD = "/search/tagcloud.jsp";
     protected static final String JSP_MYPROJECTS = "/search/myprojects.jsp";
     public static final String JSP_HEADER = "/search/includes/header.jsp";
+    public static final String JSP_SEARCHRESULT = "/search/searchresult.jsp";
     public static final String JSP_HEADER_SEARCH = "/search/includes/searchheader.jsp";
     public static final String JSP_NAVIGATIONBAR = "/search/includes/navigationbar.jsp";
     public static final String JSP_ISSUES = "/search/includes/issues.jsp";

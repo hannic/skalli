@@ -25,9 +25,9 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.FavoritesService;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.ProjectTemplateService;
@@ -104,6 +104,11 @@ public abstract class AbstractSearchFilter implements Filter {
         request.setAttribute(ATTRIBUTE_CURRENTPAGE, currentPage);
         request.setAttribute(ATTRIBUTE_PAGES, pages);
         request.setAttribute(Consts.ATTRIBUTE_USER, user);
+
+        if (((HttpServletRequest) request).getPathInfo() == null) {
+            request.getRequestDispatcher(Consts.JSP_SEARCHRESULT).forward(request, response);
+            return;
+        }
 
         // proceed along the chain
         chain.doFilter(request, response);

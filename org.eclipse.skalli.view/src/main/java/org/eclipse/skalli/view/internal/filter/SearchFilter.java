@@ -17,7 +17,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.PagingInfo;
 import org.eclipse.skalli.api.java.SearchResult;
 import org.eclipse.skalli.api.java.SearchService;
@@ -36,6 +35,7 @@ public class SearchFilter extends AbstractSearchFilter {
 
         if (StringUtils.equals(view, Consts.PARAM_VALUE_VIEW_HIERARCHY)) {
             FilterUtil.forward(request, response, Consts.URL_HIERARCHY);
+            return;
         }
 
         super.doFilter(request, response, chain);
