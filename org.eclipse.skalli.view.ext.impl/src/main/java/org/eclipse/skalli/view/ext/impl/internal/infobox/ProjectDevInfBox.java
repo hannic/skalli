@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,8 +33,6 @@ import com.vaadin.ui.Layout;
 public class ProjectDevInfBox extends AbstractInfoBox implements ProjectInfoBox {
 
     private static final String STYLE_DEFINF = "devInf"; //$NON-NLS-1$
-
-    private static final String FLASH_CLIPPY = "/VAADIN/themes/simple//flash/clippy.swf"; //$NON-NLS-1$
 
     // TODO: solve the icon madness
     private static final String ICON_SOURCES = "/VAADIN/themes/simple/icons/devinf/code.png"; //$NON-NLS-1$
@@ -81,7 +80,10 @@ public class ProjectDevInfBox extends AbstractInfoBox implements ProjectInfoBox 
             }
             // Bug Tracker
             if (StringUtils.isNotBlank(devInf.getBugtrackerUrl())) {
-                iconizedLink(sb, ICON_BUGTRACKER, "Bug Tracker", devInf.getBugtrackerUrl());
+                Set<String> linkList = new HashSet<String>();
+                linkList.add(devInf.getBugtrackerUrl());
+                addCreateBugLinks(linkList, project, devInf);
+                iconizedLinks(sb, ICON_BUGTRACKER, "Bug Tracker", "(Create Bug)", linkList);
                 rendered = true;
             }
             // Code Metrics
@@ -151,6 +153,18 @@ public class ProjectDevInfBox extends AbstractInfoBox implements ProjectInfoBox 
         layout.addComponent(label);
 
         return layout;
+    }
+
+    private void addCreateBugLinks(Set<String> linkList, Project project, DevInfProjectExt devInf) {
+        List<Link> createBugLinks = getCreateBugUrl(devInf.getBugtrackerUrl(), project);
+        for (Link createBugLink : createBugLinks) {
+            linkList.add(createBugLink.getUrl());
+        }
+    }
+
+    private List<Link> getCreateBugUrl(String bugtrackerUrl, Project project) {
+        return (new ScmLocationMapper()).getMappedLinks(configService, project.getProjectId(), bugtrackerUrl,
+                ScmLocationMapper.PURPOSE_CREATE_BUG);
     }
 
     @Override
