@@ -6,7 +6,7 @@
       provider-name="Eclipse Skalli">
 
    <description url="http://www.eclipse.org/skalli">
-        A new generation project management tool accessible and usable by the Eclipse community and other open source projects.
+      A new generation project management tool accessible and usable by the Eclipse community and other open source projects.
    </description>
 
    <copyright>
@@ -21,7 +21,7 @@
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
-         Eclipse Public License (EPL) 1.0
+      Eclipse Public License (EPL) 1.0
    </license>
 
    <includes
@@ -29,7 +29,7 @@
          version="0.0.0"/>
 
    <includes
-         id="com.sap.ldi.projectportal.orbit.feature"
+         id="org.eclipse.skalli.orbit.feature"
          version="0.0.0"/>
 
    <plugin
@@ -114,6 +114,14 @@
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.view.theme"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>

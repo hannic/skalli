@@ -6,7 +6,7 @@
       provider-name="Eclipse Skalli">
 
    <description url="http://www.eclipse.org/skalli">
-        A new generation project management tool accessible and usable by the Eclipse community and other open source projects.
+      A new generation project management tool accessible and usable by the Eclipse community and other open source projects.
    </description>
 
    <copyright>
@@ -21,14 +21,14 @@
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
-         Eclipse Public License (EPL) 1.0
+      Eclipse Public License (EPL) 1.0
    </license>
 
    <plugin
          id="org.eclipse.core.jobs"
          download-size="0"
          install-size="0"
-         version="3.5.0.v20100515"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -42,7 +42,7 @@
          id="org.eclipse.equinox.registry"
          download-size="0"
          install-size="0"
-         version="3.5.0.v20100503"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -51,7 +51,8 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
+         
+<!-- TODO first add to target platform
    <plugin
          id="org.eclipse.equinox.security.win32.x86"
          os="win32"
@@ -61,6 +62,56 @@
          version="0.0.0"
          fragment="true"
          unpack="false"/>
+-->
+
+   <plugin
+         id="org.eclipse.osgi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.http.servlet"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.osgi.services"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.ds"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.util"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jetty.osgi.boot.jsp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
 
 </feature>
-

@@ -13,8 +13,12 @@ Import-Package: org.eclipse.skalli.common,
  javax.mail,
  javax.servlet,
  javax.servlet.http,
+ javax.xml.parsers,
+ javax.xml.transform,
  org.apache.commons.lang,
- org.apache.commons.lang.time
+ org.apache.commons.lang.time,
+ org.w3c.dom,
+ org.xml.sax
 Export-Package: org.eclipse.skalli.api.java,
  org.eclipse.skalli.api.java.authentication,
  org.eclipse.skalli.api.java.events,
