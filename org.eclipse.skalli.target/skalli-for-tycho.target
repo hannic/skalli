@@ -3,9 +3,9 @@
 
 <target name="Skalli Target Platform for Tycho Builds at Eclipse.org">
 <locations>
-<location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit">
+<location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
 
-<!-- depedencies to Equinox/Eclipse platform -->
+<!-- dependencies to Equinox/Eclipse platform -->
 <unit id="a.jre.javase" version="1.6.0"/>
 <unit id="org.eclipse.core.jobs" version="0.0.0"/>
 <unit id="org.eclipse.core.contenttype" version="0.0.0"/>
@@ -16,6 +16,9 @@
 <unit id="org.eclipse.equinox.preferences" version="0.0.0"/>
 <unit id="org.eclipse.equinox.registry" version="0.0.0"/>
 <unit id="org.eclipse.equinox.security" version="0.0.0"/>
+<unit id="org.eclipse.equinox.security.win32.x86" version="0.0.0"/>
+<unit id="org.eclipse.equinox.security.win32.x86_64" version="0.0.0"/>
+<unit id="org.eclipse.equinox.security.macosx" version="0.0.0"/>
 <unit id="org.eclipse.equinox.util" version="0.0.0"/>
 <unit id="org.eclipse.osgi" version="0.0.0"/>
 <unit id="org.eclipse.osgi.services" version="0.0.0"/>
