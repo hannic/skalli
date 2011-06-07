@@ -11,7 +11,6 @@
 package org.eclipse.skalli.model.core;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.model.ext.PropertyName;
 
 /**
@@ -26,6 +25,10 @@ public class ProjectMember implements Comparable<ProjectMember> {
     public static final String PROPERTY_USERID = "userID"; //$NON-NLS-1$
 
     private String userID = ""; //$NON-NLS-1$
+
+    public ProjectMember() {
+        // TODO why will this by required by xstream?
+    }
 
     public ProjectMember(String userId) {
         this.userID = userId;

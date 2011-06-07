@@ -13,7 +13,8 @@ Import-Package: org.eclipse.skalli.common,
  com.thoughtworks.xstream.io,
  org.apache.commons.lang,
  org.osgi.framework,
- org.osgi.service.component
+ org.osgi.service.component,
+ org.w3c.dom
 Export-Package: org.eclipse.skalli.model.core,
  org.eclipse.skalli.model.ext.people
 Service-Component: OSGI-INF/ExtensionServiceCore.xml,

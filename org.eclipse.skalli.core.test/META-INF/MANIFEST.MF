@@ -9,5 +9,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.skalli.testutil,
  org.apache.commons.io,
  org.easymock,
- org.junit
-
+ org.junit,
+ org.w3c.dom

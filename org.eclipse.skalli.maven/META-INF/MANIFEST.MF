@@ -19,12 +19,15 @@ Import-Package: org.eclipse.skalli.api.java,
  com.thoughtworks.xstream.annotations,
  com.thoughtworks.xstream.converters,
  com.thoughtworks.xstream.io,
+ javax.xml.parsers,
  org.apache.commons.httpclient;version="3.1.0",
  org.apache.commons.httpclient.methods;version="3.1.0",
  org.apache.commons.io;version="1.4.0",
  org.apache.commons.lang,
  org.osgi.service.component,
- org.restlet.resource
+ org.restlet.resource,
+ org.w3c.dom,
+ org.xml.sax
 Export-Package: org.eclipse.skalli.model.ext.maven
 Service-Component: OSGI-INF/ExtensionServiceMaven.xml,
  OSGI-INF/ExtensionServiceMavenReactor.xml,
