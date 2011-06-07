@@ -66,6 +66,18 @@
       <xsd:maxLength value="255" />
     </xsd:restriction>
   </xsd:simpleType>
+  
+  <xsd:simpleType name="ShortName">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="EN">
+        Defines the short name of a project, e.g. "Skalli".
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="2" />
+      <xsd:maxLength value="10" />
+    </xsd:restriction>
+  </xsd:simpleType>
 
   <xsd:complexType name="Link">
     <xsd:annotation>

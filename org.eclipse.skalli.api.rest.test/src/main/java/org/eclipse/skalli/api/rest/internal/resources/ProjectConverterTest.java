@@ -108,6 +108,7 @@ public class ProjectConverterTest {
             expected.append("  <id>").append(enc(project.getProjectId())).append("</id>");
             expected.append("  <template>").append(enc(project.getProjectTemplateId())).append("</template>");
             expected.append("  <name>").append(enc(project.getName())).append("</name>");
+            expected.append("  <shortName>").append(enc(project.getShortName())).append("</shortName>");
             expected.append("  <link rel=\"project\" href=\"https://localhost/api/projects/")
                     .append(project.getUuid().toString()).append("\"/>");
             expected.append("  <link rel=\"browse\" href=\"https://localhost/projects/").append(project.getProjectId())

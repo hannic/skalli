@@ -69,6 +69,7 @@ public abstract class CommonProjectConverter extends AbstractConverter<Project> 
         writeNode(writer, "id", project.getProjectId()); //$NON-NLS-1$
         writeNode(writer, "template", project.getProjectTemplateId()); //$NON-NLS-1$
         writeNode(writer, "name", project.getName()); //$NON-NLS-1$
+        writeNode(writer, "shortName", project.getShortName()); //$NON-NLS-1$
         writeLink(writer, "project", host + URL_PROJECTS + project.getUuid().toString()); //$NON-NLS-1$
         writeLink(writer, "browse", host + URL_BROWSE + project.getProjectId()); //$NON-NLS-1$
         writeLink(writer, "issues", host + URL_PROJECTS + project.getUuid().toString() + URL_ISSUES); //$NON-NLS-1$

@@ -57,6 +57,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="shortName" type="ShortName">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="EN">
+            The short name of the project, e.g. "Skalli".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="link" type="Link">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">

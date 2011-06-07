@@ -67,6 +67,8 @@ class ProjectConverter extends CommonProjectConverter {
                 project.setProjectId(value);
             } else if ("name".equals(field)) { //$NON-NLS-1$
                 project.setName(value);
+            } else if ("shortName".equals(field)) { //$NON-NLS-1$
+                project.setShortName(value);
             } else if ("uuid".equals(field)) { //$NON-NLS-1$
                 project.setUuid(UUID.fromString(value));
             } else if ("description".equals(field)) { //$NON-NLS-1$
