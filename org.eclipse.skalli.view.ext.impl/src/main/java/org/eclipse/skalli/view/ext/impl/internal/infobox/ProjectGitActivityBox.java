@@ -13,7 +13,6 @@ package org.eclipse.skalli.view.ext.impl.internal.infobox;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Link;
@@ -21,10 +20,9 @@ import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 import org.eclipse.skalli.model.ext.devinf.ScmLocationMapper;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
-import com.vaadin.terminal.ExternalResource;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
@@ -62,11 +60,18 @@ public class ProjectGitActivityBox implements ProjectInfoBox {
 
     @Override
     public boolean isVisible(Project project, String loggedInUserId) {
-        List<Link> links = getActivityGraphicUrl(project);
-        return (links != null) && (links.size() > 0);
+        return (getActivityGraphicUrl(project) != null || getActivityDetailsUrl(project) != null);
     }
 
-    private List<Link> getActivityGraphicUrl(Project project) {
+    private Link getActivityGraphicUrl(Project project) {
+        return getMappedLink(project, ScmLocationMapper.PURPOSE_ACTIVITY);
+    }
+
+    private Link getActivityDetailsUrl(Project project) {
+        return getMappedLink(project, ScmLocationMapper.PURPOSE_ACTIVITY_DETAILS);
+    }
+
+    private Link getMappedLink(Project project, String purpose) {
         if (configService == null) {
             return null;
         }
@@ -80,8 +85,13 @@ public class ProjectGitActivityBox implements ProjectInfoBox {
         }
         ScmLocationMapper mapper = new ScmLocationMapper();
         List<Link> links = mapper.getMappedLinks(configService, project.getProjectId(), scmLocation,
-                ScmLocationMapper.PURPOSE_ACTIVITY);
-        return links;
+                purpose);
+
+        if (links != null && links.size() > 0) {
+            return links.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -90,18 +100,44 @@ public class ProjectGitActivityBox implements ProjectInfoBox {
         layout.setSizeFull();
 
         Label label;
-        label = new Label("Recent Git Commit Activity:");
+        label = new Label("Latest commit activity (click for details):");
         layout.addComponent(label);
+        layout.addComponent(new Label("&nbsp;", Label.CONTENT_XHTML));
 
-        List<Link> links = getActivityGraphicUrl(project);
-        if (links != null) {
-            for (Link link : links) {
-                ExternalResource externalResource = new ExternalResource(link.getUrl());
-                Embedded embedded = new Embedded("", externalResource); //$NON-NLS-1$
-                embedded.setDescription(link.getLabel());
-                layout.addComponent(embedded);
+        Link imgLink = getActivityGraphicUrl(project);
+        Link detailsLink = getActivityDetailsUrl(project);
+
+        Label activityArea = new Label();
+        activityArea.setContentMode(Label.CONTENT_XHTML);
+        if (imgLink != null) {
+            String imgTag =
+                    "<img src=\"" + imgLink.getUrl() + "\" " +
+                            "title=\"" + imgLink.getLabel() + "\" " +
+                            "onerror=\"document.getElementById('activityBoxError').style.visibility='visible';" +
+                            "document.getElementById('activityBoxImage').style.visibility='hidden';\" " +
+                            ">";
+
+            String content;
+            if (detailsLink != null) {
+                content = "<a href=\"" + detailsLink.getUrl() + "\" target=\"_new\">" + imgTag + "</a>";
+            } else {
+                content = imgTag;
             }
+            activityArea.setValue("<span id=\"activityBoxImage\">" + content + "</span>");
+            layout.addComponent(activityArea);
+
+            Label errorArea = new Label(
+                    "<span id=\"activityBoxError\" " +
+                            "style=\"visibility:hidden\">" +
+                            "<i>Currently there is no activity information available.</i>" +
+                            "</span>");
+            errorArea.setContentMode(Label.CONTENT_XHTML);
+            layout.addComponent(errorArea);
+        } else if (detailsLink != null) {
+            activityArea.setValue("<a href=\"" + detailsLink.getUrl() + "\" target=\"_new\">Show details</a>");
+            layout.addComponent(activityArea);
         }
+
         return layout;
     }
 }
