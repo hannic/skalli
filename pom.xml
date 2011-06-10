@@ -46,5 +46,6 @@
     <module>org.eclipse.skalli.source.feature</module>
     <module>org.eclipse.skalli.testing.feature</module>
     <module>org.eclipse.skalli.site</module>
+    <module>org.eclipse.skalli.examples</module>
   </modules>
 </project>

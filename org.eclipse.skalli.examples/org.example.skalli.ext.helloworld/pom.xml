@@ -1,0 +1,17 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.example.skalli.ext</groupId>
+  <artifactId>org.example.skalli.ext.helloworld</artifactId>
+  <parent>
+    <artifactId>org.eclipse.skalli.parent</artifactId>
+    <groupId>org.eclipse.skalli</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+    <relativePath>org.eclipse.skalli.parent</relativePath>
+  </parent>
+  <description>This Hello World extension contains properties which can be edited by the user and which will be displayed on the project detail page in a separate info box. 
+
+</description>
+  <organization>
+    <url>http://wiki.eclipse.org/Skalli</url>
+  </organization>
+</project>
