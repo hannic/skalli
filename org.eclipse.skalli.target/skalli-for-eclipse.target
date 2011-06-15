@@ -6,22 +6,7 @@
 
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
 <!-- dependencies to Equinox/Eclipse platform -->
-<unit id="a.jre.javase" version="1.6.0"/>
-<unit id="org.eclipse.core.jobs" version="0.0.0"/>
-<unit id="org.eclipse.core.contenttype" version="0.0.0"/>
-<unit id="org.eclipse.core.runtime" version="0.0.0"/>
-<unit id="org.eclipse.equinox.app" version="0.0.0"/>
-<unit id="org.eclipse.equinox.common" version="0.0.0"/>
-<unit id="org.eclipse.equinox.ds" version="0.0.0"/>
-<unit id="org.eclipse.equinox.preferences" version="0.0.0"/>
-<unit id="org.eclipse.equinox.registry" version="0.0.0"/>
-<unit id="org.eclipse.equinox.security" version="0.0.0"/>
-<!--<unit id="org.eclipse.equinox.security.macosx" version="0.0.0"/> //-->
-<unit id="org.eclipse.equinox.security.win32.x86" version="0.0.0"/>
-<unit id="org.eclipse.equinox.util" version="0.0.0"/>
-<unit id="org.eclipse.osgi" version="0.0.0"/>
-<unit id="org.eclipse.osgi.services" version="0.0.0"/>
-<unit id="org.eclipse.osgi.util" version="0.0.0"/>
+<unit id="org.eclipse.platform.sdk" version="3.7.0.I20110603-0909"/>
 <repository location="http://download.eclipse.org/eclipse/updates/3.7milestones/"/>
 </location>
 
@@ -54,9 +39,19 @@
 <repository location="http://download.eclipse.org/jetty/updates/jetty-rt-3.7milestones/S-3.7.M6-201103121818/"/>
 </location>
 
-<location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
-<!-- URL to Skalli orbit until all third party dependencies are in Eclipse orbit -->
-<repository location="http://download.eclipse.org/skalli"/>
+<location path="${project_loc:org.eclipse.skalli.target}/target-platform-3rdparty" type="Directory">
+<!-- Third party components which are not yet in Orbit and need to be downloaded manually -->
+<unit id="org.restlet" version="2.0.0.RC4"/>
+<unit id="org.restlet.ext.servlet" version="2.0.0.RC4"/>
+<unit id="org.restlet.ext.xstream" version="2.0.0.RC4"/>
+<unit id="org.codehaus.jettison.jettison" version="1.2.0"/>
+<unit id="com.springsource.com.thoughtworks.xstream" version="1.3.1"/>
+<unit id="com.springsource.org.custommonkey.xmlunit" version="1.2.0"/>
+<unit id="com.springsource.org.xmlpull" version="1.1.4.c"/>
+<unit id="com.vaadin" version="6.4.0"/>
+<unit id="org.eclipse.skalli.org.apache.lucene.lucene-core" version="3.0.2"/>
+<unit id="org.eclipse.skalli.org.apache.lucene.lucene-queries" version="3.0.2"/>
+<unit id="org.eclipse.skalli.org.apache.lucene.lucene-highlighter" version="3.0.2"/>
 </location>
 
 </locations>

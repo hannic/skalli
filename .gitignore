@@ -1,2 +1,5 @@
 /.metadata
 target/
+org.eclipse.skalli.target/jetty/logs/
+org.eclipse.skalli.target/target-platform-3rdparty/
+org.eclipse.skalli.target/workdir/
