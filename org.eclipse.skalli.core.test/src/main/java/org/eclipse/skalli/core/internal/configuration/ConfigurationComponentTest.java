@@ -15,14 +15,14 @@ import java.io.IOException;
 import org.easymock.EasyMock;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
 import org.eclipse.skalli.common.configuration.ConfigKey;
 import org.eclipse.skalli.common.configuration.ConfigTransaction;
+import org.eclipse.skalli.testutil.HashMapStorageService;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class ConfigurationComponentTest {
@@ -100,7 +100,7 @@ public class ConfigurationComponentTest {
     }
 
     @Test
-    public void testCustomization() {
+    public void testCustomization() throws Exception {
         EventService mockEventService = EasyMock.createMock(EventService.class);
 
         EasyMock.reset(mockEventService);
@@ -115,6 +115,7 @@ public class ConfigurationComponentTest {
 
         ConfigurationComponent ccOrig = new ConfigurationComponent();
         ccOrig.bindEventService(mockEventService);
+        ccOrig.bindStorageService(new HashMapStorageService());
 
         ccOrig.writeCustomization("key1", c1);
         EasyMock.verify(mockEventService);

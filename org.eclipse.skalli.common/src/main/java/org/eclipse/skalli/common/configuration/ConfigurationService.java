@@ -58,6 +58,7 @@ public interface ConfigurationService {
      * @param filename name (and relative path)
      * @return
      */
+    @Deprecated
     public File getWorkdirFile(String filename);
 
 }

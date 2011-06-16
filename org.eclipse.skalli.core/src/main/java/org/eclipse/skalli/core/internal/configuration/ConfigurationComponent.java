@@ -10,11 +10,11 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.configuration;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,10 +28,8 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.EventService;
+import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.api.java.events.EventConfigUpdate;
 import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
 import org.eclipse.skalli.common.configuration.ConfigKey;
@@ -39,14 +37,17 @@ import org.eclipse.skalli.common.configuration.ConfigTransaction;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.core.internal.persistence.CompositeEntityClassLoader;
 import org.eclipse.skalli.log.Log;
+import org.osgi.service.component.ComponentContext;
+
 import com.thoughtworks.xstream.XStream;
 
 public class ConfigurationComponent implements ConfigurationService {
     private static final Logger LOG = Log.getLogger(ConfigurationComponent.class);
     private static final String SECURESTORE = "storage/securestore.txt"; //$NON-NLS-1$
-    private static final String CUSTOMIZATION_FOLDER = "customization/"; //$NON-NLS-1$
+    private static final String CATEGORY_CUSTOMIZATION = "customization"; //$NON-NLS-1$
     private ISecurePreferences factory;
     private EventService eventService;
+    private StorageService storageService;
 
     private final Map<ConfigTransaction, Map<ConfigKey, String>> transactions = new HashMap<ConfigTransaction, Map<ConfigKey, String>>(
             0);
@@ -65,6 +66,14 @@ public class ConfigurationComponent implements ConfigurationService {
 
     protected void unbindEventService(EventService eventService) {
         this.eventService = null;
+    }
+
+    protected void bindStorageService(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
+    protected void unbindStorageService(StorageService storageService) {
+        this.storageService = null;
     }
 
     public ConfigurationComponent() {
@@ -86,7 +95,7 @@ public class ConfigurationComponent implements ConfigurationService {
     public String readString(ConfigKey key) {
         try {
             return factory.get(key.getKey(), key.getDefaultValue());
-        } catch (StorageException e) {
+        } catch (org.eclipse.equinox.security.storage.StorageException e) {
             throw new RuntimeException(e);
         }
     }
@@ -158,7 +167,7 @@ public class ConfigurationComponent implements ConfigurationService {
                 factory.put(entry.getKey().getKey(), entry.getValue(), entry.getKey().isEncrypted());
             }
             factory.flush();
-        } catch (StorageException e) {
+        } catch (org.eclipse.equinox.security.storage.StorageException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -181,42 +190,43 @@ public class ConfigurationComponent implements ConfigurationService {
         return xstream;
     }
 
-    private String getFilenameFromCustomizationName(String customizationName) {
-        File path = getWorkdirFile(CUSTOMIZATION_FOLDER);
-        if (!path.exists()) {
-            path.mkdirs();
-        }
-        return path.toString() + IOUtils.DIR_SEPARATOR + customizationName + ".xml"; //$NON-NLS-1$
-    }
-
     @Override
     public <T> void writeCustomization(String customizationKey, T customization) {
-        FileOutputStream os = null;
+        if (storageService == null) {
+            throw new IllegalStateException("StorageService not available");
+        }
+        String xml = getXStream(customization.getClass()).toXML(customization);
+        InputStream is = null;
         try {
-            os = new FileOutputStream(getFilenameFromCustomizationName(customizationKey));
-            getXStream(customization.getClass()).toXML(customization, os);
+            is = new ByteArrayInputStream(xml.getBytes("UTF-8")); //$NON-NLS-1$
+            storageService.write(CATEGORY_CUSTOMIZATION, customizationKey, is);
             if (eventService != null) {
                 eventService.fireEvent(new EventCustomizingUpdate(customizationKey));
             }
-        } catch (FileNotFoundException e) {
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        } catch (org.eclipse.skalli.api.java.StorageException e) {
             throw new RuntimeException(e);
         } finally {
-            IOUtils.closeQuietly(os);
+            IOUtils.closeQuietly(is);
         }
     };
 
     @Override
     public <T> T readCustomization(String customizationKey, Class<T> customizationClass) {
-        FileInputStream is = null;
+        if (storageService == null) {
+            LOG.warning("Cannot load customization for key " + customizationKey + ": StorageService not available");
+            return null;
+        }
+        InputStream is = null;
         try {
-            File file = new File(getFilenameFromCustomizationName(customizationKey));
-            if (!file.exists()) {
+            is = storageService.read(CATEGORY_CUSTOMIZATION, customizationKey);
+            if (is == null) {
                 return null;
             }
-            is = new FileInputStream(file);
             T ret = customizationClass.cast(getXStream(customizationClass).fromXML(is));
             return ret;
-        } catch (FileNotFoundException e) {
+        } catch (org.eclipse.skalli.api.java.StorageException e) {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(is);
@@ -224,6 +234,7 @@ public class ConfigurationComponent implements ConfigurationService {
     }
 
     @Override
+    @Deprecated
     public File getWorkdirFile(String filename) {
         File parent = null;
         String workDirProperty = FilenameUtils.separatorsToSystem(System.getProperty("workdir")); //$NON-NLS-1$
@@ -241,5 +252,4 @@ public class ConfigurationComponent implements ConfigurationService {
         File ret = new File(parent, filename);
         return ret;
     }
-
 }
