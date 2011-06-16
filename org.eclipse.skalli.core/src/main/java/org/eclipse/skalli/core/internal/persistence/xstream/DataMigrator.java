@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.w3c.dom.Document;
-
+import org.eclipse.skalli.common.util.XMLUtils;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.w3c.dom.Document;
 
 public class DataMigrator {
     private static final Logger LOG = Log.getLogger(DataMigrator.class);
@@ -37,18 +37,24 @@ public class DataMigrator {
         }
     }
 
-    public void migrate(Document doc, int fromVersion, int toVersion, String fileName) throws ValidationException {
+    public void migrate(Document doc, int fromVersion, int toVersion) throws ValidationException {
         if (migrations == null) {
             return;
         }
         if (fromVersion >= toVersion) {
             return;
         }
+
+        if (doc == null) {
+            return;
+        }
+
         String docType = doc.getDocumentElement().getNodeName();
         for (int i = fromVersion; i < toVersion; i++) {
             for (DataMigration migration : migrations) {
                 if (migration.getFromVersion() == i && migration.handlesType(docType)) {
-                    LOG.info(MessageFormat.format("Migrating {0} with {1}", fileName, migration.getClass().getName()));
+                    LOG.info(MessageFormat.format("Migrating {0} with {1}", XMLUtils.getUuid(doc), migration
+                            .getClass().getName()));
                     migration.migrate(doc);
                 }
             }

@@ -20,8 +20,8 @@ public class PersistenceServiceXStreamMock extends PersistenceServiceXStream {
     /** Array of extension services */
     private ExtensionService<?>[] extensionServices;
 
-    public PersistenceServiceXStreamMock(ExtensionService<?>... extensionServices) {
-        super();
+    public PersistenceServiceXStreamMock( FileStorageService storageService, ExtensionService<?>... extensionServices) {
+        super(new XStreamPersistence(storageService));
         this.extensionServices = extensionServices;
     }
 

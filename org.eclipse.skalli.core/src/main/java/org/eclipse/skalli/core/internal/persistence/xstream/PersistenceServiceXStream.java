@@ -10,64 +10,58 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.persistence.xstream;
 
-import java.io.File;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.EntityFilter;
 import org.eclipse.skalli.api.java.PersistenceService;
+import org.eclipse.skalli.api.java.StorageException;
+import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.core.internal.persistence.AbstractPersistenceService;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.eclipse.skalli.model.ext.ValidationException;
 import org.osgi.service.component.ComponentContext;
 
 /**
- * Helper class for marshalling/unmarshalling entities to/from the file system
- * and caching of undeleted and deleted entity instances.
- *
- * This class evaluates the system property "workdir". Setting this property
- * allows to choose an arbitrary storage directory (e.g. for testing purposes). If not
- * set, the current directory is used by default. In both cases, this class expects
- * to find a folder named <code>"storage"</code> in the given directory.
+ * Implementation of {@link PersistenceService} based on XStream.
  */
 public class PersistenceServiceXStream extends AbstractPersistenceService implements PersistenceService {
 
     private static final Logger LOG = Log.getLogger(PersistenceServiceXStream.class);
-    private static final String PROPERTIES_FILE = "/skalli.properties"; //$NON-NLS-1$
-    private static final String PROPERTY_WORKDIR = "workdir"; //$NON-NLS-1$
-    private static final String STORAGE_BASE = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
 
     public static final String ENTITY_PREFIX = "entity-"; //$NON-NLS-1$
 
-    private File storageDirectory;
     private final DataModelContainer cache = new DataModelContainer();
     private final DataModelContainer deleted = new DataModelContainer();
 
     private XStreamPersistence xstreamPersistence;
 
     /**
-     * Creates a new, unitialized <code>PersistenceServiceXStream</code>.
-     * Note, this class should not be instantiated directly except for testing purposes.
+     * Creates a new, uninitialized <code>PersistenceServiceXStream</code>.
      */
     public PersistenceServiceXStream() {
-        initializeStorage();
+    }
+
+    /**
+     * Creates a <code>PersistenceServiceXStream</code> based on the given <code>XStreamPersistence</code>.
+     * Note, this constructor should not be used to instantiate instances of this service directly except
+     * for testing purposes.
+     */
+    PersistenceServiceXStream(XStreamPersistence xstreamPersistence) {
+        this.xstreamPersistence = xstreamPersistence;
     }
 
     protected void activate(ComponentContext context) {
-        initializeStorage();
         LOG.info("Persistence service activated"); //$NON-NLS-1$
     }
 
@@ -85,57 +79,21 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
         deleted.clearAll();
     }
 
-    private void initializeStorage() {
-        if (storageDirectory == null) {
-            String workdir = null;
-            try {
-                // try to get working directory from configuration file
-                Properties properties = new Properties();
-                properties.load(getClass().getResourceAsStream(PROPERTIES_FILE));
-                workdir = properties.getProperty(PROPERTY_WORKDIR);
-                if (StringUtils.isBlank(workdir)) {
-                    LOG.warning("property '" + PROPERTY_WORKDIR + "' not defined in configuration file '"
-                            + PROPERTIES_FILE + "' - " +
-                            " falling back to system property '" + PROPERTY_WORKDIR + "'.");
-                }
-            } catch (Exception e) {
-                LOG.warning("cannot read configuration file '" + PROPERTIES_FILE + "' - " +
-                        "falling back to system properties.");
-            }
-
-            if (StringUtils.isBlank(workdir)) {
-                // fall back: get working directory from system property
-                workdir = System.getProperty(PROPERTY_WORKDIR);
-                if (StringUtils.isBlank(workdir)) {
-                    LOG.warning("cannot get system property '" + PROPERTY_WORKDIR + "' - " +
-                            "falling back to working directory.");
-                }
-            }
-
-            if (workdir != null) {
-                File workingDirectory = new File(workdir);
-                if (workingDirectory.exists() && workingDirectory.isDirectory()) {
-                    storageDirectory = new File(workingDirectory, STORAGE_BASE);
-                } else {
-                    LOG.warning("Working directory " + workingDirectory.getAbsolutePath()
-                            + " not found - falling back to current directory.");
-                }
-            }
-            if (storageDirectory == null) {
-                storageDirectory = new File(STORAGE_BASE);
-            }
-            LOG.info("use storage folder '" + storageDirectory.getAbsolutePath() + "' for persistence.");
-        }
-        xstreamPersistence = new XStreamPersistence(storageDirectory);
+    @Override
+    protected synchronized void unbindExtensionService(ExtensionService<?> extensionService) {
+        super.unbindExtensionService(extensionService);
+        cache.clearAll();
+        deleted.clearAll();
     }
 
-    protected File getStorageDirectory() {
-        return storageDirectory;
+    protected void bindStorageService(StorageService storageService) {
+        xstreamPersistence = new XStreamPersistence(storageService);
+        cache.clearAll();
+        deleted.clearAll();
     }
 
-    protected void setStorageDirectory(File storageDirectory) {
-        this.storageDirectory = storageDirectory;
-        xstreamPersistence = new XStreamPersistence(storageDirectory);
+    protected void unbindStorageService(StorageService storageService) {
+        xstreamPersistence = null;
         cache.clearAll();
         deleted.clearAll();
     }
@@ -167,83 +125,88 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
     }
 
     /**
-     * Loads all entities of the given class from the storage folder
-     * <code>STORAGE_DIR/entityClass.getSimpleName()</code>. Resolves
+     * Loads all entities of the given class. Resolves
      * the parent hierarchy of the loaded entities and stores the
      * result in the model caches (deleted entities in {@link #deleted},
      * all other in {@link #cache}).
      *
      * @param entityClass   the class the entities belongs to.
      */
-    private synchronized void loadModel(Class<? extends EntityBase> entityClass) {
+    private synchronized <T extends EntityBase> void loadModel(Class<T> entityClass) {
         if (cache.size(entityClass) > 0) {
+            //nothing to do, all entities are already loaded in the cache :-)
             return;
         }
-
-        File storageBase = new File(storageDirectory, entityClass.getSimpleName());
-        if (!storageBase.exists()) {
+        if (xstreamPersistence == null) {
+            LOG.warning("Cannot load entities of type " + entityClass + ": StorageService not available");
             return;
         }
-
-        LOG.info("Loading models from " + storageBase.getAbsolutePath()); //$NON-NLS-1$
-
-        @SuppressWarnings("unchecked")
-        Iterator<File> files = FileUtils.iterateFiles(storageBase, new String[] { "xml" }, true); //$NON-NLS-1$
-        while (files.hasNext()) {
-            File file = files.next();
-            LOG.info("  Loading " + file.getAbsolutePath()); //$NON-NLS-1$
-            EntityBase entity = loadEntity(file);
-            updateCache(entity);
+        List<T> loadedEntities;
+        try {
+            loadedEntities = xstreamPersistence.loadEntities(entityClass, getEntityClassLoaders(),
+                    getMigrations(), getAliases());
+        } catch (StorageException e) {
+            throw new RuntimeException(e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
         }
-
+        updateCache(loadedEntities);
         resolveParentEntities(entityClass);
     }
 
-    /**
-     * Loads an entity from a given file.
-     * Note, this method should not be called directly except for testing purposes.
-     * @param file  the file to load as entity.
-     */
-    protected EntityBase loadEntity(File file) {
-        return xstreamPersistence.loadFromFile(getEntityClassLoaders(), getMigrations(), getAliases(), file);
+    private <T extends EntityBase> void updateCache(List<T> loadedEntitiys) {
+        for (EntityBase entityBase : loadedEntitiys) {
+            updateCache(entityBase);
+        }
     }
 
     @Override
-    public synchronized void persist(EntityBase objToPersist, String userId) {
-        if (objToPersist == null) {
-            throw new IllegalArgumentException("argument 'objToPersist' must not be null");
+    public synchronized void persist(EntityBase entity, String userId) {
+        if (entity == null) {
+            throw new IllegalArgumentException("argument 'entity' must not be null");
         }
         if (StringUtils.isBlank(userId)) {
             throw new IllegalArgumentException("argument 'userId' must not be null or an empty string");
         }
+        if (xstreamPersistence == null) {
+            throw new IllegalStateException("StorageService not available");
+        }
 
         // load all project models
-        loadModel(objToPersist.getClass());
+        loadModel(entity.getClass());
 
         // generate unique id
-        if (objToPersist.getUuid() == null) {
-            objToPersist.setUuid(UUID.randomUUID());
+        if (entity.getUuid() == null) {
+            entity.setUuid(UUID.randomUUID());
         }
 
         // verify parent is known
         // TODO should be in EntitySeriviceImpl#validate
-        if (objToPersist.getParentEntityId() != null) {
-            UUID parentUUID = objToPersist.getParentEntityId();
-            EntityBase parent = getParentEntity(objToPersist.getClass(), objToPersist);
+        if (entity.getParentEntityId() != null) {
+            UUID parentUUID = entity.getParentEntityId();
+            EntityBase parent = getParentEntity(entity.getClass(), entity);
             if (parent == null) {
                 throw new RuntimeException("Parent entity " + parentUUID + " does not exist");
             }
         }
 
-        File file = xstreamPersistence.saveToFile(objToPersist, userId, getAliases());
+        try {
+            xstreamPersistence.saveEntity(entity, userId, getAliases());
+        } catch (StorageException e) {
+            throw new RuntimeException(e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+        reloadAndUpdateCache(entity);
+    }
 
-        // validate reading
-        EntityBase validation = loadEntity(objToPersist.getClass(), objToPersist.getUuid());
-        if (validation != null) {
-            updateCache(validation);
-            LOG.fine("validation succeeded (" + validation.getUuid() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+    private void reloadAndUpdateCache(EntityBase entity) {
+        EntityBase savedEntity = loadEntity(entity.getClass(), entity.getUuid());
+        if (savedEntity != null) {
+            updateCache(savedEntity);
+            LOG.fine("entity '" + savedEntity + "' successfully saved");
         } else {
-            LOG.severe("Validation of " + file.getAbsolutePath() + " failed"); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new RuntimeException("Failed to save entity '" + entity + "'");
         }
     }
 
@@ -321,55 +284,64 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
     }
 
     /**
-     * Loads the entity with the given UUID from a file. The file is searched in
-     * <code>STRORAGE_BASE/entityClass.getSimpleName()</code> and it is expected that
-     * its name is <code>uuid.toString()</code> with the extension <code>.xml</code>.
+     * Loads the entity with the given UUID.
      * This method loads the parent hierarchy of the entity, too, if available.
      *
      * @param entityClass  the class the entity belongs to.
      * @param uuid  the unique identifier of the entity.
      *
-     * @return  the entity, or <code>null</code> if either the storage directory
-     * for entities of the given class does not exist, or there is no file for
-     * the entity.
+     * @return  the entity, or <code>null</code> if the requested EntityBase could not be found.
      */
     @Override
     public <T extends EntityBase> T loadEntity(Class<T> entityClass, UUID uuid) {
-        File storageBase = new File(storageDirectory, entityClass.getSimpleName());
-        if (!storageBase.exists()) {
+        if (xstreamPersistence == null) {
+            LOG.warning("Cannot load entity " + entityClass + "/" + uuid + ": StorageService not available");
             return null;
         }
-        File file = new File(storageBase, uuid.toString() + ".xml"); //$NON-NLS-1$
+        T entity = null;
+        try {
+            entity = xstreamPersistence.loadEntity((Class<T>) entityClass, uuid,
+                    getEntityClassLoaders(),
+                    getMigrations(), getAliases());
+        } catch (StorageException e) {
+            new RuntimeException(e);
+        } catch (ValidationException e) {
+            new RuntimeException(e);
+        }
 
-        if (!file.isFile()) {
-            LOG.info(MessageFormat.format("{0} not found", file.getAbsolutePath()));
+        if (entity == null) {
             return null;
         }
 
-        T entity = entityClass.cast(loadEntity(file)); // safe, because entities of different type are stored in different folders
-        if (entity != null) {
-            // resolve the parent entity
-            UUID parentId = entity.getParentEntityId();
-            if (parentId != null) {
-                EntityBase parentEntity = null;
-                parentEntity = getParentEntity(entityClass, entity);
-                if (parentEntity == null) {
-                    // Fallback: try to load it
-                    parentEntity = loadEntity(entityClass, parentId);
-                }
-                if (parentEntity == null) {
-                    throw new RuntimeException(MessageFormat.format("Parent entity {0} does not exist", parentId));
-                }
-                entity.setParentEntity(parentEntity);
-            }
-            // update the parentEntity of all direct children
-            for (T childEntity : cache.getEntities(entityClass)) {
-                if (uuid.equals(childEntity.getParentEntityId())) {
-                    childEntity.setParentEntity(entity);
-                }
-            }
-        }
+        resolveParentEntity(entityClass, entity);
+        updateParentEntityInCache(entityClass, uuid, entity);
+
         return entity;
+    }
+
+    private <T extends EntityBase> void updateParentEntityInCache(Class<T> entityClass, UUID uuid, T entity) {
+        // update the parentEntity of all direct children
+        for (T childEntity : cache.getEntities(entityClass)) {
+            if (uuid.equals(childEntity.getParentEntityId())) {
+                childEntity.setParentEntity(entity);
+            }
+        }
+    }
+
+    private <T extends EntityBase> void resolveParentEntity(Class<T> entityClass, T entity) {
+        UUID parentId = entity.getParentEntityId();
+        if (parentId != null) {
+            EntityBase parentEntity = null;
+            parentEntity = getParentEntity(entityClass, entity);
+            if (parentEntity == null) {
+                // Fallback: try to load it
+                parentEntity = loadEntity(entityClass, parentId);
+            }
+            if (parentEntity == null) {
+                throw new RuntimeException(MessageFormat.format("Parent entity {0} does not exist", parentId));
+            }
+            entity.setParentEntity(parentEntity);
+        }
     }
 
     @Override

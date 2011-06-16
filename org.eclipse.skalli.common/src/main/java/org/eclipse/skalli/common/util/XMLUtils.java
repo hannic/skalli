@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.skalli.common.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,14 +35,13 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.skalli.model.ext.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import org.eclipse.skalli.model.ext.ValidationException;
 
 public class XMLUtils {
 
@@ -89,6 +90,17 @@ public class XMLUtils {
         }
     }
 
+    public static InputStream documentToStream(Document doc) throws TransformerException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            StreamResult result = new StreamResult(os);
+            transform(doc, result);
+            return new ByteArrayInputStream(os.toByteArray());
+        } finally {
+            IOUtils.closeQuietly(os);
+        }
+    }
+
     private static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -100,6 +112,27 @@ public class XMLUtils {
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
         transformer.transform(source, result);
+    }
+
+    /**
+     * Returns the value of the &lt;uuid&gt; element.
+     *
+     * @param doc  the XML document.
+     *
+     * @throws IllegalStateException  if there is no &lt;uuid&gt; element
+     * in the given document, or there are multiple such elements.
+     */
+    public static String getUuid(Document doc) throws IllegalStateException {
+        Element element;
+        try {
+            element = getElementOfEntity(doc, "uuid"); //$NON-NLS-1$
+        } catch (ValidationException e) {
+            throw new IllegalStateException(e);
+        }
+        if (element == null) {
+            throw new IllegalStateException("Document contains no <uuid> element"); //$NON-NLS-1$
+        }
+        return element.getTextContent();
     }
 
     /**
@@ -171,6 +204,9 @@ public class XMLUtils {
      * child element matching the given name.
      */
     public static Element getChild(Element parentElement, String elementName) throws ValidationException {
+        if (parentElement== null) {
+            throw new IllegalArgumentException("argument 'parentElement' must not be null"); //$NON-NLS-1$
+        }
         int count = 0;
         Element result = null;
         NodeList nodes = parentElement.getChildNodes();

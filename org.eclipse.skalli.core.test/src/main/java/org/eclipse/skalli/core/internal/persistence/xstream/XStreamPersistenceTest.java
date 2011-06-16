@@ -25,6 +25,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.easymock.EasyMock;
+import org.eclipse.skalli.common.util.XMLUtils;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
@@ -48,8 +49,9 @@ public class XStreamPersistenceTest {
     private static final String USER1 = "homer";
     private static final String USER2 = "marge";
 
-    private static final String XML_WITH_VERSION = "<bla version=\"42\"><hello>world</hello><blubb>noop</blubb></bla>";
-    private static final String XML_WITHOUT_VERSION = "<bla><hello>world</hello><blubb>noop</blubb></bla>";
+
+    private static final String XML_WITH_VERSION = "<bla version=\"42\"><uuid>"+PropertyHelperUtils.TEST_UUIDS[0]+"</uuid><hello>world</hello><blubb>noop</blubb></bla>";
+    private static final String XML_WITHOUT_VERSION = "<bla><uuid>"+PropertyHelperUtils.TEST_UUIDS[0]+"</uuid><hello>world</hello><blubb>noop</blubb></bla>";
 
     private static final String XML_WITH_MODIFIED_ATTRIBUTES =
             "<root lastModified=\"" + TIME0 + "\" modifiedBy=\"" + USER0 + "\"><extensions>" +
@@ -107,15 +109,13 @@ public class XStreamPersistenceTest {
     private static class TestXStreamPersistence extends XStreamPersistence {
 
         private final int CURRENT_VERSION = 43;
-        private File file;
 
         public TestXStreamPersistence() {
-            super(new File(""));
+            super(new FileStorageService(new File("")));
         }
 
-        public TestXStreamPersistence(File file) {
-            super(new File(""));
-            this.file = file;
+        public TestXStreamPersistence(File storageBase) {
+            super(new FileStorageService(storageBase));
         }
 
         @Override
@@ -123,25 +123,21 @@ public class XStreamPersistenceTest {
             return CURRENT_VERSION;
         }
 
-        @Override
-        protected File getFile(EntityBase entity) {
-            return file;
-        }
     }
 
     @Test
     public void testSaveLoadCycle() throws Exception {
-        File tmpDir = null;
+        File stroageBaseDir = null;
         try {
             TestExtensibleEntityBase entity = getExtensibleEntity();
             Map<String, Class<?>> aliases = getAliases();
 
-            tmpDir = TestUtils.createTempDir("testSaveLoadCycle");
-            File tmpFile = new File(tmpDir, entity.getUuid() + ".xml");
-            XStreamPersistence xp = new TestXStreamPersistence(tmpFile);
-            xp.saveToFile(entity, USER0, aliases);
+            stroageBaseDir = TestUtils.createTempDir("testSaveLoadCycle");
+            XStreamPersistence xp = new TestXStreamPersistence(stroageBaseDir);
+            xp.saveEntity(entity, USER0, aliases);
 
-            Document savedDoc = xp.documentFromFile(tmpFile);
+            File entityFile = new File(new File(stroageBaseDir, entity.getClass().getSimpleName()), entity.getUuid() + ".xml");
+            Document savedDoc = XMLUtils.documentFromFile(entityFile);
             String lastModified = xp.getLastModifiedAttribute(savedDoc.getDocumentElement());
             assertNotNull(lastModified);
             SortedMap<String, Element> extensions = xp.getExtensionsByAlias(savedDoc, aliases);
@@ -156,8 +152,11 @@ public class XStreamPersistenceTest {
             entityClassLoaders.add(TestExtension1.class.getClassLoader());
             DataMigration mockMigration = getMigrationMock();
             EasyMock.replay(mockMigration);
-            EntityBase loadedEntity = xp.loadFromFile(entityClassLoaders,
-                    Collections.singleton(mockMigration), aliases, tmpFile);
+            Document doc = xp.readEntityAsDom(entity.getClass(), entity.getUuid());
+            xp.preProcessXML(doc, Collections.singleton(mockMigration));
+            EntityBase entity1 = xp.domToEntity(entityClassLoaders, aliases, doc);
+            xp.postProcessEntity(doc, entity1, aliases);
+            EntityBase loadedEntity = entity1;
             assertNotNull(loadedEntity);
             assertTrue(loadedEntity instanceof TestExtensibleEntityBase);
             assertEquals(lastModified, loadedEntity.getLastModified());
@@ -172,7 +171,7 @@ public class XStreamPersistenceTest {
             assertEquals(USER0, ext2.getLastModifiedBy());
 
         } finally {
-            FileUtils.deleteDirectory(tmpDir);
+            FileUtils.deleteDirectory(stroageBaseDir);
         }
     }
 
@@ -181,9 +180,9 @@ public class XStreamPersistenceTest {
         XStreamPersistence xp = new TestXStreamPersistence();
         DataMigration mockMigration = getMigrationMock();
         EasyMock.replay(mockMigration);
-        Document doc = xp.documentFromString(XML_WITH_VERSION);
-        xp.preProcessXML(doc, Collections.singleton(mockMigration), "file");
-        String res = xp.documentToString(doc);
+        Document doc = XMLUtils.documentFromString(XML_WITH_VERSION);
+        xp.preProcessXML(doc, Collections.singleton(mockMigration));
+        String res = XMLUtils.documentToString(doc);
         assertFalse(res.contains("version=\"3\""));
         EasyMock.verify(mockMigration);
     }
@@ -191,7 +190,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testPostProcessEntity() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
+        Document doc = XMLUtils.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
         Map<String, Class<?>> aliases = getAliases();
         TestExtensibleEntityBase entity = getExtensibleEntity();
         xp.postProcessEntity(doc, entity, aliases);
@@ -210,8 +209,8 @@ public class XStreamPersistenceTest {
     @Test
     public void testPostProcessXML() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document oldDoc = xp.documentFromString(XML_WITH_EXTENSIONS);
-        Document newDoc = xp.documentFromString(XML_WITH_EXTENSIONS_MODIFIED);
+        Document oldDoc = XMLUtils.documentFromString(XML_WITH_EXTENSIONS);
+        Document newDoc = XMLUtils.documentFromString(XML_WITH_EXTENSIONS_MODIFIED);
         Map<String, Class<?>> aliases = getAliases();
         xp.postProcessXML(newDoc, oldDoc, aliases, USER0);
         Element documentElement = newDoc.getDocumentElement();
@@ -230,7 +229,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testPostProcessXMLUnchangedDocument() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITH_EXTENSIONS);
+        Document doc = XMLUtils.documentFromString(XML_WITH_EXTENSIONS);
         Map<String, Class<?>> aliases = getAliases();
         xp.postProcessXML(doc, doc, aliases, USER0);
         Element documentElement = doc.getDocumentElement();
@@ -247,7 +246,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testGetExtensionsByAlias() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
+        Document doc = XMLUtils.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
         Map<String, Class<?>> aliases = getAliases();
         SortedMap<String, Element> extensions = xp.getExtensionsByAlias(doc, aliases);
         assertEquals(2, extensions.size());
@@ -260,7 +259,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testGetExtensionsByClassName() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
+        Document doc = XMLUtils.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
         Map<String, Class<?>> aliases = getAliases();
         SortedMap<String, Element> extensions = xp.getExtensionsByClassName(doc, aliases);
         assertEquals(2, extensions.size());
@@ -275,7 +274,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testGetExtensionsNoAliases() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
+        Document doc = XMLUtils.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
         SortedMap<String, Element> extensions = xp.getExtensionsByAlias(doc, null);
         assertNotNull(extensions);
         assertTrue(extensions.isEmpty());
@@ -287,7 +286,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testGetExtensionsNoMatchingAliases() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
+        Document doc = XMLUtils.documentFromString(XML_WITH_MODIFIED_ATTRIBUTES);
         Map<String, Class<?>> notMatchingAliases = getNotMatchingAliases();
         SortedMap<String, Element> extensions = xp.getExtensionsByAlias(doc, notMatchingAliases);
         assertNotNull(extensions);
@@ -300,7 +299,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testVersionAttribute() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         xp.setVersionAttribute(doc);
         assertEquals(xp.getCurrentVersion(), xp.getVersionAttribute(doc));
     }
@@ -308,7 +307,7 @@ public class XStreamPersistenceTest {
     @Test(expected = RuntimeException.class)
     public void testCallSetVersionAttributeTwice() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         xp.setVersionAttribute(doc);
         xp.setVersionAttribute(doc);
     }
@@ -316,7 +315,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testLastModified() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
         xp.setLastModifiedAttribute(documentElement);
         assertIsXsdDateTime(xp.getLastModifiedAttribute(documentElement));
@@ -325,7 +324,7 @@ public class XStreamPersistenceTest {
     @Test(expected = RuntimeException.class)
     public void testCallSetLastModifiedTwice() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
         xp.setLastModifiedAttribute(documentElement);
         xp.setLastModifiedAttribute(documentElement);
@@ -334,7 +333,7 @@ public class XStreamPersistenceTest {
     @Test
     public void testLastModifiedBy() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
         xp.setLastModifiedByAttribute(documentElement, USER0);
         assertEquals(USER0, xp.getLastModifiedByAttribute(documentElement));
@@ -343,7 +342,7 @@ public class XStreamPersistenceTest {
     @Test(expected = RuntimeException.class)
     public void testCallSetLastModifiedByTwice() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
         xp.setLastModifiedByAttribute(documentElement, USER0);
         xp.setLastModifiedByAttribute(documentElement, USER0);
@@ -352,31 +351,31 @@ public class XStreamPersistenceTest {
     @Test
     public void testNonIdenticalElements() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
         Map<String, Class<?>> aliases = getAliases();
         SortedMap<String, Element> extensions = xp.getExtensionsByClassName(doc, aliases);
         for (Element element : extensions.values()) {
-            assertFalse(xp.identical(documentElement, element));
+            assertFalse(XMLDiff.identical(documentElement, element));
         }
     }
 
     @Test
     public void testIdenticalWithNullParams() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
-        assertTrue(xp.identical(null, null));
-        assertFalse(xp.identical(null, documentElement));
-        assertFalse(xp.identical(documentElement, null));
+        assertTrue(XMLDiff.identical(null, null));
+        assertFalse(XMLDiff.identical(null, documentElement));
+        assertFalse(XMLDiff.identical(documentElement, null));
     }
 
     @Test
     public void testIdenticalSameElement() throws Exception {
         XStreamPersistence xp = new TestXStreamPersistence();
-        Document doc = xp.documentFromString(XML_WITHOUT_VERSION);
+        Document doc = XMLUtils.documentFromString(XML_WITHOUT_VERSION);
         Element documentElement = doc.getDocumentElement();
-        assertTrue(xp.identical(documentElement, documentElement));
+        assertTrue(XMLDiff.identical(documentElement, documentElement));
     }
 
     private void assertIsXsdDateTime(String lexicalXSDDateTime) {

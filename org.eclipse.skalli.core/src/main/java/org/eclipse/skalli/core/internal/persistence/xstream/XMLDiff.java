@@ -15,10 +15,12 @@ import java.util.Arrays;
 import org.custommonkey.xmlunit.ComparisonController;
 import org.custommonkey.xmlunit.Difference;
 import org.custommonkey.xmlunit.DifferenceConstants;
+import org.custommonkey.xmlunit.DifferenceEngine;
 import org.custommonkey.xmlunit.DifferenceListener;
-import org.w3c.dom.Node;
-
+import org.custommonkey.xmlunit.ElementNameQualifier;
 import org.eclipse.skalli.common.util.CollectionUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 public class XMLDiff implements ComparisonController, DifferenceListener {
 
@@ -73,5 +75,15 @@ public class XMLDiff implements ComparisonController, DifferenceListener {
 
     public boolean identical() {
         return identical;
+    }
+
+    public static boolean identical(Element newElement, Element oldElement) {
+        if (newElement != null && oldElement == null || newElement == null && oldElement != null) {
+            return false;
+        }
+        XMLDiff diff = new XMLDiff();
+        DifferenceEngine engine = new DifferenceEngine(diff);
+        engine.compare(newElement, oldElement, diff, new ElementNameQualifier());
+        return diff.identical();
     }
 }

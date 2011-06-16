@@ -10,7 +10,14 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.persistence.xstream;
 
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.eclipse.skalli.core.internal.persistence.CompositeEntityClassLoader;
+
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -21,7 +28,7 @@ public class IgnoreUnknownElementsXStream extends XStream {
 
     private IgnoreUnknownElementsMapperWrapper wrapper;
 
-    public IgnoreUnknownElementsXStream() {
+    private IgnoreUnknownElementsXStream() {
     }
 
     @Override
@@ -30,6 +37,24 @@ public class IgnoreUnknownElementsXStream extends XStream {
             wrapper = new IgnoreUnknownElementsMapperWrapper(next);
         }
         return wrapper;
+    }
+
+    static public XStream getXStreamInstance(Set<? extends Converter> converters, Set<ClassLoader> entityClassLoaders, Map<String, Class<?>> aliases) {
+        XStream xstream = new IgnoreUnknownElementsXStream();
+        if (converters != null) {
+            for(Converter converter: converters) {
+                xstream.registerConverter(converter);
+            }
+        }
+        if (entityClassLoaders != null) {
+            xstream.setClassLoader(new CompositeEntityClassLoader(entityClassLoaders));
+        }
+        if (aliases != null) {
+            for (Entry<String, Class<?>> entry : aliases.entrySet()) {
+                xstream.alias(entry.getKey(), entry.getValue());
+            }
+        }
+        return xstream;
     }
 
 }

@@ -76,7 +76,8 @@ Service-Component: OSGI-INF/PersistenceComponent.xml,
  OSGI-INF/UserStoreConfigSection.xml,
  OSGI-INF/SchedulerComponent.xml,
  OSGI-INF/ValidationComponent.xml,
- OSGI-INF/ValidationsConfigSection.xml
+ OSGI-INF/ValidationsConfigSection.xml,
+ OSGI-INF/FileStorageComponent.xml
 Bundle-ActivationPolicy: lazy
 
 

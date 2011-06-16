@@ -13,6 +13,7 @@ package org.eclipse.skalli.core.internal.users;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,13 +26,13 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.UserService;
-import org.eclipse.skalli.core.internal.persistence.xstream.NoopConverter;
 import org.eclipse.skalli.core.internal.persistence.xstream.IgnoreUnknownElementsXStream;
+import org.eclipse.skalli.core.internal.persistence.xstream.NoopConverter;
 import org.eclipse.skalli.log.Log;
+import org.osgi.service.component.ComponentContext;
+
 import com.thoughtworks.xstream.XStream;
 
 /**
@@ -98,10 +99,10 @@ public class LocalUserServiceImpl implements UserService {
     }
 
     private XStream getXStreamInstance() {
-        XStream xstream = new IgnoreUnknownElementsXStream();
-        xstream.registerConverter(new NoopConverter());
-        xstream.setClassLoader(User.class.getClassLoader());
-        return xstream;
+        return IgnoreUnknownElementsXStream.getXStreamInstance(
+                Collections.singleton(new NoopConverter()),
+                Collections.singleton(User.class.getClassLoader()),
+                null);
     }
 
     File saveToFile(File file, User user) {

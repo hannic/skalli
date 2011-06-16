@@ -16,15 +16,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import org.eclipse.skalli.common.util.XMLUtils;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensibleEntityBase;
@@ -35,6 +26,14 @@ import org.eclipse.skalli.testutil.TestExtensibleEntityBase;
 import org.eclipse.skalli.testutil.TestExtension;
 import org.eclipse.skalli.testutil.TestExtension1;
 import org.eclipse.skalli.testutil.TestUtils;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 @SuppressWarnings("nls")
 public class PersistenceServiceXStreamTest {
@@ -58,8 +57,7 @@ public class PersistenceServiceXStreamTest {
         File storageDirectory = new File(tempdir, "storage");
 
         // create a new instance for persistence of test entities
-        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock(new ExtensibleEntityExtensionService());
-        p.setStorageDirectory(storageDirectory);
+        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock( new FileStorageService(storageDirectory), new ExtensibleEntityExtensionService());
 
         // create and persist test entities
         List<TestExtensibleEntityBase> expectedEntities = createTestEntityHierarchy();
@@ -86,8 +84,8 @@ public class PersistenceServiceXStreamTest {
         }
 
         // create a new instance for loading of persisted entities
-        p = new PersistenceServiceXStreamMock(new ExtensibleEntityExtensionService());
-        p.setStorageDirectory(storageDirectory);
+        p = new PersistenceServiceXStreamMock(new FileStorageService(storageDirectory),new ExtensibleEntityExtensionService());
+
 
         List<TestExtensibleEntityBase> actualEntities = p.getEntities(TestExtensibleEntityBase.class);
         List<TestExtensibleEntityBase> actualDeletedEntities = p.getDeletedEntities(TestExtensibleEntityBase.class);
@@ -116,8 +114,8 @@ public class PersistenceServiceXStreamTest {
         File storageDirectory = new File(tempdir, "storage");
 
         // create a new instance for persistence of test entities
-        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock(new ExtensibleEntityExtensionService());
-        p.setStorageDirectory(storageDirectory);
+        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock(new FileStorageService(storageDirectory), new ExtensibleEntityExtensionService());
+
 
         // create and persist test entities
         List<TestExtensibleEntityBase> expectedEntities = createTestEntityHierarchy();

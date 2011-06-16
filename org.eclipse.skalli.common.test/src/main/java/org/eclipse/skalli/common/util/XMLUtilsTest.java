@@ -14,23 +14,25 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.skalli.model.ext.ValidationException;
+import org.eclipse.skalli.testutil.PropertyHelperUtils;
+import org.eclipse.skalli.testutil.TestEntityBase1;
+import org.eclipse.skalli.testutil.TestExtension;
+import org.eclipse.skalli.testutil.TestExtension1;
 import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import org.eclipse.skalli.testutil.PropertyHelperUtils;
-import org.eclipse.skalli.testutil.TestEntityBase1;
-import org.eclipse.skalli.testutil.TestExtension;
-import org.eclipse.skalli.testutil.TestExtension1;
+import org.xml.sax.SAXException;
 
 public class XMLUtilsTest {
 
@@ -214,6 +216,28 @@ public class XMLUtilsTest {
     @Test
     public void testMigrateExtensionStringToStringSetNoComparator() throws Exception {
         assertStringSet(ATTRIBUTE_OF_EXTENSION, WITHOUT_COMPARATOR);
+    }
+
+    @Test
+    public void testGetChild() throws ValidationException, SAXException, IOException, ParserConfigurationException
+    {
+        Document doc = XMLUtils.documentFromString("<bla><hello>world</hello><blubb>noop</blubb></bla>");
+        Element parentElement= doc.getDocumentElement();
+        Element child = XMLUtils.getChild(parentElement, "hello");
+        assertEquals(child.getNodeName(), "hello");
+        assertEquals(child.getTextContent(), "world");
+    }
+
+    @Test
+    public void testGetChild_NotChilds() throws ValidationException, SAXException, IOException,
+            ParserConfigurationException
+    {
+        try {
+            Element noChild = XMLUtils.getChild(null, "hello");
+            fail("IllegalArgumentException  expected, but not thrown");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("parentElement"));
+        }
     }
 
     private void assertElement(Element extensionsNode, String tagName) {
