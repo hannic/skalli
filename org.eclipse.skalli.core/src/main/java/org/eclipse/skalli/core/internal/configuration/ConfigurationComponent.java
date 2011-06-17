@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
@@ -29,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.skalli.api.java.EventService;
+import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.api.java.events.EventConfigUpdate;
 import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
@@ -62,18 +65,38 @@ public class ConfigurationComponent implements ConfigurationService {
 
     protected void bindEventService(EventService eventService) {
         this.eventService = eventService;
+        LOG.info(MessageFormat.format("bindEventService({0})", eventService)); //$NON-NLS-1$
     }
 
     protected void unbindEventService(EventService eventService) {
+        LOG.info(MessageFormat.format("unbindEventService({0})", eventService)); //$NON-NLS-1$
         this.eventService = null;
     }
 
     protected void bindStorageService(StorageService storageService) {
         this.storageService = storageService;
+        notifyCustomizationChanged(storageService);
+        LOG.info(MessageFormat.format("bindStorageService({0})", storageService)); //$NON-NLS-1$
     }
 
     protected void unbindStorageService(StorageService storageService) {
+        LOG.info(MessageFormat.format("unbindStorageService({0})", storageService)); //$NON-NLS-1$
         this.storageService = null;
+        notifyCustomizationChanged(storageService);
+    }
+
+    private void notifyCustomizationChanged(StorageService storageService) {
+        if (eventService != null) {
+            List<String> customizationKeys = Collections.emptyList();
+            try {
+                customizationKeys = storageService.keys(CATEGORY_CUSTOMIZATION);
+            } catch (StorageException e) {
+
+            }
+            for (String customizationKey: customizationKeys) {
+                eventService.fireEvent(new EventCustomizingUpdate(customizationKey));
+            }
+        }
     }
 
     public ConfigurationComponent() {

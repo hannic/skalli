@@ -20,7 +20,7 @@
         unbind="unbindStorageService"
         interface="org.eclipse.skalli.api.java.StorageService"
         name="StorageService"
-        cardinality="0..1"
+        cardinality="1..1"
         policy="dynamic"/>
 </scr:component>
 
