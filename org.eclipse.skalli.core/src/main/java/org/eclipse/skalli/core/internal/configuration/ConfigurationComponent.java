@@ -11,7 +11,6 @@
 package org.eclipse.skalli.core.internal.configuration;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
@@ -22,7 +21,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -243,25 +241,5 @@ public class ConfigurationComponent implements ConfigurationService {
         } finally {
             IOUtils.closeQuietly(is);
         }
-    }
-
-    @Override
-    @Deprecated
-    public File getWorkdirFile(String filename) {
-        File parent = null;
-        String workDirProperty = FilenameUtils.separatorsToSystem(System.getProperty("workdir")); //$NON-NLS-1$
-        if (workDirProperty != null) {
-            if (!workDirProperty.endsWith(String.valueOf(IOUtils.DIR_SEPARATOR))) {
-                workDirProperty += IOUtils.DIR_SEPARATOR;
-            }
-            parent = new File(workDirProperty);
-            if (!parent.exists() || !parent.isDirectory()) {
-                LOG.warning(String
-                        .format("Working directory (%s) not found. Using current directory as fallback.", parent.getAbsolutePath())); //$NON-NLS-1$
-                parent = null;
-            }
-        }
-        File ret = new File(parent, filename);
-        return ret;
     }
 }

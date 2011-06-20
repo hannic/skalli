@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.skalli.common.configuration;
 
-import java.io.File;
 
 public interface ConfigurationService {
 
@@ -51,14 +50,4 @@ public interface ConfigurationService {
      * @param customization
      */
     public <T> void writeCustomization(String customizationKey, T customization);
-
-    /**
-     * Constructs a {@link File} object for the given path/filename relative to the working directory.
-     *
-     * @param filename name (and relative path)
-     * @return
-     */
-    @Deprecated
-    public File getWorkdirFile(String filename);
-
 }
