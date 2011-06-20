@@ -45,7 +45,11 @@ public class HashMapStorageService implements StorageService {
 
     @Override
     public InputStream read(String category, String key) throws StorageException {
-        return new ByteArrayInputStream(blobStore.get(getKey(category, key)));
+        byte[] content = blobStore.get(getKey(category, key));
+        if (content == null) {
+            return null;
+        }
+        return new ByteArrayInputStream(content);
     }
 
     @Override

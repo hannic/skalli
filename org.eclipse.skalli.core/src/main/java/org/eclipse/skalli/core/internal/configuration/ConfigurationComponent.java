@@ -12,24 +12,20 @@ package org.eclipse.skalli.core.internal.configuration;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
@@ -46,14 +42,15 @@ import com.thoughtworks.xstream.XStream;
 
 public class ConfigurationComponent implements ConfigurationService {
     private static final Logger LOG = Log.getLogger(ConfigurationComponent.class);
-    private static final String SECURESTORE = "storage/securestore.txt"; //$NON-NLS-1$
+
     private static final String CATEGORY_CUSTOMIZATION = "customization"; //$NON-NLS-1$
-    private ISecurePreferences factory;
+    private static final String KEY_PROPERTYSTORE = "PROPERTYSTORE"; //$NON-NLS-1$
+
     private EventService eventService;
     private StorageService storageService;
 
-    private final Map<ConfigTransaction, Map<ConfigKey, String>> transactions = new HashMap<ConfigTransaction, Map<ConfigKey, String>>(
-            0);
+    private final Map<ConfigTransaction, Map<ConfigKey, String>> transactions =
+            new HashMap<ConfigTransaction, Map<ConfigKey, String>>(0);
 
     protected void activate(ComponentContext context) {
         LOG.info("Configuration service activated"); //$NON-NLS-1$
@@ -99,28 +96,15 @@ public class ConfigurationComponent implements ConfigurationService {
         }
     }
 
-    public ConfigurationComponent() {
-        factory = getFactory();
-    }
-
-    ISecurePreferences getFactory() {
-        File file = getWorkdirFile(SECURESTORE);
-        try {
-            return SecurePreferencesFactory.open(file.getAbsoluteFile().toURI().toURL(), null);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public String readString(ConfigKey key) {
-        try {
-            return factory.get(key.getKey(), key.getDefaultValue());
-        } catch (org.eclipse.equinox.security.storage.StorageException e) {
-            throw new RuntimeException(e);
+        @SuppressWarnings("unchecked")
+        TreeMap<String,String> changes = readCustomization(KEY_PROPERTYSTORE, TreeMap.class);
+        String value = null;
+        if (changes != null) {
+            value = changes.get(key.getKey());
         }
+        return value != null? value : key.getDefaultValue();
     }
 
     @Override
@@ -185,17 +169,20 @@ public class ConfigurationComponent implements ConfigurationService {
     @Override
     public void commit(ConfigTransaction configTransaction) {
         Map<ConfigKey, String> tx = getChanges(configTransaction);
-        try {
-            for (Entry<ConfigKey, String> entry : tx.entrySet()) {
-                factory.put(entry.getKey().getKey(), entry.getValue(), entry.getKey().isEncrypted());
-            }
-            factory.flush();
-        } catch (org.eclipse.equinox.security.storage.StorageException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        @SuppressWarnings("unchecked")
+        TreeMap<String,String> changes = readCustomization(KEY_PROPERTYSTORE, TreeMap.class);
+        if (changes == null) {
+            changes = new TreeMap<String,String>();
         }
-
+        for (ConfigKey key: tx.keySet()) {
+            String value = tx.get(key);
+            if (value != null) {
+                changes.put(key.getKey(), value);
+            } else {
+                changes.remove(key.getKey());
+            }
+        }
+        writeCustomization(KEY_PROPERTYSTORE, changes);
         if (eventService != null) {
             eventService.fireEvent(new EventConfigUpdate(tx.keySet().toArray(new ConfigKey[tx.size()])));
         }
@@ -208,8 +195,10 @@ public class ConfigurationComponent implements ConfigurationService {
 
     private XStream getXStream(Class<?> customizationClass) {
         XStream xstream = new XStream();
-        xstream.setClassLoader(new CompositeEntityClassLoader(
-                Collections.singleton(customizationClass.getClassLoader())));
+        ClassLoader classLoader = customizationClass.getClassLoader();
+        if (classLoader != null) {
+            xstream.setClassLoader(new CompositeEntityClassLoader(Collections.singleton(classLoader)));
+        }
         return xstream;
     }
 
@@ -228,7 +217,7 @@ public class ConfigurationComponent implements ConfigurationService {
             }
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(e);
-        } catch (org.eclipse.skalli.api.java.StorageException e) {
+        } catch (StorageException e) {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(is);
@@ -249,7 +238,7 @@ public class ConfigurationComponent implements ConfigurationService {
             }
             T ret = customizationClass.cast(getXStream(customizationClass).fromXML(is));
             return ret;
-        } catch (org.eclipse.skalli.api.java.StorageException e) {
+        } catch (StorageException e) {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(is);

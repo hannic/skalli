@@ -10,11 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.configuration;
 
-import java.io.IOException;
-
 import org.easymock.EasyMock;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
 import org.eclipse.skalli.common.configuration.ConfigKey;
@@ -27,19 +23,7 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class ConfigurationComponentTest {
 
-    private ISecurePreferences mockFactory;
-    private Object[] mocks;
     private ConfigurationComponent cc;
-
-    class TestCC extends ConfigurationComponent {
-        public TestCC() {
-        }
-
-        @Override
-        ISecurePreferences getFactory() {
-            return mockFactory;
-        }
-    }
 
     ConfigKey testConfigKey1 = new ConfigKey() {
         @Override
@@ -73,6 +57,22 @@ public class ConfigurationComponentTest {
             return "42";
         }
     };
+    ConfigKey testConfigKeyIntNoDefault = new ConfigKey() {
+        @Override
+        public boolean isEncrypted() {
+            return false;
+        }
+
+        @Override
+        public String getKey() {
+            return "keyIntNoDefault";
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return null;
+        }
+    };
     ConfigKey testConfigKeyBoolean = new ConfigKey() {
         @Override
         public boolean isEncrypted() {
@@ -92,11 +92,8 @@ public class ConfigurationComponentTest {
 
     @Before
     public void setup() {
-        mockFactory = EasyMock.createMock(ISecurePreferences.class);
-        mocks = new Object[] { mockFactory };
-        cc = new TestCC();
-
-        EasyMock.reset(mocks);
+        cc = new ConfigurationComponent();
+        cc.bindStorageService(new HashMapStorageService());
     }
 
     @Test
@@ -126,20 +123,7 @@ public class ConfigurationComponentTest {
     }
 
     @Test
-    public void testRWString() throws StorageException, IOException {
-        mockFactory.get(EasyMock.eq("key1"), EasyMock.eq("default1"));
-        EasyMock.expectLastCall().andReturn("default1");
-
-        mockFactory.put(EasyMock.eq("key1"), EasyMock.eq("value1"), EasyMock.eq(false));
-        EasyMock.expectLastCall();
-        mockFactory.flush();
-        EasyMock.expectLastCall();
-
-        mockFactory.get(EasyMock.eq("key1"), EasyMock.eq("default1"));
-        EasyMock.expectLastCall().andReturn("value1");
-
-        EasyMock.replay(mocks);
-
+    public void testRWString() throws Exception {
         String res1 = cc.readString(testConfigKey1);
         Assert.assertEquals("default1", res1);
 
@@ -149,150 +133,86 @@ public class ConfigurationComponentTest {
 
         String res2 = cc.readString(testConfigKey1);
         Assert.assertEquals("value1", res2);
-
-        EasyMock.verify(mocks);
     }
 
     @Test
-    public void testReadInteger() throws StorageException {
-        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("42");
-
-        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("1");
-
-        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("");
-
-        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn(null);
-
-        EasyMock.replay(mocks);
-
-        Assert.assertEquals(42, (int) cc.readInteger(testConfigKeyInt));
-        Assert.assertEquals(1, (int) cc.readInteger(testConfigKeyInt));
-        Assert.assertNull(cc.readInteger(testConfigKeyInt));
-        Assert.assertNull(cc.readInteger(testConfigKeyInt));
-
-        EasyMock.verify(mocks);
-    }
-
-    @Test(expected = NumberFormatException.class)
-    public void testReadInteger_invalid() throws StorageException {
-        mockFactory.get(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq(testConfigKeyInt.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("hello");
-
-        EasyMock.replay(mocks);
-
-        cc.readInteger(testConfigKeyInt);
-
-        EasyMock.verify(mocks);
-    }
-
-    @Test
-    public void testWriteInteger() throws StorageException, IOException {
-        mockFactory.put(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq("2"), EasyMock.eq(false));
-        EasyMock.expectLastCall();
-        mockFactory.flush();
-        EasyMock.expectLastCall();
-
-        mockFactory.put(EasyMock.eq(testConfigKeyInt.getKey()), EasyMock.eq((String) null), EasyMock.eq(false));
-        EasyMock.expectLastCall();
-        mockFactory.flush();
-        EasyMock.expectLastCall();
-
-        EasyMock.replay(mocks);
-
-        ConfigTransaction tx;
-
-        tx = cc.startTransaction();
+    public void testRWInteger() throws Exception {
+        // define an integer entry
+        ConfigTransaction tx = cc.startTransaction();
         cc.writeInteger(tx, testConfigKeyInt, 2);
         cc.commit(tx);
+        Assert.assertEquals(2, (int)cc.readInteger(testConfigKeyInt));
 
+        // remove the integer entry: so we expect readInteger to return
+        // the default value again!
         tx = cc.startTransaction();
         cc.writeInteger(tx, testConfigKeyInt, null);
         cc.commit(tx);
-
-        EasyMock.verify(mocks);
+        Assert.assertEquals(42, (int)cc.readInteger(testConfigKeyInt));
     }
 
     @Test
-    public void testReadBoolean() throws StorageException {
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn(Boolean.FALSE.toString());
+    public void testRWIntegerNoDefault() throws Exception {
+        // define an integer entry
+        ConfigTransaction tx = cc.startTransaction();
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, 2);
+        cc.commit(tx);
+        Assert.assertEquals(2, (int)cc.readInteger(testConfigKeyIntNoDefault));
 
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn(Boolean.TRUE.toString());
-
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("true");
-
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("yes");
-
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("");
-
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn(null);
-
-        mockFactory
-                .get(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq(testConfigKeyBoolean.getDefaultValue()));
-        EasyMock.expectLastCall().andReturn("hello");
-
-        EasyMock.replay(mocks);
-
-        Assert.assertEquals(false, cc.readBoolean(testConfigKeyBoolean));
-        Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
-        Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
-        Assert.assertEquals(true, cc.readBoolean(testConfigKeyBoolean));
-        Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
-        Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
-        Assert.assertNull(cc.readBoolean(testConfigKeyBoolean));
-
-        EasyMock.verify(mocks);
-    }
-
-    @Test
-    public void testWriteBoolean() throws StorageException, IOException {
-        mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq("true"), EasyMock.eq(false));
-        EasyMock.expectLastCall();
-        mockFactory.flush();
-        EasyMock.expectLastCall();
-
-        mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq("false"), EasyMock.eq(false));
-        EasyMock.expectLastCall();
-        mockFactory.flush();
-        EasyMock.expectLastCall();
-
-        mockFactory.put(EasyMock.eq(testConfigKeyBoolean.getKey()), EasyMock.eq((String) null), EasyMock.eq(false));
-        EasyMock.expectLastCall();
-        mockFactory.flush();
-        EasyMock.expectLastCall();
-
-        EasyMock.replay(mocks);
-
-        ConfigTransaction tx;
-
+        // remove the integer entry: so we expect readInteger to return
+        // the default value again!
         tx = cc.startTransaction();
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, null);
+        cc.commit(tx);
+        Assert.assertNull(cc.readInteger(testConfigKeyIntNoDefault));
+    }
+
+    @Test
+    public void testRWBoolean() throws Exception {
+        ConfigTransaction tx = cc.startTransaction();
         cc.writeBoolean(tx, testConfigKeyBoolean, true);
         cc.commit(tx);
+        Assert.assertEquals(true, (boolean)cc.readBoolean(testConfigKeyBoolean));
 
         tx = cc.startTransaction();
         cc.writeBoolean(tx, testConfigKeyBoolean, false);
         cc.commit(tx);
+        Assert.assertEquals(false, (boolean)cc.readBoolean(testConfigKeyBoolean));
 
         tx = cc.startTransaction();
         cc.writeBoolean(tx, testConfigKeyBoolean, null);
         cc.commit(tx);
+        Assert.assertEquals(false, (boolean)cc.readBoolean(testConfigKeyBoolean));
+    }
 
-        EasyMock.verify(mocks);
+    @Test
+    public void testRWMultipleInOneTransaction() throws Exception {
+        ConfigTransaction tx = cc.startTransaction();
+        cc.writeString(tx, testConfigKey1, "value1");
+        cc.writeBoolean(tx, testConfigKeyBoolean, true);
+        cc.writeInteger(tx, testConfigKeyInt, null);
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, 2);
+        cc.commit(tx);
+
+        Assert.assertEquals(true, (boolean)cc.readBoolean(testConfigKeyBoolean));
+        Assert.assertEquals("value1", cc.readString(testConfigKey1));
+        Assert.assertEquals(42, (int)cc.readInteger(testConfigKeyInt)); // default value!
+        Assert.assertEquals(2, (int)cc.readInteger(testConfigKeyIntNoDefault));
+    }
+
+    @Test
+    public void testTransactionOrder() throws Exception {
+        ConfigTransaction tx = cc.startTransaction();
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, 2);
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, null);
+        cc.commit(tx);
+        Assert.assertNull(cc.readInteger(testConfigKeyIntNoDefault));
+
+        tx = cc.startTransaction();
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, null);
+        cc.writeInteger(tx, testConfigKeyIntNoDefault, 2);
+        cc.commit(tx);
+        Assert.assertEquals(2, (int)cc.readInteger(testConfigKeyIntNoDefault));
     }
 
 }
