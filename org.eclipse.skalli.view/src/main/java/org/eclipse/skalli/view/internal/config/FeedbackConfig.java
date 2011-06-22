@@ -18,6 +18,9 @@ public class FeedbackConfig {
     private String url;
     private String displayName;
 
+    public FeedbackConfig() {
+    }
+
     public FeedbackConfig(String url, String displayName) {
         this.url = url;
         this.displayName = displayName;

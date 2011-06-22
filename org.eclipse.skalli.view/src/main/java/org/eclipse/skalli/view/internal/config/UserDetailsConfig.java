@@ -17,6 +17,9 @@ public class UserDetailsConfig {
 
     private String url;
 
+    public UserDetailsConfig() {
+    }
+
     public UserDetailsConfig(String url) {
         super();
         this.url = url;

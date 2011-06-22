@@ -18,6 +18,9 @@ public class TopLinkConfig {
     private String displayName;
     private String url;
 
+    public TopLinkConfig() {
+    }
+
     public TopLinkConfig(String displayName, String url) {
         this.displayName = displayName;
         this.url = url;

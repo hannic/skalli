@@ -21,6 +21,9 @@ public class TopLinksConfig {
     @XStreamImplicit
     private ArrayList<TopLinkConfig> topLinks;
 
+    public TopLinksConfig() {
+    }
+
     public TopLinksConfig(ArrayList<TopLinkConfig> topLinks) {
         this.topLinks = topLinks;
     }

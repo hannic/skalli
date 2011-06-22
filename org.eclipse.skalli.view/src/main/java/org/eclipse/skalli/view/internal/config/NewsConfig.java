@@ -17,6 +17,9 @@ public class NewsConfig {
 
     private String url;
 
+    public NewsConfig() {
+    }
+
     public NewsConfig(String url) {
         super();
         this.url = url;
