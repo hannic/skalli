@@ -22,7 +22,7 @@
 
 <div class="searcharea">
     <center>
-    <img src="/VAADIN/themes/simple/images/logo350x89.png" alt="Logo" width=350px>
+    <img src="/VAADIN/themes/simple/images/logo_large.png" alt="Logo">
     <div class="search-section">
 	<form method="POST" action="j_security_check">
 		Name: <input type="text" name="j_username" />

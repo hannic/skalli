@@ -14,7 +14,6 @@ import java.text.MessageFormat;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.util.ComparatorUtils;
 
 /**
@@ -37,6 +36,12 @@ public class Issue implements Comparable<Issue> {
     private String message;
     private String description;
     private long timestamp;
+
+    /**
+     * Default constructor. Required for XML streaming.
+     */
+    public Issue() {
+    }
 
     /**
      * Creates an issue with the given <code>severity</code> for an entity specified by
