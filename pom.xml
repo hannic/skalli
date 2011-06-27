@@ -41,8 +41,8 @@
         <module>org.eclipse.skalli.commands.test</module>
         <module>org.eclipse.skalli.view.ext.impl.test</module>
         <module>org.eclipse.skalli.maven.test</module>
-        <module>org.eclipse.skalli.persistence.db</module>
-        <module>org.eclipse.skalli.persistence.db.entities</module>
+        <module>org.eclipse.skalli.storage.db</module>
+        <module>org.eclipse.skalli.storage.db.entities</module>
         <module>org.eclipse.skalli.examples</module>
         <!-- modules building the update site:-->
         <module>org.eclipse.skalli.feature</module>
@@ -56,7 +56,7 @@
         <profile>
             <id>db</id>
             <modules>
-                <module>org.eclipse.skalli.persistence.db.test</module>
+                <module>org.eclipse.skalli.storage.db.test</module>
             </modules>
         </profile>
     </profiles>
