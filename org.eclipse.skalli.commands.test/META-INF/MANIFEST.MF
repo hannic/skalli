@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli OSGi Console Commands (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.commands.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: org.eclipse.skalli.commands
+Import-Package: org.easymock;version="2.4.0",
+ org.eclipse.skalli.testutil,
+ org.junit
+
+

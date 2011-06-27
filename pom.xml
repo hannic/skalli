@@ -38,6 +38,7 @@
         <module>org.eclipse.skalli.api.java.test</module>
         <module>org.eclipse.skalli.api.rest.test</module>
         <module>org.eclipse.skalli.common.test</module>
+        <module>org.eclipse.skalli.commands.test</module>
         <module>org.eclipse.skalli.view.ext.impl.test</module>
         <module>org.eclipse.skalli.maven.test</module>
         <module>org.eclipse.skalli.persistence.db</module>

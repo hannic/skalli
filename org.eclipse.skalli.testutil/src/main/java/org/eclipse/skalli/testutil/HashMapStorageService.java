@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.skalli.api.java.StorageException;
@@ -28,16 +29,81 @@ import org.eclipse.skalli.api.java.StorageService;
  */
 public class HashMapStorageService implements StorageService {
 
-    private Map<String,byte[]> blobStore = new HashMap<String,byte[]>();
+    public static class Key {
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((category == null) ? 0 : category.hashCode());
+            result = prime * result + ((key == null) ? 0 : key.hashCode());
+            return result;
+        }
 
-    private String getKey(String category, String key) {
-        return category + "/" + key; //$NON-NLS-1$
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            Key other = (Key) obj;
+            if (category == null) {
+                if (other.category != null) {
+                    return false;
+                }
+            } else if (!category.equalsIgnoreCase((other.category))) {
+                return false;
+            }
+            if (key == null) {
+                if (other.key != null) {
+                    return false;
+                }
+            } else if (!key.equals(other.key)) {
+                return false;
+            }
+            return true;
+        }
+
+        private String category;
+        private String key;
+
+        public String getCategory() {
+            return category;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public Key(String category, String key) {
+            this.category = category;
+            this.key = key;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public String toString() {
+            return category + "/" + key; //$NON-NLS-1$
+        }
+
+    }
+
+    private Map<Key, byte[]> blobStore = new HashMap<Key, byte[]>();
+
+    public Map<Key, byte[]> getBlobStore() {
+        return blobStore;
     }
 
     @Override
     public void write(String category, String key, InputStream blob) throws StorageException {
         try {
-            blobStore.put(getKey(category, key), IOUtils.toByteArray(blob));
+            blobStore.put(new Key(category, key), IOUtils.toByteArray(blob));
         } catch (IOException e) {
             throw new StorageException(e);
         }
@@ -45,23 +111,30 @@ public class HashMapStorageService implements StorageService {
 
     @Override
     public InputStream read(String category, String key) throws StorageException {
-        byte[] content = blobStore.get(getKey(category, key));
+        byte[] content = blobStore.get(new Key(category, key));
         if (content == null) {
             return null;
         }
-        return new ByteArrayInputStream(content);
+        else {
+            return new ByteArrayInputStream(content);
+        }
     }
 
     @Override
     public void archive(String category, String key) throws StorageException {
-        byte[] content = blobStore.get(getKey(category, key));
-        if (content != null) {
-            blobStore.put(getKey(category, key) + "/" + System.currentTimeMillis(), content); //$NON-NLS-1$
-        }
+        //yet there is no way to read out the history again, so do nothing now
+        return;
     }
 
     @Override
     public List<String> keys(String category) throws StorageException {
-        return new ArrayList<String>(blobStore.keySet());
+        List<String> result = new ArrayList<String>();
+        Set<Key> allKeys = blobStore.keySet();
+        for (Key key : allKeys) {
+            if (key.getCategory().equalsIgnoreCase(category)) {
+                result.add(key.getKey());
+            }
+        }
+        return result;
     }
 }

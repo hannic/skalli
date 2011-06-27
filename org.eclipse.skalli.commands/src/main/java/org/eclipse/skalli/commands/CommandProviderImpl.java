@@ -18,10 +18,13 @@ public class CommandProviderImpl implements CommandProvider {
 
     private static final String COMMAND = "skalli"; //$NON-NLS-1$
     private static final String COMMAND_ADMIN = "admin"; //$NON-NLS-1$
+    private static final String COMMAND_STORAGE = "storage"; //$NON-NLS-1$
 
     private static final String OPTION_LIST = "-list"; //$NON-NLS-1$
     private static final String OPTION_ADD = "-add"; //$NON-NLS-1$
     private static final String OPTION_REMOVE = "-remove"; //$NON-NLS-1$
+
+    private static final String OPTION_COPY = "-copy"; //$NON-NLS-1$
 
     private static final String DESCRIPTION_ADMIN = "maintain set of user with administrative permissions";
 
@@ -30,7 +33,14 @@ public class CommandProviderImpl implements CommandProvider {
             " [" + OPTION_ADD + " <admin_id>]" + //$NON-NLS-1$ //$NON-NLS-2$
             " [" + OPTION_REMOVE + " <admin_id>]" + //$NON-NLS-1$//$NON-NLS-2$
             " - " + DESCRIPTION_ADMIN + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
-    private static String HELP = "\n---Skalli---\n" + HELP_ADMIN; //$NON-NLS-1$
+
+    private static final String DESCRIPTION_STORAGE = "maintain data storage";
+    private static String HELP_STORAGE = "\t" + COMMAND + " " + COMMAND_STORAGE + //$NON-NLS-1$ //$NON-NLS-2$
+            " -copy <sourceType> <destinationType> <category>" + //$NON-NLS-1$
+            " - " + DESCRIPTION_STORAGE + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+
+
+    private static String HELP = "\n---Skalli---\n" + HELP_ADMIN + HELP_STORAGE; //$NON-NLS-1$
 
     private static String INVALID = "Invalid command invocation.\n" + HELP; //$NON-NLS-1$
 
@@ -62,6 +72,21 @@ public class CommandProviderImpl implements CommandProvider {
                     }
                 } else {
                     intr.println(INVALID);
+                }
+            } else if (StringUtils.equalsIgnoreCase(command, COMMAND_STORAGE)) {
+                String arg = intr.nextArgument();
+                if (StringUtils.isBlank(arg) || OPTION_COPY.compareToIgnoreCase(arg) != 0) {
+                    intr.println(INVALID);
+                } else {
+                    String sourceType = intr.nextArgument();
+                    String destinationType = intr.nextArgument();
+                    String category = intr.nextArgument();
+                    if (StringUtils.isBlank(sourceType) || StringUtils.isBlank(destinationType)
+                            || StringUtils.isBlank(category)) {
+                        intr.println(INVALID);
+                    } else {
+                        StorageCommand.copy(sourceType, destinationType, category, intr);
+                    }
                 }
             } else {
                 // command not valid or null, print help

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
+<booleanAttribute key="append.args" value="true"/>
+<stringAttribute key="application" value="org.eclipse.pde.junit.runtime.coretestapplication"/>
+<booleanAttribute key="askclear" value="false"/>
+<booleanAttribute key="automaticAdd" value="false"/>
+<booleanAttribute key="automaticValidate" value="false"/>
+<stringAttribute key="bootstrap" value=""/>
+<stringAttribute key="checked" value="[NONE]"/>
+<booleanAttribute key="clearConfig" value="true"/>
+<booleanAttribute key="clearws" value="true"/>
+<booleanAttribute key="clearwslog" value="false"/>
+<booleanAttribute key="com.mountainminds.eclemma.core.INPLACE_INSTRUMENTATION" value="true"/>
+<listAttribute key="com.mountainminds.eclemma.core.INSTRUMENTATION_PATHS">
+<listEntry value="/org.eclipse.skalli.view/target/classes"/>
+</listAttribute>
+<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
+<booleanAttribute key="default" value="false"/>
+<booleanAttribute key="includeOptional" value="false"/>
+<stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/org.eclipse.skalli.commands.test"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=org.eclipse.skalli.commands.test"/>
+<booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value=""/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.skalli.commands.test"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dworkdir=${workspace_loc:org.eclipse.skalli.testutil}"/>
+<stringAttribute key="pde.version" value="3.3"/>
+<stringAttribute key="product" value="org.eclipse.equinox.p2.director.app.product"/>
+<booleanAttribute key="run_in_ui_thread" value="true"/>
+<stringAttribute key="selected_target_plugins" value="org.apache.commons.httpclient@default:default,javax.xml.stream@default:default,javax.el*2.1.0.v201105211819@default:default,org.slf4j.api@default:default,ch.qos.logback.classic@default:default,org.eclipse.core.jobs@default:default,org.easymock@default:default,org.apache.commons.codec@default:default,org.restlet.ext.servlet@default:default,javax.xml@default:default,javax.activation@default:default,org.eclipse.core.runtime@default:true,org.eclipse.skalli.org.apache.lucene.lucene-highlighter@default:default,org.eclipse.osgi*3.7.0.v20110524@-1:true,org.eclipse.equinox.app@default:default,org.eclipse.equinox.common@2:true,org.junit@default:default,org.eclipse.equinox.ds@2:true,com.springsource.org.xmlpull@default:default,org.eclipse.osgi.services*3.3.0.v20110110@default:default,org.codehaus.jettison.jettison@default:default,org.eclipse.equinox.security@default:default,javax.servlet@default:default,org.eclipse.equinox.util@default:default,org.eclipse.equinox.preferences@default:default,org.apache.commons.lang@default:default,javax.servlet.jsp*2.1.0.v201105211820@default:default,org.hamcrest.core@default:default,com.springsource.com.thoughtworks.xstream@default:default,org.restlet.ext.xstream@default:default,javax.el*2.1.0.v201004190952@default:default,org.eclipse.skalli.org.apache.lucene.lucene-core@default:default,org.jdom@default:default,org.apache.commons.io@default:default,org.apache.commons.collections@default:default,org.restlet@default:default,org.eclipse.equinox.security.win32.x86@default:false,ch.qos.logback.slf4j@default:false,ch.qos.logback.core@default:default,com.springsource.org.custommonkey.xmlunit@default:default,com.vaadin@default:default,org.eclipse.core.contenttype@default:default,javax.mail@default:default,org.slf4j.jcl@default:default,org.apache.velocity@default:default,javax.servlet.jsp*2.1.0.v201103011838@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.skalli.org.apache.lucene.lucene-queries@default:default"/>
+<stringAttribute key="selected_workspace_plugins" value="org.eclipse.skalli.commands.test@default:false,org.eclipse.skalli.model.ext.misc@default:default,org.eclipse.skalli.core@default:default,org.eclipse.skalli.api.java@default:default,org.eclipse.skalli.common@default:default,org.eclipse.skalli.log@default:default,org.eclipse.skalli.api.rest@default:default,org.eclipse.skalli.testutil@default:default,org.eclipse.skalli.model.core@default:default,org.eclipse.skalli.commands@default:default"/>
+<booleanAttribute key="show_selected_only" value="false"/>
+<booleanAttribute key="tracing" value="false"/>
+<booleanAttribute key="useCustomFeatures" value="false"/>
+<booleanAttribute key="useDefaultConfig" value="true"/>
+<booleanAttribute key="useDefaultConfigArea" value="false"/>
+<booleanAttribute key="useProduct" value="false"/>
+</launchConfiguration>
