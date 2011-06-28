@@ -24,6 +24,8 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.eclipse.persistence.annotations.Index;
+
 @Table(name = "HistoryStorage")
 @NamedQuery(name = "getItemsByCompositeKey", query = "SELECT r FROM HistoryStorageItem r WHERE r.category = :category AND r.id = :id")
 @Entity
@@ -32,7 +34,11 @@ public class HistoryStorageItem {
     @TableGenerator(name = "histKeyGen", table = "SEQUENCE", pkColumnName = "NAME", valueColumnName = "NEXTID")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "histKeyGen")
     private int autoId;
+    @Index
+    @Column(name = "category")
     private String category;
+    @Index
+    @Column(name = "id")
     private String id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;

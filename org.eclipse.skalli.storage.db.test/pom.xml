@@ -22,4 +22,27 @@
     <artifactId>org.eclipse.skalli.storage.db.test</artifactId>
     <packaging>eclipse-test-plugin</packaging>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <configuration>
+                    <bundleStartLevel>
+                        <bundle>
+                            <id>org.eclipse.gemini.dbaccess.derby</id>
+                            <level>4</level>
+                            <autoStart>true</autoStart>
+                        </bundle>
+                        <bundle>
+                            <id>org.eclipse.gemini.jpa</id>
+                            <level>4</level>
+                            <autoStart>true</autoStart>
+                        </bundle>
+                    </bundleStartLevel>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
