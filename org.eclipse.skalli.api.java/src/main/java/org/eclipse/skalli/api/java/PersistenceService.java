@@ -43,4 +43,14 @@ public interface PersistenceService {
 
     public <T extends EntityBase> List<T> getDeletedEntities(Class<T> entityClass);
 
+    /**
+     * Enforces a refresh of all entities of the given class from the underlying storage service.
+     * @param entityClass  the class of entities to refresh.
+     */
+    public <T extends EntityBase> void refresh(Class<T> entityClass);
+
+    /**
+     * Enforces a refresh of all entities (of any known type) from the underlying storage service.
+     */
+    public void refreshAll();
 }

@@ -374,4 +374,21 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
         return deleted.getEntities(entityClass);
     }
 
+    @Override
+    public <T extends EntityBase> void refresh(Class<T> entityClass) {
+        cache.clearAll(entityClass);
+        deleted.clearAll(entityClass);
+        loadModel(entityClass);
+    }
+
+    @Override
+    public void refreshAll() {
+        Set<Class<? extends EntityBase>> entityClasses = cache.getEntityTypes();
+        entityClasses.addAll(deleted.getEntityTypes());
+        cache.clearAll();
+        deleted.clearAll();
+        for (Class<? extends EntityBase> entityClass : entityClasses) {
+            loadModel(entityClass);
+        }
+    }
 }

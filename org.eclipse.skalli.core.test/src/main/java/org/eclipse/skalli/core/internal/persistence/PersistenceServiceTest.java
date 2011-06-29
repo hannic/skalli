@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.EntityFilter;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
@@ -27,6 +25,7 @@ import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionValidator;
 import org.eclipse.skalli.model.ext.PropertyValidator;
+import org.junit.Test;
 
 // test for AbstractPersistenceService
 public class PersistenceServiceTest {
@@ -64,6 +63,14 @@ public class PersistenceServiceTest {
         @Override
         public <T extends EntityBase> T loadEntity(Class<T> entityClass, UUID uuid) {
             return null;
+        }
+
+        @Override
+        public <T extends EntityBase> void refresh(Class<T> entityClass) {
+        }
+
+        @Override
+        public void refreshAll() {
         }
     }
 

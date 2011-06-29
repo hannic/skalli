@@ -13,14 +13,17 @@ package org.eclipse.skalli.core.internal.persistence.xstream;
 import java.util.List;
 import java.util.UUID;
 
+import org.eclipse.skalli.model.ext.EntityBase;
+import org.eclipse.skalli.testutil.TestEntityBase1;
 import org.junit.Assert;
 import org.junit.Test;
-
-import org.eclipse.skalli.model.ext.EntityBase;
 
 public class DataModelContainerTest {
 
     private class TestEntity extends EntityBase {
+    }
+
+    private class TestEntityDerived extends TestEntity {
     }
 
     @Test
@@ -136,5 +139,22 @@ public class DataModelContainerTest {
         Assert.assertNotNull(res);
         Assert.assertEquals(1, res.size());
         Assert.assertEquals(e1, res.get(0));
+    }
+
+    @Test
+    public void testClearAllEntitiesOfGivenClass() throws Exception {
+        TestEntity e1 = new TestEntity();
+        TestEntityDerived e2 = new TestEntityDerived();
+        TestEntityBase1 e3 = new TestEntityBase1();
+        e1.setUuid(UUID.randomUUID());
+        e2.setUuid(UUID.randomUUID());
+        e3.setUuid(UUID.randomUUID());
+        DataModelContainer cont = new DataModelContainer();
+        cont.putEntity(e1);
+        cont.putEntity(e2);
+        cont.putEntity(e3);
+        cont.clearAll(TestEntity.class);
+        Assert.assertEquals(0, cont.getEntities(TestEntity.class).size());
+        Assert.assertEquals(1, cont.getEntities(TestEntityBase1.class).size());
     }
 }

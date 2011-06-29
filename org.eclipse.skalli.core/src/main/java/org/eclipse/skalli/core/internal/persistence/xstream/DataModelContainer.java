@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.skalli.api.java.EntityFilter;
@@ -35,7 +36,6 @@ class DataModelContainer {
             if (entityClass.isAssignableFrom(entry.getKey())) {
                 ret.putAll(entry.getValue());
             }
-
         }
         return ret;
     }
@@ -153,13 +153,13 @@ class DataModelContainer {
      * @param uuids a collection of unique identifiers.
      * @return all entities referenced by the collection of unique identifiers.
      */
-    synchronized <T extends EntityBase> List<T> getEntities(Class<T> targetClass, Collection<UUID> uuids) {
+    synchronized <T extends EntityBase> List<T> getEntities(Class<T> entityClass, Collection<UUID> uuids) {
         ArrayList<T> result = new ArrayList<T>();
         if (uuids != null && uuids.size() > 0) {
-            Map<UUID, EntityBase> targetEntityMap = getEntityMap(targetClass);
-            if (targetEntityMap != null && targetEntityMap.size() > 0) {
+            Map<UUID, EntityBase> entityMap = getEntityMap(entityClass);
+            if (entityMap != null && entityMap.size() > 0) {
                 for (UUID uuid : uuids) {
-                    T targetEntity = targetClass.cast(targetEntityMap.get(uuid));
+                    T targetEntity = entityClass.cast(entityMap.get(uuid));
                     if (targetEntity != null) {
                         result.add(targetEntity);
                     }
@@ -169,10 +169,25 @@ class DataModelContainer {
         return result;
     }
 
+    synchronized Set<Class<? extends EntityBase>> getEntityTypes() {
+        return cache.keySet();
+    }
+
     /**
      * Clears the entity cache.
      */
     synchronized void clearAll() {
         cache.clear();
+    }
+
+    /**
+     * Clears the entity cache for the given class of entities.
+     * @param entityClass
+     */
+    synchronized <T extends EntityBase> void clearAll(Class<T> entityClass) {
+        List<T> entities = getEntities(entityClass);
+        for (T entity: entities) {
+            removeEntity(entity);
+        }
     }
 }

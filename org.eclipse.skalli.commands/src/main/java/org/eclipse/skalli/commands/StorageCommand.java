@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.osgi.framework.console.CommandInterpreter;
+import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.common.Services;
@@ -46,6 +47,10 @@ public class StorageCommand {
         }
 
         copy(source, destination, category, intr);
+
+        // ensure that the persistence service attached to the destination storage
+        // refreshes all caches and reloads the entities
+        Services.getRequiredService(PersistenceService.class).refreshAll();
     }
 
     static void copy(StorageService source, StorageService destination, String category, CommandInterpreter intr) {
