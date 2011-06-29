@@ -24,14 +24,6 @@
       Eclipse Public License (EPL) 1.0
    </license>
 
-   <includes
-         id="org.eclipse.skalli.eclipse.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.skalli.orbit.feature"
-         version="0.0.0"/>
-
    <plugin
          id="org.eclipse.skalli.api.java"
          download-size="0"
@@ -122,6 +114,20 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.storage.db"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.storage.db.entities"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
