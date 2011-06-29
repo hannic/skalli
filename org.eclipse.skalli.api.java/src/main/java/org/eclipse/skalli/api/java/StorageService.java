@@ -16,6 +16,9 @@ import java.util.List;
 /**
  * Interface representing a storage service that can be used for
  * persisting of project date, customizations etc.
+ *
+ * Note: For testing a StorageService there is a test helper available:
+ * {@link org.eclipse.skalli.testutil.AbstractStorageServiceTest}.
  */
 public interface StorageService {
 
