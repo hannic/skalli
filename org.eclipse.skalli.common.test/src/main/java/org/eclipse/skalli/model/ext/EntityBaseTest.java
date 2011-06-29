@@ -18,13 +18,12 @@ import java.util.TimeZone;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.junit.Assert;
-import org.junit.Test;
-
 import org.eclipse.skalli.testutil.PropertyHelper;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
 import org.eclipse.skalli.testutil.TestEntityBase1;
 import org.eclipse.skalli.testutil.TestEntityBase2;
+import org.junit.Assert;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class EntityBaseTest {
@@ -79,6 +78,28 @@ public class EntityBaseTest {
         Assert.assertNull(entity.getLastModifiedBy());
         entity.setLastModifiedBy("");
         Assert.assertNull(entity.getLastModifiedBy());
+    }
+
+    @Test
+    public void testSetResetParentEntity() {
+        TestEntityBase1 entity1 = new TestEntityBase1();
+        entity1.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestEntityBase2 entity2 = new TestEntityBase2();
+        entity2.setUuid(PropertyHelperUtils.TEST_UUIDS[1]);
+        entity1.setParentEntity(entity2);
+        Assert.assertEquals(entity2, entity1.getParentEntity());
+        Assert.assertEquals(PropertyHelperUtils.TEST_UUIDS[1], entity1.getParentEntityId());
+        entity1.setParentEntity(null);
+        Assert.assertNull(entity1.getParentEntity());
+        Assert.assertNull(entity1.getParentEntityId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetParentWithMissingUUID() {
+        TestEntityBase1 entity1 = new TestEntityBase1();
+        entity1.setUuid(PropertyHelperUtils.TEST_UUIDS[0]);
+        TestEntityBase2 entity2 = new TestEntityBase2();
+        entity1.setParentEntity(entity2);
     }
 
     @Test

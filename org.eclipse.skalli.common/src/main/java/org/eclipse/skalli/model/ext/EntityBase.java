@@ -131,6 +131,8 @@ public abstract class EntityBase implements Comparable<Object> {
             } else {
                 this.parentEntityId = parentUuid;
             }
+        } else {
+            this.parentEntityId = null;
         }
     }
 
