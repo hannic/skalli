@@ -16,7 +16,7 @@ import java.io.IOException;
 public class TestUtils {
 
     public static File createTempDir(String prefix) throws IOException {
-        File tmpFile = File.createTempFile(prefix, "-tmp");
+        File tmpFile = File.createTempFile(prefix, "-tmp", new File("target"));
         if (tmpFile.delete() && tmpFile.mkdirs()) {
             return tmpFile;
         }
