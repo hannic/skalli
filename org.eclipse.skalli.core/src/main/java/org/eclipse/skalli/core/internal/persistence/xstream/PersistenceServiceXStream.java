@@ -10,11 +10,13 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.persistence.xstream;
 
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -24,6 +26,7 @@ import org.eclipse.skalli.api.java.EntityFilter;
 import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
+import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.core.internal.persistence.AbstractPersistenceService;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.DataMigration;
@@ -46,10 +49,13 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
 
     private XStreamPersistence xstreamPersistence;
 
+    private String storageServiceClassName;
+
     /**
      * Creates a new, uninitialized <code>PersistenceServiceXStream</code>.
      */
     public PersistenceServiceXStream() {
+        storageServiceClassName = getDefaultStorageService();
     }
 
     /**
@@ -59,6 +65,34 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
      */
     PersistenceServiceXStream(XStreamPersistence xstreamPersistence) {
         this.xstreamPersistence = xstreamPersistence;
+    }
+
+    private String getDefaultStorageService() {
+        String resultServiceClassName = null;
+        try {
+            Properties properties = new Properties();
+            InputStream skalliPropertiesStream = getClass().getResourceAsStream(Consts.PROPERTIES_RESOURCE);
+            if (skalliPropertiesStream != null) {
+                properties.load(skalliPropertiesStream);
+                resultServiceClassName = (String) properties.get(Consts.PROPERTY_STORAGE_SERVICE);
+            }
+        } catch (Exception e) {
+            LOG.info("Property " + Consts.PROPERTY_STORAGE_SERVICE + " not defined"); //$NON-NLS-1$
+        }
+
+        if (StringUtils.isBlank(resultServiceClassName)) {
+            // fall back: determine storageService from system property
+            resultServiceClassName = System.getProperty(Consts.PROPERTY_STORAGE_SERVICE);
+            if (StringUtils.isBlank(resultServiceClassName)) {
+                LOG.warning("Cannot get system property '" + Consts.PROPERTY_STORAGE_SERVICE);
+            }
+        }
+
+        if (StringUtils.isBlank(resultServiceClassName)) {
+            // fall back: use the file system based storage
+            resultServiceClassName = FileStorageService.class.getName();
+        }
+        return resultServiceClassName;
     }
 
     protected void activate(ComponentContext context) {
@@ -87,15 +121,23 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
     }
 
     protected void bindStorageService(StorageService storageService) {
+        if (storageServiceClassName.equals(storageService.getClass().getName())) {
+            setStorageService(storageService);
+        }
+    }
+
+    private void setStorageService(StorageService storageService) {
         xstreamPersistence = new XStreamPersistence(storageService);
         cache.clearAll();
         deleted.clearAll();
     }
 
     protected void unbindStorageService(StorageService storageService) {
-        xstreamPersistence = null;
-        cache.clearAll();
-        deleted.clearAll();
+        if (xstreamPersistence.getStorageService() == storageService) {
+            xstreamPersistence = null;
+            cache.clearAll();
+            deleted.clearAll();
+        }
     }
 
     protected Set<DataMigration> getMigrations() {

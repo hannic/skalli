@@ -89,4 +89,10 @@ public class Consts {
 
     public static final String FILE_FAVICON = "/search/favicon.ico";
     public static final String FILE_SEARCH_PLUGIN = "/search/search-plugin.xml";
+
+    public static final String PROPERTIES_RESOURCE = "/skalli.properties";//$NON-NLS-1$
+    public static final String PROPERTY_WORKDIR = "workdir"; //$NON-NLS-1$
+    public static final String PROPERTY_STORAGE_SERVICE = "skalli.storageService";
+
+
 }

@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
+import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.log.Log;
 
 /**
@@ -35,9 +36,6 @@ import org.eclipse.skalli.log.Log;
 public class FileStorageService implements StorageService {
 
     private static final Logger LOG = Log.getLogger(XStreamPersistence.class);
-
-    private static final String PROPERTIES_FILE = "/skalli.properties"; //$NON-NLS-1$
-    private static final String PROPERTY_WORKDIR = "workdir"; //$NON-NLS-1$
     private static final String STORAGE_BASE = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
 
     private final File storageBase;
@@ -116,22 +114,22 @@ public class FileStorageService implements StorageService {
         try {
             // try to get working directory from configuration file
             Properties properties = new Properties();
-            properties.load(getClass().getResourceAsStream(PROPERTIES_FILE));
-            workdir = properties.getProperty(PROPERTY_WORKDIR);
+            properties.load(getClass().getResourceAsStream(Consts.PROPERTIES_RESOURCE));
+            workdir = properties.getProperty(Consts.PROPERTY_WORKDIR);
             if (StringUtils.isBlank(workdir)) {
-                LOG.warning("Property '" + PROPERTY_WORKDIR + "' not defined in configuration file '" + PROPERTIES_FILE
-                        + "' - falling back to system property '" + PROPERTY_WORKDIR + "'");
+                LOG.warning("Property '" + Consts.PROPERTY_WORKDIR + "' not defined in configuration file '" + Consts.PROPERTIES_RESOURCE
+                        + "' - falling back to system property '" + Consts.PROPERTY_WORKDIR + "'");
             }
         } catch (Exception e) {
-            LOG.warning("Cannot read configuration file '" + PROPERTIES_FILE +
-                    "' - falling back to system property '" + PROPERTY_WORKDIR + "'");
+            LOG.warning("Cannot read configuration file '" + Consts.PROPERTIES_RESOURCE +
+                    "' - falling back to system property '" + Consts.PROPERTY_WORKDIR + "'");
         }
 
         if (StringUtils.isBlank(workdir)) {
             // fall back: get working directory from system property
-            workdir = System.getProperty(PROPERTY_WORKDIR);
+            workdir = System.getProperty(Consts.PROPERTY_WORKDIR);
             if (StringUtils.isBlank(workdir)) {
-                LOG.warning("Cannot get system property '" + PROPERTY_WORKDIR + "' - " +
+                LOG.warning("Cannot get system property '" + Consts.PROPERTY_WORKDIR + "' - " +
                         "falling back to current directory");
             }
         }
