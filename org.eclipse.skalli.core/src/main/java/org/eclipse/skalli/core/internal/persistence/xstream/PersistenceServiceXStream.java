@@ -133,7 +133,7 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
     }
 
     protected void unbindStorageService(StorageService storageService) {
-        if (xstreamPersistence.getStorageService() == storageService) {
+        if (storageServiceClassName.equals(storageService.getClass().getName())) {
             xstreamPersistence = null;
             cache.clearAll();
             deleted.clearAll();

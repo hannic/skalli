@@ -68,10 +68,6 @@ public class XStreamPersistence implements Issuer {
 
     private StorageService storageService;
 
-    StorageService getStorageService() {
-        return storageService;
-    }
-
     public XStreamPersistence(StorageService storageService) {
         this.storageService = storageService;
     }
