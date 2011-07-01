@@ -33,6 +33,7 @@ import org.eclipse.skalli.common.configuration.ConfigKey;
 import org.eclipse.skalli.common.configuration.ConfigTransaction;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.core.internal.persistence.CompositeEntityClassLoader;
+import org.eclipse.skalli.core.utils.ConfigurationProperties;
 import org.eclipse.skalli.log.Log;
 import org.osgi.service.component.ComponentContext;
 
@@ -46,9 +47,22 @@ public class ConfigurationComponent implements ConfigurationService {
 
     private EventService eventService;
     private StorageService storageService;
+    private String storageServiceClassName;
 
     private final Map<ConfigTransaction, Map<ConfigKey, String>> transactions =
             new HashMap<ConfigTransaction, Map<ConfigKey, String>>(0);
+
+    public ConfigurationComponent() {
+        storageServiceClassName = ConfigurationProperties.getConfiguredStorageService();
+    }
+
+    /**
+     * Constructor for testing purposes: set the class name of the StorageService implementation
+     * you want to bind with bindStorageService!
+     */
+    ConfigurationComponent(String storageServiceClassName) {
+        this.storageServiceClassName = storageServiceClassName;
+    }
 
     protected void activate(ComponentContext context) {
         LOG.info("Configuration service activated"); //$NON-NLS-1$
@@ -69,15 +83,19 @@ public class ConfigurationComponent implements ConfigurationService {
     }
 
     protected void bindStorageService(StorageService storageService) {
-        this.storageService = storageService;
-        notifyCustomizationChanged(storageService);
-        LOG.info(MessageFormat.format("bindStorageService({0})", storageService)); //$NON-NLS-1$
+        if (storageServiceClassName.equals(storageService.getClass().getName())) {
+            this.storageService = storageService;
+            notifyCustomizationChanged(storageService);
+            LOG.info(MessageFormat.format("bindStorageService({0})", storageService)); //$NON-NLS-1$
+        }
     }
 
     protected void unbindStorageService(StorageService storageService) {
-        LOG.info(MessageFormat.format("unbindStorageService({0})", storageService)); //$NON-NLS-1$
-        this.storageService = null;
-        notifyCustomizationChanged(storageService);
+        if (storageServiceClassName.equals(storageService.getClass().getName())) {
+            LOG.info(MessageFormat.format("unbindStorageService({0})", storageService)); //$NON-NLS-1$
+            this.storageService = null;
+            notifyCustomizationChanged(storageService);
+        }
     }
 
     private void notifyCustomizationChanged(StorageService storageService) {

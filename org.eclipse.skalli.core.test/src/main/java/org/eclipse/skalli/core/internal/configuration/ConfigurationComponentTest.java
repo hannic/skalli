@@ -92,8 +92,13 @@ public class ConfigurationComponentTest {
 
     @Before
     public void setup() {
-        cc = new ConfigurationComponent();
+        cc = createConfigurationComponent();
+    }
+
+    private ConfigurationComponent createConfigurationComponent() {
+        ConfigurationComponent cc = new ConfigurationComponent(HashMapStorageService.class.getName());
         cc.bindStorageService(new HashMapStorageService());
+        return cc;
     }
 
     @Test
@@ -110,9 +115,8 @@ public class ConfigurationComponentTest {
         c1.prop1 = "Hello";
         c1.prop2 = "World";
 
-        ConfigurationComponent ccOrig = new ConfigurationComponent();
+        ConfigurationComponent ccOrig = createConfigurationComponent();
         ccOrig.bindEventService(mockEventService);
-        ccOrig.bindStorageService(new HashMapStorageService());
 
         ccOrig.writeCustomization("key1", c1);
         EasyMock.verify(mockEventService);

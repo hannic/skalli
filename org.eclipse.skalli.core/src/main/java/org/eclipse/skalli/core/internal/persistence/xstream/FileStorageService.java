@@ -19,15 +19,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.common.Consts;
+import org.eclipse.skalli.core.utils.ConfigurationProperties;
 import org.eclipse.skalli.log.Log;
 
 /**
@@ -106,34 +105,9 @@ public class FileStorageService implements StorageService {
         }
     }
 
-
     private final File getDefaultStorageDirectory() {
         File storageDirectory = null;
-
-        String workdir = null;
-        try {
-            // try to get working directory from configuration file
-            Properties properties = new Properties();
-            properties.load(getClass().getResourceAsStream(Consts.PROPERTIES_RESOURCE));
-            workdir = properties.getProperty(Consts.PROPERTY_WORKDIR);
-            if (StringUtils.isBlank(workdir)) {
-                LOG.warning("Property '" + Consts.PROPERTY_WORKDIR + "' not defined in configuration file '" + Consts.PROPERTIES_RESOURCE
-                        + "' - falling back to system property '" + Consts.PROPERTY_WORKDIR + "'");
-            }
-        } catch (Exception e) {
-            LOG.warning("Cannot read configuration file '" + Consts.PROPERTIES_RESOURCE +
-                    "' - falling back to system property '" + Consts.PROPERTY_WORKDIR + "'");
-        }
-
-        if (StringUtils.isBlank(workdir)) {
-            // fall back: get working directory from system property
-            workdir = System.getProperty(Consts.PROPERTY_WORKDIR);
-            if (StringUtils.isBlank(workdir)) {
-                LOG.warning("Cannot get system property '" + Consts.PROPERTY_WORKDIR + "' - " +
-                        "falling back to current directory");
-            }
-        }
-
+        String workdir = ConfigurationProperties.getProperty(Consts.PROPERTY_WORKDIR);
         if (workdir != null) {
             File workingDirectory = new File(workdir);
             if (workingDirectory.exists() && workingDirectory.isDirectory()) {
