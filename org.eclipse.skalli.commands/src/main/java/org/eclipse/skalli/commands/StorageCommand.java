@@ -19,6 +19,7 @@ import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.common.util.UUIDUtils;
 import org.osgi.framework.Constants;
 
 public class StorageCommand {
@@ -65,18 +66,39 @@ public class StorageCommand {
             intr.println("No data for category '" + category + "' found. Nothing to copy.");
             return;
         }
+
+        int copiedRecords = 0;
+        StringBuffer noUUIDKeys = new StringBuffer();
         for (String key : keys) {
             InputStream blob = null;
             try {
                 blob = source.read(category, key);
-                destination.write(category, key, blob);
+                // only copy records with valid uuids, expect for customization (these are "normal" strings!)
+                if (UUIDUtils.isUUID(key) && !"customization".equalsIgnoreCase(category)  ) {
+                    destination.write(category, key, blob);
+                    copiedRecords++;
+                    if ((copiedRecords % 10) == 0) {
+                        intr.println(copiedRecords + " data copied for category '" + category + "'.");
+                    }
+                } else {
+                    noUUIDKeys.append("'");
+                    noUUIDKeys.append(key);
+                    noUUIDKeys.append("';");
+                }
             } catch (StorageException e) {
                 intr.printStackTrace(e);
             } finally {
                 IOUtils.closeQuietly(blob);
             }
         }
-        intr.println(keys.size() + " data succesfully copied.");
+
+        intr.println(copiedRecords + " data records of category '" + category
+                + "' successfully copied from source with "
+                + keys.size() + " records.");
+        if (copiedRecords != keys.size()) {
+            intr.println("Warning: could not copy " + (keys.size() - copiedRecords) + " record(s). This are: "
+                    + noUUIDKeys);
+        }
     }
 
     /**
