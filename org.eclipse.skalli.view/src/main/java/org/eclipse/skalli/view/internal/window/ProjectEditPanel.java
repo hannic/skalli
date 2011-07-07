@@ -25,13 +25,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.ProjectNode;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.ProjectTemplateService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
@@ -45,6 +45,7 @@ import org.eclipse.skalli.view.ext.Navigator;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
 import org.eclipse.skalli.view.ext.ProjectEditMode;
 import org.eclipse.skalli.view.internal.application.ProjectApplication;
+
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Alignment;
@@ -415,19 +416,27 @@ public class ProjectEditPanel extends Panel {
     }
 
     /**
-     * Commits all enabled trays and persists the current {@link #modifiedProject}.
-     * Sets the current system time as {@link Project#setRegistered(long) registration time},
-     * if a new project is safed for the first time.
-     *
-     * @throws ValidationException
+     * Commits the forms of all enabled trays, so that fresh input from the Vaadin
+     * fields is copied to the modified project. Note, this method does not persist
+     * the modified project!
      */
-    private void commitAll() throws ValidationException {
+    private void commitFormEntries() {
         for (ProjectEditPanelEntry entry : entries) {
             if (entry.isEnabled()) {
                 entry.commit();
             }
         }
+    }
 
+    /**
+     * Persists the current modified project.
+     * Sets the current system time as {@link Project#setRegistered(long) registration time},
+     * if a new project is saved for the first time.
+     *
+     * @throws ValidationException if there are {@link org.eclipse.skalli.model.ext.Severity#FATAL fatal}
+     * validation issues.
+     */
+    private void commit() throws ValidationException {
         // set the current system time as date of registration
         if (ProjectEditMode.NEW_PROJECT.equals(mode)) {
             modifiedProject.setRegistered(System.currentTimeMillis());
@@ -437,16 +446,19 @@ public class ProjectEditPanel extends Panel {
         projectService.persist(modifiedProject, application.getLoggedInUser());
     }
 
+
     private class OKButtonListener implements Button.ClickListener {
         private static final long serialVersionUID = 6531396291087032954L;
 
         @Override
         public void buttonClick(ClickEvent event) {
-            List<String> warnings = getWarnings();
-            if (warnings.isEmpty()) {
+            commitFormEntries();
+            List<String> dataLossWarnings = getDataLossWarnings();
+            List<String> confirmationWarnings = getConfirmationWarnings();
+            if (dataLossWarnings.isEmpty() && confirmationWarnings.isEmpty()) {
                 doCommit();
             } else {
-                ConfirmPopup popup = new ConfirmPopup(warnings, new ConfirmPopup.OnConfirmation() {
+                ConfirmPopup popup = new ConfirmPopup(dataLossWarnings, confirmationWarnings, new ConfirmPopup.OnConfirmation() {
                     @Override
                     public void onConfirmation(boolean confirmed) {
                         if (confirmed) {
@@ -461,7 +473,7 @@ public class ProjectEditPanel extends Panel {
         private void doCommit() {
             try {
                 setHeaderMessage(StringUtils.EMPTY);
-                commitAll();
+                commit();
                 application.refresh(modifiedProject);
                 application.refresh((Project) project.getParentEntity());
                 application.refresh((Project) modifiedProject.getParentEntity());
@@ -508,7 +520,7 @@ public class ProjectEditPanel extends Panel {
             }
         }
 
-        private List<String> getWarnings() {
+        private List<String> getDataLossWarnings() {
             List<String> warnings = new ArrayList<String>();
             for (ExtensionEntityBase extension : project.getAllExtensions()) {
                 Class<? extends ExtensionEntityBase> extensionClass = extension.getClass();
@@ -517,6 +529,19 @@ public class ProjectEditPanel extends Panel {
                 }
                 else if (modifiedProject.getExtension(extensionClass) == null) {
                     warnings.add(asWarning(WARN_EXTENSION_DISABLED, extension));
+                }
+            }
+            return warnings;
+        }
+
+        private List<String> getConfirmationWarnings() {
+            User modifier = UserUtil.getUser(application.getLoggedInUser());
+            List<String> warnings = new ArrayList<String>();
+            for (ExtensionEntityBase extension : project.getAllExtensions()) {
+                Class<? extends ExtensionEntityBase> extensionClass = extension.getClass();
+                ExtensionService<?> extensionService = Services.getExtensionService(extensionClass);
+                if (extensionService != null) {
+                    warnings.addAll(extensionService.getConfirmationWarnings(project, modifiedProject, modifier));
                 }
             }
             return warnings;
@@ -543,20 +568,16 @@ public class ProjectEditPanel extends Panel {
         private Button yes = new Button("Yes", this);
         private Button no = new Button("No", this);
 
-        public ConfirmPopup(List<String> warnings, OnConfirmation callback) {
+        public ConfirmPopup(List<String> dataLossWarnings, List<String> confirmationWarnings, OnConfirmation callback) {
             super("Confirmation of Changes");
             setModal(true);
             setWidth(W350PX);
             this.callback = callback;
 
             StringBuilder sb = new StringBuilder();
-            sb.append("<p>").append("The following changes will <strong>remove data permanently</strong> from the project:").append("</p>"); //$NON-NLS-1$ //$NON-NLS-3$
-            sb.append("<p><ul>"); //$NON-NLS-1$
-            for (String warning : warnings) {
-                sb.append("<li>").append(warning).append("</li>"); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-            sb.append("</ul></p>"); //$NON-NLS-1$
-            sb.append("<p>").append("Commit anyway?").append("</p>"); //$NON-NLS-1$ //$NON-NLS-3$
+            append(sb, "The following changes will <strong>remove data permanently</strong> from the project:", dataLossWarnings);
+            append(sb, "The following changes might not be your intention:", confirmationWarnings);
+            sb.append("<p>Continue anyway?</p>");
             Label content = new Label(sb.toString(), Label.CONTENT_XHTML);
             addComponent(content);
 
@@ -565,6 +586,18 @@ public class ProjectEditPanel extends Panel {
             hl.addComponent(yes);
             hl.addComponent(no);
             addComponent(hl);
+        }
+
+        @SuppressWarnings("nls")
+        private void append(StringBuilder sb, String title, List<String> messages) {
+            if (messages.size() > 0) {
+                sb.append("<p>").append(title).append("</p>");
+                sb.append("<p><ul>");
+                for (String message : messages) {
+                    sb.append("<li>").append(message).append("</li>");
+                }
+                sb.append("</ul></p>");
+            }
         }
 
         @Override

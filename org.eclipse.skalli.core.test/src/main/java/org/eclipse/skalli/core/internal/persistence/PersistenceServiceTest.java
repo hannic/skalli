@@ -10,21 +10,13 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.persistence;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.skalli.api.java.EntityFilter;
-import org.eclipse.skalli.model.ext.AbstractIndexer;
-import org.eclipse.skalli.model.ext.AliasedConverter;
-import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
-import org.eclipse.skalli.model.ext.ExtensionService;
-import org.eclipse.skalli.model.ext.ExtensionValidator;
-import org.eclipse.skalli.model.ext.PropertyValidator;
+import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.junit.Test;
 
 // test for AbstractPersistenceService
@@ -74,30 +66,15 @@ public class PersistenceServiceTest {
         }
     }
 
-    private static class TestExtensionService implements ExtensionService<ExtensionEntityBase> {
+    private static class TestExtensionService extends ExtensionServiceBase<ExtensionEntityBase> {
         @Override
         public Class<ExtensionEntityBase> getExtensionClass() {
             return ExtensionEntityBase.class;
         }
 
         @Override
-        public Set<DataMigration> getMigrations() {
-            return null;
-        }
-
-        @Override
         public String getShortName() {
             return ":-)"; //$NON-NLS-1$
-        }
-
-        @Override
-        public AliasedConverter getConverter(String host) {
-            return null;
-        }
-
-        @Override
-        public Set<String> getProjectTemplateIds() {
-            return null;
         }
 
         @Override
@@ -113,31 +90,6 @@ public class PersistenceServiceTest {
         @Override
         public String getXsdFileName() {
             return null;
-        }
-
-        @Override
-        public AbstractIndexer<ExtensionEntityBase> getIndexer() {
-            return null;
-        }
-
-        @Override
-        public String getCaption(String propertyName) {
-            return null;
-        }
-
-        @Override
-        public String getDescription(String propertyName) {
-            return null;
-        }
-
-        @Override
-        public Set<PropertyValidator> getPropertyValidators(String propertyName, String caption) {
-            return Collections.emptySet();
-        }
-
-        @Override
-        public Set<ExtensionValidator<ExtensionEntityBase>> getExtensionValidators(Map<String, String> captions) {
-            return Collections.emptySet();
         }
 
         @Override

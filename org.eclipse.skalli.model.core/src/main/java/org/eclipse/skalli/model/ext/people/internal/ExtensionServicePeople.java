@@ -10,18 +10,22 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.people.internal;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
+import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.log.Log;
+import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
+import org.eclipse.skalli.model.ext.ExtensibleEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
+import org.osgi.service.component.ComponentContext;
 
 public class ExtensionServicePeople
         extends ExtensionServiceBase<PeopleProjectExt>
@@ -104,5 +108,19 @@ public class ExtensionServicePeople
     @Override
     public String getDescription(String propertyName) {
         return DESCRIPTIONS.get(propertyName);
+    }
+
+    @Override
+    public List<String> getConfirmationWarnings(ExtensibleEntityBase entity, ExtensibleEntityBase modifiedEntity, User modifier) {
+        List<String> warnings = new ArrayList<String>();
+        PeopleProjectExt extension = entity.getExtension(PeopleProjectExt.class);
+        PeopleProjectExt modifiedExtension = modifiedEntity.getExtension(PeopleProjectExt.class);
+        if (extension != null && modifiedExtension != null) {
+            ProjectMember person = new ProjectMember(modifier.getUserId());
+            if (extension.hasLead(person) && !modifiedExtension.hasLead(person)) {
+                warnings.add("You are trying to remove yourself from the list of <i>project leads</i>.");
+            }
+        }
+        return warnings;
     }
 }

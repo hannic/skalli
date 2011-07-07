@@ -11,11 +11,12 @@
 package org.eclipse.skalli.model.ext;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.util.CollectionUtils;
 
 /**
@@ -52,7 +53,7 @@ public abstract class ExtensionServiceBase<T extends ExtensionEntityBase> implem
 
     @Override
     public Set<DataMigration> getMigrations() {
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -67,7 +68,7 @@ public abstract class ExtensionServiceBase<T extends ExtensionEntityBase> implem
 
     @Override
     public Set<String> getProjectTemplateIds() {
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -88,6 +89,11 @@ public abstract class ExtensionServiceBase<T extends ExtensionEntityBase> implem
             }
         }
         return caption;
+    }
+
+    @Override
+    public List<String> getConfirmationWarnings(ExtensibleEntityBase entity, ExtensibleEntityBase modifiedEntity, User modifier) {
+        return Collections.emptyList();
     }
 
     @Override
