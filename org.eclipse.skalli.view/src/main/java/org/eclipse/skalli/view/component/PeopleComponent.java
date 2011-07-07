@@ -13,6 +13,7 @@ package org.eclipse.skalli.view.component;
 import java.util.IllegalFormatConversionException;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.User;
@@ -21,6 +22,7 @@ import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.view.internal.config.UserDetailsConfig;
 import org.eclipse.skalli.view.internal.config.UserDetailsResource;
 import org.eclipse.skalli.view.internal.container.UserContainer;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
@@ -60,11 +62,14 @@ public class PeopleComponent extends CustomComponent {
 
         sb.append("<span class=\"v-link-peoplecomponent\">"); //$NON-NLS-1$
 
-        sb.append("<a class=\"link\" href=\"mailto:"); //$NON-NLS-1$
-        sb.append(user.getEmail());
-        sb.append("\">"); //$NON-NLS-1$
-        sb.append("mail");
-        sb.append("</a> "); //$NON-NLS-1$
+        if (!StringUtils.isBlank(user.getEmail()))
+        {
+            sb.append("<a class=\"link\" href=\"mailto:"); //$NON-NLS-1$
+            sb.append(user.getEmail());
+            sb.append("\">"); //$NON-NLS-1$
+            sb.append("mail");
+            sb.append("</a> "); //$NON-NLS-1$
+        }
 
         sb.append("<a class=\"link\" href=\""); //$NON-NLS-1$
         sb.append(Consts.URL_PROJECTS_USER);
