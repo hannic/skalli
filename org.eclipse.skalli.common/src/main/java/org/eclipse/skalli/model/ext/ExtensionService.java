@@ -77,7 +77,8 @@ public interface ExtensionService<T extends ExtensionEntityBase> {
      * Returns a set of project templates indentifiers to which instances of
      * the model extension are compatible.
      *
-     * @return a set of project template identifiers, or an empty set.
+     * @return a set of project template identifiers, or null to indicate that
+     * the ExtensionService is allowed for all ProjectTemplates.
      */
     public Set<String> getProjectTemplateIds();
 

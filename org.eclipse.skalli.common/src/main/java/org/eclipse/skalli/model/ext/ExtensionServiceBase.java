@@ -68,7 +68,7 @@ public abstract class ExtensionServiceBase<T extends ExtensionEntityBase> implem
 
     @Override
     public Set<String> getProjectTemplateIds() {
-        return Collections.emptySet();
+        return null;
     }
 
     @Override
