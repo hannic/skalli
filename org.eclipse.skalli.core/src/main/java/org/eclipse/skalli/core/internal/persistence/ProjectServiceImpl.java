@@ -26,8 +26,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.EntityServiceImpl;
 import org.eclipse.skalli.api.java.InvalidParentChainException;
 import org.eclipse.skalli.api.java.NoSuchTemplateException;
@@ -54,6 +52,7 @@ import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
+import org.osgi.service.component.ComponentContext;
 
 public class ProjectServiceImpl extends EntityServiceImpl<Project> implements ProjectService {
 
@@ -241,31 +240,10 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
     @Override
     protected SortedSet<Issue> validateEntity(Project project, Severity minSeverity) {
         SortedSet<Issue> issues = new TreeSet<Issue>();
+
+        issues.addAll(validateProjectId(project));
+
         UUID projectUUID = project.getUuid();
-
-        // check the property ID
-        String projectId = project.getProjectId();
-        if (StringUtils.isBlank(projectId)) {
-            issues.add(new Issue(Severity.FATAL, ProjectService.class, projectUUID,
-                    "Project must not have an empty Project ID"));
-        }
-        else {
-            if (projectId.trim().length() != projectId.length()) {
-                issues.add(new Issue(Severity.FATAL, ProjectService.class, projectUUID,
-                        "Project ID must not have leading or trailing whitespaces"));
-            }
-            else {
-                for (Project anotherProject : getAll()) {
-                    String anotherProjectId = anotherProject.getProjectId();
-                    if (projectId.equals(anotherProjectId) && !anotherProject.getUuid().equals(projectUUID)) {
-                        issues.add(new Issue(Severity.FATAL, ProjectService.class, projectUUID,
-                                MessageFormat.format("Project with Project ID ''{0}'' already exists", projectId)));
-                        break;
-                    }
-                }
-            }
-        }
-
         // soft description validation
         issues.addAll(new ProjectDescriptionValidator(Project.class, Project.PROPERTY_DESCRIPTION).validate(
                 projectUUID, project.getDescription(), minSeverity));
@@ -294,6 +272,32 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
             // check that all extensions are compatible with the template and vice versa
             if (minSeverity.compareTo(Severity.ERROR) >= 0) {
                 validateCompatibility(project, projectTemplate, extensionService, issues);
+            }
+        }
+        return issues;
+    }
+
+    private SortedSet<Issue> validateProjectId(Project project) {
+        SortedSet<Issue> issues = new TreeSet<Issue>();
+        String projectId = project.getProjectId();
+        if (StringUtils.isBlank(projectId)) {
+            issues.add(new Issue(Severity.FATAL, ProjectService.class, project.getUuid(),
+                    "Project must not have an empty Project ID"));
+        }
+        else {
+            if (projectId.trim().length() != projectId.length()) {
+                issues.add(new Issue(Severity.FATAL, ProjectService.class, project.getUuid(),
+                        "Project ID must not have leading or trailing whitespaces"));
+            }
+            else {
+                for (Project anotherProject : getAll()) {
+                    String anotherProjectId = anotherProject.getProjectId();
+                    if (projectId.equals(anotherProjectId) && !anotherProject.getUuid().equals(project.getUuid())) {
+                        issues.add(new Issue(Severity.FATAL, ProjectService.class, project.getUuid(),
+                                MessageFormat.format("Project with Project ID ''{0}'' already exists", projectId)));
+                        break;
+                    }
+                }
             }
         }
         return issues;
@@ -331,23 +335,31 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
             for (ExtensionEntityBase extension : project.getAllExtensions()) {
                 String extensionClassName = extension.getClass().getName();
                 if (allowed != null && !allowed.contains(projectTemplate.getId())) {
-                    issues.add(new Issue(Severity.ERROR, ProjectTemplate.class, projectUUID, extension.getClass(),
+                    issues.add(new Issue(
+                            Severity.ERROR,
+                            ProjectTemplate.class,
+                            projectUUID,
+                            extension.getClass(),
                             null,
-                            MessageFormat.format(
-                                    "{0} projects are not compatible with ''{1}'' extensions. Disable the extension or "
-                                            +
-                                            "select another project template.", projectTemplate.getDisplayName(),
-                                    extensionClassName)));
+                            MessageFormat
+                                    .format(
+                                            "{0} projects are not compatible with ''{1}'' extensions. Disable the extension or select another project template.",
+                                            projectTemplate.getDisplayName(),
+                                            extensionClassName)));
                 }
                 if (excluded != null && excluded.contains(extensionClassName) ||
                         included != null && !included.contains(extensionClassName)) {
-                    issues.add(new Issue(Severity.ERROR, ProjectTemplate.class, projectUUID, extension.getClass(),
+                    issues.add(new Issue(
+                            Severity.ERROR,
+                            ProjectTemplate.class,
+                            projectUUID,
+                            extension.getClass(),
                             null,
-                            MessageFormat.format(
-                                    "''{0}'' extensions are not appropriate for {1} projects. Disable the extension or "
-                                            +
-                                            "select another project template.", extensionClassName,
-                                    projectTemplate.getDisplayName())));
+                            MessageFormat
+                                    .format(
+                                            "''{0}'' extensions are not appropriate for {1} projects. Disable the extension or select another project template.",
+                                            extensionClassName,
+                                            projectTemplate.getDisplayName())));
                 }
             }
         }
