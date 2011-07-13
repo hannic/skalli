@@ -13,13 +13,6 @@ package org.eclipse.skalli.api.rest.internal.resources;
 import java.util.HashSet;
 import java.util.List;
 
-import org.restlet.data.Form;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
-
 import org.eclipse.skalli.api.java.PagingInfo;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.QueryParseException;
@@ -30,6 +23,12 @@ import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.log.Statistics;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.AliasedConverter;
+import org.restlet.data.Form;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.resource.Get;
+import org.restlet.resource.ServerResource;
 
 public class ProjectsResource extends ServerResource {
 
@@ -47,10 +46,10 @@ public class ProjectsResource extends ServerResource {
             List<Project> projectList = null;
             if (query != null) {
                 SearchService searchService = Services.getRequiredService(SearchService.class);
-                projectList = searchService.findProjectsByQuery(query, new PagingInfo(0, 300)).getEntities();
+                projectList = searchService.findProjectsByQuery(query, new PagingInfo(0, Integer.MAX_VALUE)).getEntities();
             } else if (tag != null) {
                 SearchService searchService = Services.getRequiredService(SearchService.class);
-                projectList = searchService.findProjectsByTag(tag, new PagingInfo(0, 300)).getEntities();
+                projectList = searchService.findProjectsByTag(tag, new PagingInfo(0, Integer.MAX_VALUE)).getEntities();
             } else {
                 ProjectService projectService = Services.getRequiredService(ProjectService.class);
                 projectList = projectService.getAll();
