@@ -43,7 +43,7 @@ public class RelatedProjectsInfoBox extends AbstractInfoBox implements ProjectIn
 
         SearchService searchService = Services.getService(SearchService.class);
         if (searchService != null) {
-            SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 5);
+            SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 3);
             for (SearchHit<Project> hit : relatedProjects.getResult()) {
                 Link link = new Link();
                 link.setCaption(hit.getEntity().getName());

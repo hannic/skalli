@@ -108,7 +108,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public SearchResult<Project> getRelatedProjects(Project project, int count) {
         String[] fields = new String[] { Project.PROPERTY_NAME, Project.PROPERTY_DESCRIPTION, Project.PROPERTY_TAGS };
-        return luceneIndex.moreLikeThis(project, fields, 3);
+        return luceneIndex.moreLikeThis(project, fields, count);
     }
 
     @Override
