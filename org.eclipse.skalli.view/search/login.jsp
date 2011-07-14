@@ -10,7 +10,7 @@
 @import "<%=Consts.JSP_STYLE%>";
 </style>
 </head>
-<body>
+<body class="welcomepage">
 <%
 	// if user is already authenticated, go to welcome page
 	if (request.getUserPrincipal()!=null) {
@@ -25,10 +25,23 @@
     <img src="/VAADIN/themes/simple/images/logo_large.png" alt="Logo">
     <div class="search-section">
 	<form method="POST" action="j_security_check">
-		Name: <input type="text" name="j_username" />
-		Password: <input type="password" name="j_password" />
-		<input type="submit" name="ok" value="OK" />
-		<input type="button" onclick="javascript:history.back()" name="back" value="Cancel" />
+		<table>
+			<tr>
+				<td>Username:</td>
+				<td><input type="text" name="j_username" /></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" name="j_password" /></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<input type="submit" name="ok" value="Login" />
+					<input type="button" onclick="javascript:history.back()" name="back" value="Cancel" />
+				</td>
+			</tr>
+		</table>
 	</form>
 	</div>
 	</center>
