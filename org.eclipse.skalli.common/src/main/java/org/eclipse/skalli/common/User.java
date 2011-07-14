@@ -104,12 +104,16 @@ public class User implements Comparable<User> {
     }
 
     public String getFullName() {
-        return getFirstname() + " " + getLastname(); //$NON-NLS-1$
+        if (detailsMissing) {
+            return getUserId();
+        } else {
+            return getFirstname() + " " + getLastname(); //$NON-NLS-1$
+        }
     }
 
     public String getDisplayName() {
         if (detailsMissing) {
-            return userId;
+            return getUserId();
         }
         return getFullName() + " (" + userId + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
