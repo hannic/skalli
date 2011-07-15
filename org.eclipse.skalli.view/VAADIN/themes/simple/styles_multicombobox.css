@@ -1,0 +1,16 @@
+.multicombobox-layout {
+    
+}
+
+.multicombobox-line {
+    margin-bottom: 5px;
+}
+
+.multicombobox-btn {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.multicombobox-btn .v-button-caption {
+    font-size: x-small;
+}

@@ -10,19 +10,25 @@
  *******************************************************************************/
 package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
+import java.util.UUID;
+
+import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.SearchHit;
 import org.eclipse.skalli.api.java.SearchResult;
 import org.eclipse.skalli.api.java.SearchService;
 import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.common.util.UUIDList;
 import org.eclipse.skalli.model.core.Project;
+import org.eclipse.skalli.model.ext.misc.RelatedProjectsExt;
 import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.Link;
 
 public class RelatedProjectsInfoBox extends AbstractInfoBox implements ProjectInfoBox {
 
@@ -41,18 +47,47 @@ public class RelatedProjectsInfoBox extends AbstractInfoBox implements ProjectIn
         Layout layout = new CssLayout();
         layout.setSizeFull();
 
+        RelatedProjectsExt ext = project.getExtension(RelatedProjectsExt.class);
+        if (ext != null) {
+            Label label = new Label("The following projects might also be of interest to you:",
+                    Label.CONTENT_XHTML);
+            layout.addComponent(label);
+            boolean calculated = ext.getCalculated();
+            if (calculated) {
+                addCalculatedContent(project, layout);
+            } else {
+                UUIDList ids = ext.getRelatedProjects();
+                ProjectService projectService = Services.getRequiredService(ProjectService.class);
+                for (UUID uuid : ids) {
+                    Project relatedProject = projectService.getByUUID(uuid);
+                    ExternalResource externalResource = new ExternalResource("/projects/" + relatedProject.getProjectId());
+                    String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + relatedProject.getName()
+                            + "</a>";
+                    Label l = new Label(content, Label.CONTENT_XHTML);
+                    layout.addComponent(l);
+                }
+            }
+        }
+        return layout;
+    }
+
+    protected void addCalculatedContent(Project project, Layout layout) {
         SearchService searchService = Services.getService(SearchService.class);
         if (searchService != null) {
             SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 3);
             for (SearchHit<Project> hit : relatedProjects.getResult()) {
-                Link link = new Link();
-                link.setCaption(hit.getEntity().getName());
-                link.setResource(new ExternalResource("/projects/" + hit.getEntity().getProjectId())); //$NON-NLS-1$
-                layout.addComponent(link);
+                ExternalResource externalResource = new ExternalResource("/projects/" + hit.getEntity().getProjectId());
+                String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + hit.getEntity().getName()
+                        + "*</a>";
+                Label label = new Label(content, Label.CONTENT_XHTML);
+                layout.addComponent(label);
             }
-        }
+            Label label = new Label(HSPACE + "*calculated based on similarities between the projects",
+                    Label.CONTENT_XHTML);
+            label.setStyleName("light");//$NON-NLS-1$
+            layout.addComponent(label);
 
-        return layout;
+        }
     }
 
     @Override
@@ -67,7 +102,8 @@ public class RelatedProjectsInfoBox extends AbstractInfoBox implements ProjectIn
 
     @Override
     public boolean isVisible(Project project, String loggedInUserId) {
-        if (project.isDeleted()) {
+        RelatedProjectsExt ext = project.getExtension(RelatedProjectsExt.class);
+        if (ext == null || ext.getRelatedProjects().isEmpty()) {
             return false;
         } else {
             return true;

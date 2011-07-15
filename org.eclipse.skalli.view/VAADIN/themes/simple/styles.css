@@ -7,6 +7,7 @@
  @import url(styles_tray.css);
  @import url(styles_peoplesearch.css);
  @import url(styles_multitext.css);
+ @import url(styles_multicombobox.css);
  
 .v-app {
       background: #fff;

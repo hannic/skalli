@@ -35,7 +35,8 @@ Service-Component: OSGI-INF/ExtensionServiceReview.xml,
  OSGI-INF/ExtensionServiceLinkGroups.xml,
  OSGI-INF/MailingListMappingConfigSection.xml,
  OSGI-INF/ScmLocationMappingConfigSection.xml,
- OSGI-INF/ScrumPeopleProvider.xml
+ OSGI-INF/ScrumPeopleProvider.xml,
+ OSGI-INF/ExtensionServiceRelatedProjects.xml
 Export-Package: org.eclipse.skalli.model.ext.devinf,
  org.eclipse.skalli.model.ext.info,
  org.eclipse.skalli.model.ext.linkgroups,
