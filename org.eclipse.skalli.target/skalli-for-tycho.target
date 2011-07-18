@@ -6,8 +6,8 @@
 
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
 <!-- dependencies to Equinox/Eclipse platform -->
-<unit id="org.eclipse.platform.sdk" version="3.7.0.I20110603-0909"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7milestones/"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7/"/>
 </location>
 
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
