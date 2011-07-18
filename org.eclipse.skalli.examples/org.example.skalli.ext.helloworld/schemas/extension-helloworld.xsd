@@ -22,7 +22,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="Extension">
 				<xsd:sequence>
-					<xsd:element name="name" type="xsd:string"></xsd:element>					<xsd:element name="friends" type="xsd:string" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					<xsd:element name="name" type="xsd:string"></xsd:element>					<xsd:element name="friends" type="xsd:string" minOccurs="0" maxOccurs="unbounded"></xsd:element>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
