@@ -1,4 +1,4 @@
-<%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@page import="org.eclipse.skalli.common.Consts"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -10,8 +10,8 @@
 <style type="text/css">
   @import "<%=Consts.JSP_STYLE%>";
   .errormessage {
-  	font-style: italic;
-  	color: #9E0000;
+    font-style: italic;
+    color: #9E0000;
   }
 </style>
 </head>

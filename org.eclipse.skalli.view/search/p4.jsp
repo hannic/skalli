@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <%@page import="org.eclipse.skalli.view.internal.filter.ext.JiraFilter"%>
 <%@page import="org.eclipse.skalli.common.Consts"%>
-<%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@page errorPage="/error" %>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -74,11 +74,10 @@
         </tr>
         <tr align="left">
             <td>Process:</td>
-            <td><em>https://wiki.wdf.sap.corp/wiki/display/ProductionDrafts/PerforceCodelineLayoutForMaven</em></td>
+            <td><em>https://wiki.wdf.sap.corp/x/T4oEMw</em></td>
         </tr>        
 	</table>
 	<p>or simply copy the above to your clipboard:&nbsp;
-	<!-- 
 		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
 			  	width="110"
 		  		height="14"
@@ -87,7 +86,7 @@
 		    <param name="allowScriptAccess" value="always" />
 		    <param name="quality" value="high" />
 		    <param name="scale" value="noscale" />
-		    <param name="FlashVars" value="text=Name: ${project.name}, Key: ${project.projectId}, URL: ${projectUrl}, Proposal: ${proposedName}, Codelines: dev, Prefered Server: , User(s): ${committers}, Process: https://wiki.wdf.sap.corp/wiki/display/ProductionDrafts/PerforceCodelineLayoutForMaven" />
+		    <param name="FlashVars" value="text=Name: ${project.name}, Key: ${project.projectId}, URL: ${projectUrl}, Proposal: ${proposedName}, Codelines: dev, Prefered Server: , User(s): ${committers}, Process: https://wiki.wdf.sap.corp/x/T4oEMw" />
 		    <param name="bgcolor" value="#FFFFFF" />
 		    <embed src="/VAADIN/themes/simple/flash/clippy.swf"
 		           width="110"
@@ -97,11 +96,10 @@
 		           allowScriptAccess="always"
 		           type="application/x-shockwave-flash"
 		           pluginspage="http://www.macromedia.com/go/getflashplayer"
-		           FlashVars="text=Name: ${project.name}, Key: ${project.projectId}, URL: ${projectUrl}, Proposal: ${proposedName}, Codelines: dev, Prefered Server: , User(s): ${committers}, Process: https://wiki.wdf.sap.corp/wiki/display/ProductionDrafts/PerforceCodelineLayoutForMaven"
+		           FlashVars="text=Name: ${project.name}, Key: ${project.projectId}, URL: ${projectUrl}, Proposal: ${proposedName}, Codelines: dev, Prefered Server: , User(s): ${committers}, Process: https://wiki.wdf.sap.corp/x/T4oEMw"
 		           bgcolor="#FFFFFF"
 		   	/>
 		</object>
-	 -->
 	</p> 
 	<p class="important">Note: The new Perforce project will <strong>not</strong> automatically be added to your SCM locations, but needs to be added manually once it has been created by the Production team.</p>
 	<p><a href="/projects/${project.projectId}">Back to project</a></p>

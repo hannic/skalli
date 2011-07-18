@@ -1,7 +1,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="org.eclipse.skalli.view.component.TagCloud"%>
 <%@page import="org.eclipse.skalli.common.User"%>
 <%@page import="org.osgi.framework.Version"%>
@@ -11,13 +10,13 @@
 
 <div class="mainheader">
 <%
-  	LoginUtil util = new LoginUtil(request);
-	User user = util.getLoggedInUser();
-	TagCloud tagCloud = TagCloud.getInstance(25);
-	Version version = ViewBundleUtil.getVersion();
-	if (version!=null) {
-		request.setAttribute("version", version);
-	}
+    LoginUtil util = new LoginUtil(request);
+    User user = util.getLoggedInUser();
+    TagCloud tagCloud = TagCloud.getInstance(25);
+    Version version = ViewBundleUtil.getVersion();
+    if (version!=null) {
+        request.setAttribute("version", version);
+    }
 %>
 
     <div class="mainheader-left">
@@ -31,7 +30,6 @@
           <c:when test="${user!=null}">
             Welcome
             <a href="<%=Consts.URL_MYPROJECTS%>"><%=user.getFullName()%></a>
-            <a href="#" onclick="javascript:document.getElementById('logoutinput').value=document.location.href;document.forms['logout'].submit()">(Logout)</a>
             <c:if test="${feedbackConfig != null }">
               <span class="vertical_separator"><img src="/VAADIN/themes/simple/images/separator.png" alt="separator"></span>
               <a title="${feedbackConfig.displayName}" href="${feedbackConfig.url}">${feedbackConfig.displayName}</a>
@@ -61,7 +59,7 @@
             </c:if>
           </c:otherwise>
         </c:choose>
-	  </div>
+      </div>
     </div>
 </div>
 

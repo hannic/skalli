@@ -6,7 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="org.eclipse.skalli.common.Consts"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -37,35 +37,33 @@
 
 <c:if test="${exception != null}">
   <c:if test="${feedbackConfig != null }">
-	Please inform the ProjectPortal team about this exception: 
-	<a title="${feedbackConfig.displayName}" href="${feedbackConfig.url}">Send Bug Report</a>
-	<br><br>
-	Please include the following information:
-	<br>
-	1) Step-by-Step description how to reproduce this exception.<br>
-	2) Copy+Paste the following exception call stack:<br><br>
+    Please inform the ProjectPortal team about this exception: 
+    <a title="${feedbackConfig.displayName}" href="${feedbackConfig.url}">Send Bug Report</a>
+    <br><br>
+    Please include the following information:
+    <br>
+    1) Step-by-Step description how to reproduce this exception.<br>
+    2) Copy+Paste the following exception call stack:<br><br>
   </c:if>
-	<%
-		Object o = request.getAttribute("exception");
-		int length = 1;
-		if (o instanceof Exception) {
-			Exception exception = (Exception) request.getAttribute("exception");
-			length = exception.getStackTrace().length;
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			exception.printStackTrace(pw);		
-	%>
+    <%
+    Object o = request.getAttribute("exception");
+    int length = 1;
+    if (o instanceof Exception) {
+        Exception exception = (Exception) request.getAttribute("exception");
+        length = exception.getStackTrace().length;
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        exception.printStackTrace(pw);		
+    %>
 
-	<textarea name="callstack" rows=<%= length %> wrap=OFF cols=100 readonly ><% out.print(sw); %></textarea>
-	<%
-		} else {
-		  out.println("Callstack not available");
-		}
-	%>
+    <textarea name="callstack" rows=<%= length %> wrap=OFF cols=100 readonly ><% out.print(sw); %></textarea>
+    <%
+    } else {
+        out.println("Callstack not available");
+    }
+    %>
 </c:if>
-
 </div>
 </div>
-
 </body>
 </html>

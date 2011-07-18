@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <%@page import="org.eclipse.skalli.view.internal.filter.ext.GitGerritFilter"%>
 <%@page import="org.eclipse.skalli.common.Consts"%>
-<%@taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@page errorPage="/error" %>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -44,9 +44,7 @@
     margin-top:10px;
   }
 </style>
-<!-- 
-<script src="/js/jquery/1.4.4/jquery.min.js"></script>
- -->
+<script src="/js/jquery/1.4.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -194,7 +192,7 @@
           </c:when>
           <c:when test="${!groupExists && !repoExists && empty knownAccounts}">
             <p class="errormessage">No one of your team has a known Gerrit account. You would not be able to administer the group and/or project by yourself. Hence this request cannot be processed.</p>
-            <p class="hint">Log on once to Gerrit to create your account and try again.</p>
+            <p class="hint">Log on once to <a href="https://git.wdf.sap.corp:8080/" target="_new">Gerrit</a> to create your account and try again.</p>
           </c:when>
         </c:choose>
       </c:if>

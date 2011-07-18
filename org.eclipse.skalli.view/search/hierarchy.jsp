@@ -3,7 +3,7 @@
 <%@page import="org.eclipse.skalli.model.ext.Issues"%>
 <%@page import="org.eclipse.skalli.api.java.authentication.LoginUtil"%>
 <%@page import="org.eclipse.skalli.api.java.authentication.UserUtil"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.LinkedList"%>
 <%@ page import="java.util.Comparator"%>
 <%@ page import="java.io.IOException"%>
@@ -28,18 +28,18 @@
 <script type="text/javascript">
 function toggle(objId) {
     $('#' + objId).css('display', function(index, oldValue) {
-    	return (oldValue != 'none') ? 'none' : '';
+        return (oldValue != 'none') ? 'none' : '';
     });
 }
 function expandAll() {
-	$('span[name|="projectNode"]').each(function(index, elem) {
-		$(elem).css('display', '');
-	});
+    $('span[name|="projectNode"]').each(function(index, elem) {
+        $(elem).css('display', '');
+    });
 }
 function collapseAll() {
-	$('span[name|="projectNode"]').each(function(index, elem) {
-		$(elem).css('display', 'none');
-	});	
+    $('span[name|="projectNode"]').each(function(index, elem) {
+        $(elem).css('display', 'none');
+    });	
 }
 </script>
 </head>
