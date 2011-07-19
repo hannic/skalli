@@ -248,16 +248,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
         issues.addAll(new ProjectDescriptionValidator(Project.class, Project.PROPERTY_DESCRIPTION).validate(
                 projectUUID, project.getDescription(), minSeverity));
 
-        // ensure that the project has a PeopleProjectExt and a project lead
-        PeopleProjectExt peopleExtension = project.getExtension(PeopleProjectExt.class);
-        if (peopleExtension == null) {
-            issues.add(new Issue(Severity.FATAL, ProjectService.class, projectUUID,
-                    "Project must have a Project Members extension or inherit it from a parent"));
-        }
-        else if (peopleExtension.getLeads().isEmpty()) {
-            issues.add(new Issue(Severity.FATAL, ProjectService.class, projectUUID,
-                    PeopleProjectExt.class, null, "Project must have a least one Project Lead"));
-        }
+        issues.addAll(validatePeopleExtension(project));
 
         // ensure that the entity service exists
         ExtensionService<?> extensionService = validateExtensionService(projectUUID, project, issues);
@@ -273,6 +264,20 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
             if (minSeverity.compareTo(Severity.ERROR) >= 0) {
                 validateCompatibility(project, projectTemplate, extensionService, issues);
             }
+        }
+        return issues;
+    }
+
+    private SortedSet<Issue> validatePeopleExtension(Project project) {
+        // ensure that the project has a PeopleProjectExt and a project lead
+        SortedSet<Issue> issues = new TreeSet<Issue>();
+        PeopleProjectExt peopleExtension = project.getExtension(PeopleProjectExt.class);
+        if (peopleExtension == null) {
+            issues.add(new Issue(Severity.FATAL, ProjectService.class, project.getUuid(),
+                    "Project must have a Project Members extension or inherit it from a parent"));
+        } else if (peopleExtension.getLeads().isEmpty()) {
+            issues.add(new Issue(Severity.FATAL, ProjectService.class, project.getUuid(),
+                    PeopleProjectExt.class, null, "Project must have a least one Project Lead"));
         }
         return issues;
     }
