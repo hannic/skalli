@@ -413,7 +413,23 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
             }
         }
 
-        // then run all extension validators
+        issues.addAll(validateExtensionServiceExtensionValidators(projectUUID, ext, extensionService, projectTemplate,
+                minSeverity, captions));
+        issues.addAll(validateProjectTemplateExtensionValidators(projectUUID, ext, projectTemplate, minSeverity));
+
+        // if this extension is extensible, recursively validate all extensions
+        if (ext instanceof ExtensibleEntityBase) {
+            for (ExtensionEntityBase extension : ((ExtensibleEntityBase) ext).getAllExtensions()) {
+                validateExtension(projectUUID, extension, projectTemplate, issues, minSeverity);
+            }
+        }
+    }
+
+    private Set<Issue> validateExtensionServiceExtensionValidators(UUID projectUUID, ExtensionEntityBase ext,
+            ExtensionService<?> extensionService, ProjectTemplate projectTemplate, Severity minSeverity,
+            Map<String, String> captions) {
+        Set<Issue> issues = new TreeSet<Issue>();
+
         Set<? extends ExtensionValidator<?>> extensionValidators = extensionService.getExtensionValidators(captions);
         if (extensionValidators == null) {
             LOG.warning(MessageFormat.format(
@@ -424,13 +440,26 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                 issues.addAll(extensionValidator.validate(projectUUID, ext, minSeverity));
             }
         }
+        return issues;
+    }
 
-        // if this extension is extensible, recursively validate all extensions
-        if (ext instanceof ExtensibleEntityBase) {
-            for (ExtensionEntityBase extension : ((ExtensibleEntityBase) ext).getAllExtensions()) {
-                validateExtension(projectUUID, extension, projectTemplate, issues, minSeverity);
+    private Set<Issue> validateProjectTemplateExtensionValidators(UUID uuid, ExtensionEntityBase ext,
+            ProjectTemplate projectTemplate, Severity minSeverity) {
+        Set<Issue> issues = new TreeSet<Issue>();
+        Set<ExtensionValidator<?>> extentionValidators = projectTemplate.getExtensionValidators(ext.getClass()
+                .getName());
+        if (extentionValidators == null)
+        {
+            LOG.warning(MessageFormat.format(
+                    "{0}#getExtensionValidators({1}) returned null, but is expected to return an empty set",
+                    projectTemplate.getClass().getName(), ext.getClass().getName()));
+        }
+        else {
+            for (ExtensionValidator<?> extensionValidator : extentionValidators) {
+                issues.addAll(extensionValidator.validate(uuid, ext, minSeverity));
             }
         }
+        return issues;
     }
 
     @Override
