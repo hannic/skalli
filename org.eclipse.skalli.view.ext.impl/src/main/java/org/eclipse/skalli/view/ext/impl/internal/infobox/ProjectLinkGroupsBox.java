@@ -14,16 +14,17 @@ import org.eclipse.skalli.common.LinkGroup;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.linkgroups.LinkGroupsProjectExt;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class ProjectLinkGroupsBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectLinkGroupsBox extends InfoBox implements ProjectInfoBox {
 
     protected static final String STYLE_LABEL_GROUP = "grouplabel"; //$NON-NLS-1$
     protected static final String STYLE_LABEL_LINK = "linklabel"; //$NON-NLS-1$

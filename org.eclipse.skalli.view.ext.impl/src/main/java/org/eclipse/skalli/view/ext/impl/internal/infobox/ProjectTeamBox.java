@@ -14,15 +14,16 @@ import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 import org.eclipse.skalli.view.component.InformationBox;
 import org.eclipse.skalli.view.component.PeopleComponent;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class ProjectTeamBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectTeamBox extends InfoBox implements ProjectInfoBox {
 
     @Override
     public String getIconPath() {

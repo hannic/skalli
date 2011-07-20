@@ -12,13 +12,14 @@ package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.misc.ReviewProjectExt;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 
-public class ProjectReviewBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectReviewBox extends InfoBox implements ProjectInfoBox {
 
     private static int DEFAULT_PAGE_LENGH = 3;
     private static int MAX_PAGE_LENGH = 10;

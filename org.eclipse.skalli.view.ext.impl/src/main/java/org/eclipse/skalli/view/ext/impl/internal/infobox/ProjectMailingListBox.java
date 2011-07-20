@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.StringEscapeUtils;
-
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
@@ -26,15 +25,16 @@ import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.LinkMapper;
 import org.eclipse.skalli.model.ext.info.InfoProjectExt;
 import org.eclipse.skalli.model.ext.info.MailingListMapper;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class ProjectMailingListBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectMailingListBox extends InfoBox implements ProjectInfoBox {
 
     private static final Logger LOG = Log.getLogger(ProjectMailingListBox.class);
     private static final String STYLE_MAILING = "mailingList"; //$NON-NLS-1$

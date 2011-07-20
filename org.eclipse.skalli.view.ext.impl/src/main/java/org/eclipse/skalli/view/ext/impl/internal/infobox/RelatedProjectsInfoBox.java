@@ -20,8 +20,8 @@ import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.UUIDList;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.misc.RelatedProjectsExt;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
 import com.vaadin.terminal.ExternalResource;
@@ -30,7 +30,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class RelatedProjectsInfoBox extends AbstractInfoBox implements ProjectInfoBox {
+public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
 
     @Override
     public String getIconPath() {

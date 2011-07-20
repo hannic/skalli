@@ -21,8 +21,8 @@ import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 import org.eclipse.skalli.model.ext.devinf.ScmLocationMapper;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
 import com.vaadin.ui.Component;
@@ -30,7 +30,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class ProjectDevInfBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
 
     private static final String STYLE_DEFINF = "devInf"; //$NON-NLS-1$
 

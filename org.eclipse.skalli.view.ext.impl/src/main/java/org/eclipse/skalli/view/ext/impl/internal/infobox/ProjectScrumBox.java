@@ -11,15 +11,15 @@
 package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.scrum.ScrumProjectExt;
 import org.eclipse.skalli.view.component.InformationBox;
 import org.eclipse.skalli.view.component.PeopleComponent;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -27,7 +27,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Link;
 
-public class ProjectScrumBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectScrumBox extends InfoBox implements ProjectInfoBox {
 
     @Override
     public String getIconPath() {

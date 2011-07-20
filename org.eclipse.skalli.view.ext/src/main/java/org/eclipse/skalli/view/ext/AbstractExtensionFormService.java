@@ -21,6 +21,7 @@ import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.PropertyName;
+
 import com.vaadin.data.Item;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.FormFieldFactory;
@@ -90,7 +91,7 @@ public abstract class AbstractExtensionFormService<T extends ExtensionEntityBase
         final T instance = newExtensionInstance();
         for (Field field : getExtensionClass().getDeclaredFields()) {
             PropertyName propName = field.getAnnotation(PropertyName.class);
-            if (propName != null) {
+            if (propName != null && propName.position() >= 0) {
                 fields.add(field);
             }
         }

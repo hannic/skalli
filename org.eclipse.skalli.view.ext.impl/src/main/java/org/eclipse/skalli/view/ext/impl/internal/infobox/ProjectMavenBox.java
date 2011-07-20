@@ -12,27 +12,30 @@ package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.MapperUtil;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 import org.eclipse.skalli.model.ext.devinf.ScmLocationMapper;
 import org.eclipse.skalli.model.ext.devinf.ScmLocationMappingConfig;
+import org.eclipse.skalli.model.ext.maven.MavenCoordinate;
 import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
+import org.eclipse.skalli.model.ext.maven.MavenReactor;
+import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
-import com.vaadin.terminal.ExternalResource;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.Link;
+import com.vaadin.ui.PopupView;
 
-public class ProjectMavenBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
 
     private static final String DEFAULT_POM_FILENAME = "pom.xml"; //$NON-NLS-1$
 
@@ -62,43 +65,83 @@ public class ProjectMavenBox extends AbstractInfoBox implements ProjectInfoBox {
         layout.setSizeFull();
 
         boolean rendered = false;
+        String groupId = null;
+        MavenReactorProjectExt reactorExt = project.getExtension(MavenReactorProjectExt.class);
+        if (reactorExt != null) {
+            MavenReactor mavenReactor = reactorExt.getMavenReactor();
+            MavenCoordinate coordinate = mavenReactor.getCoordinate();
+            groupId = coordinate.getGroupId();
+            createLabel(layout, "GroupId: <b>&nbsp;" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
+            createLabel(layout, "ArtifactId: <b>" + coordinate.getArtefactId() + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
+            TreeSet<MavenCoordinate> modules = mavenReactor.getModules();
+            StringBuilder sb = new StringBuilder();
+
+            if (modules.size() > 0) {
+
+                for (MavenCoordinate module : modules) {
+                    //create popup with xml snippet
+                    sb.append("<dependency>\n");
+                    sb.append("    <artifactId>" + module.getArtefactId() + "</artifactId>\n");
+                    sb.append("    <groupId>" + module.getGroupId() + "</groupId>\n");
+                    sb.append("    <!--<version>0.0.0</version>-->\n");
+                    sb.append("    <type>" + module.getPackaging() + "</type>\n");
+                    sb.append("</dependency>\n");
+
+                }
+
+                final Label label = new Label(sb.toString(), Label.CONTENT_PREFORMATTED);
+                label.setWidth("30%");
+
+                PopupView.Content content = new PopupView.Content() {
+                    private static final long serialVersionUID = -8362267064485433525L;
+
+                    @Override
+                    public String getMinimizedValueAsHTML() {
+                        return "<div style=\"margin:3px\">Modules</div>";
+                    }
+
+                    @Override
+                    public Component getPopupComponent() {
+                        return label;
+                    }
+                };
+
+                PopupView popup = new PopupView(content);
+                popup.setHideOnMouseOut(false);
+                layout.addComponent(popup);
+            }
+            rendered = true;
+        }
         MavenProjectExt mavenExt = project.getExtension(MavenProjectExt.class);
         if (mavenExt != null) {
-            if (StringUtils.isNotBlank(mavenExt.getGroupID())) {
-                Label label = new Label("GroupId - <b>" + mavenExt.getGroupID() + "</b>", Label.CONTENT_XHTML);
-                label.addStyleName(STYLE_LABEL);
-                layout.addComponent(label);
-                rendered = true;
+            if (groupId == null) {
+                groupId = mavenExt.getGroupID();
+                if (StringUtils.isNotBlank(groupId)) {
+                    createLabel(layout, "GroupId: <b>&nbsp;" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
+                    rendered = true;
+                }
             }
             DevInfProjectExt devInf = project.getExtension(DevInfProjectExt.class);
             if (devInf != null) {
                 String reactorPomUrl = getReactorPomUrl(project, devInf, mavenExt);
                 if (reactorPomUrl == null) {
                     String reactorPomPath = mavenExt.getReactorPOM();
-                    Label label = new Label(MessageFormat.format(
+                    String caption = MessageFormat.format(
                             "Reactor POM Path: {0} (relative to SCM root location)",
-                            StringUtils.isNotBlank(reactorPomPath) ? reactorPomPath : "/"));
-                    label.addStyleName(STYLE_LABEL);
-                    layout.addComponent(label);
+                            StringUtils.isNotBlank(reactorPomPath) ? reactorPomPath : "/");
+                    createLabel(layout, caption);
                 } else {
-                    Link link = new Link("Reactor POM", new ExternalResource(reactorPomUrl));
-                    link.addStyleName(STYLE_LINK);
-                    layout.addComponent(link);
+                    createLink(layout, "Reactor POM", reactorPomUrl);
                 }
                 rendered = true;
             }
             if (StringUtils.isNotBlank(mavenExt.getSiteUrl())) {
-                Link link = new Link("Project Site", new ExternalResource(mavenExt.getSiteUrl()));
-                link.addStyleName(STYLE_LINK);
-                layout.addComponent(link);
+                createLink(layout, "Project Site", mavenExt.getSiteUrl());
                 rendered = true;
             }
-
         }
         if (!rendered) {
-            Label label = new Label("Maven extension added but no data maintained.");
-            label.addStyleName(STYLE_LABEL);
-            layout.addComponent(label);
+            createLabel(layout, "Maven extension added but no data maintained.");
         }
         return layout;
     }

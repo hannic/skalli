@@ -13,7 +13,6 @@ package org.eclipse.skalli.view.ext.impl.internal.infobox;
 import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Consts;
@@ -21,15 +20,16 @@ import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issues;
-import org.eclipse.skalli.view.ext.AbstractInfoBox;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class ProjectIssuesBox extends AbstractInfoBox implements ProjectInfoBox {
+public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
 
     private static final String STYLE_ISSUES = "prj-issues"; //$NON-NLS-1$
 
