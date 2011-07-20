@@ -48,6 +48,8 @@ public class Consts {
     public static final String ATTRIBUTE_FEEDBACKCONFIG = "feedbackConfig";
     public static final String ATTRIBUTE_TOPLINKSCONFIG = "toplinksConfig";
     public static final String ATTRIBUTE_NEWSCONFIG = "newsConfig";
+    public static final String ATTRIBUTE_BRANDINGCONFIG = "brandingConfig";
+    public static final String ATTRIBUTE_PAGETITLE = "pagetitle";
     public static final String ATTRIBUTE_EXCEPTION = "exception";
     public static final String ATTRIBUTE_QUERY = "query";
     public static final String ATTRIBUTE_TAGQUERY = "tagquery";
@@ -94,5 +96,5 @@ public class Consts {
     public static final String PROPERTY_WORKDIR = "workdir"; //$NON-NLS-1$
     public static final String PROPERTY_STORAGE_SERVICE = "skalli.storageService";
 
-
+    public static final String DEFAULT_PAGETITLE = "Skalli";
 }

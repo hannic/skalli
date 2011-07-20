@@ -19,9 +19,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
+import org.eclipse.skalli.view.internal.config.BrandingConfig;
+import org.eclipse.skalli.view.internal.config.BrandingResource;
 import org.eclipse.skalli.view.internal.config.FeedbackConfig;
 import org.eclipse.skalli.view.internal.config.FeedbackResource;
 import org.eclipse.skalli.view.internal.config.NewsConfig;
@@ -55,6 +58,19 @@ public class ConfigFilter implements Filter {
             if (newsConfig != null) {
                 request.setAttribute(Consts.ATTRIBUTE_NEWSCONFIG, newsConfig);
             }
+        }
+        BrandingConfig brandingConfig = confService.readCustomization(BrandingResource.KEY, BrandingConfig.class);
+        if (brandingConfig != null) {
+            request.setAttribute(Consts.ATTRIBUTE_BRANDINGCONFIG, brandingConfig);
+        }
+
+        // Put the common part of the page title directly into request, use default page title
+        // if branding is not configured. JSPs can directly use this attribute instead of
+        // implementing a default page title mechanism per JSP.
+        if (brandingConfig != null && StringUtils.isNotBlank(brandingConfig.getPageTitle())) {
+            request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, brandingConfig.getPageTitle());
+        } else {
+            request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, Consts.DEFAULT_PAGETITLE);
         }
 
         // proceed along the chain

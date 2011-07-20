@@ -43,7 +43,8 @@ Import-Package: org.eclipse.skalli.api.java,
 Service-Component: OSGI-INF/FeedbackConfigSection.xml,
  OSGI-INF/TopLinksConfigSection.xml,
  OSGI-INF/NewsConfigSection.xml,
- OSGI-INF/UserDetailsConfigSection.xml
+ OSGI-INF/UserDetailsConfigSection.xml,
+ OSGI-INF/BrandingConfigSection.xml
 Web-ContextPath: /
 Webapp-Context: /
 Export-Package: org.eclipse.skalli.view.component

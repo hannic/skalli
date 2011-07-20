@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal</title>
+<title>${pagetitle}</title>
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
@@ -36,9 +36,9 @@
       request.getRequestDispatcher("/error").forward(request, response);
       throw new RuntimeException(e);
     }
-	if (request.getParameter(Consts.PARAM_ACTION)!=null && request.getParameter(Consts.PARAM_ACTION).equals(Consts.PARAM_VALUE_EDIT)) {	
-	  pathInfo = pathInfo+"/"+Consts.PARAM_VALUE_EDIT;
-	}
+    if (request.getParameter(Consts.PARAM_ACTION)!=null && request.getParameter(Consts.PARAM_ACTION).equals(Consts.PARAM_VALUE_EDIT)) {
+      pathInfo = pathInfo+"/"+Consts.PARAM_VALUE_EDIT;
+    }
 %>
 
 <script type="text/javascript">
@@ -105,20 +105,20 @@ setTimeout('if (typeof com_vaadin_terminal_gwt_DefaultWidgetSet == "undefined") 
 
     <!-- project header -->
     <c:if test="${project!=null && editmode==false}">    
-	    <div class="projectheader">
-	    <c:choose>
-	      <c:when test="${projectTemplate.projectNature == projectNature}">
-	          <img src='/VAADIN/themes/simple/icons/nature/project32x32.png' alt="projectnature" title='Project'/>
-	      </c:when>
-	      <c:when test="${projectTemplate.projectNature == componentNature}">
+        <div class="projectheader">
+        <c:choose>
+          <c:when test="${projectTemplate.projectNature == projectNature}">
+              <img src='/VAADIN/themes/simple/icons/nature/project32x32.png' alt="projectnature" title='Project'/>
+          </c:when>
+          <c:when test="${projectTemplate.projectNature == componentNature}">
               <img src='/VAADIN/themes/simple/icons/nature/component32x32.png' alt="componentnature" title='Technical Component'/>
           </c:when>
-	      <c:otherwise>
-	          <img src='/VAADIN/themes/simple/icons/nature/none32x32.png' alt="error" />
-	      </c:otherwise>
-	    </c:choose>	    
-	    ${project.name}
-	    <% pageContext.setAttribute("uuid", ((Project) request.getAttribute(Consts.ATTRIBUTE_PROJECT)).getUuid().toString()); %> 
+          <c:otherwise>
+              <img src='/VAADIN/themes/simple/icons/nature/none32x32.png' alt="error" />
+          </c:otherwise>
+        </c:choose>        
+        ${project.name}
+        <% pageContext.setAttribute("uuid", ((Project) request.getAttribute(Consts.ATTRIBUTE_PROJECT)).getUuid().toString()); %> 
         <c:if test="${user!=null}">
           <c:choose>
               <c:when test="${favorites[uuid] != null}">
@@ -133,15 +133,15 @@ setTimeout('if (typeof com_vaadin_terminal_gwt_DefaultWidgetSet == "undefined") 
               </c:otherwise>
           </c:choose>
         </c:if>
-	    <c:if test="${project.deleted }">
-		   <br/>
-	       <span class="deletedmessage">Project is DELETED.</span>
-	    </c:if>	    
-	    </div>
+        <c:if test="${project.deleted }">
+           <br/>
+           <span class="deletedmessage">Project is DELETED.</span>
+        </c:if>        
+        </div>
     </c:if>
     <center>
-		<div id="project" class="v-app v-app-loading v-theme-simple v-app-ProjectApplication" ></div>
-	</center>
+        <div id="project" class="v-app v-app-loading v-theme-simple v-app-ProjectApplication" ></div>
+    </center>
 </div>
 
 </body>

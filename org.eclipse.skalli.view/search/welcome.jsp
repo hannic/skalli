@@ -4,22 +4,21 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="org.eclipse.skalli.view.component.TagCloud"%>
 <%@page import="org.eclipse.skalli.common.User"%>
-<%@ page import="org.eclipse.skalli.common.Consts"%>
+<%@page import="org.eclipse.skalli.common.Consts"%>
 <%@page import="org.eclipse.skalli.api.java.authentication.LoginUtil"%>
 <%@page import="org.eclipse.skalli.api.java.authentication.UserUtil"%>
-
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal</title>
+<title>Welcome to ${pagetitle}</title>
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
 <script type="text/javascript">
 function focusSearch()
 {
-  document.getElementById("query").focus();
+    document.getElementById("query").focus();
 }
 </script>
 <link rel="search" type="application/opensearchdescription+xml" title="Project Portal" href="search-plugin.xml">
@@ -27,7 +26,6 @@ function focusSearch()
 <body class="welcomepage" onload="focusSearch()">
 
 <jsp:include page="<%=Consts.JSP_HEADER%>" flush="true" />
-
 
 <%
     int viewMax = 25;

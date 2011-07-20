@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal</title>
+<title>Error - ${pagetitle}</title>
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
@@ -46,24 +46,26 @@
     2) Copy+Paste the following exception call stack:<br><br>
   </c:if>
     <%
-    Object o = request.getAttribute("exception");
-    int length = 1;
-    if (o instanceof Exception) {
-        Exception exception = (Exception) request.getAttribute("exception");
-        length = exception.getStackTrace().length;
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        exception.printStackTrace(pw);		
+        Object o = request.getAttribute("exception");
+        int length = 1;
+        if (o instanceof Exception) {
+            Exception exception = (Exception) request.getAttribute("exception");
+            length = exception.getStackTrace().length;
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            exception.printStackTrace(pw);
     %>
 
     <textarea name="callstack" rows=<%= length %> wrap=OFF cols=100 readonly ><% out.print(sw); %></textarea>
     <%
-    } else {
-        out.println("Callstack not available");
-    }
+        } else {
+          out.println("Callstack not available");
+        }
     %>
 </c:if>
+
 </div>
 </div>
+
 </body>
 </html>

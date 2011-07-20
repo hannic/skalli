@@ -8,14 +8,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal - TagCloud</title>
+<title>All Tags - ${pagetitle}</title>
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
 </head>
 <body>
 <%
-	TagCloud tagCloud = TagCloud.getInstance();
+    TagCloud tagCloud = TagCloud.getInstance();
 %>
 
 <!-- header area -->
@@ -31,11 +31,11 @@
 <!-- tag cloud -->
 
 <div class="tagcloudarea">
-	<center>
-		<div class="tagcloud">
-			<%= tagCloud.doLayout() %>
-		</div>
-	</center>
+    <center>
+        <div class="tagcloud">
+            <%= tagCloud.doLayout() %>
+        </div>
+    </center>
 </div>
 
 

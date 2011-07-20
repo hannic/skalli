@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal - Login Failed!</title>
+<title>Login Failed - ${pagetitle}</title>
 </head>
 <body>
 Login Failed!

@@ -8,7 +8,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>ProjectPortal - Create Git/Gerrit Repository</title>
+<title>Create Git/Gerrit Repository - ${pagetitle}</title>
 <style type="text/css">
   @import "<%=Consts.JSP_STYLE%>";
 

@@ -15,7 +15,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal</title>
+<title>Deleted Projects - ${pagetitle}</title>
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>

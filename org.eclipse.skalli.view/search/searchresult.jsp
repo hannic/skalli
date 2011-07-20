@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>ProjectPortal - ${title}</title>
+<title>${title} - ${pagetitle}</title>
 
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
@@ -61,15 +61,15 @@ viewsize = ${viewSize} @ start = ${start} @ currentPage = ${currentPage} @ pages
 <!-- search results and pagination -->
 
 <div class="rightarea">
-	<c:if test="${pages > 1}">
-		<div class="resultsperpage">
-			Results per page:
-			<a class="${10 == viewSize ? 'selected' : 'navigator'}" href="javascript:resultsPerPage(10);">[10]</a>
-			<a class="${25 == viewSize ? 'selected' : 'navigator'}" href="javascript:resultsPerPage(25);">[25]</a>
-			<a class="${50 == viewSize ? 'selected' : 'navigator'}" href="javascript:resultsPerPage(50);">[50]</a>
-		</div>
-	</c:if>
-	
+    <c:if test="${pages > 1}">
+        <div class="resultsperpage">
+            Results per page:
+            <a class="${10 == viewSize ? 'selected' : 'navigator'}" href="javascript:resultsPerPage(10);">[10]</a>
+            <a class="${25 == viewSize ? 'selected' : 'navigator'}" href="javascript:resultsPerPage(25);">[25]</a>
+            <a class="${50 == viewSize ? 'selected' : 'navigator'}" href="javascript:resultsPerPage(50);">[50]</a>
+        </div>
+    </c:if>
+
     <c:forEach var="project" items="${projects}" >
         <!-- render the project details, see /search/tags/project-details.tag -->
         <c:set var="uuid" value="${project.singleValues['uuid']}" />

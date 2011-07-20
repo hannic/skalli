@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal - Failed creating Git/Gerrit repository</title>
+<title>Failed Creating Git/Gerrit Repository - ${pagetitle}</title>
 <style type="text/css">
   @import "<%=Consts.JSP_STYLE%>";
   .errormessage {

@@ -313,7 +313,13 @@
      filter mappings
      *************** 
      -->
-    
+
+    <filter-mapping>
+       <filter-name>ConfigFilter</filter-name>
+       <url-pattern>*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+       <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>    
     <filter-mapping>
        <filter-name>UserFilter</filter-name>
        <url-pattern>/</url-pattern>
@@ -376,15 +382,10 @@
        <filter-name>FavoritesFilter</filter-name>
        <url-pattern>/myfavorites</url-pattern>
     </filter-mapping>
-        <filter-mapping>
-        <filter-name>CssCachingFilter</filter-name>
-        <url-pattern>*.css</url-pattern>
-    </filter-mapping>
     <filter-mapping>
-        <filter-name>ConfigFilter</filter-name>
-        <url-pattern>/search/includes/header.jsp</url-pattern>
-        <dispatcher>INCLUDE</dispatcher>
-    </filter-mapping>       
+       <filter-name>CssCachingFilter</filter-name>
+       <url-pattern>*.css</url-pattern>
+    </filter-mapping>
 
     <!--  move functionality of the following filters to separate bundles -->
     <filter-mapping>

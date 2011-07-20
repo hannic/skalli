@@ -5,17 +5,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ProjectPortal - Login</title>
+<title>Login to ${pagetitle}</title>
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
 </head>
 <body class="welcomepage">
 <%
-	// if user is already authenticated, go to welcome page
-	if (request.getUserPrincipal()!=null) {
-		response.sendRedirect("/");
-	}
+    // if user is already authenticated, go to welcome page
+    if (request.getUserPrincipal()!=null) {
+        response.sendRedirect("/");
+    }
 %>
 
 <jsp:include page="<%=Consts.JSP_HEADER%>" flush="true" />
@@ -24,27 +24,27 @@
     <center>
     <img src="/VAADIN/themes/simple/images/logo_large.png" alt="Logo">
     <div class="search-section">
-	<form method="POST" action="j_security_check">
-		<table>
-			<tr>
-				<td>Username:</td>
-				<td><input type="text" name="j_username" /></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type="password" name="j_password" /></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td>
-					<input type="submit" name="ok" value="Login" />
-					<input type="button" onclick="javascript:history.back()" name="back" value="Cancel" />
-				</td>
-			</tr>
-		</table>
-	</form>
-	</div>
-	</center>
+    <form method="POST" action="j_security_check">
+        <table>
+            <tr>
+                <td>Username:</td>
+                <td><input type="text" name="j_username" /></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><input type="password" name="j_password" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" name="ok" value="Login" />
+                    <input type="button" onclick="javascript:history.back()" name="back" value="Cancel" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    </div>
+    </center>
 </div>
 </body>
 </html>
