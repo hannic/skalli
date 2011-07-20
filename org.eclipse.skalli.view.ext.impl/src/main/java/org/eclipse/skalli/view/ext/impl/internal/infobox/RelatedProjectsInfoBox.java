@@ -74,8 +74,11 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
     protected void addCalculatedContent(Project project, Layout layout) {
         SearchService searchService = Services.getService(SearchService.class);
         if (searchService != null) {
-            SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 3);
+            SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 10);
             for (SearchHit<Project> hit : relatedProjects.getResult()) {
+                if (hit.getScore()!= null && hit.getScore() < 0.2) {
+                    break; // releatedProjects is sorted by score,  hence a break is ok!
+                }
                 ExternalResource externalResource = new ExternalResource("/projects/" + hit.getEntity().getProjectId());
                 String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + hit.getEntity().getName()
                         + "*</a>";
@@ -86,7 +89,6 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
                     Label.CONTENT_XHTML);
             label.setStyleName("light");//$NON-NLS-1$
             layout.addComponent(label);
-
         }
     }
 

@@ -22,11 +22,21 @@ public final class SearchHit<T extends EntityBase> {
     private T entity;
     private Map<String, List<String>> storedValues;
     private Map<String, List<String>> highlightedValues;
+    private Float score;
 
     public SearchHit(T entity, Map<String, List<String>> storedValues, Map<String, List<String>> highlightedValues) {
+       this(entity,storedValues, null, highlightedValues);
+   }
+
+    public SearchHit(T entity, Map<String, List<String>> storedValues, Float score, Map<String, List<String>> highlightedValues) {
         this.entity = entity;
         this.storedValues = storedValues;
         this.highlightedValues = highlightedValues;
+        this.score= score;
+    }
+
+    public Float getScore() {
+        return score;
     }
 
     public String getValue(String key, boolean highlighted) {

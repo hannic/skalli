@@ -48,7 +48,6 @@ import org.apache.lucene.search.similar.MoreLikeThis;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-
 import org.eclipse.skalli.api.java.EntityService;
 import org.eclipse.skalli.api.java.FacetedSearchResult;
 import org.eclipse.skalli.api.java.PagingInfo;
@@ -230,7 +229,7 @@ public class LuceneIndex<T extends EntityBase> {
         return ret;
     }
 
-    private SearchHit<T> getSearchHit(final Document doc, final List<String> fields, final Highlighter highlighter)
+    private SearchHit<T> getSearchHit(final Document doc, final List<String> fields, float score, final Highlighter highlighter)
             throws IOException {
         T entity = getEntity(doc);
         Map<String, List<String>> storedValues = new HashMap<String, List<String>>();
@@ -253,7 +252,7 @@ public class LuceneIndex<T extends EntityBase> {
             highlightedValues.put(f.name(), highlightedFieldContents);
         }
 
-        SearchHit<T> ret = new SearchHit<T>(entity, storedValues, highlightedValues);
+        SearchHit<T> ret = new SearchHit<T>(entity, storedValues, score, highlightedValues);
         return ret;
     }
 
@@ -286,7 +285,7 @@ public class LuceneIndex<T extends EntityBase> {
             for (ScoreDoc hit : collector.topDocs().scoreDocs) {
                 if (hit.doc != baseDoc.doc) {
                     Document doc = searcher.doc(hit.doc);
-                    SearchHit<T> searchHit = getSearchHit(doc, fieldList, highlighter);
+                    SearchHit<T> searchHit = getSearchHit(doc, fieldList, hit.score, highlighter);
                     searchHits.add(searchHit);
                 }
             }
@@ -350,7 +349,7 @@ public class LuceneIndex<T extends EntityBase> {
                 TopDocs topDocs = collector.topDocs(pagingInfo.getStart(), pagingInfo.getCount());
                 for (ScoreDoc hit : topDocs.scoreDocs) {
                     Document doc = searcher.doc(hit.doc);
-                    SearchHit<T> searchHit = getSearchHit(doc, fieldList, highlighter);
+                    SearchHit<T> searchHit = getSearchHit(doc, fieldList, hit.score, highlighter);
                     resultList.add(searchHit);
                 }
 
