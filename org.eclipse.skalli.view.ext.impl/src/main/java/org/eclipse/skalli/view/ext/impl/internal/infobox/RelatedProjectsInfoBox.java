@@ -49,9 +49,7 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
 
         RelatedProjectsExt ext = project.getExtension(RelatedProjectsExt.class);
         if (ext != null) {
-            Label label = new Label("The following projects might also be of interest to you:",
-                    Label.CONTENT_XHTML);
-            layout.addComponent(label);
+            createLabel(layout, "The following projects might also be of interest to you:");
             boolean calculated = ext.getCalculated();
             if (calculated) {
                 addCalculatedContent(project, layout);
@@ -60,11 +58,11 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
                 ProjectService projectService = Services.getRequiredService(ProjectService.class);
                 for (UUID uuid : ids) {
                     Project relatedProject = projectService.getByUUID(uuid);
-                    ExternalResource externalResource = new ExternalResource("/projects/" + relatedProject.getProjectId());
+                    ExternalResource externalResource = new ExternalResource("/projects/"
+                            + relatedProject.getProjectId());
                     String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + relatedProject.getName()
                             + "</a>";
-                    Label l = new Label(content, Label.CONTENT_XHTML);
-                    layout.addComponent(l);
+                    createLabel(layout, content);
                 }
             }
         }
@@ -75,15 +73,23 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
         SearchService searchService = Services.getService(SearchService.class);
         if (searchService != null) {
             SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 10);
-            for (SearchHit<Project> hit : relatedProjects.getResult()) {
-                if (hit.getScore()!= null && hit.getScore() < 0.2) {
+            if (relatedProjects.getResultCount() == 0) {
+                createLabel(layout, HSPACE + "No matches found");
+            }
+            for (int count = 0; count < relatedProjects.getResultCount(); count++) {
+                SearchHit<Project> hit = relatedProjects.getResult().get(count);
+
+                if (hit.getScore() != null && hit.getScore() < 0.2 && count >= 3) {
+                    if (count == 0) {
+                        createLabel(layout, HSPACE + "No matches found");
+                        return;
+                    }
                     break; // releatedProjects is sorted by score,  hence a break is ok!
                 }
                 ExternalResource externalResource = new ExternalResource("/projects/" + hit.getEntity().getProjectId());
                 String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + hit.getEntity().getName()
                         + "*</a>";
-                Label label = new Label(content, Label.CONTENT_XHTML);
-                layout.addComponent(label);
+                createLabel(layout, content);
             }
             Label label = new Label(HSPACE + "*calculated based on similarities between the projects",
                     Label.CONTENT_XHTML);
@@ -105,7 +111,7 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
     @Override
     public boolean isVisible(Project project, String loggedInUserId) {
         RelatedProjectsExt ext = project.getExtension(RelatedProjectsExt.class);
-        if (ext == null || ext.getRelatedProjects().isEmpty()) {
+        if (ext == null || (ext.getRelatedProjects().isEmpty() && !ext.getCalculated())) {
             return false;
         } else {
             return true;
