@@ -73,6 +73,8 @@ public class ProjectEditPanel extends Panel {
     static final String W600PX = "600px"; //$NON-NLS-1$
     private static final String W350PX = "350px"; //$NON-NLS-1$
 
+    static final String HEADER_WIDTH="600px"; //$NON-NLS-1$
+
     private final ThemeResource ICON_BUTTON_OK = new ThemeResource("icons/button/ok.png"); //$NON-NLS-1$
     private final ThemeResource ICON_BUTTON_CANCEL = new ThemeResource("icons/button/cancel.png"); //$NON-NLS-1$
     private final ThemeResource ICON_BUTTON_EXPAND_ALL = new ThemeResource("icons/button/openall.png"); //$NON-NLS-1$
@@ -251,9 +253,9 @@ public class ProjectEditPanel extends Panel {
     private void renderHeaderMessage(VerticalLayout layout) {
         CssLayout headerLine = new CssLayout();
         headerLine.setMargin(true);
-        headerLine.setWidth(W600PX);
+        headerLine.setWidth(HEADER_WIDTH);
         headerLabel = new Label("", Label.CONTENT_XHTML); //$NON-NLS-1$
-        headerLabel.setSizeUndefined();
+        headerLabel.setWidth(HEADER_WIDTH);
         headerLabel.addStyleName(STYLE_ISSUES);
         headerLabel.setVisible(false);
         headerLine.addComponent(headerLabel);
