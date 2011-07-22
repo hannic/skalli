@@ -74,7 +74,7 @@ public class StorageCommand {
             try {
                 blob = source.read(category, key);
                 // only copy records with valid uuids, expect for customization (these are "normal" strings!)
-                if (UUIDUtils.isUUID(key) && !"customization".equalsIgnoreCase(category)  ) {
+                if (UUIDUtils.isUUID(key) || "customization".equalsIgnoreCase(category)) {
                     destination.write(category, key, blob);
                     copiedRecords++;
                     if ((copiedRecords % 10) == 0) {
