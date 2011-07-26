@@ -10,19 +10,18 @@
  *******************************************************************************/
 package org.eclipse.skalli.view.internal.config;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("news")
 public class NewsConfig {
 
     private String url;
+    private String alert;
+    private String info;
 
     public NewsConfig() {
-    }
-
-    public NewsConfig(String url) {
-        super();
-        this.url = url;
     }
 
     public String getUrl() {
@@ -31,5 +30,25 @@ public class NewsConfig {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getAlert() {
+        return alert;
+    }
+
+    public void setAlert(String alert) {
+        this.alert = alert;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public boolean isMessageDefined() {
+        return StringUtils.isNotBlank(alert) || StringUtils.isNotBlank(info);
     }
 }

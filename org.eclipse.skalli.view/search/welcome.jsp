@@ -62,11 +62,25 @@ function focusSearch()
 <% if (tagCloud != null) { %>
     <div class="tagcloud">
         <div align="left"><%= viewMax %> most popular tags 
-    <a href='<%= Consts.URL_TAGCLOUD %>'>(show all tags)</a>
-    </div>
-           <%= tagCloud.doLayout() %>
+            <a href='<%= Consts.URL_TAGCLOUD %>'>(show all tags)</a>
+        </div>
+        <%= tagCloud.doLayout() %>
     </div>
 <% } %>
+<c:if test="${newsConfig != null && newsConfig.messageDefined}">
+    <div class="messages-section">
+      <c:if test="${newsConfig.alert != null}">
+          <div class="alert-section">
+              <span class="alert-msg">${newsConfig.alert}</span>
+          </div>
+      </c:if>
+      <c:if test="${newsConfig.info != null}">
+          <div class="info-section">
+              <span class="info-msg">${newsConfig.info}</span>
+          </div>
+      </c:if>
+    </div>
+</c:if>
 </center>
 <!--
     <iframe src="/content/tipoftheday" name="Tip of the Day" frameborder="0"

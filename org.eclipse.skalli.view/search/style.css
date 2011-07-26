@@ -3,69 +3,65 @@
 /*
 global styles
 */
-
 body {
-	font-family: arial, helvetica, verdana, sans-serif;
-	font-size: 12px;
-	color: #000000;
-	margin: 0px;
-	padding: 0px;
+    font-family: arial, helvetica, verdana, sans-serif;
+    font-size: 12px;
+    color: #000000;
+    margin: 0px;
+    padding: 0px;
 }
 
 a {
-	font-family: arial, helvetica, verdana, sans-serif;
-	color: #1B699F;
-	font-size: 12px;
-	font-weight: normal;
-    outline: none;	
+    font-family: arial, helvetica, verdana, sans-serif;
+    color: #1B699F;
+    font-size: 12px;
+    font-weight: normal;
+    outline: none;
     text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 img {
-	border: none;
+    border: none;
 }
-
 
 /*
 searchfield
 */
-
 .searchfield {
-	width: 30em;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #999999;
+    width: 30em;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
 }
 
 .searchfield:hover {
-	border-color: #1B699F;
+    border-color: #1B699F;
 }
 
 .searchfield:focus {
-	border-color: #1B699F;
+    border-color: #1B699F;
 }
 
 .searchsubmit {
-	border-width: 1px;
-	border-style: solid;
-	border-color: #999999;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
 }
 
 .searchsubmit:hover {
-	border-color: #1B699F;
+    border-color: #1B699F;
 }
 
 /*
 tag cloud
 */
-
 .tagcloud a {
-	padding-right: 5px;
-	text-decoration: none;
+    padding-right: 5px;
+    text-decoration: none;
 }
 
 .tagcloud a:hover {
@@ -75,196 +71,176 @@ tag cloud
 /*
 main header
 */
-
 .mainheader {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: #B8C9FF;
-	padding-bottom: 5px;
-	padding-top: 3px;
-	height: 14px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #B8C9FF;
+    padding-bottom: 5px;
+    padding-top: 3px;
+    height: 14px;
 }
 
 .mainheader a {
-	padding-left: 5px;
+    padding-left: 5px;
 }
 
 .mainheader-left {
-	float: left;
-	clear: both;
+    float: left;
+    clear: both;
 }
 
 .mainheader-right {
-	float: right;
-	clear: none;
-	padding-right: 5px;
+    float: right;
+    clear: none;
+    padding-right: 5px;
 }
 
 .mainheader-right .vertical_separator img {
-	width: 1px;
-	height: 12px;
-	padding-left: 5px;
-	vertical-align: middle;
+    width: 1px;
+    height: 12px;
+    padding-left: 5px;
+    vertical-align: middle;
 }
 
 /*
 search header
 */
-
 .searchheader {
-	height: 38px;
-	margin-bottom: 5px;
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-top: 10px;
-	padding-bottom: 5px;
-	border-bottom-width: 1px;
-	border-bottom-color: grey;
-	border-bottom-style: solid;
+    height: 38px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding-bottom: 5px;
+    border-bottom-width: 1px;
+    border-bottom-color: grey;
+    border-bottom-style: solid;
 }
 
 .searchheader-left {
-	float: left;
-	width: 150px
+    float: left;
+    width: 150px
 }
 
 .searchheader-right {
-	float: left;
-	clear: none;
-	width: 500px;
-	padding-left: 5px;
+    float: left;
+    clear: none;
+    width: 500px;
+    padding-left: 5px;
 }
 
 /*
 navigation bar (left side)
 */
-
 .navigationbar {
-	float: left;
-	width: 150px;
-	clear: both;
-	padding: 10px;
-	padding-top:5px;
-	font-family: arial, helvetica, verdana, sans-serif;
-	color: #000000;
-	margin: 0px;
+    float: left;
+    width: 150px;
+    clear: both;
+    padding: 10px;
+    padding-top: 5px;
+    font-family: arial, helvetica, verdana, sans-serif;
+    color: #000000;
+    margin: 0px;
 }
 
 /*
 issues (header area / info box / edit form)
 */
-
-.issuesarea > div {
-	border-style: solid;
-	border-width: 1px;	
-    padding:8px 8px 8px 30px;
-	background-repeat: no-repeat;
-	background-position: 8px 8px;    
+.issuesarea>div {
+    border-style: solid;
+    border-width: 1px;
+    padding: 8px 8px 8px 30px;
+    background-repeat: no-repeat;
+    background-position: 8px 8px;
 }
 
-.issuesarea .message,
-.issuesarea .message a {
-    font-weight: bold;	
+.issuesarea .message,.issuesarea .message a {
+    font-weight: bold;
 }
 
 .prj-issues p {
-	margin-left:30px;
+    margin-left: 30px;
 }
 
-.prj-issues ul,
-.prjedt-issues ul {
-	margin: 0px;
-	padding: 0px;
+.prj-issues ul,.prjedt-issues ul {
+    margin: 0px;
+    padding: 0px;
 }
 
-.prj-issues ul li,
-.prjedt-issues ul li {
-	font-weight: normal;
-	color: #000000;
-	list-style-type: none;
-	padding: 2px 2px 2px 30px;
-	background-repeat: no-repeat;
-	background-position: 5px 4px;
-	min-width: 100px;
-	min-height: 20px;
+.prj-issues ul li,.prjedt-issues ul li {
+    font-weight: normal;
+    color: #000000;
+    list-style-type: none;
+    padding: 2px 2px 2px 30px;
+    background-repeat: no-repeat;
+    background-position: 5px 4px;
+    min-width: 100px;
+    min-height: 20px;
 }
 
 .prj-issues ul li {
-	margin: 2px 6px 2px 0px;	
+    margin: 2px 6px 2px 0px;
 }
 
 .prjedt-issues ul li {
-	border-style: solid;
-	border-width: 1px;
-	margin: 2px 0px 2px 0px;
+    border-style: solid;
+    border-width: 1px;
+    margin: 2px 0px 2px 0px;
 }
 
-.issuesarea div.INFO,
-.prj-issues ul li.INFO,
-.prjedt-issues ul li.INFO {
-	background-image: url('/VAADIN/themes/simple/icons/issues/info.png');
+.issuesarea div.INFO,.prj-issues ul li.INFO,.prjedt-issues ul li.INFO {
+    background-image: url('/VAADIN/themes/simple/icons/issues/info.png');
 }
 
-.issuesarea div.WARNING,
-.prj-issues ul li.WARNING,
-.prjedt-issues ul li.WARNING {
-	background-image: url('/VAADIN/themes/simple/icons/issues/warning.png');
+.issuesarea div.WARNING,.prj-issues ul li.WARNING,.prjedt-issues ul li.WARNING {
+    background-image: url('/VAADIN/themes/simple/icons/issues/warning.png');
 }
 
-.issuesarea div.ERROR,
-.prj-issues ul li.ERROR,
-.prjedt-issues ul li.ERROR {
-	background-image: url('/VAADIN/themes/simple/icons/issues/error.png');
+.issuesarea div.ERROR,.prj-issues ul li.ERROR,.prjedt-issues ul li.ERROR {
+    background-image: url('/VAADIN/themes/simple/icons/issues/error.png');
 }
 
-.issuesarea div.FATAL,
-.prj-issues ul li.FATAL,
-.prjedt-issues ul li.FATAL {
-	background-image: url('/VAADIN/themes/simple/icons/issues/fatal.png');
+.issuesarea div.FATAL,.prj-issues ul li.FATAL,.prjedt-issues ul li.FATAL {
+    background-image: url('/VAADIN/themes/simple/icons/issues/fatal.png');
 }
 
-.issuesarea div.INFO,
-.prjedt-issues ul li.INFO {
-	color: #205791;
-	background-color: #d5edf8; 
-	border-color: #92cae4; 
+.issuesarea div.INFO,.prjedt-issues ul li.INFO {
+    color: #205791;
+    background-color: #d5edf8;
+    border-color: #92cae4;
 }
 
-.issuesarea div.WARNING,
-.prjedt-issues ul li.WARNING {
-	color: #514721; 
-	background-color: #fff6bf;
-	border-color: #ffd324;
+.issuesarea div.WARNING,.prjedt-issues ul li.WARNING {
+    color: #514721;
+    background-color: #fff6bf;
+    border-color: #ffd324;
 }
 
-.issuesarea div.ERROR,
-.prjedt-issues ul li.ERROR {
-	color: #8a1f11;
-	background-color: #fbe3e4;
-	border-color: #fbc2c4;
+.issuesarea div.ERROR,.prjedt-issues ul li.ERROR {
+    color: #8a1f11;
+    background-color: #fbe3e4;
+    border-color: #fbc2c4;
 }
 
-.issuesarea div.FATAL,
-.prjedt-issues ul li.FATAL {
-	color: #5A0000; 
-	background-color: #FF6666;
-	border-color: #FF3030;
+.issuesarea div.FATAL,.prjedt-issues ul li.FATAL {
+    color: #5A0000;
+    background-color: #FF6666;
+    border-color: #FF3030;
 }
 
 /*
-welcome page	
+welcome page
 */
-
 .welcomepage .searcharea {
-	padding-top: 70px;
+    padding-top: 70px;
 }
 
 .welcomepage .searcharea img {
-	padding-bottom: 20px;
+    padding-bottom: 20px;
 }
 
 .welcomepage .searcharea a {
-	padding-right: 20px;
+    padding-right: 20px;
 }
 
 .welcomepage .search-section {
@@ -279,128 +255,200 @@ welcome page
 }
 
 .welcomepage .link-section {
-	padding-top: 30px;
+    padding-top: 30px;
 }
 
 .welcomepage .tagcloud {
-	width: 400px;
-	margin-top: 50px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: silver;
-	background-color: white;
+    width: 400px;
+    margin-top: 50px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: silver;
+    background-color: white;
 }
 
-.welcomepage .tagcloud .tag1 { font-size:10px;}
-.welcomepage .tagcloud .tag2 { font-size:12px;}
-.welcomepage .tagcloud .tag3 { font-size:14px;}
-.welcomepage .tagcloud .tag4 { font-size:16px;}
-.welcomepage .tagcloud .tag5 { font-size:18px;}
-.welcomepage .tagcloud .tag6 { font-size:20px;}
+.welcomepage .tagcloud .tag1 {
+    font-size: 10px;
+}
+
+.welcomepage .tagcloud .tag2 {
+    font-size: 12px;
+}
+
+.welcomepage .tagcloud .tag3 {
+    font-size: 14px;
+}
+
+.welcomepage .tagcloud .tag4 {
+    font-size: 16px;
+}
+
+.welcomepage .tagcloud .tag5 {
+    font-size: 18px;
+}
+
+.welcomepage .tagcloud .tag6 {
+    font-size: 20px;
+}
+
+.messages-section {
+    margin-top: 50px;
+    width: 400px;
+}
+
+.alert-section {
+    margin-top: 3px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 4px 4px 4px 15px;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+    background-color: #fbe3e4;
+    border-color: #fbc2c4
+}
+
+.alert-msg {
+    font-weight: bold;
+    color: #8a1f11;
+}
+
+.info-section {
+    margin-top: 3px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 4px 4px 4px 15px;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+    background-color: #d5edf8;
+    border-color: #92cae4;
+}
+
+.info-msg {
+    font-weight: bold;
+    color: #205791;
+}
 
 .tipofthedayframe {
-	margin-top: 100px;
-	border-width: 0px
+    margin-top: 100px;
+    border-width: 0px
 }
 
 .tipoftheday {
-	font-family: arial, helvetica, verdana, sans-serif;
-	font-size: 14px;
+    font-family: arial, helvetica, verdana, sans-serif;
+    font-size: 14px;
 }
 
 .tipoftheday p {
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-top: 15px;
-	margin-bottom: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+    margin-bottom: 0px;
 }
 
 .tipoftheday-title {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: #999999;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #999999;
 }
 
 .tipoftheday-title img {
-	margin-right: 8px;
-	vertical-align: text-bottom;
+    margin-right: 8px;
+    vertical-align: text-bottom;
 }
 
 .tipoftheday-content img {
-	margin-left: 20px;
-	margin-top: 10px;
-	border: 1px solid #999999
+    margin-left: 20px;
+    margin-top: 10px;
+    border: 1px solid #999999
 }
 
 .tipoftheday-title h4 {
-	margin-top: 0px;
-	margin-left: 0px;
-	margin-right: 0px;
-	margin-bottom: 8px;
-	font-size: 16px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    font-size: 16px;
 }
-
-
 
 /*
 all tags page
 */
-	
 .tagcloudarea {
-	padding-top: 20px;
-	height: 100%;
-	border-left-width: 1px;
-	border-left-color: grey;
-	border-left-style: solid;
-	float: none;
-	clear: none;
-	margin-left: 150px;
+    padding-top: 20px;
+    height: 100%;
+    border-left-width: 1px;
+    border-left-color: grey;
+    border-left-style: solid;
+    float: none;
+    clear: none;
+    margin-left: 150px;
 }
 
 .tagcloudarea .tagcloud {
-	width: 500px;
-	background-color: #FFFFFF;
-	border: none;
-	margin-top: 0px;
-	width: auto;
-	padding-left: 50px;
-	padding-right: 50px;
-	padding-bottom: 50px;	
-	line-height: 30px;
+    width: 500px;
+    background-color: #FFFFFF;
+    border: none;
+    margin-top: 0px;
+    width: auto;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 50px;
+    line-height: 30px;
 }
 
-.tagcloudarea .tagcloud .tag1 { font-size:17px; }
-.tagcloudarea .tagcloud .tag2 { font-size:22px; font-weight: bold;}
-.tagcloudarea .tagcloud .tag3 { font-size:26px; font-weight: bold;}
-.tagcloudarea .tagcloud .tag4 { font-size:29px; font-weight: bold;}
-.tagcloudarea .tagcloud .tag5 { font-size:32px; font-weight: bold;}
-.tagcloudarea .tagcloud .tag6 { font-size:36px; font-weight: bolder;}
+.tagcloudarea .tagcloud .tag1 {
+    font-size: 17px;
+}
+
+.tagcloudarea .tagcloud .tag2 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.tagcloudarea .tagcloud .tag3 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.tagcloudarea .tagcloud .tag4 {
+    font-size: 29px;
+    font-weight: bold;
+}
+
+.tagcloudarea .tagcloud .tag5 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.tagcloudarea .tagcloud .tag6 {
+    font-size: 36px;
+    font-weight: bolder;
+}
 
 /*
 search result page
 */
-
 .searchresult {
-	font-family: arial, helvetica, verdana, sans-serif;
-	margin: 0px;
+    font-family: arial, helvetica, verdana, sans-serif;
+    margin: 0px;
 }
 
 .searchresult .resultsperpage {
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .searchresult .resultsperpage a {
-	padding-right: 5px;
+    padding-right: 5px;
 }
 
 .searchresult .resultsperpage .selected {
-	text-decoration: none;
-	font-weight: bold
+    text-decoration: none;
+    font-weight: bold
 }
 
 .searchresult .resultsperpage .navigator {
-	text-decoration: none;
-	padding-bottom: 20px;
+    text-decoration: none;
+    padding-bottom: 20px;
 }
 
 .searchresult .project {
@@ -416,18 +464,18 @@ search result page
 .searchresult .subproject {
     margin-top: 0px;
     padding-left: 30px;
-    padding-bottom: 20px; 
+    padding-bottom: 20px;
 }
 
 .searchresult .projectlink {
-	font-size: 16px; 
-	font-weight: bold;
-	text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .searchresult .projectlink:hover {
-	font-size: 16px;
-	font-weight: bold;
+    font-size: 16px;
+    font-weight: bold;
     text-decoration: underline;
 }
 
@@ -438,83 +486,83 @@ search result page
 }
 
 .searchresult .projectdetails a {
-	color: #094067;
-	padding-right: 3px;
-	text-decoration: none;
+    color: #094067;
+    padding-right: 3px;
+    text-decoration: none;
 }
 
 .searchresult .projectdetails a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .searchresult .projectlinks {
     white-space: nowrap;
-    margin-top: 2px; 
+    margin-top: 2px;
     margin-bottom: 2px;
 }
 
 .searchresult .pagination a {
-	padding-right: 5px;
+    padding-right: 5px;
 }
 
 .searchresult .pagination .currentpage {
-	text-decoration: none;
-	font-weight: bold
+    text-decoration: none;
+    font-weight: bold
 }
 
 .searchresult .pagination .navigator {
-	text-decoration: none;
-	padding-bottom: 20px;
+    text-decoration: none;
+    padding-bottom: 20px;
 }
 
 .searchresult em {
-	font-weight: bold;
-	font-style: normal
+    font-weight: bold;
+    font-style: normal
 }
 
 .searchresult .rightarea {
-	float: left;
-	clear: none;
-	width: 500px;
-	padding-left: 10px;
-	padding-top: 5px;
-	border-left-width: 1px;
-	border-left-color: grey;
-	border-left-style: solid;
+    float: left;
+    clear: none;
+    width: 500px;
+    padding-left: 10px;
+    padding-top: 5px;
+    border-left-width: 1px;
+    border-left-color: grey;
+    border-left-style: solid;
 }
 
 .searchresult .searchfield {
-	width: 30em;
-	margin-top: 3px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #999999;
+    width: 30em;
+    margin-top: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
 }
 
 .searchresult .searchfield:hover {
-	border-color: #1B699F;
+    border-color: #1B699F;
 }
 
 .searchresult .searchfield:focus {
-	border-color: #1B699F;
+    border-color: #1B699F;
 }
 
 .searchresult form {
-    margin: 0px;	
+    margin: 0px;
 }
-	
+
 .searchresult .searchsubmit {
-	margin-top: 3px;
-	margin-left: 5px;
-	padding-left: 6px;
-	padding-right: 6px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #999999;
+    margin-top: 3px;
+    margin-left: 5px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
 }
 
 .searchresult .searchsubmit:hover {
-	border-color: #1B699F;
+    border-color: #1B699F;
 }
 
 .searchresult .favicon {
@@ -535,8 +583,8 @@ search result page
 }
 
 .searchresult .natureicon {
-	width: 16px;
-	height: 16px;
+    width: 16px;
+    height: 16px;
     overflow: hidden;
     border: none;
     text-decoration: none;
@@ -548,13 +596,12 @@ search result page
 /*
 project page
 */
-
 .projectarearight {
-	height: 100%;
-	float: none;
-	clear: none;
-	margin-left: 170px;
-	padding-right: 10px;
+    height: 100%;
+    float: none;
+    clear: none;
+    margin-left: 170px;
+    padding-right: 10px;
 }
 
 .projectarearight .projectheader {
@@ -566,7 +613,7 @@ project page
     padding-top: 8px;
 }
 
-.projectarearight .projectheader img{
+.projectarearight .projectheader img {
     width: 40px;
     height: 40px;
     vertical-align: bottom;
@@ -591,7 +638,6 @@ project page
 /*
 project hierarchy page
 */
-
 .hierarchyarea {
     float: left;
     clear: none;
@@ -610,25 +656,35 @@ project hierarchy page
 }
 
 .hierarchyarea .optionlink {
-	padding-left: 10px;
-	font-size: 9px;
-	vertical-align: middle;
-	
+    padding-left: 10px;
+    font-size: 9px;
+    vertical-align: middle;
 }
 
-.hierarchyarea .projectlink0 { font-weight: bolder; font-size: 16px; line-hight: 18px; line-height: 32px;}
-.hierarchyarea .projectlink1 { font-weight: normal;  font-size: 14px; line-hight: 16px;line-height: 20px;}
-.hierarchyarea .projectlink2 { font-weight: normal;}
+.hierarchyarea .projectlink0 {
+    font-weight: bolder;
+    font-size: 16px;
+    line-hight: 18px;
+    line-height: 32px;
+}
+
+.hierarchyarea .projectlink1 {
+    font-weight: normal;
+    font-size: 14px;
+    line-hight: 16px;
+    line-height: 20px;
+}
+
+.hierarchyarea .projectlink2 {
+    font-weight: normal;
+}
 
 .hierarchyarea .issueicon {
-    vertical-align: middle;	
+    vertical-align: middle;
 }
-
 
 /*
 error page
 */
-
 .error {
-
 }
