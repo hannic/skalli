@@ -29,6 +29,7 @@ import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
+import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
@@ -78,6 +79,7 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
 
             if (modules.size() > 0) {
 
+                int lineLength = 0;
                 for (MavenCoordinate module : modules) {
                     //create popup with xml snippet
                     sb.append("<dependency>\n");
@@ -86,11 +88,12 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
                     sb.append("    <!--<version>0.0.0</version>-->\n");
                     sb.append("    <type>" + module.getPackaging() + "</type>\n");
                     sb.append("</dependency>\n");
-
+                    lineLength = calculateLineLength(module, lineLength);
                 }
 
                 final Label label = new Label(sb.toString(), Label.CONTENT_PREFORMATTED);
-                label.setWidth("30%");
+                //add a buffer 10, as we didn't calculate the length of surrounding strings.
+                label.setWidth(lineLength+10, Sizeable.UNITS_EM);
 
                 PopupView.Content content = new PopupView.Content() {
                     private static final long serialVersionUID = -8362267064485433525L;
@@ -144,6 +147,16 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
             createLabel(layout, "Maven extension added but no data maintained.");
         }
         return layout;
+    }
+
+    private int calculateLineLength(MavenCoordinate module, int previousValue) {
+        int newLength;
+        int artefactLength = module.getArtefactId().length();
+        int groupLength = module.getGroupId().length();
+        newLength= Math.max(groupLength, artefactLength);
+        newLength= Math.max(previousValue, newLength);
+
+        return newLength;
     }
 
     private String getReactorPomUrl(Project project, DevInfProjectExt devInf, MavenProjectExt mavenExt) {
