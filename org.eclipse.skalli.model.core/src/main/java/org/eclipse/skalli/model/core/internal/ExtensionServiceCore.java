@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.RegularExpressionValidator;
 import org.eclipse.skalli.common.util.StringLengthValidator;
@@ -30,6 +28,7 @@ import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
+import org.osgi.service.component.ComponentContext;
 
 public class ExtensionServiceCore
         extends ExtensionServiceBase<Project>
@@ -112,6 +111,7 @@ public class ExtensionServiceCore
         migrations.add(new DataMigration13());
         migrations.add(new DataMigration14());
         migrations.add(new DataMigration15());
+        migrations.add(new DataMigration16());
 
         return migrations;
     }
