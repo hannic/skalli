@@ -88,10 +88,10 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
                 }
                 ExternalResource externalResource = new ExternalResource("/projects/" + hit.getEntity().getProjectId());
                 String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + hit.getEntity().getName()
-                        + "*</a>";
+                        + " *</a>";
                 createLabel(layout, content);
             }
-            Label label = new Label(HSPACE + "*calculated based on similarities between the projects",
+            Label label = new Label(HSPACE + "* calculated based on similarities between the projects",
                     Label.CONTENT_XHTML);
             label.setStyleName("light");//$NON-NLS-1$
             layout.addComponent(label);
