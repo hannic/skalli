@@ -11,7 +11,6 @@
 package org.eclipse.skalli.api.java.authentication;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.GroupService;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.common.Services;
@@ -72,6 +71,9 @@ public class UserUtil {
      */
     // TODO authorization with configurable project admin group
     public static boolean isProjectAdmin(String userId, Project project) {
+        if (userId==null) {
+            return false;
+        }
         if (project != null) {
             for (ProjectMember member : Services.getRequiredService(ProjectService.class).getAllPeople(project)) {
                 if (StringUtils.equalsIgnoreCase(member.getUserID(), userId)) {
