@@ -13,8 +13,6 @@ package org.eclipse.skalli.model.ext.maven;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.skalli.model.ext.maven.MavenCoordinate;
-
 @SuppressWarnings("nls")
 public class MavenCoordinateUtil {
 

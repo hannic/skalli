@@ -10,6 +10,10 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.maven;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.util.ComparatorUtils;
 
 public class MavenCoordinate implements Comparable<MavenCoordinate> {
@@ -17,8 +21,14 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
     private String groupId = ""; //$NON-NLS-1$
     private String artefactId = ""; //$NON-NLS-1$
     private String packaging = ""; //$NON-NLS-1$
+    private TreeSet<String> versions = new TreeSet<String>();
 
     public MavenCoordinate() {
+    }
+
+    public MavenCoordinate(MavenCoordinate coordinate) {
+        this(coordinate.getGroupId(), coordinate.getArtefactId(), coordinate.getPackaging());
+        getVersions().addAll(coordinate.getVersions());
     }
 
     public MavenCoordinate(String groupId, String artefactId, String packaging) {
@@ -51,6 +61,25 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
         this.packaging = packaging;
     }
 
+    public synchronized SortedSet<String> getVersions() {
+        if (versions == null) {
+            versions = new TreeSet<String>();
+        }
+        return versions;
+    }
+
+    public void addVersion(String version) {
+        getVersions().add(version);
+    }
+
+    public boolean hasVersion(String version) {
+        return getVersions().contains(version);
+    }
+
+    public void removeVersion(String version) {
+        getVersions().remove(version);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -58,6 +87,9 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
         result = prime * result + ((artefactId == null) ? 0 : artefactId.hashCode());
         result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
         result = prime * result + ((packaging == null) ? 0 : packaging.hashCode());
+        for (String version: getVersions()) {
+            result = prime * result + ((version == null) ? 0 : version.hashCode());
+        }
         return result;
     }
 
@@ -83,14 +115,28 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
             result = ComparatorUtils.compare(artefactId, o.artefactId);
             if (result == 0) {
                 result = ComparatorUtils.compare(packaging, o.packaging);
+                if (result == 0) {
+                    result = ComparatorUtils.compare(versions, o.versions);
+                }
             }
         }
         return result;
     }
 
-    @SuppressWarnings("nls")
     @Override
     public String toString() {
-        return groupId + ":" + artefactId + ":" + packaging;
+        StringBuilder sb = new StringBuilder();
+        sb.append(groupId);
+        sb.append(':');
+        sb.append(artefactId);
+        if (StringUtils.isNotBlank(packaging)) {
+            sb.append(':');
+            sb.append(packaging);
+        }
+        if (getVersions().size() > 0) {
+            sb.append(':');
+            sb.append(StringUtils.join(getVersions(), ','));
+        }
+        return sb.toString();
     }
 }
