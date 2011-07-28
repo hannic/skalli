@@ -67,12 +67,6 @@
 <unit id="org.eclipse.skalli.org.apache.lucene.lucene-highlighter" version="3.0.2"/>
 </location>
 
-<location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
-<!-- for gerrit (SSH) -->
-<unit id="com.sap.ldi.projectportal.orbit.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus:8081/nexus/content/repositories/build.snapshots.unzip/com/sap/ldi/projectportal/orbit/com.sap.ldi.projectportal.orbit.updatesite/0.1.7/com.sap.ldi.projectportal.orbit.updatesite-0.1.7-assembly.zip-unzip/"/>
-</location>
-
 </locations>
 <environment>
 <os>win32</os>
