@@ -71,31 +71,25 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
 
     protected void addCalculatedContent(Project project, Layout layout) {
         SearchService searchService = Services.getService(SearchService.class);
-        if (searchService != null) {
-            SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 10);
-            if (relatedProjects.getResultCount() == 0) {
-                createLabel(layout, HSPACE + "No matches found");
-            }
-            for (int count = 0; count < relatedProjects.getResultCount(); count++) {
-                SearchHit<Project> hit = relatedProjects.getResult().get(count);
-
-                if (hit.getScore() != null && hit.getScore() < 0.2 && count >= 3) {
-                    if (count == 0) {
-                        createLabel(layout, HSPACE + "No matches found");
-                        return;
-                    }
-                    break; // releatedProjects is sorted by score,  hence a break is ok!
-                }
-                ExternalResource externalResource = new ExternalResource("/projects/" + hit.getEntity().getProjectId());
-                String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + hit.getEntity().getName()
-                        + " *</a>";
-                createLabel(layout, content);
-            }
-            Label label = new Label(HSPACE + "* calculated based on similarities between the projects",
-                    Label.CONTENT_XHTML);
-            label.setStyleName("light");//$NON-NLS-1$
-            layout.addComponent(label);
+        if (searchService == null) {
+            return;
         }
+        SearchResult<Project> relatedProjects = searchService.getRelatedProjects(project, 3);
+        if (relatedProjects.getResultCount() == 0) {
+            createLabel(layout, HSPACE + "No matches found");
+            return;
+        }
+        for (SearchHit<Project> hit : relatedProjects.getResult()) {
+            ExternalResource externalResource = new ExternalResource("/projects/" + hit.getEntity().getProjectId());
+            String content = HSPACE + "<a href=" + externalResource.getURL() + ">" + hit.getEntity().getName()
+                    + "*</a>";
+            createLabel(layout, content);
+        }
+        Label label = new Label(HSPACE + "*calculated based on similarities between the projects",
+                Label.CONTENT_XHTML);
+        label.setStyleName("light");//$NON-NLS-1$
+        layout.addComponent(label);
+
     }
 
     @Override
