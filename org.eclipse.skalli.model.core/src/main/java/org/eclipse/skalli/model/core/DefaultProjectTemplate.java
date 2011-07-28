@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.model.ext.ExtensionValidator;
@@ -53,8 +52,6 @@ public class DefaultProjectTemplate extends ProjectTemplateBase {
     protected final Map<String, Set<String>> invisibleItems = new HashMap<String, Set<String>>();
     protected final Map<String, Set<String>> invisibleAdminItems = new HashMap<String, Set<String>>();
     protected final Map<String, Set<String>> newValuesAllowedItems = new HashMap<String, Set<String>>();
-    private final Map<String, Set<ExtensionValidator<?>>> extensionValidators = new HashMap<String, Set<ExtensionValidator<?>>>();
-    protected final Map<String, Map<String, Set<PropertyValidator>>> propertyValidators = new HashMap<String, Map<String, Set<PropertyValidator>>>();
     protected final Map<String, Map<String, List<String>>> allowedValues = new HashMap<String, Map<String, List<String>>>();
     protected final Map<String, Map<String, String>> captions = new HashMap<String, Map<String, String>>();
     protected final Map<String, Map<String, String>> descriptions = new HashMap<String, Map<String, String>>();
@@ -138,24 +135,12 @@ public class DefaultProjectTemplate extends ProjectTemplateBase {
 
     @Override
     public Set<ExtensionValidator<?>> getExtensionValidators(String extensionClassName) {
-        Set<ExtensionValidator<?>> set = extensionValidators.get(extensionClassName);
-        if (set == null) {
-            return Collections.emptySet();
-        }
-        return set;
+        return Collections.emptySet();
     }
 
     @Override
     public Set<PropertyValidator> getPropertyValidators(String extensionClassName, Object propertyId) {
-        Map<String, Set<PropertyValidator>> map = propertyValidators.get(extensionClassName);
-        if (map == null) {
-            return Collections.emptySet();
-        }
-        Set<PropertyValidator> set = map.get(propertyId);
-        if (set == null) {
-            return Collections.emptySet();
-        }
-        return set;
+        return Collections.emptySet();
     }
 
     @Override
@@ -174,18 +159,5 @@ public class DefaultProjectTemplate extends ProjectTemplateBase {
     public String getDescription(String extensionClassName, Object propertyId) {
         Map<String, String> map = descriptions.get(extensionClassName);
         return map != null ? map.get(propertyId) : null;
-    }
-
-    protected void addExtensionValidators(String extensionClassName, Set<ExtensionValidator<?>> validators) {
-        if (validators == null) {
-            return; // nothing to do
-        }
-        TreeSet<ExtensionValidator<?>> allValidators = new TreeSet<ExtensionValidator<?>>();
-        Set<ExtensionValidator<?>> oldVals = extensionValidators.get(extensionClassName);
-        if (oldVals != null) {
-            allValidators.addAll(oldVals);
-        }
-        allValidators.addAll(validators);
-        extensionValidators.put(extensionClassName, allValidators);
     }
 }
