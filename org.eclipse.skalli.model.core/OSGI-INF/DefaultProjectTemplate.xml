@@ -14,5 +14,12 @@
    <service>
       <provide interface="org.eclipse.skalli.model.core.ProjectTemplate"/>
    </service>
+   <reference
+        bind="bindExtensionService"
+        unbind="unbindExtensionService"
+        interface="org.eclipse.skalli.model.ext.ExtensionService"
+        name="ExtensionService"
+        cardinality="0..n"
+        policy="dynamic" />
 </scr:component>
 

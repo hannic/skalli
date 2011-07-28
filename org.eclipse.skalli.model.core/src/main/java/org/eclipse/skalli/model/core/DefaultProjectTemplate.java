@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.core;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
+import org.eclipse.skalli.model.ext.ExtensionEntityBase;
+import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionValidator;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 
@@ -35,14 +38,10 @@ public class DefaultProjectTemplate extends ProjectTemplateBase {
     private static final String TEMPLATE_DISPLAYNAME = "Free-Style Project";
     private static final String TEMPLATE_DESCRIPTION =
             "Compose a project freely from all available project natures and enter exactly the information you need.<br/>"
-                    +
-                    "This kind of project represents a group of people working on a topic, for example a TGiF innovation. "
-                    +
-                    "It can have subprojects allowing to break down the topic into more manageable pieces or represent "
-                    +
-                    "different parallel work streams. Furthermore, you can assign component-like subprojects, for example"
-                    +
-                    "Free-Style Components, to represent the more technical aspects of the topic.";
+          + "This kind of project represents a group of people working on a topic, for example a TGiF innovation. "
+          + "It can have subprojects allowing to break down the topic into more manageable pieces or represent "
+          + "different parallel work streams. Furthermore, you can assign component-like subprojects, for example"
+          + "Free-Style Components, to represent the more technical aspects of the topic.";
 
     protected final Map<String, Float> ranks = new HashMap<String, Float>();
     protected final Set<String> enabledExtensions = new HashSet<String>();
@@ -55,6 +54,27 @@ public class DefaultProjectTemplate extends ProjectTemplateBase {
     protected final Map<String, Map<String, List<String>>> allowedValues = new HashMap<String, Map<String, List<String>>>();
     protected final Map<String, Map<String, String>> captions = new HashMap<String, Map<String, String>>();
     protected final Map<String, Map<String, String>> descriptions = new HashMap<String, Map<String, String>>();
+
+    private final Map<String, ExtensionService<?>> extensions = new HashMap<String, ExtensionService<?>>();
+
+    protected void bindExtensionService(ExtensionService<?> extensionService) {
+        String extensionClassName = extensionService.getExtensionClass().getName();
+        if (extensions.containsKey(extensionClassName)) {
+            throw new RuntimeException(MessageFormat.format(
+                    "Extension {0} already has a registered extension service",
+                    extensionClassName));
+        }
+        extensions.put(extensionClassName, extensionService);
+    }
+
+    protected void unbindExtensionService(ExtensionService<?> extensionService) {
+        extensions.remove(extensionService.getExtensionClass().getName());
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends ExtensionEntityBase> ExtensionService<T> getExtensionService(Class<T> extension) {
+        return (ExtensionService<T>)extensions.get(extension.getClass().getName());
+    }
 
     public DefaultProjectTemplate() {
         Set<String> set = CollectionUtils.asSet(PEOPLE_EXTENSION_CLASSNAME, INFO_EXTENSION_CLASSNAME);
