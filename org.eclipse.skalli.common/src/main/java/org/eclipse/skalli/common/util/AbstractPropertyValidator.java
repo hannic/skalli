@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issuer;
@@ -250,12 +249,14 @@ public abstract class AbstractPropertyValidator implements PropertyValidator, Is
 
     /**
      * Calls {@link AbstractPropertyValidator#isValid(Object, Severity)} to determine whether
-     * <code>value</code> is valid. In case the value is invalid, {@link #getInvalidMessage(Object)}
+     * <code>value</code> is valid. If the value is a Collection {@link AbstractPropertyValidator#isValid(Object, Severity)}
+     * is called for each item of the collection. <p>
+     * In case the value is invalid, {@link #getInvalidMessage(Object)}
      * is called to build a suitable "invalid value" validation message.
      * In case a value is required but not provided, {@link #getUndefinedMessage()} is called to
      * build a suitable "value undefined" validation message.
      * <p>
-     * If no sutiable custom message is available, the method tries to construct a default message
+     * If no suitable custom message is available, the method tries to construct a default message
      * by calling {@link #getDefaultInvalidMessage(Object)} or {@link #getDefaultUndefinedMessage()},
      * respectively.
      *
