@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Maven Extension (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.nexus
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: com.thoughtworks.xstream.annotations,
+ org.eclipse.skalli.api.rest.config,
+ org.eclipse.skalli.common.configuration,
+ org.restlet.resource
+Service-Component: OSGI-INF/NexusConfigSection.xml

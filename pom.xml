@@ -30,6 +30,7 @@
         <module>org.eclipse.skalli.view.ext.impl</module>
         <module>org.eclipse.skalli.view.theme</module>
         <module>org.eclipse.skalli.maven</module>
+        <module>org.eclipse.skalli.nexus</module>
         <module>org.eclipse.skalli.testutil</module>
         <module>org.eclipse.skalli.core.test</module>
         <module>org.eclipse.skalli.model.core.test</module>
