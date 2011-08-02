@@ -35,7 +35,7 @@ public class PeopleConverter extends AbstractConverter<PeopleProjectExt> {
         for (ProjectMember member : ext.getLeads()) {
             writer.startNode("lead"); //$NON-NLS-1$
             writeNode(writer, "userId", member.getUserID()); //$NON-NLS-1$
-            writeLink(writer, "user", getHost() + URL_API + "user/" + member.getUserID()); //$NON-NLS-1$ //$NON-NLS-2$
+            writeUserLink(writer, USER_RELATION, member.getUserID());
             writer.endNode();
         }
         writer.endNode();
@@ -43,7 +43,7 @@ public class PeopleConverter extends AbstractConverter<PeopleProjectExt> {
         for (ProjectMember member : ext.getMembers()) {
             writer.startNode("member"); //$NON-NLS-1$
             writeNode(writer, "userId", member.getUserID()); //$NON-NLS-1$
-            writeLink(writer, "user", getHost() + URL_API + "user/" + member.getUserID()); //$NON-NLS-1$ //$NON-NLS-2$
+            writeUserLink(writer, USER_RELATION, member.getUserID());
             writer.endNode();
         }
         writer.endNode();

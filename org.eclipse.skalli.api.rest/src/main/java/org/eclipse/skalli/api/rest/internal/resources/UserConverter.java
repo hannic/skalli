@@ -32,7 +32,7 @@ class UserConverter extends AbstractConverter<User> {
         User user = (User) source;
         marshalNSAttributes(writer);
         marshalApiVersion(writer);
-        writeLink(writer, "self", getHost() + "/api/user/" + user.getUserId()); //$NON-NLS-1$ //$NON-NLS-2$
+        writeUserLink(writer, SELF_RELATION, user.getUserId());
         writeNode(writer, "userId", user.getUserId()); //$NON-NLS-1$
         writeNode(writer, "firstname", user.getFirstname()); //$NON-NLS-1$
         writeNode(writer, "lastname", user.getLastname()); //$NON-NLS-1$

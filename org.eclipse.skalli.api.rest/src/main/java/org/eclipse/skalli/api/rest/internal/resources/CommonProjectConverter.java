@@ -33,7 +33,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public abstract class CommonProjectConverter extends AbstractConverter<Project> {
 
-    private final static String URL_PROJECTS = URL_API + "projects/"; //$NON-NLS-1$
     private final static String URL_ISSUES = "/issues"; //$NON-NLS-1$
     private final static String URL_BROWSE = "/projects/"; //$NON-NLS-1$
 
@@ -70,21 +69,21 @@ public abstract class CommonProjectConverter extends AbstractConverter<Project> 
         writeNode(writer, "template", project.getProjectTemplateId()); //$NON-NLS-1$
         writeNode(writer, "name", project.getName()); //$NON-NLS-1$
         writeNode(writer, "shortName", project.getShortName()); //$NON-NLS-1$
-        writeLink(writer, "project", host + URL_PROJECTS + project.getUuid().toString()); //$NON-NLS-1$
-        writeLink(writer, "browse", host + URL_BROWSE + project.getProjectId()); //$NON-NLS-1$
-        writeLink(writer, "issues", host + URL_PROJECTS + project.getUuid().toString() + URL_ISSUES); //$NON-NLS-1$
+        writeProjectLink(writer, PROJECT_RELATION, project.getUuid());
+        writeLink(writer, BROWSE_RELATION, host + URL_BROWSE + project.getProjectId());
+        writeLink(writer, ISSUES_RELATION, host + URL_PROJECTS + project.getUuid().toString() + URL_ISSUES);
         writeNode(writer, "phase", project.getPhase()); //$NON-NLS-1$
         writeNode(writer, "description", project.getDescription()); //$NON-NLS-1$
         UUID parent = project.getParentProject();
         if (parent != null) {
-            writeLink(writer, "parent", host + URL_PROJECTS + parent.toString()); //$NON-NLS-1$
+            writeProjectLink(writer, PARENT_RELATION, parent);
         }
         ProjectService projectService = Services.getRequiredService(ProjectService.class);
         List<Project> subprojects = projectService.getSubProjects(project.getUuid());
         if (subprojects.size() > 0) {
             writer.startNode("subprojects"); //$NON-NLS-1$
             for (Project subproject : subprojects) {
-                writeLink(writer, "subproject", host + URL_PROJECTS + subproject.getUuid().toString()); //$NON-NLS-1$
+                writeProjectLink(writer, SUBPROJECT_RELATION, subproject.getUuid());
             }
             writer.endNode();
         }
@@ -99,7 +98,7 @@ public abstract class CommonProjectConverter extends AbstractConverter<Project> 
             for (ProjectMember member : projectService.getAllPeople(project)) {
                 writer.startNode("member"); //$NON-NLS-1$
                 writeNode(writer, "userId", member.getUserID()); //$NON-NLS-1$
-                writeLink(writer, "user", getHost() + URL_API + "user/" + member.getUserID()); //$NON-NLS-1$ //$NON-NLS-2$
+                writeUserLink(writer, USER_RELATION, member.getUserID());
                 for (Entry<String, Set<ProjectMember>> entry : projectService.getAllPeopleByRole(project).entrySet()) {
                     if (entry.getValue().contains(member)) {
                         writeNode(writer, "role", entry.getKey()); //$NON-NLS-1$

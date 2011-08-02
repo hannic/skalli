@@ -11,6 +11,7 @@
 package org.eclipse.skalli.model.ext;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -18,11 +19,23 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public abstract class AbstractConverter<T> implements AliasedConverter {
 
+
     /** URL prefix for schema access. */
     protected static final String URL_SCHEMAS = "/schemas/"; //$NON-NLS-1$
 
-    /** URL prefix for API access. */
+    /** URL prefixes for REST API access. */
     protected static final String URL_API = "/api/"; //$NON-NLS-1$
+    protected static final String URL_PROJECTS = URL_API + "projects/"; //$NON-NLS-1$
+    protected static final String URL_USER = URL_API + "user/"; //$NON-NLS-1$
+
+    /** Relation attributes for links **/
+    protected static final String SELF_RELATION = "self"; //$NON-NLS-1$
+    protected static final String PROJECT_RELATION = "project"; //$NON-NLS-1$
+    protected static final String BROWSE_RELATION = "browse"; //$NON-NLS-1$
+    protected static final String ISSUES_RELATION = "issues"; //$NON-NLS-1$
+    protected static final String PARENT_RELATION = "parent"; //$NON-NLS-1$
+    protected static final String SUBPROJECT_RELATION = "subproject"; //$NON-NLS-1$
+    protected static final String USER_RELATION = "user"; //$NON-NLS-1$
 
     private static final String XMLNS = "xmlns"; //$NON-NLS-1$
     private static final String XMLNS_XSI = "xmlns:xsi"; //$NON-NLS-1$
@@ -112,6 +125,14 @@ public abstract class AbstractConverter<T> implements AliasedConverter {
         }
         writer.addAttribute(HREF, url);
         writer.endNode();
+    }
+
+    protected void writeProjectLink(HierarchicalStreamWriter writer, String relation, UUID uuid) {
+        writeLink(writer, relation, host + URL_PROJECTS + uuid.toString());
+    }
+
+    protected void writeUserLink(HierarchicalStreamWriter writer, String relation, String userId) {
+        writeLink(writer, relation, host + URL_USER + userId);
     }
 
     protected void writeNode(HierarchicalStreamWriter writer, String nodeName) {
