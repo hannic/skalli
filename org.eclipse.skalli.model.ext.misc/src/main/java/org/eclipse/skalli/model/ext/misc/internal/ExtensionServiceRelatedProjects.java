@@ -26,7 +26,7 @@ public class ExtensionServiceRelatedProjects extends ExtensionServiceBase<Relate
 
     private static final Map<String, String> CAPTIONS = CollectionUtils
             .asMap(new String[][] {
-                    { RelatedProjectsExt.PROPERTY_RELATED_PROJECT, "Related Project" },
+                    { RelatedProjectsExt.PROPERTY_RELATED_PROJECT, "Related Projects" },
                     { RelatedProjectsExt.PROPERTY_CALCULATED,
                             "Calculate Related Projects (based on similarities to this project)" } });
 

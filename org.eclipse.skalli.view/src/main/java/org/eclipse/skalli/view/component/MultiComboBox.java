@@ -94,13 +94,15 @@ public class MultiComboBox extends CustomField {
             }
             horLayout.addComponent(comboBox);
 
-            if (hasMultipleEntries) {
-                Button b = createRemoveButton();
-                comboBoxEntry.removeButton = b;
-                horLayout.addComponent(b);
-            }
-            if (i == last) {
-                horLayout.addComponent(createAddButton());
+            if (!readOnly) {
+                if (hasMultipleEntries) {
+                    Button b = createRemoveButton();
+                    comboBoxEntry.removeButton = b;
+                    horLayout.addComponent(b);
+                }
+                if (i == last) {
+                    horLayout.addComponent(createAddButton());
+                }
             }
 
             layout.addComponent(horLayout);
@@ -164,6 +166,7 @@ public class MultiComboBox extends CustomField {
         b.setStyleName(Button.STYLE_LINK);
         b.addStyleName(STYLE_BUTTON);
         b.setDescription("Remove this entry");
+        b.setEnabled(!readOnly);
         b.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
