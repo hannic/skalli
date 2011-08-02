@@ -13,6 +13,7 @@ package org.eclipse.skalli.model.ext.misc.internal;
 import java.util.Map;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
+import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.misc.RelatedProjectsExt;
@@ -74,4 +75,8 @@ public class ExtensionServiceRelatedProjects extends ExtensionServiceBase<Relate
         return null;
     }
 
+    @Override
+    public AliasedConverter getConverter(String host) {
+        return new RelatedProjectsConverter(host);
+    }
 }
