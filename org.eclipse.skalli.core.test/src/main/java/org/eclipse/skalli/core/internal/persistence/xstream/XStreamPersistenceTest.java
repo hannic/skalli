@@ -153,7 +153,7 @@ public class XStreamPersistenceTest {
             DataMigration mockMigration = getMigrationMock();
             EasyMock.replay(mockMigration);
             Document doc = xp.readEntityAsDom(entity.getClass(), entity.getUuid());
-            xp.preProcessXML(doc, Collections.singleton(mockMigration));
+            xp.preProcessXML(doc, Collections.singleton(mockMigration), null);
             EntityBase entity1 = xp.domToEntity(entityClassLoaders, aliases, doc);
             xp.postProcessEntity(doc, entity1, aliases);
             EntityBase loadedEntity = entity1;
@@ -181,7 +181,7 @@ public class XStreamPersistenceTest {
         DataMigration mockMigration = getMigrationMock();
         EasyMock.replay(mockMigration);
         Document doc = XMLUtils.documentFromString(XML_WITH_VERSION);
-        xp.preProcessXML(doc, Collections.singleton(mockMigration));
+        xp.preProcessXML(doc, Collections.singleton(mockMigration), null);
         String res = XMLUtils.documentToString(doc);
         assertFalse(res.contains("version=\"3\""));
         EasyMock.verify(mockMigration);

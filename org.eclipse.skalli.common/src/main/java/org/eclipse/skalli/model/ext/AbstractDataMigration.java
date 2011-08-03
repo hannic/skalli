@@ -38,8 +38,8 @@ public abstract class AbstractDataMigration implements DataMigration {
     }
 
     @Override
-    public boolean handlesType(String className) {
-        return StringUtils.equals(className, migratingClass.getName());
+    public boolean handlesType(String entityClassName) {
+        return StringUtils.equals(entityClassName, migratingClass.getName());
     }
 
     @Override

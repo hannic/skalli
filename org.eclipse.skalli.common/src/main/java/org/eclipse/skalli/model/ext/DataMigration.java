@@ -35,10 +35,9 @@ public interface DataMigration extends Comparable<DataMigration> {
     public int getFromVersion();
 
     /**
-     * Returns true if this {@link DataMigration} is able to handle an {@link EntityBase} with the given class name.
-     * @param className
-     * @return
+     * Returns <code>true</code> if this {@link DataMigration} is able to handle {@link EntityBase entities} with
+     * the given class name.
      */
-    public boolean handlesType(String className);
+    public boolean handlesType(String entityClassName);
 
 }

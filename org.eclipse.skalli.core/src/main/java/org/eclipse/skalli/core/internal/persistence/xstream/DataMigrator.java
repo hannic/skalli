@@ -14,6 +14,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -27,13 +28,19 @@ public class DataMigrator {
     private static final Logger LOG = Log.getLogger(DataMigrator.class);
 
     private final List<DataMigration> migrations;
+    private final Map<String, Class<?>> aliases;
 
-    public DataMigrator(Set<DataMigration> migrations) {
+    public DataMigrator(Set<DataMigration> migrations, Map<String, Class<?>> aliases) {
         if (migrations != null) {
             this.migrations = new ArrayList<DataMigration>(migrations);
             Collections.sort(this.migrations);
         } else {
             this.migrations = null;
+        }
+        if (aliases != null) {
+            this.aliases = aliases;
+        } else {
+            this.aliases = Collections.emptyMap();
         }
     }
 
@@ -44,15 +51,14 @@ public class DataMigrator {
         if (fromVersion >= toVersion) {
             return;
         }
-
         if (doc == null) {
             return;
         }
-
-        String docType = doc.getDocumentElement().getNodeName();
+        String nodeName = doc.getDocumentElement().getNodeName();
+        String className = aliases.containsKey(nodeName)? aliases.get(nodeName).getName() : nodeName;
         for (int i = fromVersion; i < toVersion; i++) {
             for (DataMigration migration : migrations) {
-                if (migration.getFromVersion() == i && migration.handlesType(docType)) {
+                if (migration.getFromVersion() == i && migration.handlesType(className)) {
                     LOG.info(MessageFormat.format("Migrating {0} with {1}", XMLUtils.getUuid(doc), migration
                             .getClass().getName()));
                     migration.migrate(doc);

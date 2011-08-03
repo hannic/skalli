@@ -11,14 +11,20 @@
 package org.eclipse.skalli.core.internal.persistence.xstream;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.easymock.EasyMock;
 import org.eclipse.skalli.common.util.XMLUtils;
+import org.eclipse.skalli.model.ext.AbstractDataMigration;
 import org.eclipse.skalli.model.ext.DataMigration;
+import org.eclipse.skalli.model.ext.ValidationException;
+import org.eclipse.skalli.testutil.TestEntityBase1;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -27,6 +33,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+@SuppressWarnings("nls")
 public class DataMigratorTest {
 
     private DataMigration mock1;
@@ -36,7 +43,19 @@ public class DataMigratorTest {
     private Set<DataMigration> migrations;
     private Element mockRoot;
 
-    private Document defaultDoc = null;
+    private static class MigrationWithAlias extends AbstractDataMigration {
+        private boolean migrateCalled;
+        public MigrationWithAlias() {
+            super(TestEntityBase1.class, 0);
+        }
+        @Override
+        public void migrate(Document doc) throws ValidationException {
+            migrateCalled = true;
+        }
+        public boolean migrateCalled() {
+            return migrateCalled;
+        }
+    }
 
     @Before
     public void setup() throws SAXException, IOException, ParserConfigurationException {
@@ -83,12 +102,7 @@ public class DataMigratorTest {
                 try {
                     return XMLUtils.documentFromString("<uuid>e4d78581-08da-4f04-8a90-a7dac41f6247</uuid>")
                             .getDocumentElement();
-                } catch (SAXException e) {
-                    //nothing to do
-                } catch (IOException e) {
-                    //nothing to do
-
-                } catch (ParserConfigurationException e) {
+                } catch (Exception e) {
                     //nothing to do
                 }
                 return null;
@@ -108,7 +122,7 @@ public class DataMigratorTest {
 
         EasyMock.replay(mocks);
 
-        DataMigrator migrator = new DataMigrator(migrations);
+        DataMigrator migrator = new DataMigrator(migrations, null);
         migrator.migrate(mockDoc, 0, 3);
 
         EasyMock.verify(mocks);
@@ -120,7 +134,7 @@ public class DataMigratorTest {
 
         EasyMock.replay(mocks);
 
-        DataMigrator migrator = new DataMigrator(migrations);
+        DataMigrator migrator = new DataMigrator(migrations, null);
         migrator.migrate(mockDoc, 0, 2);
 
         EasyMock.verify(mocks);
@@ -132,7 +146,7 @@ public class DataMigratorTest {
 
         EasyMock.replay(mocks);
 
-        DataMigrator migrator = new DataMigrator(migrations);
+        DataMigrator migrator = new DataMigrator(migrations, null);
         migrator.migrate(mockDoc, 2, 3);
 
         EasyMock.verify(mocks);
@@ -142,7 +156,7 @@ public class DataMigratorTest {
     public void testMigrate_nothingToDo() throws Exception {
         EasyMock.replay(mocks);
 
-        DataMigrator migrator = new DataMigrator(migrations);
+        DataMigrator migrator = new DataMigrator(migrations, null);
         migrator.migrate(mockDoc, 2, 2);
 
         EasyMock.verify(mocks);
@@ -150,8 +164,20 @@ public class DataMigratorTest {
 
     @Test
     public void testMigrate_noMigrations() throws Exception {
-        DataMigrator migrator = new DataMigrator(null);
+        DataMigrator migrator = new DataMigrator(null, null);
         migrator.migrate(mockDoc, 2, 2);
     }
 
+    @Test
+    public void testMigrateWithAlias() throws Exception {
+        MigrationWithAlias migration = new MigrationWithAlias();
+        Set<DataMigration> migrations = new HashSet<DataMigration>();
+        migrations.add(migration);
+        Map<String, Class<?>> aliases = new HashMap<String, Class<?>>();
+        aliases.put("alias", TestEntityBase1.class);
+        DataMigrator migrator = new DataMigrator(migrations, aliases);
+        Document doc = XMLUtils.documentFromString("<alias><uuid>e4d78581-08da-4f04-8a90-a7dac41f6247</uuid></alias>");
+        migrator.migrate(doc, 0, 1);
+        Assert.assertTrue(migration.migrateCalled());
+    }
 }

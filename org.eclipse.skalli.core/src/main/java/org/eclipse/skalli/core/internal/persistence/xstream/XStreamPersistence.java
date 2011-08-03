@@ -113,10 +113,10 @@ public class XStreamPersistence implements Issuer {
         setVersionAttribute(newDoc);
     }
 
-    void preProcessXML(Document doc, Set<DataMigration> migrations) throws ValidationException {
+    void preProcessXML(Document doc, Set<DataMigration> migrations, Map<String, Class<?>> aliases) throws ValidationException {
         int version = getVersionAttribute(doc);
         if (migrations != null) {
-            DataMigrator migrator = new DataMigrator(migrations);
+            DataMigrator migrator = new DataMigrator(migrations, aliases);
             migrator.migrate(doc, version, getCurrentVersion());
         }
     }
@@ -300,7 +300,7 @@ public class XStreamPersistence implements Issuer {
         }
 
         try {
-            preProcessXML(doc, migrations);
+            preProcessXML(doc, migrations, aliases);
         } catch (ValidationException e) {
             throw new ValidationException(new Issue(Severity.FATAL, getClass(), uuid, e.getMessage()));
         }
