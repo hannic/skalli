@@ -10,11 +10,15 @@
  *******************************************************************************/
 package org.eclipse.skalli.nexus.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.skalli.nexus.NexusArtifact;
+import org.eclipse.skalli.nexus.NexusClientException;
 import org.eclipse.skalli.nexus.NexusSearchResult;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class NexusSearchResponseImpl implements NexusSearchResult {
 
@@ -24,7 +28,34 @@ public class NexusSearchResponseImpl implements NexusSearchResult {
     private boolean toManyResults;
     private List<NexusArtifact> artifacts;
 
-    public NexusSearchResponseImpl(Element rootElement) {
+    public NexusSearchResponseImpl(Element rootElement) throws NexusClientException {
+
+        if (rootElement == null) {
+            throw new IllegalArgumentException("Parameter rootElement must not be null.");
+        }
+
+        if (!"search-results".equals(rootElement.getNodeName())) {
+            throw new IllegalArgumentException("rootElement.getNodeName() must be 'search-results'");
+        }
+
+        from = NexusResponseParser.getNodeTextContentAsInt(rootElement, "from", 0);
+        totalCount = NexusResponseParser.getNodeTextContentAsInt(rootElement, "totalCount", 0);
+        count = NexusResponseParser.getNodeTextContentAsInt(rootElement, "count", 0);
+
+        toManyResults = NexusResponseParser.getNodeTextContentAsBoolean(rootElement, "toManyResults");
+
+        artifacts = new ArrayList<NexusArtifact>();
+
+        Node data = NexusResponseParser.findNode(rootElement, "data");
+        if (data != null) {
+            NodeList dataChildren = data.getChildNodes();
+            for (int i = 0; i < dataChildren.getLength(); i++) {
+                Node artifactNode = dataChildren.item(i);
+                if ("artifact".equals(artifactNode.getNodeName())) {
+                    artifacts.add(new NexusArtifactImpl((Element) artifactNode));
+                }
+            }
+        }
 
     }
 
