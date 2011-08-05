@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.skalli.nexus;
 
+import java.io.IOException;
+
 import org.eclipse.skalli.nexus.internal.config.NexusConfig;
 
 /**
@@ -26,9 +28,11 @@ public interface NexusClient {
      * @param groupId  the group id of the artifact.
      * @param artifactId  the artifact id of the artifact.
      * @return  the search result retrieved from Nexus.
-     *
+     * @throws NexusClientException if the search request to Nexus failed, e.g. because of a missing Nexus configuration,
+     * or Nexus failed to return a result.
+     * @throws IOException if an i/o error occurred.
      * @see https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/rest.data_index.domain.target.content.html
      */
-    public NexusSearchResult searchArtifactVersions(String groupId, String artifactId);
+    public NexusSearchResult searchArtifactVersions(String groupId, String artifactId) throws NexusClientException, IOException;
 
 }
