@@ -16,6 +16,7 @@ import org.eclipse.skalli.view.component.MultiTextField;
 import org.eclipse.skalli.view.ext.AbstractExtensionFormService;
 import org.eclipse.skalli.view.ext.DefaultProjectFieldFactory;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
@@ -57,12 +58,10 @@ public class DevInfProjectExtEditForm extends AbstractExtensionFormService<DevIn
         protected Field createField(Object propertyId, String caption) {
             Field field = null;
             if (DevInfProjectExt.PROPERTY_SCM_LOCATIONS.equals(propertyId)) {
-                field = new MultiTextField(caption, extension.getScmLocations(),
-                        projectTemplate.getMaxSize(extensionClassName, propertyId));
+                field = new MultiTextField(caption, extension.getScmLocations());
             }
             else if (DevInfProjectExt.PROPERTY_JAVADOCS_URL.equals(propertyId)) {
-                field = new MultiTextField(caption, extension.getJavadocs(),
-                        projectTemplate.getMaxSize(extensionClassName, propertyId));
+                field = new MultiTextField(caption, extension.getJavadocs());
             }
             return field;
         }

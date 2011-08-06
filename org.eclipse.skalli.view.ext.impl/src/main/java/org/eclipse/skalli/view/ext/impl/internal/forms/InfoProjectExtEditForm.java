@@ -53,8 +53,7 @@ public class InfoProjectExtEditForm extends AbstractExtensionFormService<InfoPro
         protected Field createField(Object propertyId, String caption) {
             Field field = null;
             if (InfoProjectExt.PROPERTY_MAILING_LIST.equals(propertyId)) {
-                field = new MultiTextField(caption, extension.getMailingLists(),
-                        projectTemplate.getMaxSize(extensionClassName, propertyId));
+                field = new MultiTextField(caption, extension.getMailingLists());
             }
 
             return field;

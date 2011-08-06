@@ -50,6 +50,7 @@ public class MultiComboBox extends CustomField {
     private String description;
     private boolean readOnly;
     private int columns;
+    private int maxSize;
 
     private static class ComboBoxElement {
         public ComboBoxElement(ComboBox comboBox) {
@@ -72,6 +73,7 @@ public class MultiComboBox extends CustomField {
         }
         setCaption(caption);
         this.values = values;
+        this.maxSize = Integer.MAX_VALUE;
         init(values);
         layout = new VerticalLayout();
         layout.setStyleName(STYLE_LAYOUT);
@@ -80,8 +82,8 @@ public class MultiComboBox extends CustomField {
     }
 
     private void renderComboBoxes() {
-        boolean hasMultipleEntries = comboBoxEntries.size() > 1;
-        int last = comboBoxEntries.size() - 1;
+        int size = comboBoxEntries.size();
+        int last = size - 1;
         for (int i = 0; i <= last; ++i) {
             ComboBoxElement comboBoxEntry = comboBoxEntries.get(i);
             HorizontalLayout horLayout = new HorizontalLayout();
@@ -93,18 +95,16 @@ public class MultiComboBox extends CustomField {
                 comboBox.setReadOnly(readOnly);
             }
             horLayout.addComponent(comboBox);
-
             if (!readOnly) {
-                if (hasMultipleEntries) {
+                if (size > 1) {
                     Button b = createRemoveButton();
                     comboBoxEntry.removeButton = b;
                     horLayout.addComponent(b);
                 }
-                if (i == last) {
+                if (size < maxSize && i == last) {
                     horLayout.addComponent(createAddButton());
                 }
             }
-
             layout.addComponent(horLayout);
         }
     }
@@ -140,6 +140,11 @@ public class MultiComboBox extends CustomField {
         for (ComboBoxElement entry : comboBoxEntries) {
             entry.comboBox.setWidth(columns, Select.UNITS_EM);
         }
+    }
+
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize <=0 ? Integer.MAX_VALUE : maxSize;
+        requestRepaint();
     }
 
     private Button createAddButton() {
@@ -274,5 +279,4 @@ public class MultiComboBox extends CustomField {
     public boolean isReadOnly() {
         return readOnly;
     }
-
 }

@@ -30,9 +30,9 @@ public class MultiTextField extends CustomField {
 
     private static final long serialVersionUID = -1926189316257001272L;
 
-    private static final String STYLE_LAYOUT = "multitext-layout";
-    private static final String STYLE_LINE_LAYOUT = "multitext-line";
-    private static final String STYLE_BUTTON = "multitext-btn";
+    private static final String STYLE_LAYOUT = "multitext-layout"; //$NON-NLS-1$
+    private static final String STYLE_LINE_LAYOUT = "multitext-line"; //$NON-NLS-1$
+    private static final String STYLE_BUTTON = "multitext-btn"; //$NON-NLS-1$
 
     private Collection<String> values;
 
@@ -43,7 +43,7 @@ public class MultiTextField extends CustomField {
     private String inputPrompt;
     private Validator validator;
     private int columns = -1;
-    private int maxRows;
+    private int maxSize;
 
     private static class TextFieldEntry {
         public TextFieldEntry(TextField textField) {
@@ -55,16 +55,12 @@ public class MultiTextField extends CustomField {
     }
 
     public MultiTextField(String caption, Collection<String> values) {
-        this(caption, values, Integer.MAX_VALUE);
-    }
-
-    public MultiTextField(String caption, Collection<String> values, int maxRows) {
         if (values == null) {
             throw new IllegalArgumentException("argument 'value' must not be null");
         }
         setCaption(caption);
         this.values = values;
-        this.maxRows = maxRows < 1 ? 1 : maxRows;
+        this.maxSize = Integer.MAX_VALUE;
         initTextFieldEntries(values);
         layout = new CssLayout();
         layout.setStyleName(STYLE_LAYOUT);
@@ -73,9 +69,8 @@ public class MultiTextField extends CustomField {
     }
 
     private void renderTextFields() {
-        boolean allowAdd = maxRows > 1;
-        boolean hasMultipleEntries = allowAdd && textFieldEntries.size() > 1;
-        int last = Math.min(maxRows, textFieldEntries.size()) - 1;
+        int size = textFieldEntries.size();
+        int last = size - 1;
         for (int i = 0; i <= last; ++i) {
             TextFieldEntry textFieldEntry = textFieldEntries.get(i);
             CssLayout css = new CssLayout();
@@ -83,12 +78,12 @@ public class MultiTextField extends CustomField {
             textFieldEntry.textField.setReadOnly(readOnly);
             css.addComponent(textFieldEntry.textField);
             if (!readOnly) {
-                if (hasMultipleEntries) {
+                if (size > 1) {
                     Button b = createRemoveButton();
                     textFieldEntry.removeButton = b;
                     css.addComponent(b);
                 }
-                if (allowAdd && i == last) {
+                if (size < maxSize && i == last) {
                     css.addComponent(createAddButton());
                 }
             }
@@ -107,7 +102,7 @@ public class MultiTextField extends CustomField {
             }
         }
         if (nonBlankValues.isEmpty()) {
-            TextField tf = createTextField("");
+            TextField tf = createTextField(""); //$NON-NLS-1$
             textFieldEntries.add(new TextFieldEntry(tf));
         } else {
             for (String value : nonBlankValues) {
@@ -200,6 +195,11 @@ public class MultiTextField extends CustomField {
         }
     }
 
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize <= 0 ? Integer.MAX_VALUE : maxSize;
+        requestRepaint();
+    }
+
     @Override
     public void addValidator(Validator validator) {
         this.validator = validator;
@@ -258,7 +258,7 @@ public class MultiTextField extends CustomField {
                 StringBuilder sb = new StringBuilder();
                 for (String error : errors) {
                     if (sb.length() > 0) {
-                        sb.append("<br>");
+                        sb.append("<br>"); //$NON-NLS-1$
                     }
                     sb.append(error);
                 }

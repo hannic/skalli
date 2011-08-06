@@ -81,6 +81,11 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
             setInputPrompt(field, inputPrompt);
         }
 
+        int maxSize = projectTemplate.getMaxSize(extensionClassName, propertyId);
+        if (maxSize > 0) {
+            setMaxSize(field, maxSize);
+        }
+
         if (Select.class.isAssignableFrom(field.getClass())) {
             Select selection = (Select) field;
             Collection<?> defaultValues = projectTemplate.getDefaultValues(extensionClassName, propertyId);
@@ -134,6 +139,16 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
         } catch (Exception e) {
             // not all Vaadin Field implementations have an input prompt, so this is ok
             LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
+        }
+    }
+
+    private void setMaxSize(Field field, int maxSize) {
+        try {
+            Method method = field.getClass().getMethod("setMaxSize", int.class); //$NON-NLS-1$
+            method.invoke(field, maxSize);
+        } catch (Exception e) {
+            // not all Vaadin Field implementations have an max size, so this is ok
+            LOG.fine(MessageFormat.format("Field {0} does not allow to set max size", field.getCaption()));
         }
     }
 

@@ -175,9 +175,9 @@ public interface ProjectTemplate extends Issuer {
     public boolean isReadOnly(String extensionClassName, Object propertyId, boolean isAdmin);
 
     /**
-     * Returns the maximum size of collection-like properties. This method
-     * returns <code>Integer.MAX_VALUE</code> if the template imposes no restriction
-     * on the size of the property.
+     * Returns the maximum size of collection-like properties. Any value
+     * lower or equal <code>0</code> indicates that there is no restriction
+     * on the maximum size.
      *
      * @param extensionClassName  the class name of a model extension.
      * @param propertyId  a property of the given model extension.

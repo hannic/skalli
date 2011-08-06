@@ -39,9 +39,7 @@ public class ExtensionServiceHelloWorldProjectExtEditForm extends AbstractExtens
         protected Field createField(Object propertyId, String caption) {
             Field field = null;
             if (HelloWorldProjectExt.PROPERTY_FRIENDS.equals(propertyId)) {
-                field = (Field) new MultiTextField(caption, extension.getFriends(), projectTemplate.getMaxSize(
-                        extensionClassName,
-                        propertyId));
+                field = (Field) new MultiTextField(caption, extension.getFriends());
             }
             return field;
         }
