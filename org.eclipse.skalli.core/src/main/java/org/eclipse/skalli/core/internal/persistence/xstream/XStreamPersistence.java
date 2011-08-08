@@ -89,6 +89,10 @@ public class XStreamPersistence implements Issuer {
         return CURRENT_VERISON;
     }
 
+    StorageService getStorageService() {
+        return storageService;
+    }
+
     void postProcessXML(Document newDoc, Document oldDoc, Map<String, Class<?>> aliases, String userId)
             throws ValidationException {
         Element newDocElement = newDoc.getDocumentElement();
@@ -178,12 +182,12 @@ public class XStreamPersistence implements Issuer {
         }
     }
 
-    static SortedMap<String, Element> getExtensionsByAlias(Document doc, Map<String, Class<?>> aliases)
+    SortedMap<String, Element> getExtensionsByAlias(Document doc, Map<String, Class<?>> aliases)
             throws ValidationException {
         return getExtensions(doc, aliases, false);
     }
 
-    static private SortedMap<String, Element> getExtensions(Document doc, Map<String, Class<?>> aliases,
+    SortedMap<String, Element> getExtensions(Document doc, Map<String, Class<?>> aliases,
             boolean byClassName)
             throws ValidationException {
         TreeMap<String, Element> result = new TreeMap<String, Element>();
@@ -205,12 +209,16 @@ public class XStreamPersistence implements Issuer {
     }
 
     void setVersionAttribute(Document doc) {
+        setVersionAttribute(doc, getCurrentVersion());
+    }
+
+    void setVersionAttribute(Document doc, int version) {
         Element documentElement = doc.getDocumentElement();
         if (doc.getDocumentElement().hasAttribute(TAG_VERSION)) {
             throw new RuntimeException(MessageFormat.format("<{0}> element already has a ''{1}'' attribute",
                     documentElement.getNodeName(), TAG_VERSION));
         }
-        documentElement.setAttribute(TAG_VERSION, Integer.toString(getCurrentVersion()));
+        documentElement.setAttribute(TAG_VERSION, Integer.toString(version));
     }
 
     SortedMap<String, Element> getExtensionsByClassName(Document doc, Map<String, Class<?>> aliases)
@@ -250,7 +258,7 @@ public class XStreamPersistence implements Issuer {
         try {
             is = XMLUtils.documentToStream(newDoc);
         } catch (TransformerException e) {
-           throw new StorageException("Failed to transform entity " + entity + " to XML", e);
+            throw new StorageException("Failed to transform entity " + entity + " to XML", e);
         }
 
         storageService.write(category, key, is);
@@ -276,7 +284,7 @@ public class XStreamPersistence implements Issuer {
         return newDoc;
     }
 
-    EntityBase domToEntity(Set<ClassLoader> entityClassLoaders, Map<String, Class<?>> aliases, Document doc)
+    private EntityBase domToEntity(Set<ClassLoader> entityClassLoaders, Map<String, Class<?>> aliases, Document doc)
             throws StorageException {
 
         String xml = null;
@@ -322,10 +330,10 @@ public class XStreamPersistence implements Issuer {
         return entityClass.cast(loadedEntityBase);
     }
 
-    Document readEntityAsDom(Class<? extends EntityBase> entityClass, UUID uuid) throws StorageException {
+    private Document readEntityAsDom(Class<? extends EntityBase> entityClass, UUID uuid) throws StorageException {
         InputStream stream = storageService.read(entityClass.getSimpleName(), uuid.toString());
         if (stream == null) {
-            // no entity availaible
+            // no entity available
             return null;
         }
 

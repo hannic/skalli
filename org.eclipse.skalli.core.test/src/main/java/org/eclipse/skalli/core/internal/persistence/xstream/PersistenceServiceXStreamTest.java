@@ -20,6 +20,7 @@ import org.eclipse.skalli.common.util.XMLUtils;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensibleEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
+import org.eclipse.skalli.testutil.HashMapStorageService;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
 import org.eclipse.skalli.testutil.TestEntityBase1;
 import org.eclipse.skalli.testutil.TestExtensibleEntityBase;
@@ -54,10 +55,10 @@ public class PersistenceServiceXStreamTest {
 
     @Test
     public void testPersistAndLoad() throws Exception {
-        File storageDirectory = new File(tempdir, "storage");
+        HashMapStorageService hashMapStorageService = new HashMapStorageService();
 
         // create a new instance for persistence of test entities
-        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock( new FileStorageService(storageDirectory), new ExtensibleEntityExtensionService());
+        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock(hashMapStorageService, new ExtensibleEntityExtensionService());
 
         // create and persist test entities
         List<TestExtensibleEntityBase> expectedEntities = createTestEntityHierarchy();
@@ -69,10 +70,8 @@ public class PersistenceServiceXStreamTest {
         for (TestExtensibleEntityBase entity : expectedEntities) {
             Assert.assertNotNull(entity);
 
-            File f = new File(storageDirectory, "TestExtensibleEntityBase/" + entity.getUuid().toString() + ".xml");
-            Assert.assertTrue(f.exists() && f.isFile());
-
-            Document doc = XMLUtils.documentFromFile(f);
+            byte[] blob = hashMapStorageService.getBlobStore().get(new HashMapStorageService.Key(entity.getClass().getSimpleName(), entity.getUuid().toString()));
+            Document doc = XMLUtils.documentFromString(new String(blob));
             Element root = (Element) doc.getElementsByTagName(TestExtensibleEntityBase.class.getName()).item(0);
             Assert.assertNotNull(root);
             Assert.assertNull(doc.getElementsByTagName(TestExtensibleEntityBase.class.getName()).item(1));
@@ -84,7 +83,7 @@ public class PersistenceServiceXStreamTest {
         }
 
         // create a new instance for loading of persisted entities
-        p = new PersistenceServiceXStreamMock(new FileStorageService(storageDirectory),new ExtensibleEntityExtensionService());
+        p = new PersistenceServiceXStreamMock(hashMapStorageService,new ExtensibleEntityExtensionService());
 
 
         List<TestExtensibleEntityBase> actualEntities = p.getEntities(TestExtensibleEntityBase.class);
@@ -111,11 +110,10 @@ public class PersistenceServiceXStreamTest {
 
     @Test(expected = RuntimeException.class)
     public void testPersist_withUnknownParent() throws Exception {
-        File storageDirectory = new File(tempdir, "storage");
+
 
         // create a new instance for persistence of test entities
-        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock(new FileStorageService(storageDirectory), new ExtensibleEntityExtensionService());
-
+        PersistenceServiceXStreamMock p = new PersistenceServiceXStreamMock(new HashMapStorageService(), new ExtensibleEntityExtensionService());
 
         // create and persist test entities
         List<TestExtensibleEntityBase> expectedEntities = createTestEntityHierarchy();

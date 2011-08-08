@@ -12,6 +12,7 @@ package org.eclipse.skalli.core.internal.persistence.xstream;
 
 import java.util.Set;
 
+import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.ExtensionService;
 
@@ -20,7 +21,7 @@ public class PersistenceServiceXStreamMock extends PersistenceServiceXStream {
     /** Array of extension services */
     private ExtensionService<?>[] extensionServices;
 
-    public PersistenceServiceXStreamMock( FileStorageService storageService, ExtensionService<?>... extensionServices) {
+    public PersistenceServiceXStreamMock( StorageService storageService, ExtensionService<?>... extensionServices) {
         super(new XStreamPersistence(storageService));
         this.extensionServices = extensionServices;
     }
