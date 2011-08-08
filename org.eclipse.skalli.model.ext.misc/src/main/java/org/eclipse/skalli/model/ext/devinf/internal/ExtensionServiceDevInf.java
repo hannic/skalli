@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.HostReachableValidator;
 import org.eclipse.skalli.common.util.URLValidator;
@@ -28,6 +26,7 @@ import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
+import org.osgi.service.component.ComponentContext;
 
 public class ExtensionServiceDevInf
         extends ExtensionServiceBase<DevInfProjectExt>
@@ -56,7 +55,8 @@ public class ExtensionServiceDevInf
                     new String[][] {
                             { DevInfProjectExt.PROPERTY_SCM_URL,
                                     "Browsable link to the project's source code repository" },
-                            { DevInfProjectExt.PROPERTY_SCM_LOCATIONS, "Source code repositories used by this project" },
+                            { DevInfProjectExt.PROPERTY_SCM_LOCATIONS,
+                                    "Source code repositories used by this project" },
                             { DevInfProjectExt.PROPERTY_BUGTRACKER_URL,
                                     "Browsable link to the project's issue management system" },
                             { DevInfProjectExt.PROPERTY_CI_URL,
@@ -65,7 +65,17 @@ public class ExtensionServiceDevInf
                                     "Browsable link to the project's quality metrics system" },
                             { DevInfProjectExt.PROPERTY_REVIEW_URL,
                                     "Browsable link to the project's code review system" },
-                            { DevInfProjectExt.PROPERTY_JAVADOCS_URL, "Browsable link to the Javadoc of this project" } });
+                            { DevInfProjectExt.PROPERTY_JAVADOCS_URL,
+                                    "Browsable link to the Javadoc of this project" } });
+
+    private static final Map<String, String> INPUT_PROMPTS = CollectionUtils.asMap(new String[][] {
+            { DevInfProjectExt.PROPERTY_SCM_LOCATIONS, "scm:<scm-type>:<scm-location>" },
+            { DevInfProjectExt.PROPERTY_SCM_URL, URL_INPUT_PROMPT },
+            { DevInfProjectExt.PROPERTY_BUGTRACKER_URL, URL_INPUT_PROMPT },
+            { DevInfProjectExt.PROPERTY_CI_URL, URL_INPUT_PROMPT },
+            { DevInfProjectExt.PROPERTY_METRICS_URL, URL_INPUT_PROMPT },
+            { DevInfProjectExt.PROPERTY_REVIEW_URL, URL_INPUT_PROMPT },
+            { DevInfProjectExt.PROPERTY_JAVADOCS_URL, URL_INPUT_PROMPT } });
 
     @Override
     public Class<DevInfProjectExt> getExtensionClass() {
@@ -128,6 +138,11 @@ public class ExtensionServiceDevInf
     @Override
     public String getDescription(String propertyName) {
         return DESCRIPTIONS.get(propertyName);
+    }
+
+    @Override
+    public String getInputPrompt(String propertyName) {
+        return INPUT_PROMPTS.get(propertyName);
     }
 
     @Override

@@ -21,7 +21,6 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.FormFieldFactory;
-import com.vaadin.ui.TextField;
 
 public class DevInfProjectExtEditForm extends AbstractExtensionFormService<DevInfProjectExt> {
 
@@ -64,18 +63,6 @@ public class DevInfProjectExtEditForm extends AbstractExtensionFormService<DevIn
                 field = new MultiTextField(caption, extension.getJavadocs());
             }
             return field;
-        }
-
-        @Override
-        protected void initializeField(Object propertyId, Field field) {
-            if (DevInfProjectExt.PROPERTY_SCM_LOCATIONS.equals(propertyId)) {
-                MultiTextField mtf = (MultiTextField) field;
-                mtf.setInputPrompt("scm:<scm-type>:<scm-location>");
-            }
-            else if (DevInfProjectExt.PROPERTY_SCM_URL.equals(propertyId)) {
-                TextField tf = (TextField) field;
-                tf.setInputPrompt("http://<scm-host>:<scm-port>/<path>");
-            }
         }
     }
 

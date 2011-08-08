@@ -176,16 +176,19 @@ public class MultiTextField extends CustomField {
         return b;
     }
 
+    public void setInputPrompt(String inputPrompt) {
+        this.inputPrompt = inputPrompt;
+        for (TextFieldEntry textFieldEntry : textFieldEntries) {
+            textFieldEntry.textField.setInputPrompt(inputPrompt);
+        }
+    }
+
     @Override
     public void setDescription(String description) {
         this.description = description;
         for (TextFieldEntry textFieldEntry : textFieldEntries) {
             textFieldEntry.textField.setDescription(description);
         }
-    }
-
-    public void setInputPrompt(String inputPrompt) {
-        this.inputPrompt = inputPrompt;
     }
 
     public void setColumns(int columns) {

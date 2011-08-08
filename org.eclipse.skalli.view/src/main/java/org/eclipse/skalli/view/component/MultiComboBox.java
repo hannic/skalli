@@ -48,6 +48,7 @@ public class MultiComboBox extends CustomField {
     private VerticalLayout layout;
     private List<ComboBoxElement> comboBoxEntries;
     private String description;
+    private String inputPrompt;
     private boolean readOnly;
     private int columns;
     private int maxSize;
@@ -127,6 +128,9 @@ public class MultiComboBox extends CustomField {
         if (description != null) {
             comboBox.setDescription(description);
         }
+        if (inputPrompt != null) {
+            comboBox.setInputPrompt(inputPrompt);
+        }
         if (uuid != null) {
             ProjectService projectService = Services.getRequiredService(ProjectService.class);
             Project project = projectService.getByUUID(uuid);
@@ -189,6 +193,13 @@ public class MultiComboBox extends CustomField {
             }
         });
         return b;
+    }
+
+    public void setInputPrompt(String inputPrompt) {
+        this.inputPrompt = inputPrompt;
+        for (ComboBoxElement element : comboBoxEntries) {
+            element.comboBox.setInputPrompt(inputPrompt);
+        }
     }
 
     @Override

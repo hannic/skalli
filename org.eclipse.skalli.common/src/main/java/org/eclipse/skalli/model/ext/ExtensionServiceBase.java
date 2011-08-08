@@ -51,6 +51,11 @@ public abstract class ExtensionServiceBase<T extends ExtensionEntityBase> implem
             { EntityBase.PROPERTY_PARENT_ENTITY_ID,
                     "Unique identifier of an entity to which this entity is assigned as subentity" } });
 
+    /**
+     * Input prompt for URL-like form fields, i.e. <tt>{@value}</tt>.
+     */
+    protected static final String URL_INPUT_PROMPT = "http://<host>:<port>/<path>";
+
     @Override
     public Set<DataMigration> getMigrations() {
         return Collections.emptySet();
@@ -89,6 +94,11 @@ public abstract class ExtensionServiceBase<T extends ExtensionEntityBase> implem
             }
         }
         return caption;
+    }
+
+    @Override
+    public String getInputPrompt(String propertyName) {
+        return null;
     }
 
     @Override

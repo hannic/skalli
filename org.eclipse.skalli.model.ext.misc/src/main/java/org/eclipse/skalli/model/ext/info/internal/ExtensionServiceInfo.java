@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.EmailValidator;
 import org.eclipse.skalli.common.util.HostReachableValidator;
@@ -30,6 +28,7 @@ import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.info.InfoProjectExt;
+import org.osgi.service.component.ComponentContext;
 
 public class ExtensionServiceInfo
         extends ExtensionServiceBase<InfoProjectExt>
@@ -50,6 +49,9 @@ public class ExtensionServiceInfo
             new String[][] {
                     { InfoProjectExt.PROPERTY_MAILING_LIST, "Mailing lists provided by this project" },
                     { InfoProjectExt.PROPERTY_PAGE_URL, "Browsable link to the project's homepage" } });
+
+    private static final Map<String, String> INPUT_PROMPTS = CollectionUtils.asMap(new String[][] {
+            { InfoProjectExt.PROPERTY_PAGE_URL, URL_INPUT_PROMPT } });
 
     @Override
     public Class<InfoProjectExt> getExtensionClass() {
@@ -112,6 +114,11 @@ public class ExtensionServiceInfo
     @Override
     public String getDescription(String propertyName) {
         return DESCRIPTIONS.get(propertyName);
+    }
+
+    @Override
+    public String getInputPrompt(String propertyName) {
+        return INPUT_PROMPTS.get(propertyName);
     }
 
     @Override

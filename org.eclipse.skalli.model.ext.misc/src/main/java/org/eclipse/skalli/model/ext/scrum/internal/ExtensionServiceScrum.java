@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.HostReachableValidator;
 import org.eclipse.skalli.common.util.URLValidator;
@@ -28,6 +26,7 @@ import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.scrum.ScrumProjectExt;
+import org.osgi.service.component.ComponentContext;
 
 public class ExtensionServiceScrum
         extends ExtensionServiceBase<ScrumProjectExt>
@@ -51,6 +50,9 @@ public class ExtensionServiceScrum
                     { ScrumProjectExt.PROPERTY_SCRUM_MASTERS, "The SCRUM masters of this project" },
                     { ScrumProjectExt.PROPERTY_PRODUCT_OWNERS, "The product owners assigned to this project" },
                     { ScrumProjectExt.PROPERTY_BACKLOG_URL, "Browsable link to the project's backlog" } });
+
+    private static final Map<String, String> INPUT_PROMPTS = CollectionUtils.asMap(new String[][] {
+            { ScrumProjectExt.PROPERTY_BACKLOG_URL, URL_INPUT_PROMPT } });
 
     @Override
     public Class<ScrumProjectExt> getExtensionClass() {
@@ -113,6 +115,11 @@ public class ExtensionServiceScrum
     @Override
     public String getDescription(String propertyName) {
         return DESCRIPTIONS.get(propertyName);
+    }
+
+    @Override
+    public String getInputPrompt(String propertyName) {
+        return INPUT_PROMPTS.get(propertyName);
     }
 
     @Override

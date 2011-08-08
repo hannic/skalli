@@ -76,7 +76,7 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
             field.setDescription(description);
         }
 
-        String inputPrompt = projectTemplate.getInputPrompt(extensionClassName, propertyId);
+        String inputPrompt = getInputPrompt(propertyName);
         if (StringUtils.isNotBlank(inputPrompt)) {
             setInputPrompt(field, inputPrompt);
         }
@@ -168,14 +168,19 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
         return description;
     }
 
-    protected Field createField(Object propertyId, String caption)
-    {
+    protected String getInputPrompt(String propertyName) {
+        String inputPrompt = projectTemplate.getInputPrompt(extensionClassName, propertyName);
+        if (StringUtils.isBlank(inputPrompt)) {
+            inputPrompt = extensionService.getInputPrompt(propertyName);
+        }
+        return inputPrompt;
+    }
+
+    protected Field createField(Object propertyId, String caption) {
         return null;
     }
 
-    protected void initializeField(Object propertyId, Field field)
-    {
-        //nothing to do
+    protected void initializeField(Object propertyId, Field field) {
         return;
     }
 }

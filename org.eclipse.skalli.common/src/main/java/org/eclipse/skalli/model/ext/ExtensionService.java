@@ -115,6 +115,15 @@ public interface ExtensionService<T extends ExtensionEntityBase> {
     public String getDescription(String propertyName);
 
     /**
+     * Returns the input prompt to be displayed in form fields
+     * as help for the user what to enter in a field.
+     *
+     * @return  the input prompt, or <code>null</code> if there is
+     * no input prompt defined for the given property.
+     */
+    public String getInputPrompt(String propertyName);
+
+    /**
      * Returns a list of confirmation warnings to display to the user when an extensible entity, e.g. a project,
      * it to be modified. Note that <code>entity</code> and/or <code>modifiedEntity</code> might not have
      * extensions of type {@link ExtensionService#getExtensionClass()} at all. In that case, the method should
