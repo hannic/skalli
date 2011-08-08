@@ -18,12 +18,10 @@ public abstract class ProjectTemplateBase implements ProjectTemplate {
     //TODO get rid of this hard-coded list; make ProjectTemplates persisted entities?
     protected static final String PROJECT_CLASSNAME = "org.eclipse.skalli.model.core.Project"; //$NON-NLS-1$
     protected static final String PEOPLE_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.people.PeopleProjectExt"; //$NON-NLS-1$
-    protected static final String NGP_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.sap.NGPProjectExt"; //$NON-NLS-1$
     protected static final String INFO_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.info.InfoProjectExt"; //$NON-NLS-1$
     protected static final String LINKS_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.linkgroups.LinkGroupsProjectExt"; //$NON-NLS-1$
     protected static final String DEVINF_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.devinf.DevInfProjectExt"; //$NON-NLS-1$
     protected static final String MAVEN_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.maven.MavenProjectExt"; //$NON-NLS-1$
-    protected static final String SAP_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.sap.SAPProjectExt"; //$NON-NLS-1$
     protected static final String SCRUM_EXTENSION_CLASSNAME = "org.eclipse.skalli.model.ext.scrum.ScrumProjectExt"; //$NON-NLS-1$
 
     @Override
