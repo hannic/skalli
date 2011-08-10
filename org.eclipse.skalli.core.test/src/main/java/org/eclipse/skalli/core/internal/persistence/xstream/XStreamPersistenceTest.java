@@ -177,8 +177,8 @@ public class XStreamPersistenceTest {
         assertNotNull(lastModified);
         assertIsXsdDateTime(lastModified);
         Calendar lastModifiedDate = DatatypeConverter.parseDateTime(lastModified);
-        assertTrue(beforeSaveDate.before(lastModifiedDate));
-        assertTrue(lastModifiedDate.before(afterSaveDate));
+        assertTrue(beforeSaveDate.compareTo(lastModifiedDate) <= 0);
+        assertTrue(lastModifiedDate.compareTo(afterSaveDate) <= 0);
 
         //test that lastModifieddate is set for extensions as well
         SortedMap<String, Element> extensions = xp.getExtensionsByAlias(savedHashMapDoc, aliases);

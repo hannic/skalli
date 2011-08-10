@@ -8,6 +8,6 @@ Fragment-Host: org.eclipse.skalli.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.io,
  org.easymock,
-  org.eclipse.skalli.testutil,
+ org.eclipse.skalli.testutil,
  org.junit,
  org.w3c.dom
