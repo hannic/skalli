@@ -266,32 +266,33 @@ public abstract class AbstractPropertyValidator implements PropertyValidator, Is
     @Override
     public SortedSet<Issue> validate(UUID entity, Object value, Severity minSeverity) {
         TreeSet<Issue> issues = new TreeSet<Issue>();
-
-        if (isUndefinedOrBlank(value)) {
-            if (valueRequired) {
-                String message = getUndefinedMessage();
-                if (StringUtils.isBlank(message)) {
-                    message = getDefaultUndefinedMessage();
+        if (severity.compareTo(minSeverity) <= 0) {
+            if (isUndefinedOrBlank(value)) {
+                if (valueRequired) {
+                    String message = getUndefinedMessage();
+                    if (StringUtils.isBlank(message)) {
+                        message = getDefaultUndefinedMessage();
+                    }
+                    issues.add(new Issue(severity, getClass(), entity, extension, propertyName, 0, message));
                 }
-                issues.add(new Issue(minSeverity, getClass(), entity, extension, propertyName, 0, message));
             }
-        }
-        else if (value instanceof Collection) {
-            int item = 0;
-            for (Object entry : (Collection<?>) value) {
-                validate(entity, entry, minSeverity, item, issues);
-                ++item;
+            else if (value instanceof Collection) {
+                int item = 0;
+                for (Object entry : (Collection<?>) value) {
+                    validate(entity, entry, minSeverity, item, issues);
+                    ++item;
+                }
             }
-        }
-        else {
-            validate(entity, value, minSeverity, 0, issues);
+            else {
+                validate(entity, value, minSeverity, 0, issues);
+            }
         }
         return issues;
     }
 
     private void validate(UUID entity, Object value, Severity minSeverity, int item, TreeSet<Issue> issues) {
         String message = null;
-        if (severity.compareTo(minSeverity) <= 0 && !isValid(entity, value)) {
+        if (!isValid(entity, value)) {
             message = getInvalidMessage(value);
             if (StringUtils.isBlank(message)) {
                 message = getDefaultInvalidMessage(value);
