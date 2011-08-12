@@ -15,8 +15,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.EventListener;
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
@@ -26,6 +24,8 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.maven.internal.config.MavenResolverConfig;
 import org.eclipse.skalli.model.ext.maven.internal.config.MavenResolverResource;
+import org.eclipse.skalli.nexus.NexusClient;
+import org.osgi.service.component.ComponentContext;
 
 public class MavenResolverServiceImpl implements MavenResolverService, EventListener<EventCustomizingUpdate> {
 
@@ -33,6 +33,7 @@ public class MavenResolverServiceImpl implements MavenResolverService, EventList
 
     private SchedulerService schedulerService;
     private ConfigurationService configService;
+    private NexusClient nexusClient;
 
     private UUID scheduleId;
 
@@ -80,6 +81,16 @@ public class MavenResolverServiceImpl implements MavenResolverService, EventList
         LOG.info(MessageFormat.format("unbindEventService({0})", eventService)); //$NON-NLS-1$
     }
 
+    protected void bindNexusClient(NexusClient nexusClient) {
+        LOG.info(MessageFormat.format("bindNexusClient({0})", nexusClient)); //$NON-NLS-1$
+        this.nexusClient = nexusClient;
+    }
+
+    protected void unbindNexusClient(NexusClient nexusClient) {
+        LOG.info(MessageFormat.format("unbindNexusClient({0})", nexusClient)); //$NON-NLS-1$
+        this.nexusClient = null;
+    }
+
     synchronized void startAllTasks() {
         if (schedulerService != null) {
             if (scheduleId != null) {
@@ -89,6 +100,7 @@ public class MavenResolverServiceImpl implements MavenResolverService, EventList
                 final MavenResolverConfig resolverConfig = configService.readCustomization(
                         MavenResolverResource.MAPPINGS_KEY, MavenResolverConfig.class);
                 if (resolverConfig != null) {
+
                     RunnableSchedule runnableSchedule = new RunnableSchedule(resolverConfig.getSchedule()) {
                         @Override
                         public Runnable getRunnable() {
@@ -96,7 +108,7 @@ public class MavenResolverServiceImpl implements MavenResolverService, EventList
                             if (StringUtils.isBlank(userId)) {
                                 userId = MavenResolverService.class.getName();
                             }
-                            return new MavenResolverRunnable(configService, userId);
+                            return new MavenResolverRunnable(configService, nexusClient, userId);
                         }
                     };
                     scheduleId = schedulerService.registerSchedule(runnableSchedule);

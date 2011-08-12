@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
@@ -34,17 +33,25 @@ import org.eclipse.skalli.model.ext.maven.MavenPathResolver;
 import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
 import org.eclipse.skalli.model.ext.maven.MavenReactor;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
+import org.eclipse.skalli.nexus.NexusClient;
 
 public class MavenResolverRunnable implements Runnable {
 
     private static final Logger LOG = Log.getLogger(MavenResolverRunnable.class);
 
     private ConfigurationService configService;
+    private NexusClient nexusClient;
     private String userId;
 
-    public MavenResolverRunnable(ConfigurationService configService, String userId) {
+    /**
+     * @param configService
+     * @param nexusClient - if set versions are calculated via nexusClinet. If nexusClient is null the versions cant be calculated.
+     * @param userId
+     */
+    public MavenResolverRunnable(ConfigurationService configService, NexusClient nexusClient, String userId) {
         this.configService = configService;
         this.userId = userId;
+        this.nexusClient = nexusClient;
     }
 
     @Override
@@ -71,6 +78,7 @@ public class MavenResolverRunnable implements Runnable {
                         project.getProjectId()), t);
                 continue;
             }
+            addNexusVersions(newReactor);
             MavenReactor oldReactor = getMavenReactorProperty(project);
             if (!ComparatorUtils.equals(newReactor, oldReactor)) {
                 if (updateMavenReactorExtension(project, newReactor)) {
@@ -90,6 +98,15 @@ public class MavenResolverRunnable implements Runnable {
         LOG.info(MessageFormat.format(
                 "MavenResolver: finished ({0} projects scanned: {1} updated, {2} invalid)",
                 projects.size(), countUpdated, countInvalid));
+    }
+
+    /**
+     * @param newReactor
+     */
+    private void addNexusVersions(MavenReactor mavenReactor) {
+        if (nexusClient != null && mavenReactor!= null) {
+            new NexusVersionsResolver(nexusClient).addNexusVersions(mavenReactor);
+        }
     }
 
     /**

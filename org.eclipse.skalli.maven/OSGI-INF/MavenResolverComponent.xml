@@ -35,5 +35,12 @@
       name="SchedulerService"
       cardinality="0..1"
       policy="dynamic"/>
+   <reference
+      bind="bindNexusClient"
+      unbind="unbindNexusClient"
+      interface="org.eclipse.skalli.nexus.NexusClient"
+      name="NexusClient"
+      cardinality="0..1"
+      policy="dynamic"/>
 </scr:component>
 

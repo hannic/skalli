@@ -18,9 +18,6 @@ import java.util.Collections;
 import java.util.UUID;
 
 import org.easymock.Capture;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.model.core.Project;
@@ -31,6 +28,8 @@ import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
 import org.eclipse.skalli.model.ext.maven.MavenReactor;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class MavenResolverRunnableTest {
@@ -52,7 +51,7 @@ public class MavenResolverRunnableTest {
         private MavenResolverMock resolverMock;
 
         public MavenResolverRunnableMock(MavenResolverMock resolverMock) {
-            super(null, USERID);
+            super(null, null, USERID);
             this.resolverMock = resolverMock;
         }
 
