@@ -420,6 +420,7 @@
 	     <url-pattern>/js/*</url-pattern>
 	     <url-pattern>/error</url-pattern>
 	     <url-pattern>/VAADIN/*</url-pattern>
+         <url-pattern>/favicon.ico</url-pattern>
 	     <url-pattern>/</url-pattern>
 	     <url-pattern>/tags</url-pattern>
          <url-pattern>/hierarchy</url-pattern>
