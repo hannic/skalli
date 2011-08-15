@@ -10,7 +10,8 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.maven;
 
-import java.util.SortedSet;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,11 +62,22 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
         this.packaging = packaging;
     }
 
-    public synchronized SortedSet<String> getVersions() {
+    public synchronized Set<String> getVersions() {
         if (versions == null) {
             versions = new TreeSet<String>();
         }
         return versions;
+    }
+
+    /**
+     * Returns the last (highest) version currently in {@link #getVersions()}.
+     * @throws NoSuchElementException if this set is empty
+     */
+    public String getLatestVersion() throws NoSuchElementException
+    {
+        TreeSet<String> sortedVersions = new TreeSet<String>(new MavenVersionsComparator());
+        sortedVersions.addAll(versions);
+        return sortedVersions.last();
     }
 
     public void addVersion(String version) {
@@ -87,7 +99,7 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
         result = prime * result + ((artefactId == null) ? 0 : artefactId.hashCode());
         result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
         result = prime * result + ((packaging == null) ? 0 : packaging.hashCode());
-        for (String version: getVersions()) {
+        for (String version : getVersions()) {
             result = prime * result + ((version == null) ? 0 : version.hashCode());
         }
         return result;
