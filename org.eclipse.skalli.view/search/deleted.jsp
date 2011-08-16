@@ -37,25 +37,26 @@
 <!-- deleted projects -->
 
 <%
-  LoginUtil util = new LoginUtil(request);
-  User user = util.getLoggedInUser();
-  if (UserUtil.isAdministrator(user)) {
-    ProjectService projectService = Services.getRequiredService(ProjectService.class);
-    List<Project> deletedProjects = projectService.getDeletedProjects(new Comparator<Project>() {
-        public int compare(Project p1, Project p2) {
-            return p1.getProjectId().compareTo(p2.getProjectId());
-        }
-    });
+    LoginUtil util = new LoginUtil(request);
+    User user = util.getLoggedInUser();
+    if (UserUtil.isAdministrator(user)) {
+        ProjectService projectService = Services.getRequiredService(ProjectService.class);
+        List<Project> deletedProjects = projectService.getDeletedProjects(new Comparator<Project>() {
+            public int compare(Project p1, Project p2) {
+                return p1.getProjectId().compareTo(p2.getProjectId());
+                }
+            });
 %>
-<h2>Deleted Projects</h2>
-<div>
-    <ul class="deletedlist">
-    <% for (Project deletedProject: deletedProjects) { %>
-        <li><a href="<%=Consts.URL_PROJECTS%>/<%=deletedProject.getUuid()%>"><%=deletedProject.getProjectId()%> (<%=deletedProject.getName()%>)</a></li>
-    <% } %>
-    </ul>
-</div>
-<% } %>
-
+        <div class="projectarearight">
+            <h3>Deleted Projects</h3>
+            <div>
+                <ul class="deletedlist">
+                <% for (Project deletedProject: deletedProjects) { %>
+                    <li><a href="<%=Consts.URL_PROJECTS%>/<%=deletedProject.getUuid()%>"><%=deletedProject.getProjectId()%> (<%=deletedProject.getName()%>)</a></li>
+                <% } %>
+                </ul>
+            </div>
+        </div>
+<%  } %>
 </body>
 </html>
