@@ -83,7 +83,7 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
                 Set<String> linkList = new HashSet<String>();
                 linkList.add(devInf.getBugtrackerUrl());
                 addCreateBugLinks(linkList, project, devInf);
-                iconizedLinks(sb, ICON_BUGTRACKER, "Bug Tracker", "(Create Bug)", linkList);
+                iconizedLinks(sb, ICON_BUGTRACKER, "Bug Tracker", "(Create Issue)", linkList);
                 rendered = true;
             }
             // Code Metrics
