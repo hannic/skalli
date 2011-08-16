@@ -31,6 +31,8 @@ import org.eclipse.skalli.view.internal.config.NewsConfig;
 import org.eclipse.skalli.view.internal.config.NewsResource;
 import org.eclipse.skalli.view.internal.config.TopLinksConfig;
 import org.eclipse.skalli.view.internal.config.TopLinksResource;
+import org.eclipse.skalli.view.internal.config.UserDetailsConfig;
+import org.eclipse.skalli.view.internal.config.UserDetailsResource;
 
 public class ConfigFilter implements Filter {
 
@@ -66,6 +68,10 @@ public class ConfigFilter implements Filter {
                 if (StringUtils.isNotBlank(brandingConfig.getPageTitle())) {
                     request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, brandingConfig.getPageTitle());
                 }
+            }
+            UserDetailsConfig userDetailsConfig = confService.readCustomization(UserDetailsResource.KEY, UserDetailsConfig.class);
+            if (userDetailsConfig != null) {
+                request.setAttribute(Consts.ATTRIBUTE_USERDETAILSCONFIG, userDetailsConfig);
             }
         }
 

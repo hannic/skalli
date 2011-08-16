@@ -49,6 +49,7 @@ public class Consts {
     public static final String ATTRIBUTE_TOPLINKSCONFIG = "toplinksConfig";
     public static final String ATTRIBUTE_NEWSCONFIG = "newsConfig";
     public static final String ATTRIBUTE_BRANDINGCONFIG = "brandingConfig";
+    public static final String ATTRIBUTE_USERDETAILSCONFIG = "userDetailsConfig";
     public static final String ATTRIBUTE_PAGETITLE = "pagetitle";
     public static final String ATTRIBUTE_EXCEPTION = "exception";
     public static final String ATTRIBUTE_QUERY = "query";
