@@ -42,10 +42,12 @@ public class ConfigFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
 
+        request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, Consts.DEFAULT_PAGETITLE);
+
         ConfigurationService confService = Services.getService(ConfigurationService.class);
         if (confService != null) {
-            FeedbackConfig feedbackConfig = confService
-                    .readCustomization(FeedbackResource.FEEDBACK_KEY, FeedbackConfig.class);
+            FeedbackConfig feedbackConfig = confService.readCustomization(FeedbackResource.FEEDBACK_KEY,
+                    FeedbackConfig.class);
             if (feedbackConfig != null) {
                 request.setAttribute(Consts.ATTRIBUTE_FEEDBACKCONFIG, feedbackConfig);
             }
@@ -58,19 +60,13 @@ public class ConfigFilter implements Filter {
             if (newsConfig != null) {
                 request.setAttribute(Consts.ATTRIBUTE_NEWSCONFIG, newsConfig);
             }
-        }
-        BrandingConfig brandingConfig = confService.readCustomization(BrandingResource.KEY, BrandingConfig.class);
-        if (brandingConfig != null) {
-            request.setAttribute(Consts.ATTRIBUTE_BRANDINGCONFIG, brandingConfig);
-        }
-
-        // Put the common part of the page title directly into request, use default page title
-        // if branding is not configured. JSPs can directly use this attribute instead of
-        // implementing a default page title mechanism per JSP.
-        if (brandingConfig != null && StringUtils.isNotBlank(brandingConfig.getPageTitle())) {
-            request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, brandingConfig.getPageTitle());
-        } else {
-            request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, Consts.DEFAULT_PAGETITLE);
+            BrandingConfig brandingConfig = confService.readCustomization(BrandingResource.KEY, BrandingConfig.class);
+            if (brandingConfig != null) {
+                request.setAttribute(Consts.ATTRIBUTE_BRANDINGCONFIG, brandingConfig);
+                if (StringUtils.isNotBlank(brandingConfig.getPageTitle())) {
+                    request.setAttribute(Consts.ATTRIBUTE_PAGETITLE, brandingConfig.getPageTitle());
+                }
+            }
         }
 
         // proceed along the chain
