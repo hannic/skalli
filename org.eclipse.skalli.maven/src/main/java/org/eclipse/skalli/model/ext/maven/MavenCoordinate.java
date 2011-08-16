@@ -10,8 +10,10 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.maven;
 
+import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
@@ -70,14 +72,24 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
     }
 
     /**
-     * Returns the last (highest) version currently in {@link #getVersions()}.
-     * @throws NoSuchElementException if this set is empty
+     * @return String - the last (highest) version currently in {@link #getVersions()}.
      */
-    public String getLatestVersion() throws NoSuchElementException
-    {
+    public String getLatestVersion() {
+        try {
+            return getSortedVersions().last();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+
+    }
+
+    /**
+     * @return an unmodifiable set of available artifact versions sorted according to {@link MavenVersionsComparator}.
+     */
+    public SortedSet<String> getSortedVersions() {
         TreeSet<String> sortedVersions = new TreeSet<String>(new MavenVersionsComparator());
         sortedVersions.addAll(versions);
-        return sortedVersions.last();
+        return Collections.unmodifiableSortedSet(sortedVersions);
     }
 
     public void addVersion(String version) {

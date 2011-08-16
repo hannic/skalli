@@ -32,6 +32,8 @@ class MavenReactorConverter extends AbstractConverter<MavenReactorProjectExt> {
     private static final String TAG_PACKAGING = "packaging"; //$NON-NLS-1$
     private static final String TAG_ARTIFACTID = "artifactId"; //$NON-NLS-1$
     private static final String TAG_GROUPID = "groupId"; //$NON-NLS-1$
+    private static final String TAG_VERSIONS = "versions"; //$NON-NLS-1$
+    private static final String TAG_VERSION = "version"; //$NON-NLS-1$
     private static final String TAG_COORDINATE = "coordinate"; //$NON-NLS-1$
 
     public MavenReactorConverter(String host) {
@@ -46,9 +48,7 @@ class MavenReactorConverter extends AbstractConverter<MavenReactorProjectExt> {
             MavenCoordinate reactorCoordinate = reactor.getCoordinate();
             if (reactorCoordinate != null) {
                 writer.startNode(TAG_COORDINATE); // <mavenReactor>
-                writeNode(writer, TAG_GROUPID, reactorCoordinate.getGroupId());
-                writeNode(writer, TAG_ARTIFACTID, reactorCoordinate.getArtefactId());
-                writeNode(writer, TAG_PACKAGING, reactorCoordinate.getPackaging());
+                writeContent(writer, reactorCoordinate);
                 writer.endNode(); // </coordinate>
             }
 
@@ -57,14 +57,19 @@ class MavenReactorConverter extends AbstractConverter<MavenReactorProjectExt> {
                 writer.startNode(TAG_MODULES); // <modules>
                 for (MavenCoordinate moduleCoordinate : modules) {
                     writer.startNode(TAG_MODULE); // <module>
-                    writeNode(writer, TAG_GROUPID, moduleCoordinate.getGroupId());
-                    writeNode(writer, TAG_ARTIFACTID, moduleCoordinate.getArtefactId());
-                    writeNode(writer, TAG_PACKAGING, moduleCoordinate.getPackaging());
+                    writeContent(writer, moduleCoordinate);
                     writer.endNode(); // </module>
                 }
                 writer.endNode(); // </modules>
             }
         }
+    }
+
+    private void writeContent(HierarchicalStreamWriter writer, MavenCoordinate reactorCoordinate) {
+        writeNode(writer, TAG_GROUPID, reactorCoordinate.getGroupId());
+        writeNode(writer, TAG_ARTIFACTID, reactorCoordinate.getArtefactId());
+        writeNode(writer, TAG_VERSIONS, TAG_VERSION, reactorCoordinate.getSortedVersions());
+        writeNode(writer, TAG_PACKAGING, reactorCoordinate.getPackaging());
     }
 
     @Override

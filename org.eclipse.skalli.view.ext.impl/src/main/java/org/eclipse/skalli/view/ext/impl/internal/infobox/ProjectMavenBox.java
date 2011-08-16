@@ -12,6 +12,7 @@ package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
@@ -85,7 +86,12 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
                     sb.append("<dependency>\n");
                     sb.append("    <artifactId>" + module.getArtefactId() + "</artifactId>\n");
                     sb.append("    <groupId>" + module.getGroupId() + "</groupId>\n");
-                    sb.append("    <!--<version>0.0.0</version>-->\n");
+                    SortedSet<String> versions = module.getSortedVersions();
+                    if (versions.size() > 0) {
+                        sb.append("    <version>" + versions.last() + "</version>\n");
+                    } else{
+                        sb.append("    <!--<version>0.0.0</version>-->\n");
+                    }
                     sb.append("    <type>" + module.getPackaging() + "</type>\n");
                     sb.append("</dependency>\n");
                     lineLength = calculateLineLength(module, lineLength);
@@ -93,7 +99,7 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
 
                 final Label label = new Label(sb.toString(), Label.CONTENT_PREFORMATTED);
                 //add a buffer 10, as we didn't calculate the length of surrounding strings.
-                label.setWidth(lineLength+10, Sizeable.UNITS_EM);
+                label.setWidth(lineLength + 10, Sizeable.UNITS_EM);
 
                 PopupView.Content content = new PopupView.Content() {
                     private static final long serialVersionUID = -8362267064485433525L;
@@ -153,8 +159,8 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
         int newLength;
         int artefactLength = module.getArtefactId().length();
         int groupLength = module.getGroupId().length();
-        newLength= Math.max(groupLength, artefactLength);
-        newLength= Math.max(previousValue, newLength);
+        newLength = Math.max(groupLength, artefactLength);
+        newLength = Math.max(previousValue, newLength);
 
         return newLength;
     }
