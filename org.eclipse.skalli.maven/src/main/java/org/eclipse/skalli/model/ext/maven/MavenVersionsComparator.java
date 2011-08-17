@@ -22,11 +22,34 @@ import org.apache.commons.lang.StringUtils;
  */
 class MavenVersionsComparator implements Comparator<String> {
 
+    enum SortOrder {
+        ASCENDING,
+        DESCENDING
+    }
+
+    private SortOrder order = SortOrder.ASCENDING;
+
+    public MavenVersionsComparator() {
+        this(SortOrder.ASCENDING);
+    }
+
+    public MavenVersionsComparator(SortOrder order) {
+        this.order = order;
+    }
+
     /* (non-Javadoc)
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
     @Override
     public int compare(String version1, String version2) {
+        if (SortOrder.DESCENDING.equals(this.order)) {
+            return -1 * compareLatestAsLowes(version1, version2);
+        } else {
+            return compareLatestAsLowes(version1, version2);
+        }
+    };
+
+    public int compareLatestAsLowes(String version1, String version2) {
         if (version1.equals(version2)) {
             return 0;
         }

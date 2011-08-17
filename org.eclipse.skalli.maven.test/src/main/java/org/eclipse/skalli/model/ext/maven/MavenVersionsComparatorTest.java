@@ -24,6 +24,7 @@ import org.junit.Test;
 public class MavenVersionsComparatorTest {
 
     private MavenVersionsComparator comparator;
+    private MavenVersionsComparator comparatorLastAsLowest;
 
     /**
      * @throws java.lang.Exception
@@ -31,6 +32,7 @@ public class MavenVersionsComparatorTest {
     @Before
     public void setUp() throws Exception {
         comparator = new MavenVersionsComparator();
+        comparatorLastAsLowest = new MavenVersionsComparator(MavenVersionsComparator.SortOrder.DESCENDING);
     }
 
     /**
@@ -45,6 +47,7 @@ public class MavenVersionsComparatorTest {
     public void testCompare() {
 
         assertEquals(0, comparator.compare("0.0.1", "0.0.1"));
+        assertEquals(0, comparatorLastAsLowest.compare("0.0.1", "0.0.1"));
 
         String[][] lessValues = new String[][] {
                 { "0.0.1", "0.0.2" }, //
@@ -60,10 +63,15 @@ public class MavenVersionsComparatorTest {
 
         };
         for (String[] versions : lessValues) {
-            assertThat("'" + versions[0] + "'.compare('" + versions[1] + "')",
+            assertThat( "ASCENDING sort: '" + versions[0] + "'.compare('" + versions[1] + "')",
                     comparator.compare(versions[0], versions[1]), is(-1));
-            assertThat("'" + versions[1] + "'.compare('" + versions[0] + "')",
+            assertThat("ASCENDING sort: '" + versions[1] + "'.compare('" + versions[0] + "')",
                     comparator.compare(versions[1], versions[0]), is(+1));
+
+            assertThat("DESCENDING sort: '" + versions[0] + "'.compare('" + versions[1] + "')",
+                    comparatorLastAsLowest.compare(versions[0], versions[1]), is(+1));
+            assertThat("DESCENDING sort: '" + versions[1] + "'.compare('" + versions[0] + "')",
+                    comparatorLastAsLowest.compare(versions[1], versions[0]), is(-1));
         }
     }
 

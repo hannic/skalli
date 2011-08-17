@@ -76,7 +76,7 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
      */
     public String getLatestVersion() {
         try {
-            return getSortedVersions().last();
+            return getSortedVersions().first();
         } catch (NoSuchElementException e) {
             return null;
         }
@@ -84,11 +84,11 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
     }
 
     /**
-     * @return an unmodifiable set of available artifact versions sorted according to {@link MavenVersionsComparator}.
+     * @return an unmodifiable set of available artifact versions sorted according to {@link MavenVersionsGreatestFirstComparator}.
      */
     public SortedSet<String> getSortedVersions() {
-        TreeSet<String> sortedVersions = new TreeSet<String>(new MavenVersionsComparator());
-        sortedVersions.addAll(versions);
+        TreeSet<String> sortedVersions = new TreeSet<String>(new MavenVersionsComparator(MavenVersionsComparator.SortOrder.DESCENDING));
+        sortedVersions.addAll(getVersions());
         return Collections.unmodifiableSortedSet(sortedVersions);
     }
 

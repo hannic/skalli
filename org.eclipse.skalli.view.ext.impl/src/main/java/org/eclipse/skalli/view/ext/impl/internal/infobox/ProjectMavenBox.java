@@ -12,7 +12,6 @@ package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
@@ -86,10 +85,10 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
                     sb.append("<dependency>\n");
                     sb.append("    <artifactId>" + module.getArtefactId() + "</artifactId>\n");
                     sb.append("    <groupId>" + module.getGroupId() + "</groupId>\n");
-                    SortedSet<String> versions = module.getSortedVersions();
-                    if (versions.size() > 0) {
-                        sb.append("    <version>" + versions.last() + "</version>\n");
-                    } else{
+                    String latestVersion = module.getLatestVersion();
+                    if (StringUtils.isNotBlank(latestVersion)) {
+                        sb.append("    <version>" + latestVersion + "</version>\n");
+                    } else {
                         sb.append("    <!--<version>0.0.0</version>-->\n");
                     }
                     sb.append("    <type>" + module.getPackaging() + "</type>\n");
