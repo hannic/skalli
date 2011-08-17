@@ -11,6 +11,7 @@
 package org.eclipse.skalli.view.internal.filter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -21,13 +22,20 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.UUIDUtils;
 import org.eclipse.skalli.model.core.Project;
 
+/**
+ * This filter sets the following attributes if the request specifies a project:
+ * <ul>
+ * <li>"{@value Consts#ATTRIBUTE_PROJECT} - the {@link Project} instance.</li>
+ * <li>"{@value Consts#ATTRIBUTE_PROJECTID} - the {@link Project#getName() symbolic identifier} of the project.</li>
+ * <li>"{@value Consts#ATTRIBUTE_PROJECTUUID} - the {@link Project#getUuid() unique identifier} of the project.</li>
+ * </ul>
+ */
 public class ProjectFilter implements Filter {
 
     @Override
@@ -42,7 +50,7 @@ public class ProjectFilter implements Filter {
         String pathInfo = httpRequest.getPathInfo();
         String paramProjectId = request.getParameter(Consts.PARAM_ID);
 
-        ProjectService projectService = Services.getService(ProjectService.class);
+        ProjectService projectService = Services.getRequiredService(ProjectService.class);
 
         Project project = null;
 
@@ -58,11 +66,12 @@ public class ProjectFilter implements Filter {
 
             // project not found by name, search by UUID
             if (project == null && UUIDUtils.isUUID(pathInfo)) {
-                project = projectService.getByUUID(UUIDUtils.asUUID(pathInfo));
-            }
-            // project not found by UUID, search for deleted project
-            if (project == null && UUIDUtils.isUUID(pathInfo)) {
-                project = projectService.getDeletedProject(UUIDUtils.asUUID(pathInfo));
+                UUID uuid = UUIDUtils.asUUID(pathInfo);
+                project = projectService.getByUUID(uuid);
+                // project not found by UUID, search for deleted project by UUID
+                if (project == null) {
+                    project = projectService.getDeletedProject(uuid);
+                }
             }
 
             if (project == null) {
@@ -71,27 +80,25 @@ public class ProjectFilter implements Filter {
             }
         }
 
-        // check if project is provided via URL parameter
-        if (StringUtils.isNotBlank(paramProjectId)) {
-            project = Services.getRequiredService(ProjectService.class).getProjectByProjectId(paramProjectId);
+        // project not found by pathInfo, check if project is provided via URL parameter
+        if (project == null && StringUtils.isNotBlank(paramProjectId)) {
+            project = projectService.getProjectByProjectId(paramProjectId);
             if (project == null) {
                 // currently we don't support a scenario where projects are passed via UUID
-                FilterUtil.handleException(
-                        request,
-                        response,
+                FilterUtil.handleException(request, response,
                         new FilterException(String.format("Project id '%s' set in url parameter '%s' not valid.",
-                                paramProjectId,
-                                Consts.PARAM_ID)));
+                                paramProjectId, Consts.PARAM_ID)));
             }
         }
 
         if (project != null) {
             request.setAttribute(Consts.ATTRIBUTE_PROJECT, project);
             request.setAttribute(Consts.ATTRIBUTE_PROJECTID, project.getProjectId());
-        } //else {
-          // do nothing if project is null as this filter supports
-          // creation of projects and search result also
-          // }
+            request.setAttribute(Consts.ATTRIBUTE_PROJECTUUID, project.getUuid().toString());
+        } else {
+          // do nothing if project is null as this filter runs during
+          // creation of projects and displaying of search results, too
+        }
 
         // proceed along the chain
         chain.doFilter(request, response);

@@ -38,7 +38,10 @@ public class Consts {
     public static final String ATTRIBUTE_USER = "user";
     public static final String ATTRIBUTE_PROJECT = "project";
     public static final String ATTRIBUTE_PROJECTID = "projectId";
+    public static final String ATTRIBUTE_PROJECTUUID = "projectUUID";
     public static final String ATTRIBUTE_PROJECTADMIN = "isProjectAdmin";
+    public static final String ATTRIBUTE_SHOW_ISSUES = "showIssues";
+    public static final String ATTRIBUTE_EDITMODE = "editmode";
     public static final String ATTRIBUTE_PATHINFO = "pathInfo";
     public static final String ATTRIBUTE_PROJECTTEMPLATE = "projectTemplate";
     public static final String ATTRIBUTE_FAVORITES = "favorites";

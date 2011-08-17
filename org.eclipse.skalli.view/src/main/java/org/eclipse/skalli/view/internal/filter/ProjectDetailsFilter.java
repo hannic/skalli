@@ -27,7 +27,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.FavoritesService;
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.ProjectTemplateService;
@@ -42,6 +41,26 @@ import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.Issues;
 import org.eclipse.skalli.view.ext.ProjectContextLink;
 
+/**
+ * This filter sets the following attributes if the request attribute "{@value Consts#ATTRIBUTE_PROJECT}" is defined:
+ * <ul>
+ * <li>"{@value Consts#ATTRIBUTE_PROJECTTEMPLATE} - the {@link ProjectTemplate} assigned to the project.</li>
+ * </ul>
+ * This filter sets the following additional attributes if the request attributes "{@value Consts#ATTRIBUTE_PROJECT}"
+ * and "{@value Consts#ATTRIBUTE_USERID}" are defined:
+ * <ul>
+ * <li>"{@value Consts#ATTRIBUTE_FAVORITES} - the favorites of the logged in user.</li>
+ * <li>"{@value Consts#ATTRIBUTE_PROJECTADMIN} - <code>true</code>, if the logged in user is project administrator,
+ * <code>false</code> otherwise.</li>
+ * <li>"{@value Consts#ATTRIBUTE_SHOW_ISSUES} - code>true</code>, if the logged in user is allows to see the issues
+ * of the project, <code>false</code> otherwise. A user must be administrator of the project or administrator of
+ * any project ion the project's parent hierarchy to see issues.</li>
+ * </li>
+ * <li>"{@value Consts#ATTRIBUTE_ISSUES} - the {@link Issues} of the project.</li>
+ * <li>"{@value Consts#ATTRIBUTE_MAX_SEVERITY} - the maximum severity found in the project issues.</li>
+ * <li>"{@value Consts#ATTRIBUTE_PROJECTCONTEXTLINKS} - ????</li>
+ * </ul>
+ */
 public class ProjectDetailsFilter implements Filter {
 
     private static final Logger LOG = Log.getLogger(ProjectDetailsFilter.class);
@@ -51,8 +70,8 @@ public class ProjectDetailsFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-            ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
@@ -62,38 +81,43 @@ public class ProjectDetailsFilter implements Filter {
         if (project != null) {
             ProjectTemplateService templateService = Services.getRequiredService(ProjectTemplateService.class);
             ProjectTemplate projectTemplate = templateService.getProjectTemplateById(project.getProjectTemplateId());
-            FavoritesService favoritesService = Services.getService(FavoritesService.class);
-            Favorites favorites = null;
-            if (favoritesService == null) {
-                favorites = new Favorites(userId);
-            } else {
-                favorites = favoritesService.getFavorites(userId);
-            }
-            boolean isProjectAdmin = UserUtil.isAdministrator(userId) || UserUtil.isProjectAdmin(userId, project);
-            IssuesService issuesService = Services.getService(IssuesService.class);
-            boolean showIssues = isProjectAdmin || UserUtil.isProjectAdminInParentChain(userId, project);
-
-            if (issuesService != null && showIssues) {
-                Issues issues = issuesService.getByUUID(project.getUuid());
-                if (issues != null && !issues.getIssues().isEmpty()) {
-                    request.setAttribute(Consts.ATTRIBUTE_ISSUES, issues);
-                    request.setAttribute(Consts.ATTRIBUTE_MAX_SEVERITY, issues.getIssues().first().getSeverity().name());
-                }
-            }
-
-            request.setAttribute(Consts.ATTRIBUTE_PROJECTADMIN, isProjectAdmin);
             request.setAttribute(Consts.ATTRIBUTE_PROJECTTEMPLATE, projectTemplate);
-            request.setAttribute(Consts.ATTRIBUTE_FAVORITES, favorites.asMap());
-            request.setAttribute(Consts.ATTRIBUTE_PROJECTCONTEXTLINKS,
-                    getOrderedVisibleProjectContextLinks(project, userId));
+
+            if (userId != null) {
+                FavoritesService favoritesService = Services.getService(FavoritesService.class);
+                Favorites favorites = null;
+                if (favoritesService == null) {
+                    favorites = new Favorites(userId);
+                } else {
+                    favorites = favoritesService.getFavorites(userId);
+                }
+                request.setAttribute(Consts.ATTRIBUTE_FAVORITES, favorites.asMap());
+
+                boolean isProjectAdmin = UserUtil.isAdministrator(userId) || UserUtil.isProjectAdmin(userId, project);
+                request.setAttribute(Consts.ATTRIBUTE_PROJECTADMIN, isProjectAdmin);
+
+                boolean showIssues = isProjectAdmin || UserUtil.isProjectAdminInParentChain(userId, project);
+                request.setAttribute(Consts.ATTRIBUTE_SHOW_ISSUES, isProjectAdmin);
+
+                IssuesService issuesService = Services.getService(IssuesService.class);
+                if (issuesService != null && showIssues) {
+                    Issues issues = issuesService.getByUUID(project.getUuid());
+                    if (issues != null && issues.hasIssues()) {
+                        request.setAttribute(Consts.ATTRIBUTE_ISSUES, issues);
+                        request.setAttribute(Consts.ATTRIBUTE_MAX_SEVERITY, issues.getIssues().first().getSeverity().name());
+                    }
+                }
+
+                request.setAttribute(Consts.ATTRIBUTE_PROJECTCONTEXTLINKS,
+                        getOrderedVisibleProjectContextLinks(project, userId));
+            }
         } else {
             request.setAttribute(Consts.ATTRIBUTE_PATHINFO, httpRequest.getPathInfo());
-            // do nothing else as we have to support creation of project and search urls also
+            // do nothing else as we have to support creation of projects and search urls, too
         }
 
         // proceed along the chain
         chain.doFilter(request, response);
-
     }
 
     @Override

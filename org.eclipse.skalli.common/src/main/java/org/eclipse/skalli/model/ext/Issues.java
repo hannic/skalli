@@ -125,6 +125,10 @@ public class Issues extends EntityBase {
         return getIssues().contains(issue);
     }
 
+    public boolean hasIssues() {
+        return getIssues().size() > 0;
+    }
+
     public void clear() {
         getIssues().clear();
     }
