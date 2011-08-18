@@ -13,12 +13,12 @@ package org.eclipse.skalli.view.component;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.LinkGroup;
 import org.eclipse.skalli.common.OrderableGroup;
 import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.view.component.LinkWindow.ILinkAddedHandler;
 import org.eclipse.skalli.view.component.LinkWindow.ILinkModifiedHandler;
+
 import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -148,7 +148,8 @@ public class MultiLinkField extends CustomField implements ILinkAddedHandler, IL
                     Button btnEditLink = new Button(link.getLabel());
                     btnEditLink.setStyleName(Button.STYLE_LINK);
                     btnEditLink.addStyleName(STYLE_LABEL_LINK);
-                    btnEditLink.setDescription(String.format("Edit link '%s'", link.getLabel()));
+                    btnEditLink.setDescription(String.format("Edit link '%s' %s", link.getLabel(),
+                            StringUtils.isBlank(link.getUrl()) ? "" : "[" + link.getUrl() + "]"));
                     btnEditLink.addListener(new Button.ClickListener() {
                         @Override
                         public void buttonClick(ClickEvent event) {
