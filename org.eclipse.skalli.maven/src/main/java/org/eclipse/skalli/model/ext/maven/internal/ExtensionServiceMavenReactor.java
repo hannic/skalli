@@ -12,13 +12,13 @@ package org.eclipse.skalli.model.ext.maven.internal;
 
 import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.log.Log;
+import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
+import org.osgi.service.component.ComponentContext;
 
 public class ExtensionServiceMavenReactor
         extends ExtensionServiceBase<MavenReactorProjectExt>
@@ -77,4 +77,10 @@ public class ExtensionServiceMavenReactor
     public String getXsdFileName() {
         return "model-maven-reactor.xsd"; //$NON-NLS-1$
     }
+
+    @Override
+    public AbstractIndexer<MavenReactorProjectExt> getIndexer() {
+        return new MavenReactorIndexer();
+      }
+
 }
