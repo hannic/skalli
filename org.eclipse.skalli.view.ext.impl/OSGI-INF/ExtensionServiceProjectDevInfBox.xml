@@ -10,10 +10,23 @@
  -->
 
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.skalli.view.ext.impl.internal.infobox.devinf">
-   <implementation class="org.eclipse.skalli.view.ext.impl.internal.infobox.ProjectDevInfBox"/>
-   <service>
-      <provide interface="org.eclipse.skalli.view.ext.ProjectInfoBox"/>
-   </service>
-   <reference bind="bindConfigurationService" cardinality="0..1" interface="org.eclipse.skalli.common.configuration.ConfigurationService" name="ConfigurationService" policy="dynamic" unbind="unbindConfigurationService"/>
+    <implementation class="org.eclipse.skalli.view.ext.impl.internal.infobox.ProjectDevInfBox"/>
+    <service>
+        <provide interface="org.eclipse.skalli.view.ext.ProjectInfoBox"/>
+    </service>
+    <reference
+        name="ConfigurationService"
+        interface="org.eclipse.skalli.common.configuration.ConfigurationService"
+        bind="bindConfigurationService"
+        unbind="unbindConfigurationService"
+        cardinality="0..1"
+        policy="dynamic" />
+    <reference
+        name="Clipboard"
+        interface="org.eclipse.skalli.view.ext.Clipboard"
+        bind="bindClipboard"
+        unbind="unbindClipboard"
+        cardinality="0..1"
+        policy="dynamic" />
 </scr:component>
 

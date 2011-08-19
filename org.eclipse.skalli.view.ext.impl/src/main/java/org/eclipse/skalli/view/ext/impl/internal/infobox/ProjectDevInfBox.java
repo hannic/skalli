@@ -49,7 +49,7 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
     }
 
     protected void unbindConfigurationService(ConfigurationService configService) {
-        this.configService = configService;
+        this.configService = null;
     }
 
     @Override
@@ -115,7 +115,7 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
                 ScmLocationMapper mapper = new ScmLocationMapper();
                 for (String scmUrl : devInf.getScmLocations()) {
                     sb.append("<li>"); //$NON-NLS-1$
-                    clippyLink(sb, scmUrl, scmUrl);
+                    sb.append(copyToClipboardLink(scmUrl, truncate(scmUrl)));
 
                     // Mapped / Generated Links
                     boolean isFirst = true;
@@ -212,42 +212,6 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
             }
             sb.append("<br/>");
         }
-    }
-
-    @SuppressWarnings("nls")
-    private void clippyLink(final StringBuffer sb, final String label, String textToClipboard) {
-        sb.append("<div>").append(label);
-
-        /*
-        sb.append("<object style=\"margin-left:5px;\"");
-        sb.append(" classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\"");
-        sb.append(" width=\"110\"");
-        sb.append(" height=\"14\"");
-        sb.append(" id=\"clippy_").append(System.currentTimeMillis()).append("\">\n");
-
-        sb.append("<param name=\"movie\" value=\"").append(FLASH_CLIPPY).append("\" />\n");
-        sb.append("<param name=\"allowScriptAccess\" value=\"always\" />\n");
-        sb.append("<param name=\"quality\" value=\"high\" />\n");
-        sb.append("<param name=\"scale\" value=\"noscale\" />\n");
-        sb.append("<param name=\"FlashVars\" value=\"text=").append(truncate(textToClipboard)).append("\" />\n");
-        sb.append("<param name=\"bgcolor\" value=\"#FFFFFF\" />\n");
-
-        sb.append("<embed src=\"").append(FLASH_CLIPPY).append("\"");
-        sb.append(" width=\"110\"");
-        sb.append(" height=\"14\"");
-        sb.append(" name=\"clippy\"");
-        sb.append(" quality=\"high\"");
-        sb.append(" allowScriptAccess=\"always\"");
-        sb.append(" type=\"application/x-shockwave-flash\"");
-        sb.append(" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"");
-        sb.append(" FlashVars=\"text=").append(truncate(textToClipboard)).append("\"");
-        sb.append(" bgcolor=\"#FFFFFF\"");
-        sb.append(" />\n");
-
-        sb.append("</object>\n");
-        */
-
-        sb.append("</div>\n");
     }
 
     // truncate to have a useful SCM URL in the clipboard

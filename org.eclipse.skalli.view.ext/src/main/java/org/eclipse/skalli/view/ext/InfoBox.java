@@ -17,10 +17,20 @@ import com.vaadin.ui.Link;
 
 public class InfoBox {
 
-    protected static final String STYLE_LABEL = "infolabel";
-    protected static final String STYLE_LINK = "infolink";
-    protected static final String STYLE_TEAMLABEL = "teamlabel";
+    protected Clipboard clipboard;
+
+    protected static final String STYLE_LABEL = "infolabel"; //$NON-NLS-1$
+    protected static final String STYLE_LINK = "infolink"; //$NON-NLS-1$
+    protected static final String STYLE_TEAMLABEL = "teamlabel"; //$NON-NLS-1$
     protected static final String HSPACE = "&nbsp;&nbsp;&nbsp;&nbsp;"; //$NON-NLS-1$
+
+    protected void bindClipboard(Clipboard clipboard) {
+        this.clipboard = clipboard;
+    }
+
+    protected void unbindConfigurationService(Clipboard clipboard) {
+        this.clipboard = null;
+    }
 
     protected void createLabel(Layout layout, String caption) {
         Label label = new Label(caption, Label.CONTENT_XHTML);
@@ -32,5 +42,33 @@ public class InfoBox {
         Link link = new Link(caption, new ExternalResource(url));
         link.addStyleName(STYLE_LINK);
         layout.addComponent(link);
+    }
+
+    /**
+     * Creates a link that copies a given text to the clipboard.<p>
+     * Note: An info box that uses this method must bind to the {@link Clipboard} service:
+     * <pre>
+     * &lt;reference
+     *   name="Clipboard"
+     *   interface="org.eclipse.skalli.view.ext.Clipboard"
+     *   bind="bindClipboard"
+     *   unbind="unbindClipboard"
+     *   cardinality="0..1"
+     *   policy="dynamic" /&gt;
+     * </pre>
+     *
+     * @param label   the label to display with the link.
+     * @param textToClipboard   the text to copy to the clipboard when the
+     * link is clicked.
+     */
+    @SuppressWarnings("nls")
+    protected String copyToClipboardLink(String label, String textToClipboard) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div>").append(label);
+        if (clipboard != null) {
+            sb.append(clipboard.copyToClipboardLink(textToClipboard));
+        }
+        sb.append("</div>\n");
+        return sb.toString();
     }
 }
