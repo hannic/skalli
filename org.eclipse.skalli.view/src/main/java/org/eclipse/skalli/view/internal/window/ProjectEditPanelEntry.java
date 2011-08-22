@@ -69,7 +69,7 @@ class ProjectEditPanelEntry extends CustomComponent {
     private static final String STYLE_TRAY_OPEN = "open"; //$NON-NLS-1$
     private static final String STYLE_TRAY_CLOSED = "closed"; //$NON-NLS-1$
     private static final String STYLE_BUTTON_SELECTED = "selected"; //$NON-NLS-1$
-    private static final String STYLE_ISSUES = "issues"; //$NON-NLS-1$
+    private static final String STYLE_ISSUES = "prjedt-issues"; //$NON-NLS-1$
 
     private Project project;
     private Class<? extends ExtensionEntityBase> extensionClass;
