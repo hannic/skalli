@@ -500,6 +500,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
     @Override
     public Project createProject(final String templateId, final String userId) {
         final Project project = (StringUtils.isNotBlank(templateId)) ? new Project(templateId) : new Project();
+        project.setUuid(UUID.randomUUID());
 
         if (StringUtils.isNotBlank(userId) && UserUtil.getUser(userId) != null) {
             final PeopleProjectExt peopleExt = new PeopleProjectExt();

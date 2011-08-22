@@ -31,6 +31,7 @@ public class Consts {
     public static final String PARAM_VIEW = "view";
     public static final String PARAM_VALUE_EDIT = "edit";
     public static final String PARAM_VALUE_VIEW_HIERARCHY = "hierarchy";
+    public static final String PARAM_VALUE_VALIDATE = "validate";
     public static final String PARAM_EXTENSIONS = "extensions";
     public static final String PARAM_LIST_SEPARATOR = ",";
 

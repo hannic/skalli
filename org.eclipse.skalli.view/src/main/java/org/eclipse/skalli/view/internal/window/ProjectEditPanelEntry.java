@@ -10,16 +10,12 @@
  *******************************************************************************/
 package org.eclipse.skalli.view.internal.window;
 
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
@@ -31,10 +27,7 @@ import org.eclipse.skalli.view.ext.ProjectEditContext;
 import org.eclipse.skalli.view.internal.ExtensionStreamSource;
 
 import com.vaadin.Application;
-import com.vaadin.terminal.ErrorMessage;
 import com.vaadin.terminal.StreamResource;
-import com.vaadin.terminal.ThemeResource;
-import com.vaadin.terminal.UserError;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -43,7 +36,6 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Embedded;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -59,9 +51,6 @@ import com.vaadin.ui.NativeButton;
 class ProjectEditPanelEntry extends CustomComponent {
 
     private static final long serialVersionUID = 6723243553337561399L;
-    private static final Logger LOG = Log.getLogger(ProjectEditPanelEntry.class);
-
-    private final ThemeResource ERROR_ICON = new ThemeResource("icons/tray/error.png"); //$NON-NLS-1$
 
     private static final String BUTTON_TEXT_DISABLE = "disable";
     private static final String BUTTON_TEXT_DISABLED = "disabled";
@@ -80,6 +69,7 @@ class ProjectEditPanelEntry extends CustomComponent {
     private static final String STYLE_TRAY_OPEN = "open"; //$NON-NLS-1$
     private static final String STYLE_TRAY_CLOSED = "closed"; //$NON-NLS-1$
     private static final String STYLE_BUTTON_SELECTED = "selected"; //$NON-NLS-1$
+    private static final String STYLE_ISSUES = "issues"; //$NON-NLS-1$
 
     private Project project;
     private Class<? extends ExtensionEntityBase> extensionClass;
@@ -113,7 +103,6 @@ class ProjectEditPanelEntry extends CustomComponent {
 
     // issue rendering
     private Label issueLabel;
-    private SortedSet<Issue> persistedIssues;
 
     private enum TrayState {
         DISABLED, EDITABLE_INVISIBLE, EDITABLE_VISIBLE, INHERITED_INVISIBLE, INHERITED_VISIBLE
@@ -180,67 +169,6 @@ class ProjectEditPanelEntry extends CustomComponent {
         return form != null ? form.isValid() : true;
     }
 
-    public void markAsInvalid(boolean isInvalid) {
-        if (isInvalid) {
-            trayIcon.setSource(ERROR_ICON);
-        } else {
-            final String icon = formService.getIconPath();
-            if (StringUtils.isNotBlank(icon)) {
-                trayIcon.setSource(new StreamResource(new ExtensionStreamSource(formService.getClass(), icon),
-                        FilenameUtils.getName(icon), application));
-            }
-            form.setComponentError(null);
-            for (Object propertyId : form.getItemPropertyIds()) {
-                Field field = form.getField(propertyId);
-                if (field != null) {
-                    setComponentError(field, null);
-                }
-            }
-        }
-    }
-
-    public void markAsInvalid(boolean isInvalid, SortedSet<Issue> issues) {
-        markAsInvalid(isInvalid);
-        if (isInvalid && issues != null && issues.size() > 0) {
-            for (Issue issue : issues) {
-                Object propertyId = issue.getPropertyId();
-                if (propertyId != null) {
-                    Field field = form.getField(propertyId);
-                    if (field != null) {
-                        setComponentError(field, new UserError(issue.getMessage(), UserError.CONTENT_UIDL,
-                                ErrorMessage.ERROR));
-                    }
-                }
-            }
-            issues.addAll(getPersistedIssues());
-            layoutIssues(issues);
-        } else {
-            layoutIssues(getPersistedIssues());
-        }
-    }
-
-    public void setPersistedIssues(SortedSet<Issue> issues) {
-        persistedIssues = (issues != null) ? issues : new TreeSet<Issue>();
-        layoutIssues(persistedIssues);
-    }
-
-    private SortedSet<Issue> getPersistedIssues() {
-        if (persistedIssues == null) {
-            persistedIssues = new TreeSet<Issue>();
-        }
-        return persistedIssues;
-    }
-
-    private void setComponentError(Field field, ErrorMessage componentError) {
-        try {
-            Method method = field.getClass().getMethod("setComponentError", ErrorMessage.class); //$NON-NLS-1$
-            method.invoke(field, componentError);
-        } catch (Exception e) {
-            // not all Field implementations may have a method setComponentError(), so that is ok
-            LOG.fine(MessageFormat.format("Field {0} cannot set component errors.", field.getCaption()));
-        }
-    }
-
     public void commit() {
         if (form != null) {
             form.commit();
@@ -277,6 +205,10 @@ class ProjectEditPanelEntry extends CustomComponent {
         return formService.getRank();
     }
 
+    public Class<? extends ExtensionEntityBase> getExtensionClass() {
+        return extensionClass;
+    }
+
     public String getExtensionClassName() {
         return extensionClassName;
     }
@@ -295,6 +227,27 @@ class ProjectEditPanelEntry extends CustomComponent {
         }
     }
 
+    public void showIssues(SortedSet<Issue> issues, boolean collapseValid) {
+        if (issueLabel == null) {
+            issueLabel = new Label(StringUtils.EMPTY, Label.CONTENT_XHTML);
+            issueLabel.setWidth(100, UNITS_PERCENTAGE);
+            issueLabel.addStyleName(STYLE_ISSUES);
+            tray.addComponent(issueLabel);
+        }
+
+        if (issues == null || issues.isEmpty()) {
+            issueLabel.setValue(StringUtils.EMPTY);
+            issueLabel.setVisible(false);
+            if (collapseValid) {
+                collapse();
+            }
+        } else {
+            issueLabel.setValue(Issues.asHTMLList(null, issues));
+            issueLabel.setVisible(true);
+            expand();
+        }
+    }
+
     @SuppressWarnings("serial")
     private ComponentContainer createTray() {
         CssLayout layout = new CssLayout();
@@ -305,6 +258,7 @@ class ProjectEditPanelEntry extends CustomComponent {
         header.setSpacing(true);
         header.setStyleName(STYLE_TRAY_HEADER);
         header.setWidth("100%"); //$NON-NLS-1$
+
 
         trayIcon = new Embedded();
         trayIcon.setStyleName(STYLE_TRAY_HEADER_ICON);
@@ -318,7 +272,7 @@ class ProjectEditPanelEntry extends CustomComponent {
         header.setComponentAlignment(trayIcon, Alignment.MIDDLE_LEFT);
         header.setExpandRatio(trayIcon, 0);
 
-        Label captionLabel = new Label(extensionService.getCaption(), Label.CONTENT_XHTML);
+        Label captionLabel = new Label(getCaptionWithAnchor(), Label.CONTENT_XHTML);
         captionLabel.setStyleName(STYLE_TRAY_HEADER_LABEL);
         header.addComponent(captionLabel);
         header.setExpandRatio(captionLabel, 1);
@@ -413,6 +367,18 @@ class ProjectEditPanelEntry extends CustomComponent {
 
         layout.addComponent(content);
         return layout;
+    }
+
+    @SuppressWarnings("nls")
+    private String getCaptionWithAnchor() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a id=\"");
+        sb.append( extensionClassName);
+        sb.append("\" name=\"");
+        sb.append( extensionClassName);
+        sb.append("\"><!-- --></a>");
+        sb.append(extensionService.getCaption());
+        return sb.toString();
     }
 
     private void setState(TrayState newState) {
@@ -521,23 +487,6 @@ class ProjectEditPanelEntry extends CustomComponent {
             break;
         }
         state = newState;
-    }
-
-    private void layoutIssues(SortedSet<Issue> issues) {
-        if (issueLabel == null) {
-            issueLabel = new Label(StringUtils.EMPTY, Label.CONTENT_XHTML);
-            issueLabel.setWidth(100, UNITS_PERCENTAGE);
-            issueLabel.addStyleName(ProjectEditPanel.STYLE_ISSUES);
-            tray.addComponent(issueLabel);
-        }
-
-        if (issues == null || issues.isEmpty()) {
-            issueLabel.setValue(StringUtils.EMPTY);
-            issueLabel.setVisible(false);
-        } else {
-            issueLabel.setValue(Issues.asHTMLList(null, issues));
-            issueLabel.setVisible(true);
-        }
     }
 
     private void layoutNewEditForm() {

@@ -30,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.FavoritesService;
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.ProjectTemplateService;
+import org.eclipse.skalli.api.java.ValidationService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.ServiceFilter;
@@ -39,6 +40,7 @@ import org.eclipse.skalli.model.core.Favorites;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.Issues;
+import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.view.ext.ProjectContextLink;
 
 /**
@@ -101,6 +103,13 @@ public class ProjectDetailsFilter implements Filter {
 
                 IssuesService issuesService = Services.getService(IssuesService.class);
                 if (issuesService != null && showIssues) {
+                    String action = request.getParameter(Consts.PARAM_ACTION);
+                    if (action != null && action.equals(Consts.PARAM_VALUE_VALIDATE)) {
+                        ValidationService validationService = Services.getService(ValidationService.class);
+                        if (validationService != null) {
+                            validationService.validate(Project.class, project.getUuid(), Severity.INFO, userId);
+                        }
+                    }
                     Issues issues = issuesService.getByUUID(project.getUuid());
                     if (issues != null && issues.hasIssues()) {
                         request.setAttribute(Consts.ATTRIBUTE_ISSUES, issues);

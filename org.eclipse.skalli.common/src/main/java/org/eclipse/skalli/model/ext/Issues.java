@@ -11,6 +11,7 @@
 package org.eclipse.skalli.model.ext;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -179,12 +180,38 @@ public class Issues extends EntityBase {
     /**
      * Renders the given message and set of issues as HTML bulleted list (&lt;ut&gt;) with
      * the message as caption. If not message is specified, only the bulleted list is rendered.
+     * Example:
+     * <ul>
+     * <li style="color:#8a1f11;background-color:#fbe3e4;border-color:#fbc2c4;border-style:solid;border-width:1px;
+     * margin: 2px 0px 2px 0px;list-style-type:none;padding:2px 2px 2px 15px;width:300px;min-height:20px;">
+     * <b>ERROR</b>&nbsp;&nbsp;Description must not be empty</li>
+     * </ul>
      *
      * @param message  the message to render as caption of the list, or <code>null</code>.
      * @param issues  the set of issues to render, or <code>null</code>.
      */
-    @SuppressWarnings("nls")
     public static String asHTMLList(String message, Set<Issue> issues) {
+        return asHTMLList(message, issues, null);
+    }
+
+    /**
+     * Renders the given message and set of issues as HTML bulleted list (&lt;ut&gt;) with
+     * the message as caption. If not message is specified, only the bulleted list is rendered.
+     * Example:
+     * <ul>
+     * <li style="color:#8a1f11;background-color:#fbe3e4;border-color:#fbc2c4;border-style:solid;border-width:1px;
+     * margin: 2px 0px 2px 0px;list-style-type:none;padding:2px 2px 2px 15px;width:600px;min-height:20px;">
+     * <b>ERROR</b>&nbsp;&nbsp;Development Infrastructure:&nbsp;SCM location is invalid</li>
+     * </ul>
+     * @param message  the message to render as caption of the list, or <code>null</code>.
+     * @param issues  the set of issues to render, or <code>null</code>.
+     * @param displayNames  the display names of extensions that are referenced by the given issues. If for
+     * a given issue the display name of the extension it belongs to is known, the display name is
+     * rendered (as link with <tt>href="#&lt;extensionName&gt;"</tt>) between the severity label an the
+     * message of the issue.
+     */
+    @SuppressWarnings("nls")
+    public static String asHTMLList(String message, Set<Issue> issues, Map<String,String> displayNames) {
         StringBuilder sb = new StringBuilder();
         if (StringUtils.isNotBlank(message)) {
             sb.append(message);
@@ -193,7 +220,14 @@ public class Issues extends EntityBase {
             sb.append("<ul>");
             for (Issue issue : issues) {
                 sb.append("<li class=\"").append(issue.getSeverity().name()).append("\">");
-                sb.append("<strong>").append(issue.getSeverity().name()).append(":</strong> ");
+                sb.append("<strong>").append(issue.getSeverity().name()).append("</strong>&nbsp;&nbsp;");
+                if (displayNames != null) {
+                    Class<? extends ExtensionEntityBase> extension = issue.getExtension();
+                    if (extension != null && displayNames.containsKey(extension.getName())) {
+                        sb.append("<a href=\"#" + extension.getName()  +"\">");
+                        sb.append(displayNames.get(extension.getName())).append("</a>:&nbsp;");
+                    }
+                }
                 sb.append(issue.getMessage());
                 sb.append("</li>");
             }

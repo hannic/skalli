@@ -42,6 +42,7 @@ public abstract class AbstractExtensionFormService<T extends ExtensionEntityBase
         form.setWriteThrough(false); // we want explicit 'apply'
         form.setInvalidCommitted(false); // no invalid values in datamodel
         form.addStyleName(getFormStyleName());
+        form.setValidationVisible(false); // we use our own issue markers
 
         // FieldFactory for customizing the fields and adding validators
         FormFieldFactory fieldFactory = getFieldFactory(project, context);

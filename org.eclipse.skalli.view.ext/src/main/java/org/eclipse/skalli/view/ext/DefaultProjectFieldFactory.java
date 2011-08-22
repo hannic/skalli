@@ -17,13 +17,16 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.common.util.MinMaxOccurrencesPropertyValidator;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.eclipse.skalli.model.ext.PropertyValidator;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.Validator;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
@@ -68,6 +71,8 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
             }
         }
         initializeField(propertyId, field);
+
+        removeLegacyValidators(field);
 
         setColumns(field, COMMON_TEXT_FIELD_COLUMNS);
 
@@ -149,6 +154,24 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
         } catch (Exception e) {
             // not all Vaadin Field implementations have an max size, so this is ok
             LOG.fine(MessageFormat.format("Field {0} does not allow to set max size", field.getCaption()));
+        }
+    }
+
+    private void removeLegacyValidators(Field field) {
+        if (field.isRequired()) {
+            field.setRequired(false);
+            field.setRequiredError(null);
+            LOG.warning("Required flag removed from field " + field.getCaption() + " of project " + project.getName()
+                    + ". Attach a " + MinMaxOccurrencesPropertyValidator.class.getName() + " to the field.");
+        }
+        Collection<Validator> vaadinValidators = field.getValidators();
+        if (vaadinValidators != null) {
+            for (Validator vaadinValidator: vaadinValidators) {
+                LOG.warning("Validator " + vaadinValidator.getClass().getName() + " removed from field " + field.getCaption()
+                        + " of project " + project.getName() +". Attach a suitable " + PropertyValidator.class.getName()
+                        + " to the field.");
+                field.removeValidator(vaadinValidator);
+            }
         }
     }
 

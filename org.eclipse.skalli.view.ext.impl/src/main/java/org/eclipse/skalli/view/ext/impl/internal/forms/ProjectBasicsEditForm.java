@@ -135,12 +135,10 @@ public class ProjectBasicsEditForm extends AbstractExtensionFormService<Project>
                 cb.select(project.getPhase());
             } else if (Project.PROPERTY_PROJECTID.equals(propertyId)) {
                 TextField tf = (TextField) field;
-                tf.setRequired(true);
-                field.setRequiredError("Projects must have a unique Project ID");
+                tf.setCaption(tf.getCaption() + "*");
             } else if (Project.PROPERTY_NAME.equals(propertyId)) {
                 TextField tf = (TextField) field;
-                tf.setRequired(true);
-                field.setRequiredError("Projects must have a Display Name");
+                tf.setCaption(tf.getCaption() + "*");
             } else if (Project.PROPERTY_DESCRIPTION.equals(propertyId)) {
                 TextField tf = (TextField) field;
                 tf.setRows(3);

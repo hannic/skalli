@@ -38,7 +38,9 @@ import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.Issue;
+import org.eclipse.skalli.model.ext.Issuer;
 import org.eclipse.skalli.model.ext.Issues;
+import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.eclipse.skalli.view.ext.ExtensionFormService;
 import org.eclipse.skalli.view.ext.Navigator;
@@ -58,7 +60,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class ProjectEditPanel extends Panel {
+public class ProjectEditPanel extends Panel implements Issuer {
 
     private static final long serialVersionUID = 2377962084815410728L;
 
@@ -68,17 +70,16 @@ public class ProjectEditPanel extends Panel {
     private static final String STYLE_EDIT_PROJECT_LAYOUT = "prjedt-layout"; //$NON-NLS-1$
     private static final String STYLE_EDIT_PROJECT_BUTTONS = "prjedt-buttons"; //$NON-NLS-1$
     private static final String STYLE_EDIT_PROJECT_ERROR = "prjedt-errorLabel"; //$NON-NLS-1$
-    static final String STYLE_ISSUES = "prjedt-issues"; //$NON-NLS-1$
+    private static final String STYLE_ISSUES = "prjedt-issues"; //$NON-NLS-1$
 
-    static final String W600PX = "600px"; //$NON-NLS-1$
-    private static final String W350PX = "350px"; //$NON-NLS-1$
-
-    static final String HEADER_WIDTH="600px"; //$NON-NLS-1$
+    private static final String PANEL_WIDTH = "600px"; //$NON-NLS-1$
+    private static final String CONFIRM_POPUP_WIDTH = "350px"; //$NON-NLS-1$
 
     private final ThemeResource ICON_BUTTON_OK = new ThemeResource("icons/button/ok.png"); //$NON-NLS-1$
     private final ThemeResource ICON_BUTTON_CANCEL = new ThemeResource("icons/button/cancel.png"); //$NON-NLS-1$
     private final ThemeResource ICON_BUTTON_EXPAND_ALL = new ThemeResource("icons/button/openall.png"); //$NON-NLS-1$
     private final ThemeResource ICON_BUTTON_COLLAPSE_ALL = new ThemeResource("icons/button/closeall.png"); //$NON-NLS-1$
+    private final ThemeResource ICON_BUTTON_VALIDATE = new ThemeResource("icons/button/validate.png"); //$NON-NLS-1$
 
     private static final String WARN_EXTENSION_DISABLED = "Extension <i>{0}</i> has been disabled";
     private static final String WARN_EXTENSION_INHERITED = "Extension <i>{0}</i> is inherited from parent project <i>{1}</i>";
@@ -97,35 +98,35 @@ public class ProjectEditPanel extends Panel {
     private Navigator navigator;
 
     private Label headerLabel;
+    private Label footerLabel;
 
-    private SortedSet<Issue> persistedIssuesWithoutExtension;
-    private Map<String, SortedSet<Issue>> persistedIssuesPerExtension;
+    private Issues persistedIssues;
 
     /**
-     * Creates a project edit view for browsing a project in readonly mode
-     * ({@link ProjectEditMode#VIEW_PROJECT}), for editing a project
-     * ({@see ProjectEditMode#EDIT_PROJECT}), or for creating a new project
-     * based on a given project template.
-     * @param application
-     * @param project
-     * @param mode
-     * @param projectTemplate
+     * Creates a project edit view for
+     * <ul>
+     *   <li>browsing of an existing project in readonly mode ({@link ProjectEditMode#VIEW_PROJECT})</li>
+     *   <li>editing of an existing project ({@link ProjectEditMode#EDIT_PROJECT})</li>
+     *   <li>editing of a new project ({@link ProjectEditMode#NEW_PROJECT})</li>
+     * </ul>
+     *
+     * @param application  the application.
+     * @param navigator  the navigator used to leave the dialog.
+     * @param project  the project to browse or modify, or a freshly created project.
+     * (see {@link ProjectService#createProject(String, String)}).
+     * @param mode  one of {@link ProjectEditMode#VIEW_PROJECT}, {@link ProjectEditMode#EDIT_PROJECT} or
+     * {@link ProjectEditMode#NEW_PROJECT}.
      */
     public ProjectEditPanel(ProjectApplication application, Navigator navigator, Project project, ProjectEditMode mode)
     {
         this.application = application;
         this.navigator = navigator;
         this.mode = mode;
-
-        if (project == null) {
-            project = new Project();
-        }
         this.project = project;
 
-        // get a new project instance as the edit dialog could make changes
-        // to the cached instance while editing and that would have visible
-        // side effects to other users
-        if (project.getUuid() == null) {
+        // If the project has been persisted before, do not modify the
+        // cached project instance, but modify a copy loaded directly from storage.
+        if (ProjectEditMode.NEW_PROJECT.equals(mode)) {
             modifiedProject = project;
         } else {
             ProjectService service = Services.getRequiredService(ProjectService.class);
@@ -136,7 +137,7 @@ public class ProjectEditPanel extends Panel {
         projectTemplate = templateService.getProjectTemplateById(project.getProjectTemplateId());
 
         initializeSelectableExtensions();
-        initializePersistedIssues();
+        loadPersistedIssues();
         initializePanelEntries();
 
         setSizeFull();
@@ -145,62 +146,38 @@ public class ProjectEditPanel extends Panel {
     }
 
     /**
-     * Sorts the issues (per extension / global issues) for further processing (e.g. setErrorMessage()).
-     * Guarantees that the set (global issues) and the map (issues per extension) are not null.
+     * Loads persisted issues for the project.
      */
-    private void initializePersistedIssues() {
-        persistedIssuesWithoutExtension = new TreeSet<Issue>();
-        persistedIssuesPerExtension = new HashMap<String, SortedSet<Issue>>();
+    private void loadPersistedIssues() {
         if (modifiedProject.getUuid() == null) {
-            LOG.info("New project, no issues available. Skipping initialization of issues.");
+            LOG.info("New project, no issues available. Skipping loading of issues.");
             return;
         }
 
         IssuesService issuesService = Services.getService(IssuesService.class);
         if (issuesService == null) {
-            LOG.warning("No issue service available. Skipping initialization of issues.");
+            LOG.warning("No issue service available. Skipping loading of issues.");
             return;
         }
 
-        Issues issues = issuesService.loadEntity(Issues.class, modifiedProject.getUuid());
-        if (issues == null || issues.getIssues().isEmpty()) {
-            LOG.info("No issues available. Skipping initialization of issues.");
-            return;
-        }
-
-        for (Issue issue : issues.getIssues()) {
-            Class<? extends ExtensionEntityBase> extension = issue.getExtension();
-            if (extension == null) {
-                persistedIssuesWithoutExtension.add(issue);
-            } else {
-                if (persistedIssuesPerExtension.containsKey(extension.getName())) {
-                    persistedIssuesPerExtension.get(extension.getName()).add(issue);
-                }
-                else {
-                    SortedSet<Issue> extensionIssues = new TreeSet<Issue>();
-                    extensionIssues.add(issue);
-                    persistedIssuesPerExtension.put(extension.getName(), extensionIssues);
-                }
-            }
-        }
+        persistedIssues = issuesService.loadEntity(Issues.class, modifiedProject.getUuid());
     }
 
     /**
-     * Initializes {@link #selectableExtensions}:
-     * Iterates over all {@link ExtensionService} implementations, i.e. over
-     * all extensions, and
-     * <ol>
-     * <li>checks that the extension can work with the given template</li>
-     * <li>checks that the extensions is not in the template's exclude list (if an exclude list is specified)</li>
-     * <li>checks that the extensions is in the templates include list (if an include list is specified)</li>
-     * </ol>
+     * Initializes the {@link #selectableExtensions} field:
+     * Calls {@link ProjectTemplateService#getSelectableExtensions(ProjectTemplate, Project)} to determine
+     * all extensions that
+     * <ul>
+     * <li>can work with the given template (see {@link ExtensionService#getProjectTemplateIdservice()})</li>
+     * <li>are not in the template's exclude list (if an exclude list is specified,
+     * see {@link ProjectTemplate#getExcludedExtensions()})</li>
+     * <li>are in the templates include list (if an include list is specified,
+     * see {@link ProjectTemplate#getIncludedExtensions()})</li>
+     * </ul>
      * If all checks succeed, the extension's class name is added to <code>selectableExtensions</code>.
-     * Note, <code>selectableExtensions</code> is pre-initialized with the project's extensions.
-     * This ensures, that extensions do not accidentially vansish, when the template of a project changes.
      */
     private void initializeSelectableExtensions() {
         ProjectTemplateService projectTemplateService = Services.getRequiredService(ProjectTemplateService.class);
-
         selectableExtensions = new HashSet<String>();
         for (Class<? extends ExtensionEntityBase> extension : projectTemplateService.getSelectableExtensions(
                 projectTemplate, modifiedProject)) {
@@ -209,7 +186,7 @@ public class ProjectEditPanel extends Panel {
     }
 
     /**
-     * Creates and initializes the trays.
+     * Creates and initializes the panels.
      * Iterates over all available {@link ExtensionFormService} and creates a {@link ProjectEditPanelEntry}
      * for each form service that is supported by the project template of the project to edit.
      */
@@ -223,64 +200,61 @@ public class ProjectEditPanel extends Panel {
             ExtensionFormService extensionFormFactory = extensionFormFactories.next();
             String extensionClassName = extensionFormFactory.getExtensionClass().getName();
             if (selectableExtensions.contains(extensionClassName)) {
-                ProjectEditPanelEntry entry = new ProjectEditPanelEntry(modifiedProject, extensionFormFactory, context,
-                        application);
-                entry.setWidth(W600PX);
+                ProjectEditPanelEntry entry = new ProjectEditPanelEntry(
+                        modifiedProject, extensionFormFactory, context, application);
+                entry.setWidth(PANEL_WIDTH);
                 entries.add(entry);
                 displayNames.put(extensionClassName, entry.getDisplayName());
-
-                entry.setPersistedIssues(persistedIssuesPerExtension.get(extensionClassName));
             }
         }
     }
 
-    /**
-     * Renders the content of the panel.
-     */
-    private void renderContent(VerticalLayout content) {
+    void renderContent(VerticalLayout content) {
         content.setStyleName(STYLE_EDIT_PROJECT_LAYOUT);
         renderButtons(content);
-        renderHeaderMessage(content);
-        renderProjectEntries(content);
+        headerLabel = renderMessageArea(content);
+        renderPanels(content);
+        footerLabel = renderMessageArea(content);
         renderButtons(content);
+        renderPersistedIssues();
+    }
 
-        setHeaderMessage(persistedIssuesWithoutExtension);
+    private Label renderMessageArea(VerticalLayout layout) {
+        CssLayout messageArea = new CssLayout();
+        messageArea.setMargin(true);
+        messageArea.setWidth(PANEL_WIDTH);
+        Label label = new Label("", Label.CONTENT_XHTML); //$NON-NLS-1$
+        label.addStyleName(STYLE_ISSUES);
+        label.setVisible(false);
+        messageArea.addComponent(label);
+        layout.addComponent(messageArea);
+        layout.setComponentAlignment(messageArea, Alignment.MIDDLE_CENTER);
+        return label;
+    }
+
+    private void setMessage(Label label, String message) {
+        if (StringUtils.isNotEmpty(message)) {
+            label.setValue(message);
+            label.setVisible(true);
+        } else {
+            label.setVisible(false);
+        }
+        label.requestRepaint();
+    }
+
+    private void setMessage(String message) {
+        setMessage(headerLabel, message);
+        setMessage(footerLabel, message);
+    }
+
+    private void setMessage(SortedSet<Issue> issues, Map<String,String> displayNames) {
+        String message = Issues.asHTMLList(null, issues, displayNames);
+        setMessage(headerLabel, message);
+        setMessage(footerLabel, message);
     }
 
     /**
-     * Renders the header message between the upper button bar and the first tray.
-     */
-    private void renderHeaderMessage(VerticalLayout layout) {
-        CssLayout headerLine = new CssLayout();
-        headerLine.setMargin(true);
-        headerLine.setWidth(HEADER_WIDTH);
-        headerLabel = new Label("", Label.CONTENT_XHTML); //$NON-NLS-1$
-        headerLabel.setWidth(HEADER_WIDTH);
-        headerLabel.addStyleName(STYLE_ISSUES);
-        headerLabel.setVisible(false);
-        headerLine.addComponent(headerLabel);
-        layout.addComponent(headerLine);
-        layout.setComponentAlignment(headerLine, Alignment.MIDDLE_CENTER);
-    }
-
-    /**
-     * Sets or resets the header message and repaints the label.
-     */
-    private void setHeaderMessage(String message) {
-        headerLabel.setValue(message);
-        headerLabel.setVisible(StringUtils.isNotEmpty(message));
-        headerLabel.requestRepaint();
-    }
-
-    /**
-     * Sets or resets the header message and repaints the label.
-     */
-    private void setHeaderMessage(SortedSet<Issue> issues) {
-        setHeaderMessage(Issues.asHTMLList(null, issues));
-    }
-
-    /**
-     * Renders the OK/Cancel/Expand All/Collapse All button bar.
+     * Renders a OK/Cancel/Validate/Expand All/Collapse All button bar.
      */
     @SuppressWarnings("serial")
     private void renderButtons(VerticalLayout layout) {
@@ -289,34 +263,45 @@ public class ProjectEditPanel extends Panel {
 
         Button okButton = new Button("OK");
         okButton.setIcon(ICON_BUTTON_OK);
-        okButton.setDescription("Commit changes");
+        okButton.setDescription("Save the modified project");
         okButton.addListener(new OKButtonListener());
         buttons.addComponent(okButton);
 
         Button cancelButton = new Button("Cancel");
         cancelButton.setIcon(ICON_BUTTON_CANCEL);
-        cancelButton.setDescription("Discard changes");
+        cancelButton.setDescription("Discard all changes to the project");
         cancelButton.addListener(new CancelButtonListener());
         buttons.addComponent(cancelButton);
 
+        Button validateAllButton = new Button("Validate");
+        validateAllButton.setIcon(ICON_BUTTON_VALIDATE);
+        validateAllButton.setDescription("Checks the modified project for issues without saving it");
+        validateAllButton.addListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                validateModifiedProject();
+            }
+        });
+        buttons.addComponent(validateAllButton);
+
         Button expandAllButton = new Button("Expand All");
         expandAllButton.setIcon(ICON_BUTTON_EXPAND_ALL);
-        expandAllButton.setDescription("Expand All");
+        expandAllButton.setDescription("Expand all panels");
         expandAllButton.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                expandAllTrays();
+                expandAllPanels();
             }
         });
         buttons.addComponent(expandAllButton);
 
         Button collapseAllButton = new Button("Collapse All");
         collapseAllButton.setIcon(ICON_BUTTON_COLLAPSE_ALL);
-        collapseAllButton.setDescription("Collapse All ");
+        collapseAllButton.setDescription("Collapse all panels");
         collapseAllButton.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                collapseAllTrays();
+                collapseAllPanels();
             }
         });
         buttons.addComponent(collapseAllButton);
@@ -326,112 +311,140 @@ public class ProjectEditPanel extends Panel {
     }
 
     /**
-     * Renders the trays in the order defined by the comparator of {@link #entries}.
+     * Renders the panels in the order defined by the comparator of {@link #entries}.
      */
-    private void renderProjectEntries(VerticalLayout layout) {
+    private void renderPanels(VerticalLayout layout) {
         for (ProjectEditPanelEntry entry : entries) {
             layout.addComponent(entry);
             layout.setComponentAlignment(entry, Alignment.MIDDLE_CENTER);
         }
     }
 
-    /**
-     * Collapses all trays.
-     */
-    private void collapseAllTrays() {
+    private void collapseAllPanels() {
         for (ProjectEditPanelEntry entry : entries) {
             entry.collapse();
         }
     }
 
-    /**
-     * Expands all trays.
-     */
-    private void expandAllTrays() {
+    private void expandAllPanels() {
         for (ProjectEditPanelEntry entry : entries) {
             entry.expand();
         }
     }
 
     /**
-     * Expands all invalid trays and collapses the valid trays.
+     * Validates the modified project with {@link Severity#INFO} and renders the result.
      */
-    private void expandAllInvalidTrays() {
-        for (ProjectEditPanelEntry entry : entries) {
-            if (entry.isEnabled()) {
-                if (entry.isValid()) {
-                    entry.markAsInvalid(false);
-                    entry.collapse();
-                } else {
-                    entry.markAsInvalid(true);
-                    entry.expand();
-                }
+    private void validateModifiedProject() {
+        commitForms();
+
+        ProjectService projectService = Services.getRequiredService(ProjectService.class);
+        SortedSet<Issue> issues =  projectService.validate(modifiedProject, Severity.INFO);
+        renderIssues(issues, false);
+
+        if (issues.size() == 0) {
+            getWindow().showNotification("No Issues Found");
+        }
+    }
+
+
+    /**
+     * Renders the persisted validation issues. If the persisted issues are
+     * stale, render a corresponding message instead.
+     */
+    private void renderPersistedIssues() {
+        if (persistedIssues != null) {
+            renderIssues(persistedIssues.getIssues(), false);
+            if (persistedIssues.isStale()) {
+                setMessage("<ul><li class=\"STALE\">" +
+                        "No information about issues available. Use the <b>Validate</b> button " +
+                        "above to validate the project now.</li></ul>");
             }
         }
     }
 
     /**
-     * Shows validation issues given by a <code>ValidationException</code>.
-     * Expands all trays with validation issues and marks them as invalid.
-     * Displays issues that are not related to any extension in the error line above the trays.
-     * Sets the error marker on invalid fields and displays error messages related to an extension
-     * by setting the error text of the corresponding form.
+     * Renders validation issues given by a <code>ValidationException</code>
+     * merged with the persisted issues (if any).
      *
-     * @param e  the validation exception to evaluate.
+     * @param e  the validation exception to render.
      */
-    private void showValidationIssues(ValidationException e) {
-        SortedSet<Issue> globalIssues = new TreeSet<Issue>(persistedIssuesWithoutExtension);
-        Map<String, SortedSet<Issue>> invalidExtensions = new HashMap<String, SortedSet<Issue>>();
-
-        // sort the issues of the exception by extension
-        for (Issue issue : e.getIssues()) {
-            Class<? extends ExtensionEntityBase> extension = issue.getExtension();
-            if (extension != null) {
-                String extensionName = extension.getName();
-                SortedSet<Issue> extensionIssues = invalidExtensions.get(extensionName);
-                if (extensionIssues == null) {
-                    extensionIssues = new TreeSet<Issue>();
-                }
-                extensionIssues.add(issue);
-                invalidExtensions.put(extensionName, extensionIssues);
-            } else {
-                globalIssues.add(issue);
-            }
+    private void renderIssues(ValidationException e) {
+        TreeSet<Issue> issues = new TreeSet<Issue>(e.getIssues());
+        if (persistedIssues != null) {
+            issues.addAll(persistedIssues.getIssues());
         }
-        // render issues related to certain extensions by setting error texts
-        // of the invalid fields and the form of the corresponding tray
+        renderIssues(issues, true);
+    }
+
+    /**
+     * Renders the given validation issues.
+     *
+     * If <code>collapseValid</code> is set all panels without issues will be collapsed
+     * to focus the view of the user to panels with issues.
+     */
+    private void renderIssues(SortedSet<Issue> issues, boolean collapseValid) {
+        Map<String, SortedSet<Issue>> sortedIssues = new HashMap<String, SortedSet<Issue>>();
+        sortIssuesByExtension(issues, sortedIssues);
+
+        // render issues that are related to an extension
         for (ProjectEditPanelEntry entry : entries) {
             String extensionName = entry.getExtensionClassName();
-            SortedSet<Issue> extensionIssues = invalidExtensions.get(extensionName);
-            if (extensionIssues != null) {
-                entry.markAsInvalid(true, extensionIssues);
-                entry.expand();
-            } else {
-                entry.markAsInvalid(false, null);
-            }
+            SortedSet<Issue> extensionIssues = sortedIssues.get(extensionName);
+            entry.showIssues(extensionIssues, collapseValid);
         }
-        // render issues that are not related to an extension in the error view
-        // above the trays
-        if (globalIssues.size() > 0) {
-            setHeaderMessage(globalIssues);
-        }
+
+        // render issues in the message areas
+        setMessage(issues, displayNames);
     }
 
     /**
-     * Commits the forms of all enabled trays, so that fresh input from the Vaadin
+     * Sorts the issues by extension and adds them to <code>extensionIssues</code> according to the
+     * extension they belong to.
+     */
+    private void sortIssuesByExtension(SortedSet<Issue> issues, Map<String, SortedSet<Issue>> extensionIssues) {
+        if (issues != null) {
+            for (Issue issue : issues) {
+                Class<? extends ExtensionEntityBase> extension = issue.getExtension();
+                if (extension != null) {
+                    String extensionName = extension.getName();
+                    addIssue(extensionIssues, extensionName, issue);
+                }
+            }
+        }
+    }
+
+    private void addIssue(Map<String, SortedSet<Issue>> issues, String extensionName, Issue issue) {
+        SortedSet<Issue> set = issues.get(extensionName);
+        if (set == null) {
+            set = new TreeSet<Issue>();
+        }
+        set.add(issue);
+        issues.put(extensionName, set);
+    }
+
+    /**
+     * Commits the forms of all enabled panels, so that fresh input from the Vaadin
      * fields is copied to the modified project. Note, this method does not persist
      * the modified project!
      */
-    private void commitFormEntries() {
+    private void commitForms() {
         for (ProjectEditPanelEntry entry : entries) {
             if (entry.isEnabled()) {
-                entry.commit();
+                try {
+                    entry.commit();
+                } catch (InvalidValueException e) {
+                    // we do not support Vaadin validation (see DefaultProjectFieldFactory),
+                    // but if something bad happens, we at least should log it
+                    LOG.log(Level.SEVERE, e.getMessage(), e);
+                }
             }
         }
     }
 
     /**
-     * Persists the current modified project.
+     * Persists the current modified project and removes persisted issues.
+     *
      * Sets the current system time as {@link Project#setRegistered(long) registration time},
      * if a new project is saved for the first time.
      *
@@ -439,42 +452,72 @@ public class ProjectEditPanel extends Panel {
      * validation issues.
      */
     private void commit() throws ValidationException {
-        // set the current system time as date of registration
         if (ProjectEditMode.NEW_PROJECT.equals(mode)) {
             modifiedProject.setRegistered(System.currentTimeMillis());
         }
+        commitModifiedProject();
+        clearPersistedIssues();
+    }
 
+    private void commitModifiedProject() throws ValidationException {
         ProjectService projectService = Services.getRequiredService(ProjectService.class);
         projectService.persist(modifiedProject, application.getLoggedInUser());
     }
 
+    /**
+     * Removes persisted issues for this project, but marks the corresponding
+     * {@link Issues} entry as stale.
+     */
+    private void clearPersistedIssues() throws ValidationException {
+        IssuesService issuesService = Services.getService(IssuesService.class);
+        if (issuesService != null) {
+            Issues emptyIssues = new Issues(modifiedProject.getUuid());
+            emptyIssues.setStale(true);
+            issuesService.persist(emptyIssues, application.getLoggedInUser());
+         }
+    }
 
     private class OKButtonListener implements Button.ClickListener {
         private static final long serialVersionUID = 6531396291087032954L;
 
         @Override
         public void buttonClick(ClickEvent event) {
-            commitFormEntries();
-            List<String> dataLossWarnings = getDataLossWarnings();
-            List<String> confirmationWarnings = getConfirmationWarnings();
-            if (dataLossWarnings.isEmpty() && confirmationWarnings.isEmpty()) {
-                doCommit();
-            } else {
-                ConfirmPopup popup = new ConfirmPopup(dataLossWarnings, confirmationWarnings, new ConfirmPopup.OnConfirmation() {
-                    @Override
-                    public void onConfirmation(boolean confirmed) {
-                        if (confirmed) {
-                            doCommit();
+            try {
+                commitForms();
+                List<String> dataLossWarnings = getDataLossWarnings();
+                List<String> confirmationWarnings = getConfirmationWarnings();
+                if (dataLossWarnings.isEmpty() && confirmationWarnings.isEmpty()) {
+                    doCommit();
+                } else {
+                    ConfirmPopup popup = new ConfirmPopup(dataLossWarnings, confirmationWarnings, new ConfirmPopup.OnConfirmation() {
+                        @Override
+                        public void onConfirmation(boolean confirmed) {
+                            if (confirmed) {
+                                doCommit();
+                            }
                         }
-                    }
-                });
-                getWindow().addWindow(popup);
+                    });
+                    getWindow().addWindow(popup);
+                }
+            } catch (RuntimeException e) {
+                // If something bad happens in a validator, in the form commit or
+                // while persisting the project, we log the incident and render the exception
+                renderException(e);
+                LOG.log(Level.SEVERE, e.getMessage(), e);
             }
+        }
+
+        private void renderException(Throwable t) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<strong class=\"").append(STYLE_EDIT_PROJECT_ERROR).append("\">"); //$NON-NLS-1$ //$NON-NLS-2$
+            sb.append("Failed to commit changes. An internal error occured. See log for details.");
+            sb.append("</strong>"); //$NON-NLS-1$
+            setMessage(sb.toString());
         }
 
         private void doCommit() {
             try {
-                setHeaderMessage(StringUtils.EMPTY);
+                setMessage(StringUtils.EMPTY);
                 commit();
                 application.refresh(modifiedProject);
                 application.refresh((Project) project.getParentEntity());
@@ -486,26 +529,9 @@ public class ProjectEditPanel extends Panel {
                 else {
                     navigator.navigateWelcomeView();
                 }
-            } catch (InvalidValueException e) { // thrown by Vaadin validators
-                expandAllInvalidTrays();
+            } catch (ValidationException e) {
+                renderIssues(e);
                 LOG.log(Level.FINE, e.getMessage(), e);
-            } catch (ValidationException e) { // thrown by persistency
-                showValidationIssues(e);
-                LOG.log(Level.FINE, e.getMessage(), e);
-            } catch (RuntimeException e) {
-                expandAllInvalidTrays();
-                String errorMessage = e.getMessage();
-                StringBuilder sb = new StringBuilder();
-                sb.append("<strong class=\"").append(STYLE_EDIT_PROJECT_ERROR).append("\">"); //$NON-NLS-1$ //$NON-NLS-2$
-                if (StringUtils.isBlank(errorMessage)) {
-                    sb.append("Failed to commit changes. An internal error occured. See log for details.");
-                }
-                else {
-                    sb.append(errorMessage);
-                }
-                sb.append("</strong>"); //$NON-NLS-1$
-                setHeaderMessage(sb.toString());
-                LOG.log(Level.SEVERE, errorMessage, e);
             }
         }
 
@@ -573,7 +599,7 @@ public class ProjectEditPanel extends Panel {
         public ConfirmPopup(List<String> dataLossWarnings, List<String> confirmationWarnings, OnConfirmation callback) {
             super("Confirmation of Changes");
             setModal(true);
-            setWidth(W350PX);
+            setWidth(CONFIRM_POPUP_WIDTH);
             this.callback = callback;
 
             StringBuilder sb = new StringBuilder();

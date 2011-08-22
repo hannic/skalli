@@ -54,14 +54,27 @@ public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
             Issues issues = issuesService.loadEntity(Issues.class, project.getUuid());
             StringBuilder sb = new StringBuilder();
             if (issues != null) {
-                SortedSet<Issue> issueSet = issues.getIssues();
-                if (!issueSet.isEmpty()) {
-                    sb.append(Issues.asHTMLList(null, issueSet));
-                    sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/")
-                            .append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=")
-                            .append(Consts.PARAM_VALUE_EDIT).append("\">here</a> to correct ");
-                    sb.append((issueSet.size() == 1) ? "this issue" : "these issues");
-                    sb.append(".</p>");
+                if (issues.isStale()) {
+                    sb.append("<ul><li class=\"STALE\">No information about issues available.</li></ul>");
+                    if (util.isUserProjectAdmin(project)) {
+                        sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/");
+                        sb.append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=");
+                        sb.append(Consts.PARAM_VALUE_VALIDATE).append("\">here</a> to validate the project now.</p>");
+                    }
+
+                } else {
+                    SortedSet<Issue> issueSet = issues.getIssues();
+                    if (!issueSet.isEmpty()) {
+                        sb.append(Issues.asHTMLList(null, issueSet));
+                        if (util.isUserProjectAdmin(project)) {
+                            sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/")
+                                    .append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=")
+                                    .append(Consts.PARAM_VALUE_EDIT).append("\">here</a> to correct ");
+                            sb.append((issueSet.size() == 1) ? "this issue" : "these issues");
+                            sb.append(".</p>");
+                        }
+                    }
+
                 }
                 Label issuesLabel = new Label(sb.toString(), Label.CONTENT_XHTML);
                 issuesLabel.addStyleName(STYLE_ISSUES);
@@ -88,16 +101,19 @@ public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
             return false;
         }
 
+        boolean showIssues = UserUtil.isAdministrator(loggedInUserId)
+                || UserUtil.isProjectAdminInParentChain(loggedInUserId, project);
+        if (!showIssues) {
+            return false;
+        }
+
         IssuesService issuesService = Services.getService(IssuesService.class);
         if (issuesService == null) {
             return false;
         }
 
-        boolean showIssues = UserUtil.isAdministrator(loggedInUserId)
-                || UserUtil.isProjectAdminInParentChain(loggedInUserId, project);
         Issues issues = issuesService.loadEntity(Issues.class, project.getUuid());
-
-        return (showIssues && issues != null && !issues.getIssues().isEmpty());
+        return issues != null && (issues.hasIssues() || issues.isStale());
     }
 
 }

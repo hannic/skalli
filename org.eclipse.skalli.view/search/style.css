@@ -204,6 +204,10 @@ issues (header area / info box / edit form)
     background-image: url('/VAADIN/themes/simple/icons/issues/fatal.png');
 }
 
+.issuesarea div.STALE,.prj-issues ul li.STALE,.prjedt-issues ul li.STALE {
+    background-image: url('/VAADIN/themes/simple/icons/issues/stale.png');
+}
+
 .issuesarea div.INFO,.prjedt-issues ul li.INFO {
     color: #205791;
     background-color: #d5edf8;
@@ -226,6 +230,12 @@ issues (header area / info box / edit form)
     color: #5A0000;
     background-color: #FF6666;
     border-color: #FF3030;
+}
+
+.issuesarea div.STALE,.prjedt-issues ul li.STALE {
+    color: #205791;
+    background-color: #d5edf8;
+    border-color: #92cae4;
 }
 
 /*
