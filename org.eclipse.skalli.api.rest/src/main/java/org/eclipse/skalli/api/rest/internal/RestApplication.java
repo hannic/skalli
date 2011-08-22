@@ -12,10 +12,7 @@ package org.eclipse.skalli.api.rest.internal;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import org.restlet.Application;
-import org.restlet.Restlet;
-import org.restlet.routing.Router;
+import java.util.logging.Logger;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 import org.eclipse.skalli.api.rest.internal.admin.ProjectBackupResource;
@@ -25,10 +22,19 @@ import org.eclipse.skalli.api.rest.internal.resources.IssuesResource;
 import org.eclipse.skalli.api.rest.internal.resources.ProjectResource;
 import org.eclipse.skalli.api.rest.internal.resources.ProjectsResource;
 import org.eclipse.skalli.api.rest.internal.resources.UserResource;
+import org.eclipse.skalli.api.rest.monitor.Monitorable;
+import org.eclipse.skalli.log.Log;
+import org.restlet.Application;
+import org.restlet.Restlet;
+import org.restlet.resource.ServerResource;
+import org.restlet.routing.Router;
 
 public class RestApplication extends Application {
 
+    private static final Logger LOG = Log.getLogger(RestApplication.class);
+
     private final static Set<ConfigSection> configSections = new HashSet<ConfigSection>();
+    private final static Set<Monitorable> serviceMonitors = new HashSet<Monitorable>();
 
     @Override
     public synchronized Restlet createInboundRoot() {
@@ -41,6 +47,7 @@ public class RestApplication extends Application {
         router.attach("/admin/status", StatusResource.class); //$NON-NLS-1$
         router.attach("/admin/statistics", StatisticsResource.class); //$NON-NLS-1$
         router.attach("/admin/backup", ProjectBackupResource.class); //$NON-NLS-1$
+        attachServiceMonitors("/admin/services/", router); //$NON-NLS-1$
 
         router.attach("/projects", ProjectsResource.class); //$NON-NLS-1$
         router.attach("/projects/{id}", ProjectResource.class); //$NON-NLS-1$
@@ -59,4 +66,34 @@ public class RestApplication extends Application {
         configSections.remove(configSection);
     }
 
+    protected void bindMonitorable(Monitorable monitorable) {
+        // TODO  find out if resources can be attached dynamically to the router:
+        // monitors come and go together with their service, but currently
+        // everything is attached to the router in createInboundRoot()
+        //
+        serviceMonitors.add(monitorable);
+    }
+
+    protected void unbindMonitorable(Monitorable monitorable) {
+        // TODO  find out if resources can be detached dynamically from the router:
+        // monitors come and go together with their service, but currently
+        // everything is attached to the router in createInboundRoot()
+        serviceMonitors.remove(monitorable);
+    }
+
+    private void attachServiceMonitors(String basePath, Router router) {
+        for (Monitorable serviceMonitor: serviceMonitors) {
+            String servicePath = basePath + serviceMonitor.getServiceComponentName() + "/"; //$NON-NLS-1$
+            for (String resourceName: serviceMonitor.getResourceNames()) {
+                String path = servicePath + "monitors/" + resourceName; //$NON-NLS-1$
+                Class<? extends ServerResource> monitorResource = serviceMonitor.getServerResource(resourceName);
+                if (monitorResource != null) {
+                    router.attach(path, monitorResource);
+                    LOG.info("Attached service monitor to path " + path);
+                } else {
+                    LOG.warning("No monitor resource provided for path " + path);
+                }
+            }
+        }
+    }
 }

@@ -34,7 +34,8 @@ Import-Package: org.eclipse.skalli.api.java,
  org.restlet.routing,
  org.restlet.util
 Web-ContextPath: /api
-Service-Component: OSGI-INF/ConfigComponent.xml
-Export-Package: org.eclipse.skalli.api.rest.config
+Service-Component: OSGI-INF/RestComponent.xml
+Export-Package: org.eclipse.skalli.api.rest.config,
+ org.eclipse.skalli.api.rest.monitor
 Bundle-ActivationPolicy: lazy
 
