@@ -10,8 +10,13 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -159,6 +164,14 @@ public abstract class AbstractConverter<T> implements AliasedConverter {
                 writeNode(writer, itemName, value);
             }
             writer.endNode();
+        }
+    }
+
+    protected void writeDateTime(HierarchicalStreamWriter writer, String nodeName, long millis) {
+        if (millis >= 0) {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.ENGLISH); //$NON-NLS-1$
+            calendar.setTimeInMillis(millis);
+            writeNode(writer, nodeName, DatatypeConverter.printDateTime(calendar));
         }
     }
 }

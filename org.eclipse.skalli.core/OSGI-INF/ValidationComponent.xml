@@ -13,6 +13,7 @@
    <implementation class="org.eclipse.skalli.core.internal.validation.ValidationServiceImpl"/>
    <service>
       <provide interface="org.eclipse.skalli.api.java.ValidationService"/>
+      <provide interface="org.eclipse.skalli.api.rest.monitor.Monitorable"/>
    </service>
    <reference
       bind="bindConfigurationService"

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
@@ -25,8 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.EntityService;
 import org.eclipse.skalli.api.java.EventListener;
 import org.eclipse.skalli.api.java.EventService;
@@ -38,6 +37,7 @@ import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
 import org.eclipse.skalli.api.java.tasks.Schedule;
 import org.eclipse.skalli.api.java.tasks.SchedulerService;
 import org.eclipse.skalli.api.java.tasks.Task;
+import org.eclipse.skalli.api.rest.monitor.Monitorable;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.log.Log;
@@ -46,8 +46,11 @@ import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issues;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.osgi.service.component.ComponentContext;
+import org.restlet.resource.ServerResource;
 
-public class ValidationServiceImpl implements ValidationService, EventListener<EventCustomizingUpdate> {
+
+public class ValidationServiceImpl implements ValidationService, EventListener<EventCustomizingUpdate>, Monitorable {
 
     private static final Logger LOG = Log.getLogger(ValidationServiceImpl.class);
 
@@ -76,8 +79,8 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     private UUID taskIdQueueValidator;
 
     /** Entities queued for re-validation subsequent to a persist */
-    private final LinkedBlockingQueue<Validation<? extends EntityBase>> queuedEntities =
-            new LinkedBlockingQueue<Validation<? extends EntityBase>>();
+    private final LinkedBlockingQueue<QueuedEntity<? extends EntityBase>> queuedEntities =
+            new LinkedBlockingQueue<QueuedEntity<? extends EntityBase>>();
 
     /** Activates this service and starts validation jobs. */
     protected void activate(ComponentContext context) {
@@ -174,7 +177,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
 
     private <T extends EntityBase> void queueAll(Map<Validation<T>, Validation<T>> newEntries) {
         // first, update those entries that already are scheduled...
-        Iterator<Validation<?>> oldEntries = queuedEntities.iterator();
+        Iterator<QueuedEntity<?>> oldEntries = queuedEntities.iterator();
         while (oldEntries.hasNext()) {
             Validation<?> oldEntry = oldEntries.next();
             Validation<T> newEntry = newEntries.get(oldEntry);
@@ -205,9 +208,9 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     public synchronized <T extends EntityBase> boolean isQueued(T entity) {
         Class<?> entityClass = entity.getClass();
         UUID entityId = entity.getUuid();
-        for (Validation<?> scheduledEntity : queuedEntities) {
-            if (entityClass.equals(scheduledEntity.getEntityClass())
-                    && entityId.equals(scheduledEntity.getEntityId())) {
+        for (Validation<?> queuedEntity : queuedEntities) {
+            if (entityClass.equals(queuedEntity.getEntityClass())
+                    && entityId.equals(queuedEntity.getEntityId())) {
                 return true;
             }
         }
@@ -301,14 +304,19 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         return (EntityService<T>) entityServices.get(entityClass.getName());
     }
 
+    // package protected for monitoring and testing purposes
+    Queue<QueuedEntity<? extends EntityBase>> getQueuedEntities() {
+        return queuedEntities;
+    }
+
     // package protected for testing purposes
-    Validation<? extends EntityBase> pollNextQueueEntry() {
+    QueuedEntity<? extends EntityBase> pollNextQueueEntry() {
         return queuedEntities.poll();
     }
 
     // package protected for testing purposes
     <T extends EntityBase> boolean offerQueueEntry(Validation<T> newEntry) {
-        return queuedEntities.offer(newEntry);
+        return queuedEntities.offer(new QueuedEntity<T>(newEntry));
     }
 
     // package protected for testing purposes
@@ -320,6 +328,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     Set<UUID> getRegisteredSchedules() {
         return registeredSchedules;
     }
+
 
     /**
      * Runnable that validates entities queued for re-validation and persists the results.
@@ -352,10 +361,11 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         @Override
         public void run() {
             do {
-                Validation<? extends EntityBase> entry = pollNextQueueEntry();
+                QueuedEntity<? extends EntityBase> entry = pollNextQueueEntry();
                 if (entry == null) {
                     break;
                 }
+                entry.setStartedAt(System.currentTimeMillis());
                 validateAndPersist(entry, defaultSeverity);
                 LOG.info(MessageFormat.format("{0}: done", entry));
             } while (queuedEntities.size() >= threshold);
@@ -577,7 +587,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     }
 
     // register default task for the queue validation
-    protected void startDefaultQueueTask(boolean start) {
+    private void startDefaultQueueTask(boolean start) {
         if (start) {
             Task task = new Task(
                     new QueueValidator(DEFAULT_SEVERITY, DEFAULT_THRESHOLD),
@@ -588,7 +598,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     }
 
     // register default "nightly queue all" schedule
-    protected void startDefaultNightlyTask(boolean start) {
+    private void startDefaultNightlyTask(boolean start) {
         if (start) {
             Schedule schedule = new Schedule(DEFAULT_NIGHTLY_VALIDATION_DAY,
                     DEFAULT_NIGHTLY_VALIDATION_HOUR, DEFAULT_NIGHLY_VALIDATION_MINUTE);
@@ -627,5 +637,27 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         if (ValidationsResource.MAPPINGS_KEY.equals(event.getCustomizationName())) {
             synchronizeAllTasks();
         }
+    }
+
+    // interface Monitorable
+
+    static final String SERVICE_COMPONENT_NAME = "org.eclipse.skalli.core.validation"; //$NON-NLS-1$
+
+    @Override
+    public String getServiceComponentName() {
+        return SERVICE_COMPONENT_NAME;
+    }
+
+    @Override
+    public Set<String> getResourceNames() {
+        return CollectionUtils.asSet(QueueMonitorResource.RESOURCE_NAME);
+    }
+
+    @Override
+    public Class<? extends ServerResource> getServerResource(String resourceName) {
+        if (QueueMonitorResource.RESOURCE_NAME.equals(resourceName)) {
+            return QueueMonitorResource.class;
+        }
+        return null;
     }
 }
