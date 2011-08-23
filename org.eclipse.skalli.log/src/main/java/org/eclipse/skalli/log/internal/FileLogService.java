@@ -13,19 +13,25 @@ package org.eclipse.skalli.log.internal;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
 
-import org.osgi.framework.ServiceReference;
+import org.eclipse.skalli.log.DefaultLogFormatter;
+import org.eclipse.skalli.log.LogService;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.log.LogService;
 
-@SuppressWarnings("nls")
+/**
+ * File based implementation of {@link LogService}.
+ * The name of the log file can be set with the system property <tt>logfile</tt>.
+ */
 public class FileLogService implements LogService {
 
     private PrintStream logFile;
+    private Formatter formatter = new DefaultLogFormatter();
 
     protected void activate(ComponentContext context) {
         try {
-            String logfileName = "log/log.txt";
+            String logfileName = "log/skalli.log"; //$NON-NLS-1$
             String logfileProperty = System.getProperty("logfile"); //$NON-NLS-1$
             if (logfileProperty != null) {
                 logfileName = logfileProperty;
@@ -42,49 +48,17 @@ public class FileLogService implements LogService {
     }
 
     @Override
-    public synchronized void log(int level, String message) {
-        logFile.println("[" + levelToString(level) + "] " + message);
+    public synchronized void log(LogRecord record) {
+        logFile.println(formatter.format(record));
     }
 
     @Override
-    public synchronized void log(int level, String message, Throwable exception) {
-        log(level, message);
-        logException(exception);
+    public void close() {
+        logFile.close();
     }
 
     @Override
-    public void log(ServiceReference sr, int level, String message) {
-        log(level, message);
-        if (sr != null) {
-            logFile.println("<" + sr.getBundle().getBundleId() + ":" + sr.getClass().getName() + "> ");
-        }
+    public void flush() {
+        logFile.flush();
     }
-
-    @Override
-    public void log(ServiceReference sr, int level, String message, Throwable exception) {
-        log(sr, level, message);
-        logException(exception);
-    }
-
-    private void logException(Throwable exception) {
-        if (exception != null) {
-            exception.printStackTrace(logFile);
-        }
-    }
-
-    private String levelToString(int level) {
-        switch (level) {
-        case LogService.LOG_DEBUG:
-            return "DEBUG"; //$NON-NLS-1$
-        case LogService.LOG_INFO:
-            return "INFO"; //$NON-NLS-1$
-        case LogService.LOG_WARNING:
-            return "WARNING"; //$NON-NLS-1$
-        case LogService.LOG_ERROR:
-            return "ERROR"; //$NON-NLS-1$
-        default:
-            return "UNKNOWN"; //$NON-NLS-1$
-        }
-    }
-
 }

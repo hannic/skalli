@@ -10,22 +10,26 @@
  *******************************************************************************/
 package org.eclipse.skalli.log;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.skalli.log.internal.JdkLogManager;
+import org.eclipse.skalli.log.internal.DefaultLoggerManager;
 
+/**
+ * Utility class to retrieve {@link java.util.logging.Logger loggers}.
+ */
 public class Log {
 
-    public static void setDefaultLogLevel(Level level) {
-        JdkLogManager.getInstance().setDefaultLogLevel(level);
-    }
-
-    public static Logger getLogger(String name) {
-        return JdkLogManager.getInstance().getLogger(name);
-    }
-
+    /**
+     * Returns a {@link java.util.logging.Logger logger} for the given class.
+     *
+     * @param c  the class for which to retrieve a logger.
+     * @return  a logger instance.
+     */
     public static Logger getLogger(Class<?> c) {
-        return JdkLogManager.getInstance().getLogger(c.getName());
+        DefaultLoggerManager instance = DefaultLoggerManager.getInstance();
+        if (instance != null) {
+            return instance.getLogger(c);
+        }
+        return Logger.getLogger(c.getName());
     }
 }

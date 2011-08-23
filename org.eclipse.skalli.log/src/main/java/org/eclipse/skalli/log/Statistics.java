@@ -35,10 +35,6 @@ public class Statistics {
             this.location = location;
         }
 
-        public String getBrowser() {
-            return browser;
-        }
-
         public String getDepartment() {
             return department;
         }
