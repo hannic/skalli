@@ -56,12 +56,6 @@ public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
             if (issues != null) {
                 if (issues.isStale()) {
                     sb.append("<ul><li class=\"STALE\">No information about issues available.</li></ul>");
-                    if (util.isUserProjectAdmin(project)) {
-                        sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/");
-                        sb.append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=");
-                        sb.append(Consts.PARAM_VALUE_VALIDATE).append("\">here</a> to validate the project now.</p>");
-                    }
-
                 } else {
                     SortedSet<Issue> issueSet = issues.getIssues();
                     if (!issueSet.isEmpty()) {
@@ -74,7 +68,11 @@ public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
                             sb.append(".</p>");
                         }
                     }
-
+                }
+                if (util.isUserProjectAdmin(project)) {
+                    sb.append("<p>Click <a href=\"").append(Consts.URL_PROJECTS).append("/");
+                    sb.append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=");
+                    sb.append(Consts.PARAM_VALUE_VALIDATE).append("\">here</a> to validate the project now.</p>");
                 }
                 Label issuesLabel = new Label(sb.toString(), Label.CONTENT_XHTML);
                 issuesLabel.addStyleName(STYLE_ISSUES);
