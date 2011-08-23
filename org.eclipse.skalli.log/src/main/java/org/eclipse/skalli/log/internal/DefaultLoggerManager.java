@@ -45,6 +45,7 @@ public class DefaultLoggerManager implements LoggerManager {
         loggerNames = new HashSet<String>();
         logServices = new HashSet<LogService>();
 
+        this.defaultLogLevel = Level.INFO;
         String defaultLogLevelProperty = System.getProperty("defaultLogLevel"); //$NON-NLS-1$
         if (defaultLogLevelProperty != null) {
             this.defaultLogLevel = Level.parse(defaultLogLevelProperty);
