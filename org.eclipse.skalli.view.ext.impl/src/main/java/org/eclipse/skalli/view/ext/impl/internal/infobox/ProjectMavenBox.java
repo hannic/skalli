@@ -91,7 +91,10 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
                     } else {
                         sb.append("    <!--<version>0.0.0</version>-->\n");
                     }
-                    sb.append("    <type>" + module.getPackaging() + "</type>\n");
+                    String packaging = module.getPackaging();
+                    if (StringUtils.isNotBlank(packaging)) {
+                        sb.append("    <type>" + packaging + "</type>\n");
+                    }
                     sb.append("</dependency>\n");
                     lineLength = calculateLineLength(module, lineLength);
                 }
