@@ -337,11 +337,9 @@ public class ProjectEditPanel extends Panel implements Issuer {
      */
     private void validateModifiedProject() {
         commitForms();
-
         ProjectService projectService = Services.getRequiredService(ProjectService.class);
         SortedSet<Issue> issues =  projectService.validate(modifiedProject, Severity.INFO);
         renderIssues(issues, false);
-
         if (issues.size() == 0) {
             getWindow().showNotification("No Issues Found");
         }
@@ -354,11 +352,12 @@ public class ProjectEditPanel extends Panel implements Issuer {
      */
     private void renderPersistedIssues() {
         if (persistedIssues != null) {
-            renderIssues(persistedIssues.getIssues(), false);
             if (persistedIssues.isStale()) {
                 setMessage("<ul><li class=\"STALE\">" +
                         "No information about issues available. Use the <b>Validate</b> button " +
                         "above to validate the project now.</li></ul>");
+            } else {
+                renderIssues(persistedIssues.getIssues(), false);
             }
         }
     }
@@ -371,9 +370,6 @@ public class ProjectEditPanel extends Panel implements Issuer {
      */
     private void renderIssues(ValidationException e) {
         TreeSet<Issue> issues = new TreeSet<Issue>(e.getIssues());
-        if (persistedIssues != null) {
-            issues.addAll(persistedIssues.getIssues());
-        }
         renderIssues(issues, true);
     }
 
@@ -517,7 +513,6 @@ public class ProjectEditPanel extends Panel implements Issuer {
 
         private void doCommit() {
             try {
-                setMessage(StringUtils.EMPTY);
                 commit();
                 application.refresh(modifiedProject);
                 application.refresh((Project) project.getParentEntity());
