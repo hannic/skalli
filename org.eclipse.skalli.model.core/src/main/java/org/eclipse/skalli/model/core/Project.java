@@ -128,9 +128,11 @@ public class Project extends ExtensibleEntityBase implements Taggable {
                 // use first characters of each word, if they are alpha-numeric and the resulting length exceeds 1 char.
                 StringBuilder retAbbrev = new StringBuilder();
                 for (String n : name.split(" ")) { //$NON-NLS-1$
-                    char ch = n.charAt(0);
-                    if (CharUtils.isAsciiAlphanumeric(ch) && retAbbrev.length() < 10) {
-                        retAbbrev.append(ch);
+                    if (n.length() > 0) {
+                        char ch = n.charAt(0);
+                        if (CharUtils.isAsciiAlphanumeric(ch) && retAbbrev.length() < 10) {
+                            retAbbrev.append(ch);
+                        }
                     }
                 }
                 // if the first-char abbbreviation is long enough, use it
