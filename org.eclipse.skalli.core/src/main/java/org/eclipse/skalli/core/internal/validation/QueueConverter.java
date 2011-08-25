@@ -45,11 +45,11 @@ class QueueConverter extends AbstractMonitorConverter {
             writer.startNode("queuedEntities");
             for (QueuedEntity<?> queuedEntity: queuedEntities) {
                 writer.startNode("queuedEntity");
-                writeNode(writer, "entityClass", queuedEntity.getEntityClass().toString());
+                writeNode(writer, "entityClass", queuedEntity.getEntityClass().getName());
                 writeNode(writer, "entityId", queuedEntity.getEntityId().toString());
                 writeNode(writer, "minSeverity", queuedEntity.getMinSeverity().toString());
                 writeNode(writer, "userId", queuedEntity.getUserId());
-                writeDateTime(writer, "QueuedAt", queuedEntity.getQueuedAt());
+                writeDateTime(writer, "queuedAt", queuedEntity.getQueuedAt());
                 writeDateTime(writer, "startedAt", queuedEntity.getStartedAt());
                 writer.endNode();
             }
