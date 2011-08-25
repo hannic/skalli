@@ -251,27 +251,32 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         }
     }
 
-    private <T extends EntityBase> void validateAndPersist(EntityService<T> entityService, T entity,
-            Severity minSeverity, String userId) {
-        SortedSet<Issue> issues = entityService.validate(entity, minSeverity);
+    private <T extends EntityBase> void validateAndPersist(EntityService<T> entityService,
+            T entity, Severity minSeverity, String userId) {
+        SortedSet<Issue> issues = null;
+        try {
+            issues = entityService.validate(entity, minSeverity);
+        } catch (RuntimeException e) {
+            LOG.log(Level.SEVERE, MessageFormat.format("Validation of entity {0} failed:\n{1}",
+                    entity.getUuid(), e.getMessage()), e);
+            return;
+        }
         if (issuesService != null) {
             try {
                 issuesService.persist(entity.getUuid(), issues, userId);
                 SortedSet<Issue> fatalIssues = Issues.getIssues(issues, Severity.FATAL);
                 if (fatalIssues.size() > 0) {
                     LOG.warning(Issues.getMessage(
-                            MessageFormat.format("Entity {0} has {1} FATAL issues", entity.getUuid(),
-                                    fatalIssues.size()),
+                            MessageFormat.format("Entity {0} has {1} FATAL issues", entity.getUuid(), fatalIssues.size()),
                             fatalIssues));
                 } else if (LOG.isLoggable(Level.FINE)) {
                     LOG.info(Issues.getMessage(
-                            MessageFormat.format("Entity {0}: validated ({1} issues found)", entity.getUuid(),
-                                    issues.size()),
+                            MessageFormat.format("Entity {0}: validated ({1} issues found)", entity.getUuid(), issues.size()),
                             issues));
                 }
             } catch (ValidationException e) { // should not happen, but in case...
-                LOG.warning(MessageFormat.format("Failed to persist issues for entity {0}:\n{1}",
-                        entity.getUuid(), e.getMessage()));
+                LOG.log(Level.SEVERE, MessageFormat.format("Failed to persist issues for entity {0}:\n{1}",
+                        entity.getUuid(), e.getMessage()), e);
             }
         }
     }
