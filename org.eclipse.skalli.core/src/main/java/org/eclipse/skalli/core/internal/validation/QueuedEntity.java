@@ -11,6 +11,7 @@
 package org.eclipse.skalli.core.internal.validation;
 
 import org.eclipse.skalli.api.java.Validation;
+import org.eclipse.skalli.common.util.FormatUtils;
 import org.eclipse.skalli.model.ext.EntityBase;
 
 class QueuedEntity<T extends EntityBase> extends Validation<T> {
@@ -33,5 +34,18 @@ class QueuedEntity<T extends EntityBase> extends Validation<T> {
 
     public long getQueuedAt() {
         return queuedAt;
+    }
+
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(super.toString());
+        if (queuedAt >= 0) {
+            sb.append("[queued at ").append(FormatUtils.formatUTCWithMillis(queuedAt)).append("]");
+        }
+        if (startedAt >= 0) {
+            sb.append("[started at ").append(FormatUtils.formatUTCWithMillis(startedAt)).append("]");
+        }
+        return sb.toString();
     }
 }

@@ -40,6 +40,7 @@ import org.eclipse.skalli.api.java.tasks.Task;
 import org.eclipse.skalli.api.rest.monitor.Monitorable;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.CollectionUtils;
+import org.eclipse.skalli.common.util.FormatUtils;
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.Issue;
@@ -366,11 +367,15 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         @Override
         public void run() {
             do {
+                LOG.info(MessageFormat.format("polling next queued validation at {0}",
+                        FormatUtils.formatUTCWithMillis(System.currentTimeMillis())));
                 QueuedEntity<? extends EntityBase> entry = pollNextQueueEntry();
                 if (entry == null) {
+                    LOG.info(MessageFormat.format("nothing to do (queuedEntities.size={0})", queuedEntities.size()));
                     break;
                 }
                 entry.setStartedAt(System.currentTimeMillis());
+                LOG.info(MessageFormat.format("{0}: started", entry));
                 validateAndPersist(entry, defaultSeverity);
                 LOG.info(MessageFormat.format("{0}: done", entry));
             } while (queuedEntities.size() >= threshold);
