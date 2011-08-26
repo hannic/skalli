@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.skalli.view.ext;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
@@ -33,13 +35,30 @@ public class InfoBox {
     }
 
     protected void createLabel(Layout layout, String caption) {
+        createLabel(layout, caption, STYLE_LABEL);
+    }
+
+    protected void createLabel(Layout layout, String caption, String styleName) {
         Label label = new Label(caption, Label.CONTENT_XHTML);
-        label.addStyleName(STYLE_LABEL);
+        if (StringUtils.isNotBlank(styleName)) {
+            label.addStyleName(styleName);
+        } else {
+            label.addStyleName(STYLE_LABEL);
+        }
         layout.addComponent(label);
     }
 
     protected void createLink(Layout layout, String caption, String url){
+        createLink(layout, caption, url, HtmlBuilder.DEFAULT_TARGET);
+    }
+
+    protected void createLink(Layout layout, String caption, String url, String targetName){
         Link link = new Link(caption, new ExternalResource(url));
+        if (StringUtils.isNotBlank(targetName)) {
+            link.setTargetName(targetName);
+        } else {
+            link.setTargetName(HtmlBuilder.DEFAULT_TARGET);
+        }
         link.addStyleName(STYLE_LINK);
         layout.addComponent(link);
     }

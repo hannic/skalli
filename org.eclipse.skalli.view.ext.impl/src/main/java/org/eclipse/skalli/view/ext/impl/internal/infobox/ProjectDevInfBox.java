@@ -22,12 +22,12 @@ import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 import org.eclipse.skalli.model.ext.devinf.ScmLocationMapper;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+import org.eclipse.skalli.view.ext.HtmlBuilder;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
 public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
@@ -67,91 +67,60 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
         Layout layout = new CssLayout();
         layout.setSizeFull();
 
-        boolean rendered = false;
         DevInfProjectExt devInf = project.getExtension(DevInfProjectExt.class);
 
-        StringBuffer sb = new StringBuffer();
-
+        HtmlBuilder html = new HtmlBuilder();
         if (devInf != null) {
             // Project Sources
             if (StringUtils.isNotBlank(devInf.getScmUrl())) {
-                iconizedLink(sb, ICON_SOURCES, "Project Sources", devInf.getScmUrl());
-                rendered = true;
+                html.appendIconizedLink(ICON_SOURCES, "Project Sources", devInf.getScmUrl());
             }
             // Bug Tracker
             if (StringUtils.isNotBlank(devInf.getBugtrackerUrl())) {
                 Set<String> linkList = new HashSet<String>();
                 linkList.add(devInf.getBugtrackerUrl());
                 addCreateBugLinks(linkList, project, devInf);
-                iconizedLinks(sb, ICON_BUGTRACKER, "Bug Tracker", "(Create Issue)", linkList);
-                rendered = true;
+                html.appendIconizedLinks(ICON_BUGTRACKER, "Bug Tracker", "(Create Issue)", linkList);
             }
             // Code Metrics
             if (StringUtils.isNotBlank(devInf.getMetricsUrl())) {
-                iconizedLink(sb, ICON_METRICS, "Code Metrics", devInf.getMetricsUrl());
-                rendered = true;
+                html.appendIconizedLink(ICON_METRICS, "Code Metrics", devInf.getMetricsUrl());
             }
             // CI / Build Server
             if (StringUtils.isNotBlank(devInf.getCiUrl())) {
-                iconizedLink(sb, ICON_CI_SERVER, "Continuous Integration / Build Server", devInf.getCiUrl());
-                rendered = true;
+                html.appendIconizedLink(ICON_CI_SERVER, "Continuous Integration / Build Server", devInf.getCiUrl());
             }
             // Code Review
             if (StringUtils.isNotBlank(devInf.getReviewUrl())) {
-                iconizedLink(sb, ICON_REVIEW, "Code Review", devInf.getReviewUrl());
-                rendered = true;
+                html.appendIconizedLink(ICON_REVIEW, "Code Review", devInf.getReviewUrl());
             }
             // Javadoc
             if (CollectionUtils.isNotBlank(devInf.getJavadocs())) {
-                iconizedLinks(sb, ICON_JAVADOC, "Javadoc", "more Javadoc", devInf.getJavadocs());
-                rendered = true;
+                html.appendIconizedLinks(ICON_JAVADOC, "Javadoc", "(more Javadoc)", devInf.getJavadocs());
             }
 
             // SCM Locations
             if (CollectionUtils.isNotBlank(devInf.getScmLocations())) {
-                sb.append("<h4>").append("Source Locations").append("</h4>\n"); //$NON-NLS-1$ //$NON-NLS-3$
-                sb.append("<ul>\n"); //$NON-NLS-1$
-
+                html.appendHeader("Source Locations", 4).append('\n');
+                html.append("<ul>\n"); //$NON-NLS-1$
                 ScmLocationMapper mapper = new ScmLocationMapper();
                 for (String scmUrl : devInf.getScmLocations()) {
-                    sb.append("<li>"); //$NON-NLS-1$
-                    sb.append(copyToClipboardLink(scmUrl, truncate(scmUrl)));
-
-                    // Mapped / Generated Links
-                    boolean isFirst = true;
+                    html.append("<li>"); //$NON-NLS-1$
+                    html.append(copyToClipboardLink(scmUrl, scmUrl.replaceFirst("^scm:.+?:", ""))); //$NON-NLS-1$ //$NON-NLS-2$
                     List<Link> mappedScmLinks = mapper.getMappedLinks(configService, project.getProjectId(), scmUrl,
                             ScmLocationMapper.PURPOSE_BROWSE, ScmLocationMapper.PURPOSE_REVIEW);
-                    for (Link mappedScmLink : mappedScmLinks) {
-                        sb.append("<a href=\""); //$NON-NLS-1$
-                        sb.append(mappedScmLink.getUrl());
-                        sb.append("\" target=\"_blank\""); //$NON-NLS-1$
-                        if (isFirst) {
-                            sb.append(">"); //$NON-NLS-1$
-                        } else {
-                            sb.append(" class=\"leftMargin\">"); //$NON-NLS-1$
-                        }
-                        sb.append(mappedScmLink.getLabel());
-                        sb.append("</a>"); //$NON-NLS-1$
-                        isFirst = false;
-                    }
-                    sb.append("</li>"); //$NON-NLS-1$
+                    html.appendLinks(mappedScmLinks);
+                    html.append("</li>\n"); //$NON-NLS-1$
                 }
-
-                sb.append("</ul>\n"); //$NON-NLS-1$
-                rendered = true;
+                html.append("</ul>\n"); //$NON-NLS-1$
             }
         }
 
-        Label label;
-        if (rendered) {
-            label = new Label(sb.toString(), Label.CONTENT_XHTML);
-            label.addStyleName(STYLE_DEFINF);
+        if (html.length() > 0) {
+            createLabel(layout, html.toString(), STYLE_DEFINF);
         } else {
-            label = new Label("Development Infrastructure extension added but no data maintained.");
-            label.addStyleName(STYLE_LABEL);
+            createLabel(layout, "This project has no development information.");
         }
-        layout.addComponent(label);
-
         return layout;
     }
 
@@ -184,39 +153,5 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
         } else {
             return false;
         }
-    }
-
-    @SuppressWarnings("nls")
-    private void iconizedLink(final StringBuffer sb, final String icon, final String label, final String url) {
-        sb.append("<img src =\"").append(icon).append("\" alt=\"\" />\n");
-        sb.append("<a href=\"").append(url).append("\" target=\"_blank\">").append(label).append("</a>\n");
-        sb.append("<br/>");
-    }
-
-    @SuppressWarnings("nls")
-    private void iconizedLinks(final StringBuffer sb, final String icon, final String firstLabel,
-            final String otherLabel, final Set<String> links) {
-        if (links.size() == 1) {
-            iconizedLink(sb, icon, firstLabel, links.iterator().next());
-        }
-        else {
-            sb.append("<img src =\"").append(icon).append("\" alt=\"\" />\n");
-
-            boolean isFirst = true;
-            for (String url : links) {
-                String label = (isFirst) ? firstLabel : otherLabel;
-                sb.append("<a href=\"").append(url).append("\" target=\"_blank\"")
-                        .append(isFirst ? ">" : " class=\"leftMargin\">").append(label).append("</a>");
-
-                isFirst = false;
-            }
-            sb.append("<br/>");
-        }
-    }
-
-    // truncate to have a useful SCM URL in the clipboard
-    @SuppressWarnings("nls")
-    private String truncate(String url) {
-        return url.replaceFirst("^scm:.+?:", "");
     }
 }
