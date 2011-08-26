@@ -47,16 +47,16 @@ public class Project extends ExtensibleEntityBase implements Taggable {
     @PropertyName(position = 5)
     public static final String PROPERTY_PARENT_PROJECT = "parentProject"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_TAGS = "tags"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_LOGO_URL = "logoUrl"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_PHASE = "phase"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_REGISTERED = "registered"; //$NON-NLS-1$
 
     private static final String DEFAULT_TEMPLATE_ID = "default"; //$NON-NLS-1$

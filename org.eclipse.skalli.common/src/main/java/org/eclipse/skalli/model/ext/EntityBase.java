@@ -23,25 +23,25 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class EntityBase implements Comparable<Object> {
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_UUID = "uuid"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_DELETED = "deleted"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_PARENT_ENTITY = "parentEntity"; //$NON-NLS-1$
 
     @Derived
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_PARENT_ENTITY_ID = "parentEntityId"; //$NON-NLS-1$
 
     @Derived
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_LAST_MODIFIED = "lastModified"; //$NON-NLS-1$
 
     @Derived
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_LAST_MODIFIED_BY = "lastModifiedBy"; //$NON-NLS-1$
 
     /**

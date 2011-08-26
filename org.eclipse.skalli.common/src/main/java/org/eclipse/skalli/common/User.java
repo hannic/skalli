@@ -35,11 +35,11 @@ public class User implements Comparable<User> {
     public static final String PROPERTY_EMAIL = "email"; //$NON-NLS-1$
 
     @Derived
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_FULL_NAME = "fullName"; //$NON-NLS-1$
 
     @Derived
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_DISPLAY_NAME = "displayName"; //$NON-NLS-1$
 
     private String userId;

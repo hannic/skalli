@@ -60,6 +60,6 @@ public @interface PropertyName {
      * This position will be used to sort a set of properties whenever the order matters
      * (e.g. when determining the properties to be rendered in the user interface automatically).
      */
-    int position();
+    int position() default -1;
 
 }

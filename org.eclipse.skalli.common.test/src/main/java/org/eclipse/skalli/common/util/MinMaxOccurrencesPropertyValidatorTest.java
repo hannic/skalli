@@ -28,7 +28,7 @@ public class MinMaxOccurrencesPropertyValidatorTest {
     class TestExtension extends ExtensibleEntityBase {
         Set<String> items = new HashSet<String>();
 
-        @PropertyName(position = -1)
+        @PropertyName
         public static final String PROPERTY_ITEMS = "items";
 
         public Set<String> getItems() {

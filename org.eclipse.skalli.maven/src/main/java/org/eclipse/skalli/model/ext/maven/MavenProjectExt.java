@@ -18,7 +18,7 @@ public class MavenProjectExt extends ExtensionEntityBase {
     public static final String MODEL_VERSION = "1.0"; //$NON-NLS-1$
     public static final String NAMESPACE = "http://www.eclipse.org/skalli/2010/Model/Extension-Maven"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_GROUPID = "groupID"; //$NON-NLS-1$
 
     @PropertyName(position = 0)

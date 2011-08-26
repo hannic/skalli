@@ -19,13 +19,13 @@ import org.eclipse.skalli.model.ext.PropertyName;
 @SuppressWarnings("nls")
 public class TestExtension extends ExtensionEntityBase {
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_BOOL = "bool";
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_STR = "str";
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_ITEMS = "items";
 
     private boolean bool;

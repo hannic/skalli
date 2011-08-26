@@ -21,10 +21,10 @@ import org.eclipse.skalli.model.ext.PropertyName;
 
 public class Favorites extends EntityBase {
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_USERID = "userId"; //$NON-NLS-1$
 
-    @PropertyName(position = -1)
+    @PropertyName
     public static final String PROPERTY_PROJECTS = "projects"; //$NON-NLS-1$
 
     private String userId = ""; //$NON-NLS-1$
