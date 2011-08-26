@@ -10,17 +10,12 @@
  *******************************************************************************/
 package org.eclipse.skalli.common.util;
 
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Severity;
@@ -28,6 +23,11 @@ import org.eclipse.skalli.testutil.BundleManager;
 import org.eclipse.skalli.testutil.HttpServerMock;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
 import org.eclipse.skalli.testutil.TestExtension;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class HostReachableValidatorTest {
@@ -118,6 +118,16 @@ public class HostReachableValidatorTest {
     @Test
     public void testIssuesFATAL() throws Exception {
         testIssues(Severity.FATAL);
+    }
+
+    @Test
+    public void testEncodeURL() throws Exception {
+        Assert.assertEquals("http://host:8080/first%20second",
+                HostReachableValidator.encodeURL(new URL("http://host:8080/first second")).toExternalForm());
+        Assert.assertEquals("http://host:8080/first%20second/third",
+                HostReachableValidator.encodeURL(new URL("http://host:8080/first second/third")).toExternalForm());
+        Assert.assertEquals("http://host:8080/=$%20%25:%C3%A4",
+                HostReachableValidator.encodeURL(new URL("http://host:8080/=$ %:ä")).toExternalForm());
     }
 
     private void testIssues(final Severity minSeverity) throws Exception {

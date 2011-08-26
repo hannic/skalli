@@ -13,8 +13,11 @@ package org.eclipse.skalli.common.util;
 import static org.apache.commons.httpclient.HttpStatus.*;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
@@ -22,10 +25,11 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
-
 import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.Issue;
@@ -61,6 +65,7 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
     private static final String TXT_PERMANENT_REQUEST_PROBLEM = "''{0}'' not found due to a permanent problem with the request ({1} {2}).";
     private static final String TXT_HOST_NOT_REACHABLE = "''{0}'' is not reachable.";
     private static final String TXT_HOST_UNKNOWN = "''{0}'' is unknown.";
+    private static final String TXT_CONNECT_FAILED = "Could not connect to host ''{0}''.";
 
     // general timeout for connection requests
     private static final int TIMEOUT = 10000;
@@ -130,9 +135,12 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
         try {
             if (HttpUtils.isSupportedProtocol(url)) {
                 // Was a HEAD request, but Confluence Wiki & P4Web did not support that correctly
+                url = encodeURL(url);
+                LOG.info("GET " + url); //$NON-NLS-1$
                 GetMethod method = new GetMethod(url.toExternalForm());
                 method.setFollowRedirects(false); // we want to find 301 (MOVED PERMANTENTLY)
-                HttpUtils.getClient(url).executeMethod(method);
+                int status = HttpUtils.getClient(url).executeMethod(method);
+                LOG.info(status + " " + HttpStatus.getStatusText(status)); //$NON-NLS-1$
                 CollectionUtils.addSafe(issues,
                         getIssueByResponseCode(minSeverity, entityId, item, method.getStatusCode(), label));
             } else {
@@ -140,8 +148,23 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
             }
         } catch (UnknownHostException e) {
             issues.add(newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, url.getHost()));
+        } catch (ConnectException e) {
+            issues.add(newIssue(Severity.ERROR, entityId, item, TXT_CONNECT_FAILED, url.getHost()));
         } catch (IOException e) {
-            LOG.warning(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage())); //$NON-NLS-1$
+            LOG.log(Level.WARNING, MessageFormat.format("I/O Exception on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
+        } catch (RuntimeException e) {
+            LOG.log(Level.SEVERE, MessageFormat.format("RuntimeException on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
+        }
+    }
+
+    // use URI to properly encode the given URL
+    static URL encodeURL(URL url) throws MalformedURLException {
+        try {
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),
+                    url.getPath(), url.getQuery(), url.getRef());
+            return new URL(uri.toASCIIString());
+        } catch (URISyntaxException e) {
+            throw new MalformedURLException(url.toString());
         }
     }
 
@@ -158,7 +181,7 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
             } catch (UnknownHostException e) {
                 return newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, host);
             } catch (IOException e) {
-                LOG.warning(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage())); //$NON-NLS-1$
+                LOG.log(Level.WARNING, MessageFormat.format("I/O Exception on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
                 return null;
             }
         }
