@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Services;
@@ -38,10 +39,15 @@ public class HttpUtils {
     private static final String[] RE_REPLACE = new String[] { "|", "(\\w|\\.|\\-)*", "\\." }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     // general timeout for connection requests
-    private static final int TIMEOUT = 10000;
+    private static final int CONNECT_TIMEOUT = 10000;
+    private static final int READ_TIMEOUT = 30000;
 
     // no instances
     private HttpUtils() {
+    }
+
+    static {
+        Protocol.registerProtocol(HTTPS, new Protocol(HTTPS, new AlwaysTrustSSLProtocolSocketFactory(), 443));
     }
 
     /**
@@ -58,12 +64,10 @@ public class HttpUtils {
         }
 
         HttpClient client = new HttpClient();
-        client.getHttpConnectionManager().getParams().setConnectionTimeout(TIMEOUT);
-
-        // according to http://hc.apache.org/httpclient-3.x/sslguide.html
-        if (url.getProtocol().equals(HTTPS)) {
-            Protocol.registerProtocol(HTTPS, new Protocol(HTTPS, new AlwaysTrustSSLProtocolSocketFactory(), 443));
-        }
+        HttpConnectionManagerParams params = client.getHttpConnectionManager().getParams();
+        params.setConnectionTimeout(CONNECT_TIMEOUT);
+        params.setSoTimeout(READ_TIMEOUT);
+        params.setTcpNoDelay(true);
 
         if (!isLocalDomain(url)) {
             setProxy(client, url);
