@@ -33,11 +33,13 @@ import org.eclipse.skalli.common.configuration.ConfigKey;
 import org.eclipse.skalli.common.configuration.ConfigTransaction;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.core.internal.persistence.CompositeEntityClassLoader;
+import org.eclipse.skalli.core.internal.persistence.xstream.IgnoreUnknownElementsMapperWrapper;
 import org.eclipse.skalli.core.utils.ConfigurationProperties;
 import org.eclipse.skalli.log.Log;
 import org.osgi.service.component.ComponentContext;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 public class ConfigurationComponent implements ConfigurationService {
     private static final Logger LOG = Log.getLogger(ConfigurationComponent.class);
@@ -210,7 +212,12 @@ public class ConfigurationComponent implements ConfigurationService {
     }
 
     private XStream getXStream(Class<?> customizationClass) {
-        XStream xstream = new XStream();
+        XStream xstream = new XStream() {
+            @Override
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
+                return new IgnoreUnknownElementsMapperWrapper(next);
+            }
+        };
         ClassLoader classLoader = customizationClass.getClassLoader();
         if (classLoader != null) {
             xstream.setClassLoader(new CompositeEntityClassLoader(Collections.singleton(classLoader)));
