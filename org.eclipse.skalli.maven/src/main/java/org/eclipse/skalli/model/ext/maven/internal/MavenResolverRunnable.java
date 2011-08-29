@@ -107,6 +107,14 @@ public class MavenResolverRunnable implements Runnable {
             LOG.finest(MessageFormat.format(
                     "MavenResolver: ({0} projects scanned: {1} updated, {2} invalid, {3} remaining)",
                     projects.size(), countUpdated, countInvalid, projects.size() - countUpdated - countInvalid));
+
+            // delay the execution for 10 seconds, otherwise we may
+            // overcharge gitweb/Nexus with out requests
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                break;
+            }
         }
         LOG.info(MessageFormat.format(
                 "MavenResolver: finished ({0} projects scanned: {1} updated, {2} invalid)",
