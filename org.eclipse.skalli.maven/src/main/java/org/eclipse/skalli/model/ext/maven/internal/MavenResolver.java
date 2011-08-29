@@ -19,12 +19,13 @@ import java.text.MessageFormat;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.FilenameUtils;
-
 import org.eclipse.skalli.common.util.HttpUtils;
+import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issuer;
 import org.eclipse.skalli.model.ext.Severity;
@@ -36,6 +37,8 @@ import org.eclipse.skalli.model.ext.maven.MavenReactor;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
 
 public class MavenResolver implements Issuer {
+
+    private static final Logger LOG = Log.getLogger(MavenResolver.class);
 
     protected final UUID project;
     protected final MavenPomParser parser;
@@ -82,23 +85,30 @@ public class MavenResolver implements Issuer {
             throw new IllegalArgumentException(MessageFormat.format(
                     "path resolver {0} is not applicable to scmLocation={1}", pathResolver.getClass(), scmLocation));
         }
-        MavenReactor project = new MavenReactor();
+        MavenReactor mavenReactor = new MavenReactor();
         MavenPom reactorPom = getMavenPom(scmLocation, reactorPomPath);
+        if (reactorPom== null) {
+            throw new MavenValidationException(MessageFormat.format("no pom for scm location {0} and reactorPomPath {1}", scmLocation, reactorPomPath));
+        }
         MavenCoordinate parent = reactorPom.getParent();
         MavenCoordinate self = getSelf(reactorPom, parent);
-        project.setCoordinate(self);
+        mavenReactor.setCoordinate(self);
+
         Set<String> moduleTags = reactorPom.getModuleTags();
         for (String moduleTag : moduleTags) {
             String normalizedPath = getNormalizedPath(reactorPomPath, moduleTag);
-            project.addModules(getModules(scmLocation, normalizedPath, self));
+            mavenReactor.addModules(getModules(scmLocation, normalizedPath, self));
         }
-        return project;
+        return mavenReactor;
     }
 
     private Set<MavenCoordinate> getModules(String scmLocation, String relativePath, MavenCoordinate parent)
             throws IOException, MavenValidationException {
         TreeSet<MavenCoordinate> result = new TreeSet<MavenCoordinate>();
         MavenPom modulePom = getMavenPom(scmLocation, relativePath);
+        if (modulePom == null) {
+            return result;
+        }
         MavenCoordinate self = getSelf(modulePom, parent);
         result.add(self);
         Set<String> moduleTags = modulePom.getModuleTags();
@@ -131,6 +141,9 @@ public class MavenResolver implements Issuer {
     MavenPom getMavenPom(String scmLocation, String relativePath)
             throws IOException, MavenValidationException {
         URL url = pathResolver.resolvePath(scmLocation, relativePath);
+        if (url == null)        {
+            throw new MavenValidationException(MessageFormat.format("url to read the pom for scm {0}, relativePath {1} is null.",scmLocation, relativePath));
+        }
         return getMavenPom(url);
     }
 
@@ -138,9 +151,15 @@ public class MavenResolver implements Issuer {
     MavenPom getMavenPom(URL url)
             throws IOException, MavenValidationException {
         MavenPom mavenPom = null;
-        String externalForm = url.toExternalForm();
-        GetMethod method = new GetMethod(externalForm);
-        method.setFollowRedirects(false);
+        String externalForm = null;
+        GetMethod method = null;
+        try {
+            externalForm = url.toExternalForm();
+            method = new GetMethod(externalForm);
+            method.setFollowRedirects(false);
+        } catch (IllegalArgumentException e) {
+            throw new IOException(MessageFormat.format("Can''t getMavenPom for url {0}: {1}", url.toString(), e.getMessage()));
+        }
         try {
             int statusCode = HttpUtils.getClient(url).executeMethod(method);
             if (statusCode == HttpStatus.SC_OK) {

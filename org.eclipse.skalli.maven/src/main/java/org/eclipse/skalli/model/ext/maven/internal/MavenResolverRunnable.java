@@ -60,6 +60,7 @@ public class MavenResolverRunnable implements Runnable {
         int countInvalid = 0;
         ProjectService projectService = getProjectService();
         List<Project> projects = projectService.getAll();
+        NexusVersionsResolver versionsResolver = new NexusVersionsResolver(nexusClient);
         LOG.info(MessageFormat.format("MavenResolver: started ({0} projects to scan)", projects.size()));
         for (Project project : projects) {
             MavenReactor newReactor = null;
@@ -78,7 +79,15 @@ public class MavenResolverRunnable implements Runnable {
                         project.getProjectId()), t);
                 continue;
             }
-            addNexusVersions(newReactor);
+
+            try {
+                versionsResolver.addNexusVersions(newReactor);
+            } catch (RuntimeException e) {
+                LOG.log(Level.SEVERE, MessageFormat.format(
+                        "Can''t calculate Versions for project {0} . Unexpected Exception cought: {1}",
+                        project.getProjectId(), e.getMessage()));
+            }
+
             MavenReactor oldReactor = getMavenReactorProperty(project);
             if (!ComparatorUtils.equals(newReactor, oldReactor)) {
                 if (updateMavenReactorExtension(project, newReactor)) {
@@ -94,19 +103,14 @@ public class MavenResolverRunnable implements Runnable {
                     }
                 }
             }
+
+            LOG.finest(MessageFormat.format(
+                    "MavenResolver: ({0} projects scanned: {1} updated, {2} invalid, {3} remaining)",
+                    projects.size(), countUpdated, countInvalid, projects.size() - countUpdated - countInvalid));
         }
         LOG.info(MessageFormat.format(
                 "MavenResolver: finished ({0} projects scanned: {1} updated, {2} invalid)",
                 projects.size(), countUpdated, countInvalid));
-    }
-
-    /**
-     * @param newReactor
-     */
-    private void addNexusVersions(MavenReactor mavenReactor) {
-        if (nexusClient != null && mavenReactor!= null) {
-            new NexusVersionsResolver(nexusClient).addNexusVersions(mavenReactor);
-        }
     }
 
     /**
