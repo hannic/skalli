@@ -204,10 +204,12 @@ public abstract class AbstractSearchFilter implements Filter {
         Map<String, String> natures = new HashMap<String, String>();
         for (SearchHit<Project> searchHit : searchHits) {
             Project project = searchHit.getEntity();
-            String uuid = project.getUuid().toString();
-            ProjectTemplate template = templateService.getProjectTemplateById(project.getProjectTemplateId());
-            if (template != null) {
-                natures.put(uuid, template.getProjectNature().toString());
+            if (project != null) {
+                String uuid = project.getUuid().toString();
+                ProjectTemplate template = templateService.getProjectTemplateById(project.getProjectTemplateId());
+                if (template != null) {
+                    natures.put(uuid, template.getProjectNature().toString());
+                }
             }
         }
         return natures;
