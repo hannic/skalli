@@ -40,7 +40,7 @@ public class HttpUtils {
 
     // general timeout for connection requests
     private static final int CONNECT_TIMEOUT = 10000;
-    private static final int READ_TIMEOUT = 30000;
+    private static final int READ_TIMEOUT = 300000;
 
     // no instances
     private HttpUtils() {
