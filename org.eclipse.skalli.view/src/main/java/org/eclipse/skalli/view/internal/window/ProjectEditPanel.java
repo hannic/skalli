@@ -56,6 +56,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.ProgressIndicator;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -98,6 +99,14 @@ public class ProjectEditPanel extends Panel implements Issuer {
 
     private Label headerLabel;
     private Label footerLabel;
+    private Button headerCheckButton;
+    private Button footerCheckButton;
+
+
+    private CssLayout indicatorArea;
+    private ProgressIndicator progressIndicator;
+    private ProgressThread progressThread;
+    private ValidatorThread validatorThread;
 
     private Issues persistedIssues;
 
@@ -210,12 +219,27 @@ public class ProjectEditPanel extends Panel implements Issuer {
 
     void renderContent(VerticalLayout content) {
         content.setStyleName(STYLE_EDIT_PROJECT_LAYOUT);
-        renderButtons(content);
+        headerCheckButton = renderButtons(content);
+        renderProgessIndicator(content);
         headerLabel = renderMessageArea(content);
         renderPanels(content);
         footerLabel = renderMessageArea(content);
-        renderButtons(content);
+        footerCheckButton = renderButtons(content);
         renderPersistedIssues();
+    }
+
+    private void renderProgessIndicator(VerticalLayout layout) {
+        indicatorArea = new CssLayout();
+        indicatorArea.setVisible(false);
+        indicatorArea.setMargin(true);
+        indicatorArea.setWidth(PANEL_WIDTH);
+        indicatorArea.addComponent(new Label("<strong>Project is checked for issues</strong>", Label.CONTENT_XHTML));
+        progressIndicator = new ProgressIndicator();
+        progressIndicator.setWidth("300px");
+        progressIndicator.setIndeterminate(false);
+        indicatorArea.addComponent(progressIndicator);
+        layout.addComponent(indicatorArea);
+        layout.setComponentAlignment(indicatorArea, Alignment.MIDDLE_CENTER);
     }
 
     private Label renderMessageArea(VerticalLayout layout) {
@@ -256,7 +280,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
      * Renders a OK/Cancel/Validate/Expand All/Collapse All button bar.
      */
     @SuppressWarnings("serial")
-    private void renderButtons(VerticalLayout layout) {
+    private Button renderButtons(VerticalLayout layout) {
         CssLayout buttons = new CssLayout();
         buttons.addStyleName(STYLE_EDIT_PROJECT_BUTTONS);
 
@@ -272,16 +296,16 @@ public class ProjectEditPanel extends Panel implements Issuer {
         cancelButton.addListener(new CancelButtonListener());
         buttons.addComponent(cancelButton);
 
-        Button validateAllButton = new Button("Validate");
-        validateAllButton.setIcon(ICON_BUTTON_VALIDATE);
-        validateAllButton.setDescription("Checks the modified project for issues without saving it");
-        validateAllButton.addListener(new Button.ClickListener() {
+        Button checkButton = new Button("Check");
+        checkButton.setIcon(ICON_BUTTON_VALIDATE);
+        checkButton.setDescription("Checks the modified project for issues without saving it");
+        checkButton.addListener(new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
                 validateModifiedProject();
             }
         });
-        buttons.addComponent(validateAllButton);
+        buttons.addComponent(checkButton);
 
         Button expandAllButton = new Button("Expand All");
         expandAllButton.setIcon(ICON_BUTTON_EXPAND_ALL);
@@ -307,6 +331,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
 
         layout.addComponent(buttons);
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
+        return checkButton;
     }
 
     /**
@@ -335,15 +360,91 @@ public class ProjectEditPanel extends Panel implements Issuer {
      * Validates the modified project with {@link Severity#INFO} and renders the result.
      */
     private void validateModifiedProject() {
+        headerCheckButton.setEnabled(false);
+        footerCheckButton.setEnabled(false);
         commitForms();
-        ProjectService projectService = Services.getRequiredService(ProjectService.class);
-        SortedSet<Issue> issues =  projectService.validate(modifiedProject, Severity.INFO);
-        renderIssues(issues, false);
-        if (issues.size() == 0) {
-            getWindow().showNotification("No Issues Found");
+        renderIssues(null, false);
+        progressIndicator.setValue(0f);
+        indicatorArea.setVisible(true);
+        progressThread = new ProgressThread();
+        validatorThread = new ValidatorThread();
+        progressThread.start();
+        validatorThread.start();
+    }
+
+    private void updateProgressIndicator() {
+        if (validatorThread != null && validatorThread.isFinished()) {
+            indicatorArea.setVisible(false);
+            persistedIssues.addLatestDuration(validatorThread.getDuration());
+            progressThread.interrupt();
+            validatorThread.interrupt();
+            progressThread = null;
+            validatorThread = null;
+            headerCheckButton.setEnabled(true);
+            footerCheckButton.setEnabled(true);
+        } else if (progressThread != null){
+            progressIndicator.setValue(progressThread.progress());
+        } else {
+            progressIndicator.setValue(0f);
         }
     }
 
+    private class ProgressThread extends Thread {
+        private static final long SLEEPING_TIME = 300L; // 1 seconds milliseconds
+        private static final long UNKNOWN_AVERAGE_DURATION = 30000L; // 10 seconds
+
+        private long elapsedTime;
+        private long averageDuration;
+
+        @Override
+        public void run() {
+            averageDuration = persistedIssues.getAverageDuration();
+            if (averageDuration < 0) {
+                averageDuration = UNKNOWN_AVERAGE_DURATION;
+            }
+            for (; elapsedTime < averageDuration ; elapsedTime += SLEEPING_TIME) {
+                try {
+                    Thread.sleep(SLEEPING_TIME);
+                } catch (InterruptedException e) {
+                    return;
+                }
+                synchronized (getApplication()) {
+                    updateProgressIndicator();
+                }
+            }
+        }
+
+        private float progress() {
+            return Math.min((float)elapsedTime/averageDuration, 0.95f); // never return 100%
+        }
+    }
+
+    private class ValidatorThread extends Thread {
+        private long startTime;
+        private long duration = -1L;
+        @Override
+        public void run() {
+            ProjectService projectService = Services.getRequiredService(ProjectService.class);
+            startTime = System.currentTimeMillis();
+            SortedSet<Issue> issues =  projectService.validate(modifiedProject, Severity.INFO);
+            synchronized (getApplication()) {
+                renderIssues(issues, false);
+                if (issues.size() == 0) {
+                    getWindow().showNotification("No Issues Found");
+                }
+                duration = System.currentTimeMillis() - startTime;
+                updateProgressIndicator();
+            }
+        }
+
+        public boolean isFinished() {
+            return duration >= 0;
+        }
+
+        public long getDuration() {
+            return duration;
+        }
+    }
 
     /**
      * Renders the persisted validation issues. If the persisted issues are

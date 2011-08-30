@@ -15,13 +15,12 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.testutil.AssertUtils;
 import org.eclipse.skalli.testutil.PropertyHelper;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class IssuesTest implements Issuer {
@@ -115,5 +114,26 @@ public class IssuesTest implements Issuer {
                 Arrays.asList(ISSUES[1], ISSUES[0], ISSUES[4], ISSUES[2], ISSUES[3]),
                 issues.getIssues(Severity.INFO));
         Assert.assertTrue(issues.getIssues(null).isEmpty());
+    }
+
+    @Test
+    public void testLatestDurations() throws Exception {
+        Issues issues = new Issues();
+        Assert.assertEquals(0, issues.getLatestDurations().length);
+        Assert.assertEquals(-1L, issues.getLatestDuration());
+        Assert.assertEquals(-1L, issues.getAverageDuration());
+        long sum = 0;
+        for (int i = 1; i <= 10; ++i) {
+            if (i > 5) {
+                sum += i;
+            }
+            issues.addLatestDuration(i);
+            Assert.assertEquals(i, issues.getLatestDuration());
+            if (i==1) {
+                Assert.assertEquals(1L, issues.getAverageDuration());
+            }
+        }
+        Assert.assertEquals(sum/5, issues.getAverageDuration());
+        Assert.assertEquals(10, issues.getLatestDuration());
     }
 }

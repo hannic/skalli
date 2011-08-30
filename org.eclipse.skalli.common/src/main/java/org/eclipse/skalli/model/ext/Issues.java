@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Issues extends EntityBase {
 
+    private static final int NUMBER_LATEST_DURATIONS = 5;
+
     @PropertyName(position = 0)
     public static final String PROPERTY_ISSUES = "issues"; //$NON-NLS-1$
 
@@ -40,9 +43,15 @@ public class Issues extends EntityBase {
 
     /**
      * Specifies whether the set of issues is stale and the corresponding
-     * entity needs to validated again.
+     * entity needs to be validated again.
      */
     private boolean stale;
+
+    /**
+     * The latest {@value NUMBER_LATEST_DURATIONS} durations to find the validation issues.
+     * For the purpose of showing meaningful progress indicators in the UI and for monitoring.
+     */
+    private long[] latestDurations;
 
     /**
      * Creates an empty <code>Issues</code> instance.
@@ -140,6 +149,40 @@ public class Issues extends EntityBase {
 
     public void setStale(boolean stale) {
         this.stale = stale;
+    }
+
+    public long[] getLatestDurations() {
+        if (latestDurations == null) {
+            return new long[0];
+        }
+        return latestDurations;
+    }
+
+    public long getLatestDuration() {
+        return latestDurations != null? getLatestDurations()[0] : -1L;
+    }
+
+    public void addLatestDuration(long duration) {
+        if (latestDurations == null) {
+            latestDurations = new long[NUMBER_LATEST_DURATIONS];
+            Arrays.fill(latestDurations, duration);
+            return;
+        }
+        for (int i = NUMBER_LATEST_DURATIONS-1; i > 0 ; --i) {
+            latestDurations[i] = latestDurations[i-1];
+        }
+        latestDurations[0] = duration;
+    }
+
+    public long getAverageDuration() {
+        if (latestDurations == null) {
+            return -1L;
+        }
+        long sum = 0;
+        for (int i = 0; i < NUMBER_LATEST_DURATIONS; ++i) {
+            sum += latestDurations[i];
+        }
+        return sum / NUMBER_LATEST_DURATIONS;
     }
 
     /**
