@@ -14,14 +14,18 @@ import org.eclipse.skalli.api.java.Validation;
 import org.eclipse.skalli.common.util.FormatUtils;
 import org.eclipse.skalli.model.ext.EntityBase;
 
-class QueuedEntity<T extends EntityBase> extends Validation<T> {
+class QueuedEntity<T extends EntityBase> extends Validation<T> implements Comparable<QueuedEntity<T>> {
     private long queuedAt = -1L;
     private long startedAt = -1L;
+    private long nanos = -1L; // ensure well-defined ordering in queue
+
+    private static long NANO_TIME = System.nanoTime();
 
     public QueuedEntity(Validation<T> validation) {
         super(validation.getEntityClass(), validation.getEntityId(),
-                validation.getMinSeverity(), validation.getUserId());
+                validation.getMinSeverity(), validation.getUserId(), validation.getPriority());
         queuedAt = System.currentTimeMillis();
+        nanos = System.nanoTime() - NANO_TIME;
     }
 
     public long getStartedAt() {
@@ -47,5 +51,14 @@ class QueuedEntity<T extends EntityBase> extends Validation<T> {
             sb.append("[started at ").append(FormatUtils.formatUTCWithMillis(startedAt)).append("]");
         }
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(QueuedEntity<T> o) {
+        int result = getPriority() < o.getPriority() ? -1 : (getPriority() == o.getPriority() ? 0 : 1);
+        if (result == 0) {
+            result = nanos < o.nanos ? -1 : (nanos == o.nanos ? 0 : 1);
+        }
+        return result;
     }
 }

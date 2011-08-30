@@ -18,10 +18,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.EntityService;
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.Validation;
@@ -45,6 +41,9 @@ import org.eclipse.skalli.testutil.BundleManager;
 import org.eclipse.skalli.testutil.PropertyHelperUtils;
 import org.eclipse.skalli.testutil.TestEntityBase1;
 import org.eclipse.skalli.testutil.TestEntityBase2;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 @SuppressWarnings("nls")
 public class ValidationServiceImplTest {
@@ -277,9 +276,9 @@ public class ValidationServiceImplTest {
         Assert.assertTrue(validationService.isQueued(entities1.get(1)));
         Assert.assertTrue(validationService.isQueued(entities2.get(2)));
 
-        Assert.assertEquals(validation1, validationService.pollNextQueueEntry());
         Assert.assertEquals(validation2, validationService.pollNextQueueEntry());
         Assert.assertEquals(validation3, validationService.pollNextQueueEntry());
+        Assert.assertEquals(validation1, validationService.pollNextQueueEntry());
         Assert.assertNull(validationService.pollNextQueueEntry());
         verify(mocks);
     }

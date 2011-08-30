@@ -11,9 +11,9 @@
 package org.eclipse.skalli.core.internal.validation;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.tasks.Schedule;
 import org.eclipse.skalli.model.ext.Severity;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("validation")
@@ -24,7 +24,6 @@ public class ValidationConfig {
     private ValidationAction action;
     private String userId;
     private String entityType;
-    private int threshold;
 
     public ValidationConfig() {
     }
@@ -34,7 +33,6 @@ public class ValidationConfig {
         action = config.getAction();
         userId = config.getUserId();
         entityType = config.getEntityType();
-        threshold = config.getThreshold();
         schedule = config.getSchedule();
     }
 
@@ -81,22 +79,11 @@ public class ValidationConfig {
         this.entityType = entityType;
     }
 
-    public int getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(int threshold) {
-        this.threshold = threshold;
-    }
-
     @SuppressWarnings("nls")
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(action != null ? action : "<no action>").append(' ');
-        if (ValidationAction.QUEUED.equals(action)) {
-            sb.append("threshold=").append(threshold).append(' ');
-        }
         sb.append(getMinSeverity()).append(' ');
         sb.append(StringUtils.isNotBlank(userId) ? userId : "<default user>").append(' ');
         sb.append(StringUtils.isNotBlank(entityType) ? entityType : "<all entity types>");

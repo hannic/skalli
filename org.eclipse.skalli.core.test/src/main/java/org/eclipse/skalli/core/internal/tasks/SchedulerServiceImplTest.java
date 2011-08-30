@@ -14,14 +14,13 @@ import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
+import org.eclipse.skalli.api.java.tasks.Schedule;
+import org.eclipse.skalli.api.java.tasks.Task;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
-import org.eclipse.skalli.api.java.tasks.Schedule;
-import org.eclipse.skalli.api.java.tasks.Task;
 
 @SuppressWarnings("nls")
 public class SchedulerServiceImplTest {
@@ -117,7 +116,7 @@ public class SchedulerServiceImplTest {
     public void testRegisterUnregisterSchedule() {
         Schedule schedule = new Schedule();
         TestRunnableSchedule runnableSchedule = new TestRunnableSchedule(schedule);
-        instance.registerRecurringTaskRunner(100, TimeUnit.MILLISECONDS); // set the cron period to 10ms
+        instance.registerCron(100, TimeUnit.MILLISECONDS); // set the cron period to 10ms
         UUID scheduleId = instance.registerSchedule(runnableSchedule);
 
         waitForExecution(2, runnableSchedule.runnable);

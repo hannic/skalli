@@ -23,10 +23,37 @@ import org.eclipse.skalli.model.ext.Severity;
  * If no severity is specified, {@link Severity#INFO} is assumed.
  */
 public class Validation<T extends EntityBase> {
+
+    /**
+     * The default priority for validation jobs.
+     */
+    public static final int DEFAULT_PRIORITY = 5;
+    public static final int HIGHEST_PRIORITY = 0;
+    public static final int LOWEST_PRIORITY = 9;
+
+    /**
+     * Validations with priority <code>IMMEDIATE</code> will be executed
+     * as single shot task.
+     */
+    public static final int IMMEDIATE = -1;
+
     private Class<T> entityClass;
     private UUID entityId;
     private Severity minSeverity;
     private String userId;
+    private int priority = DEFAULT_PRIORITY;
+
+    /**
+     * Creates a <code>Validation</code> instance with default priority.
+     *
+     * @param entityClass  the class of the entities to validate.
+     * @param entityId  the unique identifier of the entity to validate.
+     * @param minSeverity  the minimal severity of issues to report.
+     * @param userId  unique identifier of the user initiating the validation.
+     */
+    public Validation(Class<T> entityClass, UUID entityId, Severity minSeverity, String userId) {
+        this(entityClass, entityId, minSeverity, userId, DEFAULT_PRIORITY);
+    }
 
     /**
      * Creates a <code>Validation</code> instance.
@@ -35,16 +62,24 @@ public class Validation<T extends EntityBase> {
      * @param entityId  the unique identifier of the entity to validate.
      * @param minSeverity  the minimal severity of issues to report.
      * @param userId  unique identifier of the user initiating the validation.
+     * @param priority  the priority with which this validation should be executed.
+     * Must be a number between 0 (highest priority) and 9 (lowest priority), or
+     * -1 for validations to be executed immediately.
+     * 5 is the default priority.
      */
-    public Validation(Class<T> entityClass, UUID entityId, Severity minSeverity, String userId) {
+    public Validation(Class<T> entityClass, UUID entityId, Severity minSeverity, String userId, int priority) {
         if (entityClass == null) {
             throw new IllegalArgumentException("argument 'entityClass' must not be null");
         }
         if (entityId == null) {
             throw new IllegalArgumentException("argument 'entityId' must not be null");
         }
+        if (priority < IMMEDIATE || priority > LOWEST_PRIORITY) {
+            throw new IllegalArgumentException("argument 'priority' must be a number in the range -1..9");
+        }
         this.entityClass = entityClass;
         this.entityId = entityId;
+        this.priority = priority;
         setUserId(userId);
         setMinSeverity(minSeverity);
     }
@@ -70,6 +105,10 @@ public class Validation<T extends EntityBase> {
 
     public String getUserId() {
         return userId;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     public void setUserId(String userId) {
@@ -104,8 +143,35 @@ public class Validation<T extends EntityBase> {
     @SuppressWarnings("nls")
     @Override
     public String toString() {
-        return "Validation [entityClass=" + entityClass + ", entityId=" + entityId + ", minSeverity=" + minSeverity
-                + ", userId=" + userId + "]";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Validation [entityClass=");
+        stringBuilder.append(entityClass);
+        stringBuilder.append(", entityId=");
+        stringBuilder.append(entityId);
+        stringBuilder.append(", minSeverity=");
+        stringBuilder.append(minSeverity);
+        stringBuilder.append(", userId=");
+        stringBuilder.append(userId);
+        stringBuilder.append(", priority=");
+        stringBuilder.append(priorityAsString());
+        stringBuilder.append("]");
+        return stringBuilder.toString();
+    }
+
+    @SuppressWarnings("nls")
+    public String priorityAsString() {
+        switch (priority) {
+        case IMMEDIATE:
+            return "IMMEDIATE";
+        case DEFAULT_PRIORITY:
+            return "DEFAULT";
+        case HIGHEST_PRIORITY:
+            return "HIGHEST";
+        case LOWEST_PRIORITY:
+            return "LOWEST";
+        default:
+            return Integer.toString(priority);
+        }
     }
 
 }

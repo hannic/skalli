@@ -20,7 +20,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +64,6 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
 
     private static final long DEFAULT_QUEUED_INITIAL_DELAY = TimeUnit.SECONDS.toMillis(10);
     private static final long DEFAULT_QUEUED_PERIOD = TimeUnit.SECONDS.toMillis(10);
-    private static final int DEFAULT_THRESHOLD = 0;
 
     /** All currently known implementations of EntityService, managed by bindEntityService/unbindEntityService */
     private final Map<String, EntityService<?>> entityServices = new HashMap<String, EntityService<?>>();
@@ -80,8 +79,8 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     private UUID taskIdQueueValidator;
 
     /** Entities queued for re-validation subsequent to a persist */
-    private final LinkedBlockingQueue<QueuedEntity<? extends EntityBase>> queuedEntities =
-            new LinkedBlockingQueue<QueuedEntity<? extends EntityBase>>();
+    private final PriorityBlockingQueue<QueuedEntity<? extends EntityBase>> queuedEntities =
+            new PriorityBlockingQueue<QueuedEntity<? extends EntityBase>>();
 
     /** Activates this service and starts validation jobs. */
     protected void activate(ComponentContext context) {
@@ -158,6 +157,10 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
 
     @Override
     public synchronized <T extends EntityBase> void queue(Validation<T> validation) {
+        if (validation.getPriority() < 0) {
+            validateImmediately(validation);
+            return;
+        }
         Map<Validation<T>, Validation<T>> validations = CollectionUtils.asMap(validation, validation);
         queueAll(validations);
     }
@@ -177,23 +180,22 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     }
 
     private <T extends EntityBase> void queueAll(Map<Validation<T>, Validation<T>> newEntries) {
-        // first, update those entries that already are scheduled...
+        // first, remove all entries that already are scheduled from the queue...
         Iterator<QueuedEntity<?>> oldEntries = queuedEntities.iterator();
         while (oldEntries.hasNext()) {
             Validation<?> oldEntry = oldEntries.next();
             Validation<T> newEntry = newEntries.get(oldEntry);
             if (newEntry != null) {
+                oldEntries.remove();
                 // relaxing severity is ok (e.g. from FATAL to WARNING), but not vice versa;
                 // otherwise we would not get issues that the previous caller has requested
-                if (oldEntry.getMinSeverity().compareTo(newEntry.getMinSeverity()) < 0) {
-                    oldEntry.setMinSeverity(newEntry.getMinSeverity());
+                if (oldEntry.getMinSeverity().compareTo(newEntry.getMinSeverity()) > 0) {
+                    newEntry.setMinSeverity(oldEntry.getMinSeverity());
+                    LOG.info(MessageFormat.format("{0}: updated severity in queue", newEntry));
                 }
-                oldEntry.setUserId(newEntry.getUserId());
-                newEntries.remove(newEntry);
-                LOG.info(MessageFormat.format("{0}: updated in queue", oldEntry));
             }
         }
-        // ...then schedule the remaining...
+        // ...then schedule the new entries
         for (Validation<T> newEntry : newEntries.keySet()) {
             if (!offerQueueEntry(newEntry)) {
                 // should not happen since we use a queue without bounds, but in case...
@@ -203,6 +205,13 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         }
         // ...and mark existing issues of the entity as stale
         markIssuesAsStale(newEntries);
+    }
+
+    private <T extends EntityBase> void validateImmediately(Validation<T> validation) {
+        if (schedulerService != null) {
+            schedulerService.registerTask(new Task(
+                    new ImmediateValidator<T>(new QueuedEntity<T>(validation), DEFAULT_SEVERITY)));
+        }
     }
 
     @Override
@@ -237,6 +246,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
             }
         }
     }
+
 
     private <T extends EntityBase> void validateAndPersist(Validation<T> entry, Severity defaultSeverity) {
         EntityService<T> entityService = getEntityService(entry.getEntityClass());
@@ -335,6 +345,28 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         return registeredSchedules;
     }
 
+    /**
+     * Runnable that performs the validation of a single entity
+     * and persists the results.
+     */
+    final class ImmediateValidator<T extends EntityBase> implements Runnable {
+
+        private Severity defaultSeverity;
+        QueuedEntity<T> entry;
+
+        public ImmediateValidator(QueuedEntity<T> entry, Severity defaultSeverity) {
+            this.defaultSeverity = defaultSeverity;
+            this.entry = entry;
+        }
+
+        @Override
+        public void run() {
+            entry.setStartedAt(System.currentTimeMillis());
+            LOG.info(MessageFormat.format("{0}: started", entry));
+            validateAndPersist(entry, defaultSeverity);
+            LOG.info(MessageFormat.format("{0}: done", entry));
+        }
+    }
 
     /**
      * Runnable that validates entities queued for re-validation and persists the results.
@@ -342,7 +374,6 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     final class QueueValidator implements Runnable {
 
         private Severity defaultSeverity;
-        private int threshold;
 
         /**
          * Creates a validation runnable suitable for periodic re-validation
@@ -351,12 +382,9 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
          * @param minSeverity  default minimal severity of issues to report. This severity is
          * applied if no explicit severity has been specified when the entity was
          * {@link EntityService#scheduleForValidation(UUID, Severity) scheduled for re-validation}.
-         * @param threshold  threshold of entries that triggers a "bunch validation",
-         * when exceeded, see {@link #run()}.
          */
-        public QueueValidator(Severity defaultSeverity, int threshold) {
+        public QueueValidator(Severity defaultSeverity) {
             this.defaultSeverity = defaultSeverity;
-            this.threshold = threshold;
         }
 
         /**
@@ -366,19 +394,17 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
          */
         @Override
         public void run() {
-            do {
-                LOG.info(MessageFormat.format("polling next queued validation at {0}",
-                        FormatUtils.formatUTCWithMillis(System.currentTimeMillis())));
-                QueuedEntity<? extends EntityBase> entry = pollNextQueueEntry();
-                if (entry == null) {
-                    LOG.info(MessageFormat.format("nothing to do (queuedEntities.size={0})", queuedEntities.size()));
-                    break;
-                }
-                entry.setStartedAt(System.currentTimeMillis());
-                LOG.info(MessageFormat.format("{0}: started", entry));
-                validateAndPersist(entry, defaultSeverity);
-                LOG.info(MessageFormat.format("{0}: done", entry));
-            } while (queuedEntities.size() >= threshold);
+            LOG.info(MessageFormat.format("polling next queued validation at {0}",
+                    FormatUtils.formatUTCWithMillis(System.currentTimeMillis())));
+            QueuedEntity<? extends EntityBase> entry = pollNextQueueEntry();
+            if (entry == null) {
+                LOG.info(MessageFormat.format("nothing to do (queuedEntities.size={0})", queuedEntities.size()));
+                return;
+            }
+            entry.setStartedAt(System.currentTimeMillis());
+            LOG.info(MessageFormat.format("{0}: started", entry));
+            validateAndPersist(entry, defaultSeverity);
+            LOG.info(MessageFormat.format("{0}: done", entry));
         }
     }
 
@@ -553,7 +579,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         }
         switch (action) {
         case QUEUED:
-            return new QueueValidator(minSeverity, config.getThreshold());
+            return new QueueValidator(minSeverity);
         case QUEUE:
             return new QueueRunnable(minSeverity, entityType, userId);
         case QUEUE_ALL:
@@ -600,7 +626,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     private void startDefaultQueueTask(boolean start) {
         if (start) {
             Task task = new Task(
-                    new QueueValidator(DEFAULT_SEVERITY, DEFAULT_THRESHOLD),
+                    new QueueValidator(DEFAULT_SEVERITY),
                     DEFAULT_QUEUED_INITIAL_DELAY, DEFAULT_QUEUED_PERIOD);
             taskIdQueueValidator = schedulerService.registerTask(task);
             LOG.info(MessageFormat.format("Default task {0}: registered (id={1})", task, taskIdQueueValidator)); //$NON-NLS-1$

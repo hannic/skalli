@@ -49,6 +49,7 @@ class QueueConverter extends AbstractMonitorConverter {
                 writeNode(writer, "entityId", queuedEntity.getEntityId().toString());
                 writeNode(writer, "minSeverity", queuedEntity.getMinSeverity().toString());
                 writeNode(writer, "userId", queuedEntity.getUserId());
+                writeNode(writer, "priority", queuedEntity.priorityAsString());
                 writeDateTime(writer, "queuedAt", queuedEntity.getQueuedAt());
                 writeDateTime(writer, "startedAt", queuedEntity.getStartedAt());
                 writer.endNode();

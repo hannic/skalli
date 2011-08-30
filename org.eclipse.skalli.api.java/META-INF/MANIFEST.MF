@@ -5,16 +5,17 @@ Bundle-SymbolicName: org.eclipse.skalli.api.java
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: Eclipse Skalli
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.skalli.common,
- org.eclipse.skalli.common.configuration,
- org.eclipse.skalli.log,
- org.eclipse.skalli.model.core,
- org.eclipse.skalli.model.ext,
- javax.mail,
+Import-Package: javax.mail,
  javax.servlet,
  javax.servlet.http,
  org.apache.commons.lang,
- org.apache.commons.lang.time
+ org.apache.commons.lang.time,
+ org.eclipse.skalli.common,
+ org.eclipse.skalli.common.configuration,
+ org.eclipse.skalli.common.util,
+ org.eclipse.skalli.log,
+ org.eclipse.skalli.model.core,
+ org.eclipse.skalli.model.ext
 Export-Package: org.eclipse.skalli.api.java,
  org.eclipse.skalli.api.java.authentication,
  org.eclipse.skalli.api.java.events,

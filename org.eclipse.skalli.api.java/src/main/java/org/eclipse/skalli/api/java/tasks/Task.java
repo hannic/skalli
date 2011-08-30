@@ -12,8 +12,8 @@ package org.eclipse.skalli.api.java.tasks;
 
 import java.text.MessageFormat;
 
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
+import org.eclipse.skalli.common.util.FormatUtils;
 
 public class Task {
 
@@ -81,15 +81,17 @@ public class Task {
      * Returns <code>true</code> if the task is a single-shot task.
      */
     public boolean isOneShot() {
-        return period == -1L;
+        return initialDelay == 0 && period == -1L;
     }
 
     @Override
     public String toString() {
         String sRunnable = runnable.getClass().getName();
-        String sInitialDelay = DateFormatUtils.SMTP_DATETIME_FORMAT.format(System.currentTimeMillis() + initialDelay);
+        String sInitialDelay = FormatUtils.formatUTCWithMillis(System.currentTimeMillis() + initialDelay);
         String sPeriod = DurationFormatUtils.formatDurationHMS(period);
         if (isOneShot()) {
+            return MessageFormat.format("running {0} now", sRunnable);
+        } else if (period == -1L) {
             return MessageFormat.format("running {0} once at {1}", sRunnable, sInitialDelay);
         }
         return MessageFormat.format("running {0} every {1} first at {2}", sRunnable, sPeriod, sInitialDelay);

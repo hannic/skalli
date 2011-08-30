@@ -160,7 +160,8 @@ public abstract class EntityServiceImpl<T extends EntityBase> implements EntityS
 
         ValidationService validationService = getValidationService();
         if (validationService != null) {
-            validationService.queue(new Validation<T>(getEntityClass(), entity.getUuid(), Severity.INFO, userId));
+            validationService.queue(new Validation<T>(getEntityClass(), entity.getUuid(),
+                    Severity.INFO, userId, Validation.IMMEDIATE));
         }
     }
 
