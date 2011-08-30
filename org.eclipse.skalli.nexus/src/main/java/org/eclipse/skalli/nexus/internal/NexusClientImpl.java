@@ -80,9 +80,18 @@ public class NexusClientImpl implements NexusClient {
         GetMethod method = new GetMethod(externalForm);
         method.setFollowRedirects(false);
         try {
-            LOG.info("GET " + nexusUrl); //$NON-NLS-1$
-            int statusCode = HttpUtils.getClient(nexusUrl).executeMethod(method);
-            LOG.info(statusCode + " " + HttpStatus.getStatusText(statusCode)); //$NON-NLS-1$
+            int statusCode;
+            try {
+                LOG.info("GET " + nexusUrl); //$NON-NLS-1$
+                statusCode = HttpUtils.getClient(nexusUrl).executeMethod(method);
+                LOG.info(statusCode + " " + HttpStatus.getStatusText(statusCode)); //$NON-NLS-1$
+            } catch (HttpException e) {
+                throw new HttpException(MessageFormat.format("Problems found for {0}: {1}", nexusUrl,
+                        e.getMessage()), e);
+            } catch (IOException e) {
+                throw new IOException(MessageFormat.format("Problems found for {0}: {1}", nexusUrl,
+                        e.getMessage()), e);
+            }
             if (statusCode == HttpStatus.SC_OK) {
                 InputStream in = method.getResponseBodyAsStream();
                 Document document;
