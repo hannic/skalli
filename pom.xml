@@ -75,5 +75,11 @@
                 <module>org.eclipse.skalli.gerrit.test</module>
             </modules>
         </profile>
+        <profile>
+            <id>selenium</id>
+            <modules>
+                <module>org.eclipse.skalli.selenium</module>
+            </modules>
+        </profile>
     </profiles>
 </project>
