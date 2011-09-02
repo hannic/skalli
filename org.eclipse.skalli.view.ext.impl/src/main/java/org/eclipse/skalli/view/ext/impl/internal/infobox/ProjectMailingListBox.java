@@ -23,12 +23,16 @@ import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.HtmlBuilder;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Layout;
 
 public class ProjectMailingListBox extends InfoBox implements ProjectInfoBox {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectMailingListBox.class);
 
     private static final String STYLE_MAILING = "mailingList"; //$NON-NLS-1$
 

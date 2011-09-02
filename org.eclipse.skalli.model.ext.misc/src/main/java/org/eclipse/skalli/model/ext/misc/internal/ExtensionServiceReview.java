@@ -11,24 +11,23 @@
 package org.eclipse.skalli.model.ext.misc.internal;
 
 import java.util.Map;
-import java.util.logging.Logger;
-
-import org.osgi.service.component.ComponentContext;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.misc.ReviewProjectExt;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServiceReview
         extends ExtensionServiceBase<ReviewProjectExt>
         implements ExtensionService<ReviewProjectExt>
 {
 
-    private static final Logger LOG = Log.getLogger(ExtensionServiceReview.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServiceReview.class);
 
     private static final String CAPTION = "Ratings & Reviews";
     private static final String DESCRIPTION = "Enables ratings and reviews for the project.";

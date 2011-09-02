@@ -55,7 +55,7 @@ import org.eclipse.skalli.api.java.QueryParseException;
 import org.eclipse.skalli.api.java.SearchHit;
 import org.eclipse.skalli.api.java.SearchResult;
 import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensibleEntityBase;

@@ -13,19 +13,18 @@ package org.eclipse.skalli.model.ext.people.internal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.PeopleProvider;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class CorePeopleProvider implements PeopleProvider {
-    private static final Logger LOG = Log.getLogger(CorePeopleProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CorePeopleProvider.class);
 
     private static final String ROLE_LEAD = "projectlead"; //$NON-NLS-1$
     private static final String ROLE_MEMBER = "projectmember"; //$NON-NLS-1$

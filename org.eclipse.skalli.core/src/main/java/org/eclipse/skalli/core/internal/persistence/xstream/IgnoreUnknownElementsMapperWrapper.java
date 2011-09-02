@@ -10,9 +10,9 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.persistence.xstream;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.eclipse.skalli.log.Log;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -22,7 +22,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * entry http://jira.codehaus.org/browse/XSTR-30
  */
 public class IgnoreUnknownElementsMapperWrapper extends MapperWrapper {
-    private static final Logger LOG = Log.getLogger(IgnoreUnknownElementsMapperWrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IgnoreUnknownElementsMapperWrapper.class);
 
     public IgnoreUnknownElementsMapperWrapper(MapperWrapper next) {
         super(next);
@@ -41,7 +41,7 @@ public class IgnoreUnknownElementsMapperWrapper extends MapperWrapper {
         try {
             return super.realClass(elementName);
         } catch (CannotResolveClassException e) {
-            LOG.warning("No class for element named '" + elementName + "' found during entity deserialization.");
+            LOG.warn("No class for element named '" + elementName + "' found during entity deserialization.");
             return Noop.class;
         }
     }

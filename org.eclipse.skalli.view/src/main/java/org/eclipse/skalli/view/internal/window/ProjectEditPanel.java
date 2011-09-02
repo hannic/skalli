@@ -21,8 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.IssuesService;
@@ -32,7 +30,6 @@ import org.eclipse.skalli.api.java.ProjectTemplateService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
@@ -47,6 +44,8 @@ import org.eclipse.skalli.view.ext.Navigator;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
 import org.eclipse.skalli.view.ext.ProjectEditMode;
 import org.eclipse.skalli.view.internal.application.ProjectApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.terminal.ThemeResource;
@@ -64,7 +63,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
 
     private static final long serialVersionUID = 2377962084815410728L;
 
-    private static final Logger LOG = Log.getLogger(ProjectEditPanel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectEditPanel.class);
 
     private static final String STYLE_EDIT_PROJECT = "prjedt"; //$NON-NLS-1$
     private static final String STYLE_EDIT_PROJECT_LAYOUT = "prjedt-layout"; //$NON-NLS-1$
@@ -156,7 +155,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
 
         IssuesService issuesService = Services.getService(IssuesService.class);
         if (issuesService == null) {
-            LOG.warning("No issue service available. Skipping loading of issues.");
+            LOG.warn("No issue service available. Skipping loading of issues.");
             return;
         }
 
@@ -432,7 +431,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
                 } catch (InvalidValueException e) {
                     // we do not support Vaadin validation (see DefaultProjectFieldFactory),
                     // but if something bad happens, we at least should log it
-                    LOG.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                 }
             }
         }
@@ -499,7 +498,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
                 // If something bad happens in a validator, in the form commit or
                 // while persisting the project, we log the incident and render the exception
                 renderException(e);
-                LOG.log(Level.SEVERE, e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
 
@@ -526,7 +525,7 @@ public class ProjectEditPanel extends Panel implements Issuer {
                 }
             } catch (ValidationException e) {
                 renderIssues(e);
-                LOG.log(Level.FINE, e.getMessage(), e);
+                LOG.debug(e.getMessage(), e);
             }
         }
 

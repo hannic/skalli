@@ -23,17 +23,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
 import org.eclipse.skalli.api.java.tasks.SchedulerService;
 import org.eclipse.skalli.api.java.tasks.Task;
-import org.eclipse.skalli.log.Log;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SchedulerServiceImpl implements SchedulerService {
 
-    private static final Logger LOG = Log.getLogger(SchedulerServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SchedulerServiceImpl.class);
 
     private static final TimeZone TIMEZONE = TimeZone.getTimeZone("UTC"); //$NON-NLS-1$
 
@@ -77,7 +77,8 @@ public class SchedulerServiceImpl implements SchedulerService {
             future = singleShotExecutor.submit(runnable);
             LOG.info(MessageFormat.format("Task id=''{0}'' {1}: submitted", taskId, task));
         } else {
-            future = scheduler.scheduleAtFixedRate(runnable, task.getInitialDelay(), task.getPeriod(), TimeUnit.MILLISECONDS);
+            future = scheduler.scheduleAtFixedRate(runnable, task.getInitialDelay(), task.getPeriod(),
+                    TimeUnit.MILLISECONDS);
             LOG.info(MessageFormat.format("Task id=''{0}'' {1}: registered", taskId, task));
         }
         futures.put(taskId, future);
@@ -173,7 +174,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     private class CleanupDoneTasksRunner implements Runnable {
         @Override
         public void run() {
-            for (UUID taskId: futures.keySet()) {
+            for (UUID taskId : futures.keySet()) {
                 Future<?> future = futures.get(taskId);
                 if (future.isDone()) {
                     futures.remove(taskId);

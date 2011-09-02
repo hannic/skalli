@@ -13,17 +13,17 @@ package org.eclipse.skalli.view.ext;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.MinMaxOccurrencesPropertyValidator;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.PropertyValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Validator;
@@ -34,7 +34,7 @@ import com.vaadin.ui.Select;
 
 public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> extends DefaultFieldFactory {
 
-    private static final Logger LOG = Log.getLogger(DefaultProjectFieldFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultProjectFieldFactory.class);
     private static final long serialVersionUID = 162355838708348565L;
     protected static final int COMMON_TEXT_FIELD_COLUMNS = 30;
 
@@ -133,7 +133,7 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
             method.invoke(field, columns);
         } catch (Exception e) {
             // not all Vaadin Field implementations allow to set the columns, so this is ok
-            LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
+            LOG.debug(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
         }
     }
 
@@ -143,7 +143,7 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
             method.invoke(field, inputPrompt);
         } catch (Exception e) {
             // not all Vaadin Field implementations have an input prompt, so this is ok
-            LOG.fine(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
+            LOG.debug(MessageFormat.format("Field {0} does not allow to set columns", field.getCaption()));
         }
     }
 
@@ -153,7 +153,7 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
             method.invoke(field, maxSize);
         } catch (Exception e) {
             // not all Vaadin Field implementations have an max size, so this is ok
-            LOG.fine(MessageFormat.format("Field {0} does not allow to set max size", field.getCaption()));
+            LOG.debug(MessageFormat.format("Field {0} does not allow to set max size", field.getCaption()));
         }
     }
 
@@ -161,13 +161,13 @@ public abstract class DefaultProjectFieldFactory<T extends ExtensionEntityBase> 
         if (field.isRequired()) {
             field.setRequired(false);
             field.setRequiredError(null);
-            LOG.warning("Required flag removed from field " + field.getCaption() + " of project " + project.getName()
+            LOG.warn("Required flag removed from field " + field.getCaption() + " of project " + project.getName()
                     + ". Attach a " + MinMaxOccurrencesPropertyValidator.class.getName() + " to the field.");
         }
         Collection<Validator> vaadinValidators = field.getValidators();
         if (vaadinValidators != null) {
             for (Validator vaadinValidator: vaadinValidators) {
-                LOG.warning("Validator " + vaadinValidator.getClass().getName() + " removed from field " + field.getCaption()
+                LOG.warn("Validator " + vaadinValidator.getClass().getName() + " removed from field " + field.getCaption()
                         + " of project " + project.getName() +". Attach a suitable " + PropertyValidator.class.getName()
                         + " to the field.");
                 field.removeValidator(vaadinValidator);

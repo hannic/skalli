@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.EntityServiceImpl;
@@ -37,7 +36,6 @@ import org.eclipse.skalli.api.java.SearchService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.ProjectDescriptionValidator;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.PeopleProvider;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
@@ -53,10 +51,12 @@ import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProjectServiceImpl extends EntityServiceImpl<Project> implements ProjectService {
 
-    private static final Logger LOG = Log.getLogger(ProjectServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectServiceImpl.class);
     private ProjectTemplateService projectTemplateService;
 
     protected SearchService getSearchService() {
@@ -396,7 +396,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
             Set<PropertyValidator> propertyValidators = new HashSet<PropertyValidator>();
             Set<PropertyValidator> defaultValidators = extensionService.getPropertyValidators(propertyName, caption);
             if (defaultValidators == null) {
-                LOG.warning(MessageFormat.format(
+                LOG.warn(MessageFormat.format(
                         "{0}#getPropertyValidators({1}) returned null, but is expected to return an empty set",
                         extensionService.getClass().getName(), propertyName));
             } else {
@@ -405,7 +405,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
             Set<PropertyValidator> customValidators = projectTemplate.getPropertyValidators(extensionClassName,
                     propertyName);
             if (customValidators == null) {
-                LOG.warning(MessageFormat.format(
+                LOG.warn(MessageFormat.format(
                         "{0}#getPropertyValidators({1}, {2}) returned null, but is expected to return an empty set",
                         projectTemplate.getClass().getName(), extensionClassName, propertyName));
             } else {
@@ -435,7 +435,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 
         Set<? extends ExtensionValidator<?>> extensionValidators = extensionService.getExtensionValidators(captions);
         if (extensionValidators == null) {
-            LOG.warning(MessageFormat.format(
+            LOG.warn(MessageFormat.format(
                     "{0}#getExtensionValidators() returned null, but is expected to return an empty set",
                     projectTemplate.getClass().getName()));
         } else {
@@ -453,7 +453,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                 .getName());
         if (extentionValidators == null)
         {
-            LOG.warning(MessageFormat.format(
+            LOG.warn(MessageFormat.format(
                     "{0}#getExtensionValidators({1}) returned null, but is expected to return an empty set",
                     projectTemplate.getClass().getName(), ext.getClass().getName()));
         }
@@ -470,9 +470,9 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
         SearchService searchService = getSearchService();
         if (searchService != null) {
             searchService.update(project);
-            LOG.fine(MessageFormat.format("project {0} updated in search index", project.getProjectId()));
+            LOG.debug(MessageFormat.format("project {0} updated in search index", project.getProjectId()));
         } else {
-            LOG.warning(MessageFormat.format("Failed to update search index - no instance of {0} available",
+            LOG.warn(MessageFormat.format("Failed to update search index - no instance of {0} available",
                     SearchService.class.getName()));
         }
     }
@@ -520,10 +520,10 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                             project.addExtension(extensionClass.cast(extensionClass.newInstance()));
                         }
                     } catch (InstantiationException e) {
-                        LOG.warning(MessageFormat.format("Extension ''{0}'' could not be instantiated: {1}",
+                        LOG.warn(MessageFormat.format("Extension ''{0}'' could not be instantiated: {1}",
                                 extensionClassName, e.getMessage()));
                     } catch (IllegalAccessException e) {
-                        LOG.warning(MessageFormat.format("Extension ''{0}'' could not be instantiated: {1}",
+                        LOG.warn(MessageFormat.format("Extension ''{0}'' could not be instantiated: {1}",
                                 extensionClassName, e.getMessage()));
                     }
                 }

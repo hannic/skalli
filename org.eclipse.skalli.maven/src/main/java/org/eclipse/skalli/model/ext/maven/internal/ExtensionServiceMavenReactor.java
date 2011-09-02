@@ -10,22 +10,21 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.ext.maven.internal;
 
-import java.util.logging.Logger;
-
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServiceMavenReactor
         extends ExtensionServiceBase<MavenReactorProjectExt>
         implements ExtensionService<MavenReactorProjectExt>
 {
 
-    private static final Logger LOG = Log.getLogger(ExtensionServiceMavenReactor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServiceMavenReactor.class);
 
     private static final String CAPTION = "Maven Reactor";
     private static final String DESCRIPTION = "Information related to a Maven reactor project and its modules";

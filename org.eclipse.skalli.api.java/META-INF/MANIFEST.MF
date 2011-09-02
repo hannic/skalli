@@ -13,7 +13,7 @@ Import-Package: javax.mail,
  org.eclipse.skalli.common,
  org.eclipse.skalli.common.configuration,
  org.eclipse.skalli.common.util,
- org.eclipse.skalli.log,
+ org.slf4j,
  org.eclipse.skalli.model.core,
  org.eclipse.skalli.model.ext
 Export-Package: org.eclipse.skalli.api.java,

@@ -16,8 +16,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
@@ -32,14 +30,14 @@ import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //TODO the current implementation of this service is infrastructure specific
 public class LDAPClient {
 
-    private final static Logger LOG = Log.getLogger(LDAPClient.class);
+    private final static Logger LOG = LoggerFactory.getLogger(LDAPClient.class);
 
     private final String factory;
     private final String hostname;
@@ -84,7 +82,7 @@ public class LDAPClient {
             try {
                 ldap = getConnection();
             } catch (AuthException e1) {
-                LOG.log(Level.WARNING, "Could not authenticate to LDAP", e1);
+                LOG.warn("Could not authenticate to LDAP", e1);
                 return User.createUserWithoutDetails(userId);
             }
             try {
@@ -111,7 +109,7 @@ public class LDAPClient {
             try {
                 ldap = getConnection();
             } catch (AuthException e1) {
-                LOG.log(Level.WARNING, "Could not authenticate to LDAP", e1);
+                LOG.warn("Could not authenticate to LDAP", e1);
                 return ret;
             }
             try {
@@ -168,7 +166,7 @@ public class LDAPClient {
             SearchResult entry = results.next();
             User user = processEntry(entry);
             if (user != null) {
-                LOG.fine("Success reading from LDAP: " + user.getUserId() + ", " + user.getFullName()
+                LOG.debug("Success reading from LDAP: " + user.getUserId() + ", " + user.getFullName()
                         + " <" + user.getEmail() + ">");
                 return user;
             }
@@ -217,7 +215,7 @@ public class LDAPClient {
             }
         } catch (SizeLimitExceededException e) {
             // 1000 is good enough at the moment for this use case...
-            LOG.log(Level.WARNING, "LDAP query size limit exceeded while searching for '" + name + "'", e);
+            LOG.warn("LDAP query size limit exceeded while searching for '" + name + "'", e);
         }
         return ret;
     }
@@ -258,7 +256,7 @@ public class LDAPClient {
             SearchResult entry = results.next();
             User user = processEntry(entry);
             if (user != null) {
-                LOG.fine("Success reading from LDAP: " + user.getUserId() + ", " + user.getFullName()
+                LOG.debug("Success reading from LDAP: " + user.getUserId() + ", " + user.getFullName()
                         + " <" + user.getEmail() + ">");
                 users.add(user);
                 somethingAdded = true;

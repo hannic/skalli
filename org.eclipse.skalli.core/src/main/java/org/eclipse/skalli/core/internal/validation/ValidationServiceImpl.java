@@ -22,8 +22,6 @@ import java.util.SortedSet;
 import java.util.UUID;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.EntityService;
@@ -41,7 +39,6 @@ import org.eclipse.skalli.api.rest.monitor.Monitorable;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.FormatUtils;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issues;
@@ -49,11 +46,12 @@ import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.osgi.service.component.ComponentContext;
 import org.restlet.resource.ServerResource;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ValidationServiceImpl implements ValidationService, EventListener<EventCustomizingUpdate>, Monitorable {
 
-    private static final Logger LOG = Log.getLogger(ValidationServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ValidationServiceImpl.class);
 
     private static final String DEFAULT_USER = ValidationService.class.getName();
     private static final Severity DEFAULT_SEVERITY = Severity.INFO;
@@ -199,7 +197,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         for (Validation<T> newEntry : newEntries.keySet()) {
             if (!offerQueueEntry(newEntry)) {
                 // should not happen since we use a queue without bounds, but in case...
-                LOG.warning(MessageFormat.format("Failed to schedule entity {0} for validation", newEntry.getEntityId()));
+                LOG.warn(MessageFormat.format("Failed to schedule entity {0} for validation", newEntry.getEntityId()));
             }
             LOG.info(MessageFormat.format("{0}: queued", newEntry));
         }
@@ -268,7 +266,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         try {
             issues = entityService.validate(entity, minSeverity);
         } catch (RuntimeException e) {
-            LOG.log(Level.SEVERE, MessageFormat.format("Validation of entity {0} failed:\n{1}",
+            LOG.error(MessageFormat.format("Validation of entity {0} failed:\n{1}",
                     entity.getUuid(), e.getMessage()), e);
             return;
         }
@@ -277,16 +275,18 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
                 issuesService.persist(entity.getUuid(), issues, userId);
                 SortedSet<Issue> fatalIssues = Issues.getIssues(issues, Severity.FATAL);
                 if (fatalIssues.size() > 0) {
-                    LOG.warning(Issues.getMessage(
-                            MessageFormat.format("Entity {0} has {1} FATAL issues", entity.getUuid(), fatalIssues.size()),
+                    LOG.warn(Issues.getMessage(
+                            MessageFormat.format("Entity {0} has {1} FATAL issues", entity.getUuid(),
+                                    fatalIssues.size()),
                             fatalIssues));
-                } else if (LOG.isLoggable(Level.FINE)) {
+                } else if (LOG.isInfoEnabled()) {
                     LOG.info(Issues.getMessage(
-                            MessageFormat.format("Entity {0}: validated ({1} issues found)", entity.getUuid(), issues.size()),
+                            MessageFormat.format("Entity {0}: validated ({1} issues found)", entity.getUuid(),
+                                    issues.size()),
                             issues));
                 }
             } catch (ValidationException e) { // should not happen, but in case...
-                LOG.log(Level.SEVERE, MessageFormat.format("Failed to persist issues for entity {0}:\n{1}",
+                LOG.error(MessageFormat.format("Failed to persist issues for entity {0}:\n{1}",
                         entity.getUuid(), e.getMessage()), e);
             }
         }
@@ -308,7 +308,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
                 try {
                     issuesService.persist(issues, validation.getUserId());
                 } catch (ValidationException e) { // should not happen, but in case...
-                    LOG.warning(MessageFormat.format("Failed to persist validation issues for entity {0}:\n{1}",
+                    LOG.warn(MessageFormat.format("Failed to persist validation issues for entity {0}:\n{1}",
                             entityId, e.getMessage()));
                 }
             }
@@ -571,7 +571,7 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
             switch (action) {
             case QUEUE:
             case VALIDATE:
-                LOG.warning(MessageFormat.format(
+                LOG.warn(MessageFormat.format(
                         "Ignoring invalid schedule entry ''{0}'': entity type required for action {1}",
                         toString(), action));
                 return null;

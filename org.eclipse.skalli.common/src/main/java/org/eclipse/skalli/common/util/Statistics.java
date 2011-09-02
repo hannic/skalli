@@ -8,7 +8,7 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.log;
+package org.eclipse.skalli.common.util;
 
 import java.util.Collections;
 import java.util.Date;

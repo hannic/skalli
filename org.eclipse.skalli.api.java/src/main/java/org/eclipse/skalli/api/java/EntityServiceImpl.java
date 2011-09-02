@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.logging.Logger;
 
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base implementation of an entity service.
@@ -33,7 +33,7 @@ import org.eclipse.skalli.model.ext.ValidationException;
  */
 public abstract class EntityServiceImpl<T extends EntityBase> implements EntityService<T> {
 
-    private static final Logger LOG = Log.getLogger(EntityServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EntityServiceImpl.class);
 
     private PersistenceService persistenceService;
     private ValidationService validationService;
@@ -205,14 +205,14 @@ public abstract class EntityServiceImpl<T extends EntityBase> implements EntityS
             // don't accept issues for other entities
             if (!issue.getEntityId().equals(entityId)) {
                 invalidIssues.add(issue);
-                LOG.warning(MessageFormat.format("Invalid issue detected (requested entity={0} but found entity={1})",
+                LOG.warn(MessageFormat.format("Invalid issue detected (requested entity={0} but found entity={1})",
                         entityId, issue.getEntityId()));
             }
             // we cannot guarantee that 3rd-party validators honor minSeverity, so
             // to be sure we filter out issues with a severity less than minSeverity
             if (minSeverity.compareTo(issue.getSeverity()) < 0) {
                 invalidIssues.add(issue);
-                LOG.warning(MessageFormat.format(
+                LOG.warn(MessageFormat.format(
                         "Invalid issue detected (requested minSeverity={0} but found severity={1})", minSeverity,
                         issue.getSeverity()));
             }

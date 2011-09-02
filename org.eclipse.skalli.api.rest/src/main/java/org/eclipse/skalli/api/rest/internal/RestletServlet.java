@@ -12,7 +12,6 @@ package org.eclipse.skalli.api.rest.internal;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.authentication.LoginUtil;
-import org.eclipse.skalli.log.Log;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 import org.restlet.ext.servlet.ServerServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RestletServlet extends ServerServlet {
     private static final long serialVersionUID = -7953560055729006206L;
-    private static final Logger LOG = Log.getLogger(RestletServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RestletServlet.class);
 
     @Override
     protected Class<?> loadClass(String className) throws ClassNotFoundException {
@@ -38,7 +38,7 @@ public class RestletServlet extends ServerServlet {
                 ret = super.loadClass(className);
             } catch (ClassNotFoundException e) {
                 // Ignore, because that's the whole point here...
-                LOG.finest(MessageFormat.format("Class {0} not found in current bundle", className)); //$NON-NLS-1$
+                LOG.debug(MessageFormat.format("Class {0} not found in current bundle", className)); //$NON-NLS-1$
             }
         }
 
@@ -48,7 +48,7 @@ public class RestletServlet extends ServerServlet {
                 ret = Thread.currentThread().getContextClassLoader().loadClass(className);
             } catch (ClassNotFoundException e) {
                 // Ignore, because that's the whole point here...
-                LOG.finest(MessageFormat.format("Class {0} not found by context class loader", className)); //$NON-NLS-1$
+                LOG.debug(MessageFormat.format("Class {0} not found by context class loader", className)); //$NON-NLS-1$
             }
         }
 

@@ -19,7 +19,6 @@
         <module>org.eclipse.skalli.parent</module>
         <module>org.eclipse.skalli.api.java</module>
         <module>org.eclipse.skalli.api.rest</module>
-        <module>org.eclipse.skalli.log</module>
         <module>org.eclipse.skalli.core</module>
         <module>org.eclipse.skalli.model.core</module>
         <module>org.eclipse.skalli.common</module>

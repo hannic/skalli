@@ -10,16 +10,15 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.users;
 
-import java.util.logging.Logger;
-
+import org.eclipse.skalli.api.rest.config.ConfigSection;
 import org.osgi.service.component.ComponentContext;
 import org.restlet.resource.ServerResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.eclipse.skalli.api.rest.config.ConfigSection;
-import org.eclipse.skalli.log.Log;
 
 public class UserStoreConfigSection implements ConfigSection {
-    private static final Logger LOG = Log.getLogger(UserStoreConfigSection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserStoreConfigSection.class);
 
     protected void activate(ComponentContext context) {
         LOG.info("UserStoreConfig activated"); //$NON-NLS-1$

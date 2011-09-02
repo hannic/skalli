@@ -14,14 +14,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.common.LinkGroup;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.Link;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -45,7 +44,7 @@ import com.vaadin.ui.Window;
 public class LinkWindow extends Window {
 
     private static final long serialVersionUID = 7764538915405149666L;
-    private static final Logger LOG = Log.getLogger(LinkWindow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LinkWindow.class);
 
     private final ThemeResource ICON_BUTTON_OK = new ThemeResource("icons/button/ok.png"); //$NON-NLS-1$
 
@@ -217,7 +216,7 @@ public class LinkWindow extends Window {
             ((Field) component).addListener(new ValueNotLongerEmptyListener());
         } catch (InvalidValueException e) {
             // Automatically handled by validator implementations (onValueChange)
-            LOG.log(Level.FINE, "Invalid value", e); //$NON-NLS-1$
+            LOG.debug("Invalid value", e); //$NON-NLS-1$
         }
     }
 

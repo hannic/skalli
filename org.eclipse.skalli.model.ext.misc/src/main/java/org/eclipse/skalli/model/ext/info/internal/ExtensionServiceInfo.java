@@ -14,13 +14,11 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.EmailValidator;
 import org.eclipse.skalli.common.util.HostReachableValidator;
 import org.eclipse.skalli.common.util.URLValidator;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
@@ -29,13 +27,15 @@ import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.info.InfoProjectExt;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServiceInfo
         extends ExtensionServiceBase<InfoProjectExt>
         implements ExtensionService<InfoProjectExt>
 {
 
-    private static final Logger LOG = Log.getLogger(ExtensionServiceInfo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServiceInfo.class);
 
     private static final String CAPTION = "Info";
     private static final String DESCRIPTION = "Additional information related to the project";

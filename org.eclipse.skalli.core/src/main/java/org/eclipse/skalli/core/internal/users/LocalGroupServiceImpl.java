@@ -13,17 +13,17 @@ package org.eclipse.skalli.core.internal.users;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.api.java.EntityFilter;
 import org.eclipse.skalli.api.java.EntityServiceImpl;
 import org.eclipse.skalli.api.java.GroupService;
 import org.eclipse.skalli.common.Group;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link GroupService} using {@link Group} instances.
@@ -33,7 +33,7 @@ import org.osgi.service.component.ComponentContext;
  */
 public class LocalGroupServiceImpl extends EntityServiceImpl<Group> implements GroupService {
 
-    private static final Logger LOG = Log.getLogger(LocalGroupServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LocalGroupServiceImpl.class);
 
     /** Unique identifier of the portal admiminstrators group */
     private static final String ADMIN_GROUP = "administrators"; //$NON-NLS-1$

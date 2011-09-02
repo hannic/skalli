@@ -14,21 +14,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.skalli.model.core.Project;
+import org.eclipse.skalli.model.ext.AbstractDataMigration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import org.eclipse.skalli.log.Log;
-import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AbstractDataMigration;
-
 @SuppressWarnings("nls")
 public class DataMigration11 extends AbstractDataMigration {
-    private static final Logger LOG = Log.getLogger(DataMigration11.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataMigration11.class);
 
     public DataMigration11() {
         super(Project.class, 11);
@@ -54,7 +53,7 @@ public class DataMigration11 extends AbstractDataMigration {
         for (int i = 0; i < nodes.getLength(); i++) {
             Element member = (Element) nodes.item(i);
             String userId = member.getElementsByTagName("userID").item(0).getTextContent();
-            LOG.fine("Reading User '" + userId + "' for Migration.");
+            LOG.debug("Reading User '" + userId + "' for Migration.");
 
             NodeList roles = member.getElementsByTagName("roles").item(0).getChildNodes();
             for (int j = 0; j < roles.getLength(); j++) {
@@ -68,7 +67,7 @@ public class DataMigration11 extends AbstractDataMigration {
                     } else {
                         role = roleCache.get(roleElement.getNodeName());
                     }
-                    LOG.fine("User '" + userId + "' has role '" + role + "'.");
+                    LOG.debug("User '" + userId + "' has role '" + role + "'.");
                     if (role.equals("projectmember")) {
                         members.add(userId);
                     } else if (role.equals("projectlead")) {
@@ -103,7 +102,7 @@ public class DataMigration11 extends AbstractDataMigration {
             Node scrumExt = doc.getElementsByTagName("org.eclipse.skalli.model.ext.scrum.ScrumProjectExt").item(0);
 
             if (scrumExt == null) {
-                LOG.warning("there were scrum people, but no scrum extension.");
+                LOG.warn("there were scrum people, but no scrum extension.");
             } else {
                 // add scrum masters
                 addPeopleSection(doc, scrumExt, "scrumMasters", scrumMasters);

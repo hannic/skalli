@@ -24,7 +24,6 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,7 +36,6 @@ import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.UUIDUtils;
 import org.eclipse.skalli.common.util.XMLUtils;
 import org.eclipse.skalli.core.internal.persistence.EntityHelper;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensibleEntityBase;
@@ -47,6 +45,8 @@ import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issuer;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -64,7 +64,7 @@ public class XStreamPersistence implements Issuer {
     private static final String TAG_MODIFIED_BY = "modifiedBy"; //$NON-NLS-1$
     private static final String TAG_LAST_MODIFIED = "lastModified"; //$NON-NLS-1$
 
-    private static final Logger LOG = Log.getLogger(XStreamPersistence.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XStreamPersistence.class);
 
     private StorageService storageService;
 

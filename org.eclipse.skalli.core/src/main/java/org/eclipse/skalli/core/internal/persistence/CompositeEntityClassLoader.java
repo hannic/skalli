@@ -14,13 +14,15 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
-import org.eclipse.skalli.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class CompositeEntityClassLoader extends ClassLoader {
 
-    private static final Logger LOG = Log.getLogger(CompositeEntityClassLoader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CompositeEntityClassLoader.class);
 
     private final Set<ClassLoader> classLoaders = new HashSet<ClassLoader>(0);
 
@@ -39,7 +41,7 @@ public class CompositeEntityClassLoader extends ClassLoader {
                 }
             } catch (ClassNotFoundException e) {
                 // ingore, cuz that's the point of this composite class loader!
-                LOG.finest(MessageFormat.format("Class {0} not found by class loader {1}", name, classLoader));
+                LOG.debug(MessageFormat.format("Class {0} not found by class loader {1}", name, classLoader));
             }
         }
         throw new ClassNotFoundException("Class not found: " + name);

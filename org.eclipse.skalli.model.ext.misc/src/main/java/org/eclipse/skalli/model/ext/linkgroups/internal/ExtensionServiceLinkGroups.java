@@ -12,11 +12,7 @@ package org.eclipse.skalli.model.ext.linkgroups.internal;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
-import org.osgi.service.component.ComponentContext;
-
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
@@ -24,13 +20,16 @@ import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.linkgroups.LinkGroupValidator;
 import org.eclipse.skalli.model.ext.linkgroups.LinkGroupsProjectExt;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServiceLinkGroups
         extends ExtensionServiceBase<LinkGroupsProjectExt>
         implements ExtensionService<LinkGroupsProjectExt>
 {
 
-    private static final Logger LOG = Log.getLogger(ExtensionServiceLinkGroups.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServiceLinkGroups.class);
 
     private static final String CAPTION = "Additional Links";
     private static final String DESCRIPTION = "Information related to the project that is maintained elsewhere and linkable.";

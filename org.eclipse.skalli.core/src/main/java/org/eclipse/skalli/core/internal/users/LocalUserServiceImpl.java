@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
@@ -30,8 +29,9 @@ import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.UserService;
 import org.eclipse.skalli.core.internal.persistence.xstream.IgnoreUnknownElementsXStream;
 import org.eclipse.skalli.core.internal.persistence.xstream.NoopConverter;
-import org.eclipse.skalli.log.Log;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -47,7 +47,7 @@ import com.thoughtworks.xstream.XStream;
  */
 public class LocalUserServiceImpl implements UserService {
 
-    private static final Logger LOG = Log.getLogger(LocalUserServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LocalUserServiceImpl.class);
     private static final String STORAGE_BASE = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
     private File storageDirectory;
 
@@ -74,7 +74,7 @@ public class LocalUserServiceImpl implements UserService {
                 if (workingDirectory.exists() && workingDirectory.isDirectory()) {
                     storageDirectory = new File(workingDirectory, STORAGE_BASE + "User");
                 } else {
-                    LOG.warning("Working directory " + workingDirectory.getAbsolutePath()
+                    LOG.warn("Working directory " + workingDirectory.getAbsolutePath()
                             + "not found - falling back to current directory");
                 }
             }

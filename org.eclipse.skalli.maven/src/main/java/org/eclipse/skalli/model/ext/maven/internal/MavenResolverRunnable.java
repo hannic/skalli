@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.ProjectService;
@@ -23,7 +21,6 @@ import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.ComparatorUtils;
 import org.eclipse.skalli.common.util.MapperUtil;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
@@ -34,10 +31,12 @@ import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
 import org.eclipse.skalli.model.ext.maven.MavenReactor;
 import org.eclipse.skalli.model.ext.maven.MavenReactorProjectExt;
 import org.eclipse.skalli.nexus.NexusClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MavenResolverRunnable implements Runnable {
 
-    private static final Logger LOG = Log.getLogger(MavenResolverRunnable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MavenResolverRunnable.class);
 
     private ConfigurationService configService;
     private NexusClient nexusClient;
@@ -68,13 +67,13 @@ public class MavenResolverRunnable implements Runnable {
                 newReactor = resolveProject(project);
             } catch (ValidationException e) {
                 ++countInvalid;
-                LOG.log(Level.INFO, MessageFormat.format(
+                LOG.info(MessageFormat.format(
                         "Invalid Maven reactor information for project {0}:\n {1}",
                         project.getProjectId(), e.getMessage()));
                 continue;
             } catch (Throwable t) {
                 ++countInvalid;
-                LOG.log(Level.SEVERE, MessageFormat.format(
+                LOG.error(MessageFormat.format(
                         "Failed to resolve Maven reactor information for project {0}",
                         project.getProjectId()), t);
                 continue;
@@ -83,7 +82,7 @@ public class MavenResolverRunnable implements Runnable {
             try {
                 versionsResolver.addNexusVersions(newReactor);
             } catch (RuntimeException e) {
-                LOG.log(Level.SEVERE, MessageFormat.format(
+                LOG.error(MessageFormat.format(
                         "Can''t calculate Versions for project {0} . Unexpected Exception cought: {1}",
                         project.getProjectId(), e.getMessage()));
             }
@@ -96,7 +95,7 @@ public class MavenResolverRunnable implements Runnable {
                         ++countUpdated;
                     } catch (ValidationException e) {
                         ++countInvalid;
-                        LOG.log(Level.WARNING, MessageFormat.format(
+                        LOG.warn(MessageFormat.format(
                                 "Failed to persist Maven reactor information for project {0}",
                                 project.getProjectId()), e);
                         continue;
@@ -104,7 +103,7 @@ public class MavenResolverRunnable implements Runnable {
                 }
             }
 
-            LOG.finest(MessageFormat.format(
+            LOG.debug(MessageFormat.format(
                     "MavenResolver: ({0} projects scanned: {1} updated, {2} invalid, {3} remaining)",
                     projects.size(), countUpdated, countInvalid, projects.size() - countUpdated - countInvalid));
 
@@ -213,8 +212,8 @@ public class MavenResolverRunnable implements Runnable {
     // package protected for testing purposes
     MavenPathResolver getMavenPathResolver(ConfigurationService configService, String scmLocation) {
         if (configService == null) {
-            if (LOG.isLoggable(Level.FINE)) {
-                LOG.fine("no scm mappings available: configService==null");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("no scm mappings available: configService==null");
             }
             return null;
         }
@@ -222,8 +221,8 @@ public class MavenResolverRunnable implements Runnable {
         List<ScmLocationMappingConfig> mappings = mapper.getMappings(configService,
                 "git", ScmLocationMapper.PURPOSE_BROWSE); //$NON-NLS-1$
         if (mappings.isEmpty()) {
-            if (LOG.isLoggable(Level.FINE)) {
-                LOG.fine(MessageFormat.format(
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(MessageFormat.format(
                         "no suitable scm mapping found matching filter provider=''git'' && purpose=''{0}''",
                         ScmLocationMapper.PURPOSE_BROWSE));
             }
@@ -234,8 +233,8 @@ public class MavenResolverRunnable implements Runnable {
                 return new GitWebPathResolver(mapping.getPattern(), mapping.getTemplate());
             }
         }
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine(MessageFormat.format(
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(MessageFormat.format(
                     "no suitable scm mapping found matching scmLocation=''{0}'' && purpose=''{1}''",
                     scmLocation, ScmLocationMapper.PURPOSE_BROWSE));
         }

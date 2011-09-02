@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -38,14 +37,15 @@ import org.eclipse.skalli.api.java.authentication.LoginUtil;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Favorites;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractSearchFilter implements Filter {
 
-    private static final Logger LOG = Log.getLogger(AbstractSearchFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractSearchFilter.class);
 
     public static final String ATTRIBUTE_RESULTSIZE = "resultSize"; //$NON-NLS-1$
     public static final String ATTRIBUTE_DURATION = "duration"; //$NON-NLS-1$

@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
@@ -35,14 +34,15 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.core.internal.persistence.CompositeEntityClassLoader;
 import org.eclipse.skalli.core.internal.persistence.xstream.IgnoreUnknownElementsMapperWrapper;
 import org.eclipse.skalli.core.utils.ConfigurationProperties;
-import org.eclipse.skalli.log.Log;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 public class ConfigurationComponent implements ConfigurationService {
-    private static final Logger LOG = Log.getLogger(ConfigurationComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationComponent.class);
 
     private static final String CATEGORY_CUSTOMIZATION = "customization"; //$NON-NLS-1$
     private static final String KEY_PROPERTYSTORE = "PROPERTYSTORE"; //$NON-NLS-1$
@@ -250,7 +250,7 @@ public class ConfigurationComponent implements ConfigurationService {
     @Override
     public <T> T readCustomization(String customizationKey, Class<T> customizationClass) {
         if (storageService == null) {
-            LOG.warning("Cannot load customization for key " + customizationKey + ": StorageService not available");
+            LOG.warn("Cannot load customization for key " + customizationKey + ": StorageService not available");
             return null;
         }
         InputStream is = null;

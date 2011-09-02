@@ -13,11 +13,9 @@ package org.eclipse.skalli.model.ext.people.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.util.CollectionUtils;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
@@ -26,12 +24,14 @@ import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServicePeople
         extends ExtensionServiceBase<PeopleProjectExt>
         implements ExtensionService<PeopleProjectExt>
 {
-    private static final Logger LOG = Log.getLogger(ExtensionServicePeople.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServicePeople.class);
 
     private static final String CAPTION = "Project Members";
     private static final String DESCRIPTION =

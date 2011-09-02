@@ -16,7 +16,6 @@ import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,13 +34,14 @@ import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.ServiceFilter;
 import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Favorites;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.Issues;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.view.ext.ProjectContextLink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This filter sets the following attributes if the request attribute "{@value Consts#ATTRIBUTE_PROJECT}" is defined:
@@ -65,7 +65,7 @@ import org.eclipse.skalli.view.ext.ProjectContextLink;
  */
 public class ProjectDetailsFilter implements Filter {
 
-    private static final Logger LOG = Log.getLogger(ProjectDetailsFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectDetailsFilter.class);
 
     @Override
     public void destroy() {
@@ -161,12 +161,12 @@ public class ProjectDetailsFilter implements Filter {
 
         for (ProjectContextLink contextLink : set) {
             if (StringUtils.isBlank(contextLink.getCaption(project))) {
-                LOG.warning(MessageFormat
+                LOG.warn(MessageFormat
                         .format(
                                 "instance of {0} returned null or blank when calling method getCaption(project) with projectId={1}",
                                 contextLink.getClass(), project.getProjectId()));
             } else if (contextLink.getUri(project) == null) {
-                LOG.warning(MessageFormat.format(
+                LOG.warn(MessageFormat.format(
                         "instance of {0} returned null when calling method getUri(project) with projectId={1}",
                         contextLink.getClass(), project.getProjectId()));
             } else {

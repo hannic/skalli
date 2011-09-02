@@ -20,7 +20,7 @@ import org.eclipse.skalli.api.java.SearchService;
 import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.restlet.data.Form;

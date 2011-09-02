@@ -17,7 +17,7 @@ import org.restlet.resource.Get;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class UserResource extends AbstractServerResource {

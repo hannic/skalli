@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.model.ext.AbstractConverter;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;

@@ -15,15 +15,16 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.eclipse.skalli.log.Log;
+
 
 public abstract class ExtensionEntityBase extends EntityBase {
 
-    private static final Logger LOG = Log.getLogger(ExtensionEntityBase.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionEntityBase.class);
 
     /** Non-persistent pointer of an extension entity to an extensible entity. */
     private transient ExtensibleEntityBase extensibleEntity;
@@ -104,7 +105,7 @@ public abstract class ExtensionEntityBase extends EntityBase {
         try {
             return getClass().getMethod(methodName, new Class[] {});
         } catch (NoSuchMethodException e) {
-            LOG.fine(MessageFormat.format("Entity of type {0} does not have a getter {1} for property {2}", getClass()
+            LOG.debug(MessageFormat.format("Entity of type {0} does not have a getter {1} for property {2}", getClass()
                     .getName(), methodName, propertyName));
         }
         return null;

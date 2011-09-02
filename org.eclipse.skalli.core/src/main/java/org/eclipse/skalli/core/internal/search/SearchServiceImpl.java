@@ -15,9 +15,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
-
-import org.osgi.service.component.ComponentContext;
 
 import org.eclipse.skalli.api.java.PagingInfo;
 import org.eclipse.skalli.api.java.ProjectService;
@@ -26,14 +23,16 @@ import org.eclipse.skalli.api.java.SearchHit;
 import org.eclipse.skalli.api.java.SearchResult;
 import org.eclipse.skalli.api.java.SearchService;
 import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SearchServiceImpl implements SearchService {
 
-    private static final Logger LOG = Log.getLogger(SearchServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SearchServiceImpl.class);
     private LuceneIndex<Project> luceneIndex;
 
     protected void bindProjectService(ProjectService srvc) {

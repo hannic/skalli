@@ -14,14 +14,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
-
-import org.osgi.service.component.ComponentContext;
 
 import org.eclipse.skalli.api.java.EventListener;
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.events.AbstractEvent;
-import org.eclipse.skalli.log.Log;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Beware: This eventing implementation is just a POC!!!
@@ -30,7 +29,7 @@ import org.eclipse.skalli.log.Log;
  */
 // TODO: just a POC...
 public class EventComponent implements EventService {
-    private static final Logger LOG = Log.getLogger(EventComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EventComponent.class);
 
     private final Map<String, Set> listeners = new HashMap<String, Set>();
 

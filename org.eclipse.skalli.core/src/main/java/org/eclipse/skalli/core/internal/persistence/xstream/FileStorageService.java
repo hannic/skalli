@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -27,14 +26,16 @@ import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.core.utils.ConfigurationProperties;
-import org.eclipse.skalli.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Implementation of a storage service based on a local file system.
  */
 public class FileStorageService implements StorageService {
 
-    private static final Logger LOG = Log.getLogger(XStreamPersistence.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XStreamPersistence.class);
     private static final String STORAGE_BASE = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
 
     private final File storageBase;
@@ -86,7 +87,7 @@ public class FileStorageService implements StorageService {
         } finally {
             IOUtils.closeQuietly(fos);
         }
-        LOG.fine(getPath(category, key) + " successfully written to " + file.getAbsolutePath()); //$NON-NLS-1$
+        LOG.debug(getPath(category, key) + " successfully written to " + file.getAbsolutePath()); //$NON-NLS-1$
     }
 
     @Override
@@ -113,7 +114,7 @@ public class FileStorageService implements StorageService {
             if (workingDirectory.exists() && workingDirectory.isDirectory()) {
                 storageDirectory = new File(workingDirectory, STORAGE_BASE);
             } else {
-                LOG.warning("Working directory '" + workingDirectory.getAbsolutePath()
+                LOG.warn("Working directory '" + workingDirectory.getAbsolutePath()
                         + "' not found - falling back to current directory");
             }
         }

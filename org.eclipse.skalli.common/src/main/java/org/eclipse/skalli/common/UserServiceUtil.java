@@ -10,16 +10,15 @@
  *******************************************************************************/
 package org.eclipse.skalli.common;
 
-import java.util.logging.Logger;
-
 import org.apache.commons.lang.BooleanUtils;
-import org.osgi.framework.Constants;
-
 import org.eclipse.skalli.common.configuration.ConfigurationService;
-import org.eclipse.skalli.log.Log;
+import org.osgi.framework.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class UserServiceUtil {
-    private static final Logger LOG = Log.getLogger(UserServiceUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceUtil.class);
 
     private static UserServiceUtil instance = null;
 

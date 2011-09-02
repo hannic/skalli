@@ -11,27 +11,26 @@
 package org.eclipse.skalli.model.ext.maven.internal;
 
 import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.maven.MavenCoordinate;
 import org.eclipse.skalli.model.ext.maven.MavenReactor;
 import org.eclipse.skalli.nexus.NexusArtifact;
 import org.eclipse.skalli.nexus.NexusClient;
 import org.eclipse.skalli.nexus.NexusSearchResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class NexusVersionsResolver {
-    private static final Logger LOG = Log.getLogger(NexusVersionsResolver.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NexusVersionsResolver.class);
     private NexusClient nexusClient;
 
     public NexusVersionsResolver(NexusClient nexusClient) {
         this.nexusClient = nexusClient;
         if (this.nexusClient == null) {
-            LOG.log(Level.WARNING, "Can't calculate versions: No Nexus client available");
+            LOG.warn("Can't calculate versions: No Nexus client available");
         }
     }
 
@@ -61,8 +60,7 @@ public class NexusVersionsResolver {
             }
 
         } catch (Exception e) {
-            LOG.log(Level.WARNING,
-                    MessageFormat.format("Can''t get Maven version for {0}: {1}", mavenCoordinate, e.getMessage()), e);
+            LOG.warn(MessageFormat.format("Can''t get Maven version for {0}: {1}", mavenCoordinate, e.getMessage()), e);
         }
     }
 }

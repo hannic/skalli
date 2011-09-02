@@ -3,16 +3,16 @@ package org.eclipse.skalli.core.utils;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.core.internal.persistence.xstream.FileStorageService;
-import org.eclipse.skalli.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigurationProperties {
 
-    private static final Logger LOG = Log.getLogger(ConfigurationProperties.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationProperties.class);
 
     public static String getProperty(String propertyName) {
         return getProperty(propertyName, null);
@@ -25,14 +25,14 @@ public class ConfigurationProperties {
             try {
                 // search property in /skalli.properties
                 Properties properties = new Properties();
-                InputStream skalliPropertiesStream = ConfigurationProperties.class.getResourceAsStream(Consts.PROPERTIES_RESOURCE);
+                InputStream skalliPropertiesStream = ConfigurationProperties.class
+                        .getResourceAsStream(Consts.PROPERTIES_RESOURCE);
                 if (skalliPropertiesStream != null) {
                     properties.load(skalliPropertiesStream);
                     propertyValue = (String) properties.get(propertyName);
                 }
             } catch (Exception e) {
-                LOG.info(MessageFormat.format(
-                        "Failed to retrieve property ''{0}'' from resource file ''{1}''", //$NON-NLS-1$
+                LOG.info(MessageFormat.format("Failed to retrieve property ''{0}'' from resource file ''{1}''", //$NON-NLS-1$
                         propertyName, Consts.PROPERTIES_RESOURCE));
             }
         }

@@ -14,23 +14,22 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Logger;
-
-import org.osgi.service.component.ComponentContext;
 
 import org.eclipse.skalli.api.java.ProjectTemplateService;
 import org.eclipse.skalli.common.ServiceFilter;
 import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.DefaultProjectTemplate;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProjectTemplateServiceImpl implements ProjectTemplateService {
 
-    private static final Logger LOG = Log.getLogger(ProjectTemplateServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ProjectTemplateServiceImpl.class);
 
     protected void activate(ComponentContext context) {
         LOG.info("Project template service activated");

@@ -25,18 +25,17 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issuer;
 import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Validates that a host / URL is reachable by trying to establish a connection.</p>
@@ -51,7 +50,7 @@ import org.eclipse.skalli.model.ext.Severity;
  */
 public class HostReachableValidator implements Issuer, PropertyValidator {
 
-    private static final Logger LOG = Log.getLogger(HostReachableValidator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HostReachableValidator.class);
 
     // TODO: I18N
     private static final String TXT_RESOURCE_FOUND_REDIRECT = "''{0}'' found, but a redirect is necessary ({1} {2}).";
@@ -151,9 +150,9 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
         } catch (ConnectException e) {
             issues.add(newIssue(Severity.ERROR, entityId, item, TXT_CONNECT_FAILED, url.getHost()));
         } catch (IOException e) {
-            LOG.log(Level.WARNING, MessageFormat.format("I/O Exception on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
+            LOG.warn(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
         } catch (RuntimeException e) {
-            LOG.log(Level.SEVERE, MessageFormat.format("RuntimeException on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
+            LOG.error(MessageFormat.format("RuntimeException on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
         }
     }
 
@@ -181,7 +180,7 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
             } catch (UnknownHostException e) {
                 return newIssue(Severity.ERROR, entityId, item, TXT_HOST_UNKNOWN, host);
             } catch (IOException e) {
-                LOG.log(Level.WARNING, MessageFormat.format("I/O Exception on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
+                LOG.warn(MessageFormat.format("I/O Exception on validation: {0}", e.getMessage()), e); //$NON-NLS-1$
                 return null;
             }
         }

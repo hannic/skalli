@@ -24,7 +24,7 @@ import org.apache.commons.lang.StringUtils;
 
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 
 public class StatisticsFilter implements Filter {
 

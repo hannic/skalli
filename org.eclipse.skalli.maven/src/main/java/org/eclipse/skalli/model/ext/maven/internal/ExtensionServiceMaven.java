@@ -13,14 +13,10 @@ package org.eclipse.skalli.model.ext.maven.internal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
-
-import org.osgi.service.component.ComponentContext;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.HostReachableValidator;
 import org.eclipse.skalli.common.util.URLValidator;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.ExtensionService;
@@ -28,13 +24,16 @@ import org.eclipse.skalli.model.ext.ExtensionServiceBase;
 import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.maven.MavenProjectExt;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServiceMaven
         extends ExtensionServiceBase<MavenProjectExt>
         implements ExtensionService<MavenProjectExt>
 {
 
-    private static final Logger LOG = Log.getLogger(ExtensionServiceMaven.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServiceMaven.class);
 
     private static final String CAPTION = "Maven";
     private static final String DESCRIPTION = "Information related to a Maven project like the group id.";

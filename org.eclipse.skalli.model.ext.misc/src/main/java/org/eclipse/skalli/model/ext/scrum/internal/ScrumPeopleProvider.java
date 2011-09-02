@@ -13,19 +13,18 @@ package org.eclipse.skalli.model.ext.scrum.internal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.PeopleProvider;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.scrum.ScrumProjectExt;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ScrumPeopleProvider implements PeopleProvider {
-    private static final Logger LOG = Log.getLogger(ScrumPeopleProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScrumPeopleProvider.class);
 
     private static final String ROLE_SM = "scrummaster"; //$NON-NLS-1$
     private static final String ROLE_PO = "productowner"; //$NON-NLS-1$

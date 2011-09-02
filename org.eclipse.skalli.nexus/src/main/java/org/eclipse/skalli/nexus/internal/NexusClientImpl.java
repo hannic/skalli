@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -27,19 +26,20 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.HttpUtils;
 import org.eclipse.skalli.common.util.XMLUtils;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.nexus.NexusClient;
 import org.eclipse.skalli.nexus.NexusClientException;
 import org.eclipse.skalli.nexus.NexusSearchResult;
 import org.eclipse.skalli.nexus.internal.config.NexusConfig;
 import org.eclipse.skalli.nexus.internal.config.NexusResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 public class NexusClientImpl implements NexusClient {
 
-    private static final Logger LOG = Log.getLogger(NexusClientImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NexusClientImpl.class);
 
     private ConfigurationService configService;
 

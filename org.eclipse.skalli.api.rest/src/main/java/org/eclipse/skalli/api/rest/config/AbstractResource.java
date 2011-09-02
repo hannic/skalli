@@ -11,13 +11,11 @@
 package org.eclipse.skalli.api.rest.config;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.api.java.authentication.LoginUtil;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
-import org.eclipse.skalli.log.Log;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.servlet.ServletUtils;
@@ -27,11 +25,13 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thoughtworks.xstream.XStream;
 
 public abstract class AbstractResource<T> extends ServerResource {
-    private final static Logger LOG = Log.getLogger(AbstractResource.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AbstractResource.class);
 
     /**
      * Defines the class that contains all configuration parameters and will be represented in the REST API.
@@ -83,7 +83,7 @@ public abstract class AbstractResource<T> extends ServerResource {
         } else {
             String message = "Failed to read configuration (" + getConfigClass().getSimpleName()
                     + ") - no instance of " + ConfigurationService.class.getName() + "available";
-            LOG.warning(message);
+            LOG.warn(message);
             return new StringRepresentation(message, MediaType.TEXT_PLAIN);
         }
     }
@@ -103,7 +103,7 @@ public abstract class AbstractResource<T> extends ServerResource {
                 storeConfig(configService, configObject);
                 result = new StringRepresentation("Configuration successfully stored", MediaType.TEXT_PLAIN);
             } else {
-                LOG.warning("Failed to store configuration - no instance of " + ConfigurationService.class.getName() + "available"); //$NON-NLS-1$
+                LOG.warn("Failed to store configuration - no instance of " + ConfigurationService.class.getName() + "available"); //$NON-NLS-1$
                 result = new StringRepresentation("Failed to store configuration", MediaType.TEXT_PLAIN);
                 getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
             }

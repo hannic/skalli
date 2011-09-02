@@ -16,16 +16,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.common.util.XMLUtils;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 public class DataMigrator {
-    private static final Logger LOG = Log.getLogger(DataMigrator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataMigrator.class);
 
     private final List<DataMigration> migrations;
     private final Map<String, Class<?>> aliases;

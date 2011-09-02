@@ -12,7 +12,6 @@ package org.eclipse.skalli.model.ext.maven.internal;
 
 import java.text.MessageFormat;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.EventListener;
@@ -21,15 +20,16 @@ import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
 import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
 import org.eclipse.skalli.api.java.tasks.SchedulerService;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.maven.internal.config.MavenResolverConfig;
 import org.eclipse.skalli.model.ext.maven.internal.config.MavenResolverResource;
 import org.eclipse.skalli.nexus.NexusClient;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MavenResolverServiceImpl implements MavenResolverService, EventListener<EventCustomizingUpdate> {
 
-    private static final Logger LOG = Log.getLogger(MavenResolverServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MavenResolverServiceImpl.class);
 
     private SchedulerService schedulerService;
     private ConfigurationService configService;

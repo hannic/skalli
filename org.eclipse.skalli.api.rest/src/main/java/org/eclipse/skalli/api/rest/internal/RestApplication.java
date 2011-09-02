@@ -12,7 +12,6 @@ package org.eclipse.skalli.api.rest.internal;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.api.rest.config.ConfigSection;
 import org.eclipse.skalli.api.rest.internal.admin.ProjectBackupResource;
@@ -23,15 +22,16 @@ import org.eclipse.skalli.api.rest.internal.resources.ProjectResource;
 import org.eclipse.skalli.api.rest.internal.resources.ProjectsResource;
 import org.eclipse.skalli.api.rest.internal.resources.UserResource;
 import org.eclipse.skalli.api.rest.monitor.Monitorable;
-import org.eclipse.skalli.log.Log;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RestApplication extends Application {
 
-    private static final Logger LOG = Log.getLogger(RestApplication.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RestApplication.class);
 
     private final static Set<ConfigSection> configSections = new HashSet<ConfigSection>();
     private final static Set<Monitorable> serviceMonitors = new HashSet<Monitorable>();
@@ -91,7 +91,7 @@ public class RestApplication extends Application {
                     router.attach(path, monitorResource);
                     LOG.info("Attached service monitor to path " + path);
                 } else {
-                    LOG.warning("No monitor resource provided for path " + path);
+                    LOG.warn("No monitor resource provided for path " + path);
                 }
             }
         }

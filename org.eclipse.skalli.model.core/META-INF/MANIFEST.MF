@@ -5,13 +5,13 @@ Bundle-SymbolicName: org.eclipse.skalli.model.core
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: Eclipse Skalli
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.skalli.common,
- org.eclipse.skalli.common.util,
- org.eclipse.skalli.log,
- org.eclipse.skalli.model.ext,
- com.thoughtworks.xstream.converters,
+Import-Package: com.thoughtworks.xstream.converters,
  com.thoughtworks.xstream.io,
  org.apache.commons.lang,
+ org.slf4j,
+ org.eclipse.skalli.common,
+ org.eclipse.skalli.common.util,
+ org.eclipse.skalli.model.ext,
  org.osgi.framework,
  org.osgi.service.component,
  org.w3c.dom

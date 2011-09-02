@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.skalli.api.java.authentication.LoginUtil;
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Statistics;
+import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.view.internal.application.ProjectApplication;
 import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.AbstractApplicationServlet;

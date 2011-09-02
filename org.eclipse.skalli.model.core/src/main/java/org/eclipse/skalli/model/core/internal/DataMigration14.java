@@ -10,18 +10,16 @@
  *******************************************************************************/
 package org.eclipse.skalli.model.core.internal;
 
-import java.util.logging.Logger;
-
+import org.eclipse.skalli.model.core.Project;
+import org.eclipse.skalli.model.ext.AbstractDataMigration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import org.eclipse.skalli.log.Log;
-import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AbstractDataMigration;
-
 public class DataMigration14 extends AbstractDataMigration {
 
-    private static final Logger LOG = Log.getLogger(DataMigration14.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DataMigration14.class);
 
     public DataMigration14() {
         super(Project.class, 14);

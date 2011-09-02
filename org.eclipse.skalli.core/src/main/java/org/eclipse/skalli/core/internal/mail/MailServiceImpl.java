@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -27,19 +26,19 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.MailService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
 import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MailServiceImpl implements MailService {
 
-    private static final Logger LOG = Log.getLogger(MailServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MailServiceImpl.class);
 
     protected void activate(ComponentContext context) {
         LOG.info("Mail service activated"); //$NON-NLS-1$

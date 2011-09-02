@@ -14,11 +14,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-import org.osgi.service.component.ComponentContext;
-
 import org.eclipse.skalli.api.java.EventListener;
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.events.EventConfigUpdate;
@@ -28,7 +25,10 @@ import org.eclipse.skalli.common.UserService;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.core.internal.cache.Cache;
 import org.eclipse.skalli.core.internal.cache.GroundhogCache;
-import org.eclipse.skalli.log.Log;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Implementation of {@link UserService} accessing an LDAP server.
@@ -39,7 +39,7 @@ import org.eclipse.skalli.log.Log;
  */
 public class LDAPUserServiceImpl implements UserService, EventListener<EventConfigUpdate> {
 
-    private static final Logger LOG = Log.getLogger(LDAPUserServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LDAPUserServiceImpl.class);
     private final Cache<String, User> cache = new GroundhogCache<String, User>(2000);
     private EventService eventService;
 
@@ -74,7 +74,7 @@ public class LDAPUserServiceImpl implements UserService, EventListener<EventConf
             factory = configService.readString(ConfigKeyLDAP.FACTORY);
             usersGroup = configService.readString(ConfigKeyLDAP.USERS_GROUP);
         } else {
-            LOG.warning("Failed to read LDAP configuration - no instance of "
+            LOG.warn("Failed to read LDAP configuration - no instance of "
                     + ConfigurationService.class.getName() + "available. Either provide a suitable "
                     + "configuration service or switch to another user service, for example Local User Service.");
         }

@@ -13,12 +13,10 @@ package org.eclipse.skalli.model.ext.devinf.internal;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.common.util.HostReachableValidator;
 import org.eclipse.skalli.common.util.URLValidator;
-import org.eclipse.skalli.log.Log;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionService;
@@ -27,13 +25,15 @@ import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtensionServiceDevInf
         extends ExtensionServiceBase<DevInfProjectExt>
         implements ExtensionService<DevInfProjectExt>
 {
 
-    private static final Logger LOG = Log.getLogger(ExtensionServiceDevInf.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtensionServiceDevInf.class);
 
     private static final String CAPTION = "Development Infrastructure";
     private static final String DESCRIPTION =

@@ -12,18 +12,17 @@ package org.eclipse.skalli.common.util;
 
 import java.text.MessageFormat;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
-
-import org.eclipse.skalli.log.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Collection of utilities for {@link java.util.UUID}.
  */
 public class UUIDUtils {
 
-    private static final Logger LOG = Log.getLogger(UUIDUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UUIDUtils.class);
 
     /**
      * Checks if the given string is a valid {@link java.util.UUID}.
@@ -38,7 +37,7 @@ public class UUIDUtils {
                 UUID.fromString(s);
                 return true;
             } catch (IllegalArgumentException ex) {
-                LOG.finest(MessageFormat.format("{0} is not considered to be a valid UUID.", s));
+                LOG.debug(MessageFormat.format("{0} is not considered to be a valid UUID.", s));
             }
         }
         return false;
@@ -56,7 +55,7 @@ public class UUIDUtils {
             try {
                 return UUID.fromString(s);
             } catch (IllegalArgumentException ex) {
-                LOG.finest(MessageFormat.format(
+                LOG.debug(MessageFormat.format(
                         "{0} is not considered to be a valid UUID. Going to return a random one.", s));
             }
         }

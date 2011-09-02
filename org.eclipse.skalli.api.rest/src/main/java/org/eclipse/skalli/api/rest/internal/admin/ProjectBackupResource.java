@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -31,8 +30,10 @@ import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.eclipse.skalli.log.Log;
+
 
 /**
  *
@@ -52,7 +53,7 @@ public class ProjectBackupResource extends ServerResource {
     }
 
     private static class ZipRepresentation extends OutputRepresentation {
-        private static final Logger LOG = Log.getLogger(ZipRepresentation.class);
+        private static final Logger LOG = LoggerFactory.getLogger(ZipRepresentation.class);
 
         private static final String STORAGE_LOCATION = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
         private final int BUFFER = 2048;
@@ -74,7 +75,7 @@ public class ProjectBackupResource extends ServerResource {
                 }
                 parent = new File(workDirProperty);
                 if (!parent.exists() || !parent.isDirectory()) {
-                    LOG.warning(String
+                    LOG.warn(String
                             .format("Working directory (%s) not found. Using current directory as fallback.", parent.getAbsolutePath())); //$NON-NLS-1$
                     parent = null;
                 }
