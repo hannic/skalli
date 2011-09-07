@@ -138,6 +138,18 @@
         <jsp-file>/search/jira.jsp</jsp-file>
     </servlet>
     <servlet>
+        <description>CreateGitGerrit</description>
+        <display-name>CreateGitGerrit</display-name>
+        <servlet-name>CreateGitGerrit</servlet-name>
+        <jsp-file>/search/gitgerrit.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <description>Create GitGerrit Error</description>
+        <display-name>CreateGitGerritError</display-name>
+        <servlet-name>CreateGitGerritError</servlet-name>
+        <jsp-file>/search/gitgerrit_error.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <description>RequestP4Depot</description>
         <display-name>RequestP4Depot</display-name>
         <servlet-name>RequestP4Depot</servlet-name>
@@ -196,12 +208,16 @@
     
     <!--  move functionality of the following filters to separate bundles -->
     <filter>
-       <filter-name>JiraFilter</filter-name>
-       <filter-class>org.eclipse.skalli.view.internal.filter.ext.JiraFilter</filter-class>
+        <filter-name>JiraFilter</filter-name>
+        <filter-class>org.eclipse.skalli.view.internal.filter.ext.JiraFilter</filter-class>
     </filter>
     <filter>
-       <filter-name>P4Filter</filter-name>
-       <filter-class>org.eclipse.skalli.view.internal.filter.ext.P4Filter</filter-class>
+        <filter-name>P4Filter</filter-name>
+        <filter-class>org.eclipse.skalli.view.internal.filter.ext.P4Filter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>GitGerritFilter</filter-name>
+        <filter-class>org.eclipse.skalli.view.internal.filter.ext.GitGerritFilter</filter-class>
     </filter>
     
     <!--
@@ -295,12 +311,20 @@
         <servlet-name>ErrorPage</servlet-name>
         <url-pattern>/error</url-pattern>
     </servlet-mapping>
-    
-    
-    <!--  move functionality of the following servlets to separate bundles -->
+
+
+    <!-- move functionality of the following servlets to separate bundles -->
     <servlet-mapping>
         <servlet-name>CreateJira</servlet-name>
         <url-pattern>/create/jira</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateGitGerrit</servlet-name>
+        <url-pattern>/create/gitgerrit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateGitGerritError</servlet-name>
+        <url-pattern>/create/gitgerriterror</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RequestP4Depot</servlet-name>
@@ -397,6 +421,12 @@
     <filter-mapping>
         <filter-name>P4Filter</filter-name>
         <url-pattern>/create/p4</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GitGerritFilter</filter-name>
+        <url-pattern>/create/gitgerrit</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>

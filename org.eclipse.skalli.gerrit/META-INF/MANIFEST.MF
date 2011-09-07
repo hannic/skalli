@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Gerrit Integration (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.gerrit
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.jcraft.jsch,
+ com.jcraft.jsch.jce,
+ com.jcraft.jsch.jcraft,
+ com.jcraft.jsch.jgss,
+ com.thoughtworks.xstream,
+ com.thoughtworks.xstream.annotations,
+ com.thoughtworks.xstream.converters,
+ com.thoughtworks.xstream.io,
+ org.apache.commons.io,
+ org.apache.commons.lang,
+ org.codehaus.jettison.json,
+ org.eclipse.skalli.api.java.authentication,
+ org.eclipse.skalli.api.rest.config,
+ org.eclipse.skalli.common,
+ org.eclipse.skalli.common.configuration,
+ org.restlet,
+ org.restlet.data,
+ org.restlet.representation,
+ org.restlet.resource,
+ org.slf4j,
+ org.slf4j.impl
+Export-Package: org.eclipse.skalli.gerrit.client,
+ org.eclipse.skalli.gerrit.client.config,
+ org.eclipse.skalli.gerrit.client.exception
+Service-Component: OSGI-INF/GerritConfigSection.xml,
+ OSGI-INF/GerritService.xml
+Bundle-ActivationPolicy: lazy

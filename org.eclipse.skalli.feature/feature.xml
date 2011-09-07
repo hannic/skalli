@@ -100,7 +100,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.eclipse.skalli.nexus"
          download-size="0"
@@ -125,6 +125,13 @@
 
    <plugin
          id="org.eclipse.skalli.storage.db.entities"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.skalli.gerrit"
          download-size="0"
          install-size="0"
          version="0.0.0"

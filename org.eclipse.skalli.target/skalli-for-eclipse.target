@@ -44,6 +44,7 @@
 <unit id="org.junit" version="4.8.1.v4_8_1_v20100427-1100"/>
 <unit id="org.easymock" version="2.4.0.v20090202-0900"/>
 <unit id="org.slf4j.api" version="1.5.11.v20100519-1910"/>
+<unit id="com.jcraft.jsch" version="0.1.44.v201101211721"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository"/>
 </location>
 

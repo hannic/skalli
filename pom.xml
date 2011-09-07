@@ -15,6 +15,7 @@
     <name>Skalli (Incubation)</name>
 
     <modules>
+        <module>org.eclipse.skalli.gerrit</module>
         <module>org.eclipse.skalli.target</module>
         <module>org.eclipse.skalli.parent</module>
         <module>org.eclipse.skalli.api.java</module>
@@ -58,6 +59,12 @@
             <id>db</id>
             <modules>
                 <module>org.eclipse.skalli.storage.db.test</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>gerrit</id>
+            <modules>
+                <module>org.eclipse.skalli.gerrit.test</module>
             </modules>
         </profile>
     </profiles>

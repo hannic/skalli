@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Skalli Gerrit Integration Tests (Incubation)
+Bundle-SymbolicName: org.eclipse.skalli.gerrit.test
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Skalli
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: org.eclipse.skalli.gerrit
+Import-Package: org.slf4j,
+ org.easymock,
+ org.junit

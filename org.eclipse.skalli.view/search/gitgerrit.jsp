@@ -62,7 +62,7 @@
 </h3>
   <c:choose>
     <c:when test="${empty param.action}">
-      <p>Use this form to create a new repository on '${gerritHost}'.</p>     
+      <p>Use this form to create a new repository on '${gerritHost}'.</p>
       <p>
         Enter a new group name or select one from the proposals based on the project hierarchy.<br/>
         Furthermore specify the new repository name that will be used for creation.
@@ -117,7 +117,7 @@
       </form>
       <p class="hint">Your values must not be blank and must not contain any whitespaces.</p>
       <p class="hint">Click 'Check' to contact Gerrit and find out whether the group and/or the repository exist.</p>
-      <p class="hint">This action won't do any changes to Gerrit or the project on Project Portal.</p>
+      <p class="hint">This action won't do any changes.</p>
     </c:when>
     <c:when test="${param.action == 'check'}">
       <p>Your input has been checked:</p>
