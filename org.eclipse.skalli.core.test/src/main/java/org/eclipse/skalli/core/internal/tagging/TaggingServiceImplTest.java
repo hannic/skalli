@@ -8,7 +8,7 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.core.internal.persistence;
+package org.eclipse.skalli.core.internal.tagging;
 
 import static org.easymock.EasyMock.*;
 
@@ -18,13 +18,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Taggable;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TaggingServiceImplTest {
 

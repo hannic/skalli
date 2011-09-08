@@ -10,23 +10,23 @@
         SAP AG - initial API and implementation
  -->
 
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" immediate="true" name="org.eclipse.skalli.api.java.persistence">
-   <implementation class="org.eclipse.skalli.core.internal.persistence.xstream.PersistenceServiceXStream"/>
-   <service>
-      <provide interface="org.eclipse.skalli.api.java.PersistenceService"/>
-   </service>
-   <reference
-        bind="bindExtensionService"
-        unbind="unbindExtensionService"
-        interface="org.eclipse.skalli.model.ext.ExtensionService"
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.skalli.core.component.persistence">
+    <implementation class="org.eclipse.skalli.core.internal.persistence.xstream.PersistenceServiceXStream"/>
+    <service>
+        <provide interface="org.eclipse.skalli.api.java.PersistenceService"/>
+    </service>
+    <reference
         name="ExtensionService"
+        interface="org.eclipse.skalli.model.ext.ExtensionService"
         cardinality="0..n"
-        policy="dynamic" />
-   <reference
-        bind="bindStorageService"
-        unbind="unbindStorageService"
-        interface="org.eclipse.skalli.api.java.StorageService"
+        policy="dynamic"
+        bind="bindExtensionService"
+        unbind="unbindExtensionService"/>
+    <reference
         name="StorageService"
+        interface="org.eclipse.skalli.api.java.StorageService"
         cardinality="0..n"
-        policy="dynamic"/>
+        policy="dynamic"
+        bind="bindStorageService"
+        unbind="unbindStorageService"/>
 </scr:component>

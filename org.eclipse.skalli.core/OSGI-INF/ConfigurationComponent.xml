@@ -5,22 +5,28 @@
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
     http://www.eclipse.org/legal/epl-v10.html
-   
+
     Contributors:
         SAP AG - initial API and implementation
  -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="true" name="org.eclipse.skalli.core.configuration">
-   <implementation class="org.eclipse.skalli.core.internal.configuration.ConfigurationComponent"/>
-   <service>
-      <provide interface="org.eclipse.skalli.common.configuration.ConfigurationService"/>
-   </service>
-   <reference bind="bindEventService" cardinality="0..1" interface="org.eclipse.skalli.api.java.EventService" name="EventService" policy="dynamic" unbind="unbindEventService"/>
-   <reference
-        bind="bindStorageService"
-        unbind="unbindStorageService"
-        interface="org.eclipse.skalli.api.java.StorageService"
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.skalli.core.component.configuration">
+    <implementation class="org.eclipse.skalli.core.internal.configuration.ConfigurationComponent"/>
+    <service>
+        <provide interface="org.eclipse.skalli.common.configuration.ConfigurationService"/>
+    </service>
+    <reference
+        name="EventService"
+        interface="org.eclipse.skalli.api.java.EventService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="bindEventService"
+        unbind="unbindEventService"/>
+    <reference
         name="StorageService"
+        interface="org.eclipse.skalli.api.java.StorageService"
         cardinality="0..n"
-        policy="dynamic"/>
+        policy="dynamic"
+        bind="bindStorageService"
+        unbind="unbindStorageService"/>
 </scr:component>
 

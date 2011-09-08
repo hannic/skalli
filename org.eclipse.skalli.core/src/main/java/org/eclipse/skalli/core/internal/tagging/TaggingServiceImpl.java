@@ -8,7 +8,7 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.core.internal.persistence;
+package org.eclipse.skalli.core.internal.tagging;
 
 import java.util.HashMap;
 import java.util.HashSet;

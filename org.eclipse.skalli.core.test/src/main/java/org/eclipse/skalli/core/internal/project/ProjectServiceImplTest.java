@@ -8,7 +8,7 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.core.internal.persistence;
+package org.eclipse.skalli.core.internal.project;
 
 import static org.easymock.EasyMock.*;
 
@@ -20,11 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.osgi.framework.BundleException;
-
 import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.api.java.ProjectTemplateService;
 import org.eclipse.skalli.model.core.DefaultProjectTemplate;
@@ -33,6 +28,10 @@ import org.eclipse.skalli.model.core.ProjectMember;
 import org.eclipse.skalli.model.core.ProjectNature;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
 import org.eclipse.skalli.testutil.BundleManager;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.osgi.framework.BundleException;
 
 @SuppressWarnings("nls")
 public class ProjectServiceImplTest {

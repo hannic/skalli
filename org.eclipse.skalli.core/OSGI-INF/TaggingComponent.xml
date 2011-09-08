@@ -1,25 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
     Copyright (c) 2010, 2011 SAP AG and others.
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
     http://www.eclipse.org/legal/epl-v10.html
-   
+
     Contributors:
         SAP AG - initial API and implementation
  -->
 
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="org.eclipse.skalli.core.persistence.tagging">
-   <implementation class="org.eclipse.skalli.core.internal.persistence.TaggingServiceImpl"/>
-   <service>
-      <provide interface="org.eclipse.skalli.api.java.TaggingService"/>
-   </service>
-   <reference 
-        bind="bindPersistenceService" 
-        cardinality="1..1" 
-        interface="org.eclipse.skalli.api.java.PersistenceService" 
-        name="persistenceService" 
-        policy="static" 
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.skalli.core.component.tagging">
+    <implementation class="org.eclipse.skalli.core.internal.tagging.TaggingServiceImpl"/>
+    <service>
+        <provide interface="org.eclipse.skalli.api.java.TaggingService"/>
+    </service>
+    <reference
+        name="PersistenceService"
+        interface="org.eclipse.skalli.api.java.PersistenceService"
+        cardinality="1..1"
+        policy="dynamic"
+        bind="bindPersistenceService"
         unbind="unbindPersistenceService"/>
 </scr:component>
 

@@ -8,20 +8,19 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.core.internal.persistence;
+package org.eclipse.skalli.core.internal.favorites;
 
 import static org.easymock.EasyMock.*;
 
 import org.easymock.IAnswer;
+import org.eclipse.skalli.api.java.FavoritesService;
+import org.eclipse.skalli.api.java.PersistenceService;
+import org.eclipse.skalli.core.internal.project.ProjectServiceImplTest;
+import org.eclipse.skalli.model.core.Favorites;
+import org.eclipse.skalli.testutil.AssertUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.BundleException;
-
-import org.eclipse.skalli.api.java.FavoritesService;
-import org.eclipse.skalli.api.java.PersistenceService;
-import org.eclipse.skalli.core.internal.persistence.FavoritesServiceImpl.FavoritesFilter;
-import org.eclipse.skalli.model.core.Favorites;
-import org.eclipse.skalli.testutil.AssertUtils;
 
 public class FavoritesServiceImplTest extends ProjectServiceImplTest {
 
@@ -63,12 +62,12 @@ public class FavoritesServiceImplTest extends ProjectServiceImplTest {
     protected void recordMocks() {
         super.recordMocks();
 
-        mockIPS.getEntity(eq(Favorites.class), isA(FavoritesFilter.class));
+        mockIPS.getEntity(eq(Favorites.class), isA(FavoritesServiceImpl.FavoritesFilter.class));
         expectLastCall().andAnswer(new IAnswer<Favorites>() {
             @Override
             public Favorites answer() throws Throwable {
                 Object[] args = getCurrentArguments();
-                String userId = ((FavoritesFilter) args[1]).getUserId();
+                String userId = ((FavoritesServiceImpl.FavoritesFilter) args[1]).getUserId();
                 if (USERID1.equals(userId)) {
                     return favorites1;
                 }

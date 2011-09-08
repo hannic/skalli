@@ -1,53 +1,54 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
     Copyright (c) 2010, 2011 SAP AG and others.
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
     http://www.eclipse.org/legal/epl-v10.html
-   
+
     Contributors:
         SAP AG - initial API and implementation
  -->
 
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="true" name="org.eclipse.skalli.core.validation">
-   <implementation class="org.eclipse.skalli.core.internal.validation.ValidationServiceImpl"/>
-   <service>
-      <provide interface="org.eclipse.skalli.api.java.ValidationService"/>
-      <provide interface="org.eclipse.skalli.api.rest.monitor.Monitorable"/>
-   </service>
-   <reference
-      bind="bindConfigurationService"
-      unbind="unbindConfigurationService"
-      interface="org.eclipse.skalli.common.configuration.ConfigurationService"
-      name="ConfigurationService"
-      cardinality="0..1"
-      policy="dynamic"/>
-   <reference
-      bind="bindEventService"
-      unbind="unbindEventService"
-      interface="org.eclipse.skalli.api.java.EventService"
-      name="EventService"
-      cardinality="0..1"
-      policy="dynamic"/>
-   <reference
-      bind="bindIssuesService"
-      unbind="unbindIssuesService"
-      interface="org.eclipse.skalli.api.java.IssuesService"
-      name="IssuesService"
-      cardinality="0..1"
-      policy="dynamic"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.skalli.core.component.validation">
+    <implementation class="org.eclipse.skalli.core.internal.validation.ValidationServiceImpl"/>
+    <service>
+        <provide interface="org.eclipse.skalli.api.java.ValidationService"/>
+        <provide interface="org.eclipse.skalli.api.rest.monitor.Monitorable"/>
+    </service>
     <reference
-      bind="bindEntityService"
-      unbind="unbindEntityService"
-      interface="org.eclipse.skalli.api.java.EntityService"
-      name="EntityService"
-      cardinality="0..n"
-      policy="dynamic"/>
-   <reference
-      bind="bindSchedulerService"
-      unbind="unbindSchedulerService"
-      interface="org.eclipse.skalli.api.java.tasks.SchedulerService"
-      name="SchedulerService"
-      cardinality="0..1"
-      policy="dynamic"/>
+        name="ConfigurationService"
+        interface="org.eclipse.skalli.common.configuration.ConfigurationService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="bindConfigurationService"
+        unbind="unbindConfigurationService"/>
+    <reference
+        name="EventService"
+        interface="org.eclipse.skalli.api.java.EventService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="bindEventService"
+        unbind="unbindEventService"/>
+    <reference
+        name="IssuesService"
+        interface="org.eclipse.skalli.api.java.IssuesService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="bindIssuesService"
+        unbind="unbindIssuesService"/>
+    <reference
+        name="EntityService"
+        interface="org.eclipse.skalli.api.java.EntityService"
+        cardinality="0..n"
+        policy="dynamic"
+        bind="bindEntityService"
+        unbind="unbindEntityService"/>
+    <reference
+        name="SchedulerService"
+        interface="org.eclipse.skalli.api.java.tasks.SchedulerService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="bindSchedulerService"
+        unbind="unbindSchedulerService"/>
 </scr:component>
