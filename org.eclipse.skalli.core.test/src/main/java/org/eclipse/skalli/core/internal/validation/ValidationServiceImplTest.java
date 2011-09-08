@@ -366,7 +366,7 @@ public class ValidationServiceImplTest {
         Assert.assertEquals(configs.length, validationService.getRegisteredSchedules().size());
 
         validationService.unbindConfigurationService(mockCS);
-        Assert.assertEquals(1, validationService.getRegisteredSchedules().size()); // default nightly schedule!
+        Assert.assertEquals(0, validationService.getRegisteredSchedules().size()); // default nightly schedule!
         validationService.bindConfigurationService(mockCS);
         Assert.assertEquals(configs.length, validationService.getRegisteredSchedules().size());
 

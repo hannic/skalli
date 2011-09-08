@@ -12,11 +12,6 @@ package org.eclipse.skalli.core.internal.validation;
 
 public enum ValidationAction {
     /**
-     * Defines a schedule for the validation queue.
-     */
-    QUEUED,
-
-    /**
      * Defines a scheduled action that queues all entities
      * of a given type for validation. The actual validation is
      * executed asynchronously.

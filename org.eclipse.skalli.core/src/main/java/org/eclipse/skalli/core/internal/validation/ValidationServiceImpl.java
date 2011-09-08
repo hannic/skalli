@@ -32,7 +32,6 @@ import org.eclipse.skalli.api.java.Validation;
 import org.eclipse.skalli.api.java.ValidationService;
 import org.eclipse.skalli.api.java.events.EventCustomizingUpdate;
 import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
-import org.eclipse.skalli.api.java.tasks.Schedule;
 import org.eclipse.skalli.api.java.tasks.SchedulerService;
 import org.eclipse.skalli.api.java.tasks.Task;
 import org.eclipse.skalli.api.rest.monitor.Monitorable;
@@ -578,8 +577,6 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
             }
         }
         switch (action) {
-        case QUEUED:
-            return new QueueValidator(minSeverity);
         case QUEUE:
             return new QueueRunnable(minSeverity, entityType, userId);
         case QUEUE_ALL:
@@ -597,19 +594,11 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
             if (taskIdQueueValidator != null || registeredSchedules.size() > 0) {
                 stopAllTasks();
             }
-            boolean startDefaultQueueTask = true;
-            boolean startDefaultNightlyTask = true;
             if (configService != null) {
                 ValidationsConfig validationConfigs = configService.readCustomization(ValidationsResource.MAPPINGS_KEY,
                         ValidationsConfig.class);
                 if (validationConfigs != null) {
                     for (ValidationConfig validationConfig : validationConfigs.getValidationConfigs()) {
-                        ValidationAction action = validationConfig.getAction();
-                        if (ValidationAction.QUEUED.equals(action)) {
-                            startDefaultQueueTask = false;
-                        } else if (ValidationAction.QUEUE_ALL.equals(action)) {
-                            startDefaultNightlyTask = false;
-                        }
                         ValidationSchedule schedule = new ValidationSchedule(validationConfig);
                         UUID scheduleId = schedulerService.registerSchedule(schedule);
                         registeredSchedules.add(scheduleId);
@@ -617,37 +606,17 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
                     }
                 }
             }
-            startDefaultQueueTask(startDefaultQueueTask);
-            startDefaultNightlyTask(startDefaultNightlyTask);
+            startDefaultQueueTask();
         }
     }
 
     // register default task for the queue validation
-    private void startDefaultQueueTask(boolean start) {
-        if (start) {
-            Task task = new Task(
-                    new QueueValidator(DEFAULT_SEVERITY),
-                    DEFAULT_QUEUED_INITIAL_DELAY, DEFAULT_QUEUED_PERIOD);
-            taskIdQueueValidator = schedulerService.registerTask(task);
-            LOG.info(MessageFormat.format("Default task {0}: registered (id={1})", task, taskIdQueueValidator)); //$NON-NLS-1$
-        }
-    }
-
-    // register default "nightly queue all" schedule
-    private void startDefaultNightlyTask(boolean start) {
-        if (start) {
-            Schedule schedule = new Schedule(DEFAULT_NIGHTLY_VALIDATION_DAY,
-                    DEFAULT_NIGHTLY_VALIDATION_HOUR, DEFAULT_NIGHLY_VALIDATION_MINUTE);
-            RunnableSchedule runnableSchedule = new RunnableSchedule(schedule) {
-                @Override
-                public Runnable getRunnable() {
-                    return new QueueAllRunnable(DEFAULT_SEVERITY, DEFAULT_USER);
-                }
-            };
-            UUID scheduleId = schedulerService.registerSchedule(runnableSchedule);
-            registeredSchedules.add(scheduleId);
-            LOG.info(MessageFormat.format("Default schedule {0}: registered (id={1})", runnableSchedule, scheduleId)); //$NON-NLS-1$
-        }
+    private void startDefaultQueueTask() {
+        Task task = new Task(
+                new QueueValidator(DEFAULT_SEVERITY),
+                DEFAULT_QUEUED_INITIAL_DELAY, DEFAULT_QUEUED_PERIOD);
+        taskIdQueueValidator = schedulerService.registerTask(task);
+        LOG.info(MessageFormat.format("Default queue task {0}: registered (id={1})", task, taskIdQueueValidator)); //$NON-NLS-1$
     }
 
     synchronized void stopAllTasks() {
