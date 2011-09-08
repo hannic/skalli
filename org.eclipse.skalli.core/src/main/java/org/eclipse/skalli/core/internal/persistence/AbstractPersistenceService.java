@@ -16,15 +16,19 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.skalli.api.java.PersistenceService;
+import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractPersistenceService implements PersistenceService {
+
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPersistenceService.class);
 
     private final Set<ExtensionService<?>> extensionServices = new HashSet<ExtensionService<?>>();
     private final Map<String, ExtensionService<?>> extensionNameRegistry = new HashMap<String, ExtensionService<?>>();
+
+    protected static final String ENTITY_PREFIX = "entity-"; //$NON-NLS-1$
 
     protected synchronized void bindExtensionService(ExtensionService<?> extensionService) {
         if (extensionNameRegistry.get(extensionService.getExtensionClass().getName()) != null) {
@@ -43,6 +47,32 @@ public abstract class AbstractPersistenceService implements PersistenceService {
 
     protected Set<ExtensionService<?>> getExtensionServices() {
         return extensionServices;
+    }
+
+    protected Set<DataMigration> getMigrations() {
+        Set<DataMigration> ret = new HashSet<DataMigration>();
+        for (ExtensionService<?> extensionService : extensionServices) {
+            if (extensionService.getMigrations() != null) {
+                ret.addAll(extensionService.getMigrations());
+            }
+        }
+        return ret;
+    }
+
+    protected Map<String, Class<?>> getAliases() {
+        Map<String, Class<?>> ret = new HashMap<String, Class<?>>();
+        for (ExtensionService<?> extensionService : extensionServices) {
+            ret.put(ENTITY_PREFIX + extensionService.getShortName(), extensionService.getExtensionClass());
+        }
+        return ret;
+    }
+
+    protected Set<ClassLoader> getEntityClassLoaders() {
+        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
+        for (ExtensionService<?> extensionService : extensionServices) {
+            classLoaders.add(extensionService.getClass().getClassLoader());
+        }
+        return classLoaders;
     }
 
 }

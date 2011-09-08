@@ -11,10 +11,7 @@
 package org.eclipse.skalli.core.internal.persistence.xstream;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,7 +22,6 @@ import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.core.internal.persistence.AbstractPersistenceService;
 import org.eclipse.skalli.core.utils.ConfigurationProperties;
-import org.eclipse.skalli.model.ext.DataMigration;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ValidationException;
@@ -39,8 +35,6 @@ import org.slf4j.LoggerFactory;
 public class PersistenceServiceXStream extends AbstractPersistenceService implements PersistenceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceServiceXStream.class);
-
-    public static final String ENTITY_PREFIX = "entity-"; //$NON-NLS-1$
 
     private final DataModelContainer cache = new DataModelContainer();
     private final DataModelContainer deleted = new DataModelContainer();
@@ -108,32 +102,6 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
         }
     }
 
-    protected Set<DataMigration> getMigrations() {
-        Set<DataMigration> ret = new HashSet<DataMigration>();
-        for (ExtensionService<?> extensionService : getExtensionServices()) {
-            if (extensionService.getMigrations() != null) {
-                ret.addAll(extensionService.getMigrations());
-            }
-        }
-        return ret;
-    }
-
-    protected Map<String, Class<?>> getAliases() {
-        Map<String, Class<?>> ret = new HashMap<String, Class<?>>();
-        for (ExtensionService<?> extensionService : getExtensionServices()) {
-            ret.put(ENTITY_PREFIX + extensionService.getShortName(), extensionService.getExtensionClass());
-        }
-        return ret;
-    }
-
-    protected Set<ClassLoader> getEntityClassLoaders() {
-        Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
-        for (ExtensionService<?> extensionService : getExtensionServices()) {
-            classLoaders.add(extensionService.getClass().getClassLoader());
-        }
-        return classLoaders;
-    }
-
     /**
      * Loads all entities of the given class. Resolves
      * the parent hierarchy of the loaded entities and stores the
@@ -153,8 +121,8 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
         }
         List<T> loadedEntities;
         try {
-            loadedEntities = xstreamPersistence.loadEntities(entityClass, getEntityClassLoaders(),
-                    getMigrations(), getAliases());
+            loadedEntities = xstreamPersistence.loadEntities(entityClass,
+                    getEntityClassLoaders(), getMigrations(), getAliases());
         } catch (StorageException e) {
             throw new RuntimeException(e);
         } catch (ValidationException e) {
