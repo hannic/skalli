@@ -6,6 +6,6 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: Eclipse Skalli
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: org.eclipse.skalli.gerrit
-Import-Package: org.slf4j,
- org.easymock,
- org.junit
+Import-Package: org.easymock,
+ org.junit,
+ org.slf4j

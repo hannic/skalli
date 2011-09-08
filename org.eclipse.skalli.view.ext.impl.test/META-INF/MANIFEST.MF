@@ -6,7 +6,7 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: Eclipse Skalli
 Fragment-Host: org.eclipse.skalli.view.ext.impl
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.eclipse.skalli.testutil,
- org.easymock;version="2.4.0",
+Import-Package: org.easymock,
+ org.eclipse.skalli.testutil,
  org.junit
 

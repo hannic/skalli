@@ -11,13 +11,13 @@ Import-Package: com.vaadin.data,
  com.vaadin.ui,
  org.apache.commons.io,
  org.apache.commons.lang,
- org.slf4j,
  org.eclipse.skalli.api.java,
  org.eclipse.skalli.common,
  org.eclipse.skalli.common.util,
  org.eclipse.skalli.model.core,
  org.eclipse.skalli.model.ext,
- org.osgi.framework
+ org.osgi.framework,
+ org.slf4j
 Export-Package: org.eclipse.skalli.view.ext
 Bundle-ActivationPolicy: lazy
 

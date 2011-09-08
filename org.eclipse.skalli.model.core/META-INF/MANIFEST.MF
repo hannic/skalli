@@ -8,12 +8,12 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.thoughtworks.xstream.converters,
  com.thoughtworks.xstream.io,
  org.apache.commons.lang,
- org.slf4j,
  org.eclipse.skalli.common,
  org.eclipse.skalli.common.util,
  org.eclipse.skalli.model.ext,
  org.osgi.framework,
  org.osgi.service.component,
+ org.slf4j,
  org.w3c.dom
 Export-Package: org.eclipse.skalli.model.core,
  org.eclipse.skalli.model.ext.people

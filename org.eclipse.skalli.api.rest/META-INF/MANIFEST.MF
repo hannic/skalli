@@ -15,7 +15,6 @@ Import-Package: com.thoughtworks.xstream,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.apache.commons.lang.time,
- org.slf4j,
  org.eclipse.skalli.api.java,
  org.eclipse.skalli.api.java.authentication,
  org.eclipse.skalli.common,
@@ -33,7 +32,8 @@ Import-Package: com.thoughtworks.xstream,
  org.restlet.representation,
  org.restlet.resource,
  org.restlet.routing,
- org.restlet.util
+ org.restlet.util,
+ org.slf4j
 Web-ContextPath: /api
 Service-Component: OSGI-INF/RestComponent.xml
 Export-Package: org.eclipse.skalli.api.rest.config,
