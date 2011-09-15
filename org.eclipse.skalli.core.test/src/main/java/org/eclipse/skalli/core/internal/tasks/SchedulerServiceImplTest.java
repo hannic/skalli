@@ -36,7 +36,7 @@ public class SchedulerServiceImplTest {
     @After
     public void tearDown() {
         if (instance != null) {
-            instance.deactivate(null);
+            instance.deactivate();
         }
     }
 

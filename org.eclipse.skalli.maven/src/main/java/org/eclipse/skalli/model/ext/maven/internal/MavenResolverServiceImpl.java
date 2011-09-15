@@ -23,6 +23,7 @@ import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.model.ext.maven.internal.config.MavenResolverConfig;
 import org.eclipse.skalli.model.ext.maven.internal.config.MavenResolverResource;
 import org.eclipse.skalli.nexus.NexusClient;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,15 +38,14 @@ public class MavenResolverServiceImpl implements MavenResolverService, EventList
 
     private UUID scheduleId;
 
-    /** Activates this service and starts validation jobs. */
     protected void activate(ComponentContext context) {
-        LOG.info("Maven Resolver Service activated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[MavenResolverService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
-    /** Deactivates this service and stops validation jobs. */
     protected void deactivate(ComponentContext context) {
-        stopAllTasks();
-        LOG.info("Maven Resolver Service deactivated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[MavenResolverService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void bindSchedulerService(SchedulerService schedulerService) {

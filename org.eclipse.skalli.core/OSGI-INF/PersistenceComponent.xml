@@ -25,7 +25,7 @@
     <reference
         name="StorageService"
         interface="org.eclipse.skalli.api.java.StorageService"
-        cardinality="0..n"
+        cardinality="1..n"
         policy="dynamic"
         bind="bindStorageService"
         unbind="unbindStorageService"/>

@@ -25,6 +25,7 @@ import org.eclipse.skalli.core.utils.ConfigurationProperties;
 import org.eclipse.skalli.model.ext.EntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,14 +61,16 @@ public class PersistenceServiceXStream extends AbstractPersistenceService implem
     }
 
     protected void activate(ComponentContext context) {
-        LOG.info("Persistence service activated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[PersistenceService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void deactivate(ComponentContext context) {
         xstreamPersistence = null;
         cache.clearAll();
         deleted.clearAll();
-        LOG.info("Persistence service deactivated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[PersistenceService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     @Override

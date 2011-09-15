@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.tagging;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,8 +21,14 @@ import org.eclipse.skalli.api.java.PersistenceService;
 import org.eclipse.skalli.api.java.TaggingService;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Taggable;
+import org.osgi.service.component.ComponentConstants;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TaggingServiceImpl implements TaggingService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TaggingServiceImpl.class);
 
     private PersistenceService persistenceService;
 
@@ -31,6 +38,16 @@ public class TaggingServiceImpl implements TaggingService {
 
     protected void unbindPersistenceService(PersistenceService srvc) {
         this.persistenceService = null;
+    }
+
+    protected void activate(ComponentContext context) {
+        LOG.info(MessageFormat.format("[TaggingService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
+    }
+
+    protected void deactivate(ComponentContext context) {
+        LOG.info(MessageFormat.format("[TaggingService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     @Override

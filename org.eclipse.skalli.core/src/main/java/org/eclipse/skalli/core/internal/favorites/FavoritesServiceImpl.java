@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.favorites;
 
+import java.text.MessageFormat;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -21,8 +22,24 @@ import org.eclipse.skalli.model.core.Favorites;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.osgi.service.component.ComponentConstants;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FavoritesServiceImpl extends EntityServiceImpl<Favorites> implements FavoritesService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FavoritesServiceImpl.class);
+
+    protected void activate(ComponentContext context) {
+        LOG.info(MessageFormat.format("[FavoritesService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
+    }
+
+    protected void deactivate(ComponentContext context) {
+        LOG.info(MessageFormat.format("[FavoritesService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
+    }
 
     @Override
     public Class<Favorites> getEntityClass() {

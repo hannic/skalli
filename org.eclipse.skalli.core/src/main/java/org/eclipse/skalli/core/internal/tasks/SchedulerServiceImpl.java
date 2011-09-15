@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.skalli.api.java.tasks.RunnableSchedule;
 import org.eclipse.skalli.api.java.tasks.SchedulerService;
 import org.eclipse.skalli.api.java.tasks.Task;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,22 +51,32 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     /** Activates this service and starts the runner for recurring tasks. */
     protected void activate(ComponentContext context) {
-        // starts the cron task (every minute with no initial delay)
-        registerCron(1, TimeUnit.MINUTES);
-        // starts a cleanup task for done single shot tasks (every 12 hours with an initial delay of 12 hours)
-        registerCleanupDoneTasksRunner(12, TimeUnit.HOURS);
-        LOG.info("Scheduler Service activated"); //$NON-NLS-1$
+        activate();
+        LOG.info(MessageFormat.format("[SchedulerService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     /** Deactivates this service and cancels all scheduled tasks. */
     protected void deactivate(ComponentContext context) {
+        deactivate();
+        LOG.info(MessageFormat.format("[SchedulerService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
+    }
+
+    void activate() {
+        // starts the cron task (every minute with no initial delay)
+        registerCron(1, TimeUnit.MINUTES);
+        // starts a cleanup task for done single shot tasks (every 12 hours with an initial delay of 12 hours)
+        registerCleanupDoneTasksRunner(12, TimeUnit.HOURS);
+    }
+
+    void deactivate() {
         for (Future<?> future : futures.values()) {
             future.cancel(true);
         }
         futures.clear();
         scheduler.shutdownNow();
         singleShotExecutor.shutdownNow();
-        LOG.info("Scheduler Service deactivated"); //$NON-NLS-1$
     }
 
     @Override

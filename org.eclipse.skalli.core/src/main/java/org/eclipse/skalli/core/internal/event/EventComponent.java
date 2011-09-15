@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.event;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Set;
 import org.eclipse.skalli.api.java.EventListener;
 import org.eclipse.skalli.api.java.EventService;
 import org.eclipse.skalli.api.java.events.AbstractEvent;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +36,13 @@ public class EventComponent implements EventService {
     private final Map<String, Set> listeners = new HashMap<String, Set>();
 
     protected void activate(ComponentContext context) {
-        LOG.info("Event service activated");
+        LOG.info(MessageFormat.format("[EventService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void deactivate(ComponentContext context) {
-        LOG.info("Event service deactivated");
+        LOG.info(MessageFormat.format("[EventService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     @Override

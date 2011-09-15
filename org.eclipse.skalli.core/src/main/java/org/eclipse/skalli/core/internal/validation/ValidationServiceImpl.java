@@ -43,6 +43,7 @@ import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issues;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
@@ -79,15 +80,14 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     private final PriorityBlockingQueue<QueuedEntity<? extends EntityBase>> queuedEntities =
             new PriorityBlockingQueue<QueuedEntity<? extends EntityBase>>();
 
-    /** Activates this service and starts validation jobs. */
     protected void activate(ComponentContext context) {
-        LOG.info("Validation Service activated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[ValidationService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
-    /** Deactivates this service and stops validation jobs. */
     protected void deactivate(ComponentContext context) {
-        stopAllTasks();
-        LOG.info("Validation Service deactivated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[ValidationService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     @SuppressWarnings("rawtypes")

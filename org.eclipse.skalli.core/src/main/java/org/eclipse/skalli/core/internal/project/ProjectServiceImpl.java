@@ -50,6 +50,7 @@ import org.eclipse.skalli.model.ext.PropertyValidator;
 import org.eclipse.skalli.model.ext.Severity;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.eclipse.skalli.model.ext.people.PeopleProjectExt;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,11 +65,13 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
     }
 
     protected void activate(ComponentContext context) {
-        LOG.info("Project Service activated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[ProjectService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void deactivate(ComponentContext context) {
-        LOG.info("Project Service deactivated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[ProjectService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     /**

@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.eclipse.skalli.api.java.StorageException;
 import org.eclipse.skalli.api.java.StorageService;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.core.utils.ConfigurationProperties;
+import org.osgi.service.component.ComponentConstants;
+import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +38,8 @@ import org.slf4j.LoggerFactory;
  */
 public class FileStorageService implements StorageService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(XStreamPersistence.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileStorageService.class);
+
     private static final String STORAGE_BASE = "storage" + IOUtils.DIR_SEPARATOR; //$NON-NLS-1$
 
     private final File storageBase;
@@ -55,6 +59,16 @@ public class FileStorageService implements StorageService {
      */
     FileStorageService(File storageBase) {
         this.storageBase = storageBase;
+    }
+
+    protected void activate(ComponentContext context) {
+        LOG.info(MessageFormat.format("[StorageService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
+    }
+
+    protected void deactivate(ComponentContext context) {
+        LOG.info(MessageFormat.format("[StorageService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     private String getPath(String category, String key) {

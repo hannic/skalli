@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.templates;
 
+import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,13 @@ public class ProjectTemplateServiceImpl implements ProjectTemplateService {
     private static final Logger LOG = LoggerFactory.getLogger(ProjectTemplateServiceImpl.class);
 
     protected void activate(ComponentContext context) {
-        LOG.info("Project template service activated");
+        LOG.info(MessageFormat.format("[ProjectTemplateService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void deactivate(ComponentContext context) {
-        LOG.info("Project template service deactivated");
+        LOG.info(MessageFormat.format("[ProjectTemplateService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     @Override

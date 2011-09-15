@@ -24,18 +24,18 @@
         bind="bindPersistenceService"
         unbind="unbindPersistenceService"/>
     <reference
-        name="ValidationService"
-        interface="org.eclipse.skalli.api.java.ValidationService"
-        cardinality="0..1"
-        policy="dynamic"
-        bind="bindValidationService"
-        unbind="unbindValidationService"/>
-    <reference
         name="ProjectTemplateService"
         interface="org.eclipse.skalli.api.java.ProjectTemplateService"
         cardinality="1..1"
         policy="dynamic"
         bind="bindProjectTemplateService"
         unbind="unbindProjectTemplateService"/>
+    <reference
+        name="ValidationService"
+        interface="org.eclipse.skalli.api.java.ValidationService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="bindValidationService"
+        unbind="unbindValidationService"/>
 </scr:component>
 

@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.core.internal.search;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.AbstractIndexer;
 import org.eclipse.skalli.model.ext.ExtensionService;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +54,13 @@ public class SearchServiceImpl implements SearchService {
     }
 
     protected void activate(ComponentContext context) {
-        LOG.info("Search service activated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[SearchService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void deactivate(ComponentContext context) {
-        LOG.info("Search service deactivated"); //$NON-NLS-1$
+        LOG.info(MessageFormat.format("[SearchService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     @Override

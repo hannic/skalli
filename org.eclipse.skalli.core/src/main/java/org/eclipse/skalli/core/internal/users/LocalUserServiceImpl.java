@@ -12,6 +12,7 @@ package org.eclipse.skalli.core.internal.users;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.common.UserService;
 import org.eclipse.skalli.core.internal.persistence.xstream.IgnoreUnknownElementsXStream;
 import org.eclipse.skalli.core.internal.persistence.xstream.NoopConverter;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,11 +61,13 @@ public class LocalUserServiceImpl implements UserService {
     }
 
     protected void activate(ComponentContext context) {
-        LOG.info("Local User Service activated");
+        LOG.info(MessageFormat.format("[UserService] {0} : activated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     protected void deactivate(ComponentContext context) {
-        LOG.info("Local User Service deactivated");
+        LOG.info(MessageFormat.format("[UserService] {0} : deactivated",
+                (String) context.getProperties().get(ComponentConstants.COMPONENT_NAME)));
     }
 
     private void initializeStorage() {
