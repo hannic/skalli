@@ -393,11 +393,15 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
          */
         @Override
         public void run() {
-            LOG.info(MessageFormat.format("polling next queued validation at {0}",
-                    FormatUtils.formatUTCWithMillis(System.currentTimeMillis())));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(MessageFormat.format("polling next queued validation at {0}",
+                        FormatUtils.formatUTCWithMillis(System.currentTimeMillis())));
+            }
             QueuedEntity<? extends EntityBase> entry = pollNextQueueEntry();
             if (entry == null) {
-                LOG.info(MessageFormat.format("nothing to do (queuedEntities.size={0})", queuedEntities.size()));
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(MessageFormat.format("nothing to do (queuedEntities.size={0})", queuedEntities.size()));
+                }
                 return;
             }
             entry.setStartedAt(System.currentTimeMillis());
