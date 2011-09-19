@@ -29,6 +29,16 @@ public class MavenCoordinateTest {
     }
 
     @Test
+    public void testConstructor_defaultPackaing() throws Exception {
+        MavenCoordinate c =  new MavenCoordinate(MavenCoordinateUtil.GROUPID,
+                MavenCoordinateUtil.ARTIFACT, null);
+        assertEquals(MavenCoordinateUtil.GROUPID, c.getGroupId());
+        assertEquals(MavenCoordinateUtil.ARTIFACT, c.getArtefactId());
+        assertEquals("jar", c.getPackaging());
+    }
+
+
+    @Test
     public void testCopyConstructor() throws Exception {
         MavenCoordinate original = new MavenCoordinate(TEST_COORD);
         original.addVersion("1.0");
@@ -86,7 +96,7 @@ public class MavenCoordinateTest {
         assertGreater(left, right);
 
         right = new MavenCoordinate(MavenCoordinateUtil.GROUPID, MavenCoordinateUtil.ARTIFACT, null);
-        assertGreater(left, right);
+        assertEqual(left, right);
 
         right = new MavenCoordinate(MavenCoordinateUtil.GROUPID.toUpperCase(), MavenCoordinateUtil.ARTIFACT,
                 MavenCoordinateUtil.PACKAGING);

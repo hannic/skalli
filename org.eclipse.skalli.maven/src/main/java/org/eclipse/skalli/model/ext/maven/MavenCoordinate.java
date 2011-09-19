@@ -21,6 +21,8 @@ import org.eclipse.skalli.common.util.ComparatorUtils;
 
 public class MavenCoordinate implements Comparable<MavenCoordinate> {
 
+    private static String DEFAULT_PACKAGING = "jar";
+
     private String groupId = ""; //$NON-NLS-1$
     private String artefactId = ""; //$NON-NLS-1$
     private String packaging = ""; //$NON-NLS-1$
@@ -37,7 +39,7 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
     public MavenCoordinate(String groupId, String artefactId, String packaging) {
         this.groupId = groupId;
         this.artefactId = artefactId;
-        this.packaging = packaging;
+        setPackaging(packaging);
     }
 
     public String getGroupId() {
@@ -61,7 +63,11 @@ public class MavenCoordinate implements Comparable<MavenCoordinate> {
     }
 
     public void setPackaging(String packaging) {
-        this.packaging = packaging;
+        if (packaging == null || packaging.length() == 0) {
+            this.packaging= DEFAULT_PACKAGING;
+        } else {
+            this.packaging = packaging;
+        }
     }
 
     public synchronized Set<String> getVersions() {
