@@ -131,10 +131,6 @@ class ProjectEditPanelEntry extends CustomComponent {
             disableAllowed = false;
             inheritAllowed = false;
         }
-        else if (isEnabledIntially) {
-            disableAllowed = false;
-            inheritAllowed = true;
-        }
         else {
             disableAllowed = true;
             inheritAllowed = true;
@@ -259,7 +255,6 @@ class ProjectEditPanelEntry extends CustomComponent {
         header.setStyleName(STYLE_TRAY_HEADER);
         header.setWidth("100%"); //$NON-NLS-1$
 
-
         trayIcon = new Embedded();
         trayIcon.setStyleName(STYLE_TRAY_HEADER_ICON);
 
@@ -373,9 +368,9 @@ class ProjectEditPanelEntry extends CustomComponent {
     private String getCaptionWithAnchor() {
         StringBuilder sb = new StringBuilder();
         sb.append("<a id=\"");
-        sb.append( extensionClassName);
+        sb.append(extensionClassName);
         sb.append("\" name=\"");
-        sb.append( extensionClassName);
+        sb.append(extensionClassName);
         sb.append("\"><!-- --></a>");
         sb.append(extensionService.getCaption());
         return sb.toString();
