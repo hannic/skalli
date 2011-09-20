@@ -17,12 +17,12 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.eclipse.skalli.common.util.CollectionUtils;
+import org.eclipse.skalli.common.util.HtmlBuilder;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.devinf.DevInfProjectExt;
 import org.eclipse.skalli.model.ext.devinf.ScmLocationMapper;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
-import org.eclipse.skalli.view.ext.HtmlBuilder;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 

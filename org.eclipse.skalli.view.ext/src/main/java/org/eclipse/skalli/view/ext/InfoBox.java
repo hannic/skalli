@@ -11,6 +11,7 @@
 package org.eclipse.skalli.view.ext;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.skalli.common.util.HtmlBuilder;
 
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Label;
@@ -61,6 +62,36 @@ public class InfoBox {
         }
         link.addStyleName(STYLE_LINK);
         layout.addComponent(link);
+    }
+
+    public Label asLabel(String s) {
+        return asLabel(s, (String[])null);
+    }
+
+    public Label asLabel(StringBuilder sb) {
+        return asLabel(sb.toString(), (String[])null);
+    }
+
+    public Label asLabel(HtmlBuilder sb) {
+        return asLabel(sb.toString(), (String[])null);
+    }
+
+    public Label asLabel(String s, String... styles) {
+        Label label = new Label(s, Label.CONTENT_XHTML);
+        if (styles != null) {
+            for (String style: styles) {
+                label.addStyleName(style);
+            }
+        }
+        return label;
+    }
+
+    public Label asLabel(StringBuilder sb, String... styles) {
+        return asLabel(sb.toString(), styles);
+    }
+
+    public Label asLabel(HtmlBuilder sb, String... styles) {
+        return asLabel(sb.toString(), styles);
     }
 
     /**

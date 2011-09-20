@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.skalli.common.configuration.ConfigurationService;
+import org.eclipse.skalli.common.util.HtmlBuilder;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.Link;
 import org.eclipse.skalli.model.ext.LinkMapper;
 import org.eclipse.skalli.model.ext.info.InfoProjectExt;
 import org.eclipse.skalli.model.ext.info.MailingListMapper;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
-import org.eclipse.skalli.view.ext.HtmlBuilder;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 import org.slf4j.Logger;
