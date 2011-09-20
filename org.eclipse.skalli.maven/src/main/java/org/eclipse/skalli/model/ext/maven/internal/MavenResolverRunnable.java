@@ -62,6 +62,7 @@ public class MavenResolverRunnable implements Runnable {
         NexusVersionsResolver versionsResolver = new NexusVersionsResolver(nexusClient);
         LOG.info(MessageFormat.format("MavenResolver: started ({0} projects to scan)", projects.size()));
         for (Project project : projects) {
+            MavenReactor oldReactor = getMavenReactorProperty(project);
             MavenReactor newReactor = null;
             try {
                 newReactor = resolveProject(project);
@@ -80,14 +81,14 @@ public class MavenResolverRunnable implements Runnable {
             }
 
             try {
-                versionsResolver.addNexusVersions(newReactor);
+                versionsResolver.addVersions(newReactor, oldReactor);
+                versionsResolver.setNexusVersions(newReactor);
             } catch (RuntimeException e) {
                 LOG.error(MessageFormat.format(
                         "Can''t calculate Versions for project {0} . Unexpected Exception cought: {1}",
                         project.getProjectId(), e.getMessage()));
             }
 
-            MavenReactor oldReactor = getMavenReactorProperty(project);
             if (!ComparatorUtils.equals(newReactor, oldReactor)) {
                 if (updateMavenReactorExtension(project, newReactor)) {
                     try {

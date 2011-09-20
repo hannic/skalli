@@ -14,6 +14,7 @@ import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class NexusVersionsResolverTest {
     }
 
     @Test
-    public void testAddNexusVersionsMavenReactor() throws NexusClientException, IOException {
+    public void testSetNexusVersionsMavenReactor() throws NexusClientException, IOException {
 
         MavenReactor mavenReactor = new MavenReactor();
         MavenCoordinate mavenCoordinateParent = new MavenCoordinate("org.example.helloworld",
@@ -87,7 +88,7 @@ public class NexusVersionsResolverTest {
         replay(nexusClientMock);
 
         NexusVersionsResolver resolver = new NexusVersionsResolver(nexusClientMock);
-        resolver.addNexusVersions(mavenReactor);
+        resolver.setNexusVersions(mavenReactor);
 
         assertThat(mavenReactor.getCoordinate().getVersions().size(), is(2));
         assertThat(mavenReactor.getCoordinate().getVersions(), hasItem("0.0.1"));
@@ -104,7 +105,7 @@ public class NexusVersionsResolverTest {
     }
 
     @Test
-    public void testAddNexusVersionsMavenCoordinate() throws NexusClientException, IOException {
+    public void testSetNexusVersionsMavenCoordinate() throws NexusClientException, IOException {
         MavenCoordinate mavenCoordinate = new MavenCoordinate("org.example.helloworld",
                 "org.example.helloworld.updatesite", "zip");
         NexusClient nexusClientMock = createMock(NexusClient.class);
@@ -113,11 +114,86 @@ public class NexusVersionsResolverTest {
 
         NexusVersionsResolver resolver = new NexusVersionsResolver(nexusClientMock);
 
-        resolver.addNexusVersions(mavenCoordinate);
+        resolver.setNexusVersion(mavenCoordinate);
 
         assertThat(mavenCoordinate.getVersions().size(), is(2));
         assertThat(mavenCoordinate.getVersions(), hasItem("0.0.1"));
         assertThat(mavenCoordinate.getVersions(), hasItem("0.0.2"));
     }
 
+    @Test
+    public void testSetNexusVersionsMavenCoordinate_withNexusClientException() throws NexusClientException, IOException {
+        MavenCoordinate mavenCoordinate = new MavenCoordinate("org.example.helloworld",
+                "org.example.helloworld.updatesite", "zip");
+        mavenCoordinate.addVersion("0.0.1");
+        mavenCoordinate.addVersion("0.0.2");
+
+        NexusClient nexusClientMock = createMock(NexusClient.class);
+        expect(nexusClientMock.searchArtifactVersions(mavenCoordinate.getGroupId(),
+                mavenCoordinate.getArtefactId())).andThrow(new NexusClientException("nexus not availaible"));
+        replay(nexusClientMock);
+
+        NexusVersionsResolver resolver = new NexusVersionsResolver(nexusClientMock);
+
+        resolver.setNexusVersion(mavenCoordinate);
+
+        assertThat(mavenCoordinate.getVersions().size(), is(2));
+        assertThat(mavenCoordinate.getVersions(), hasItem("0.0.1"));
+        assertThat(mavenCoordinate.getVersions(), hasItem("0.0.2"));
+    }
+
+    @Test
+    public void testAddVersions() {
+        MavenReactor oldMavenReactor = new MavenReactor();
+
+        MavenCoordinate oldMavenCoordinateParent = new MavenCoordinate("org.example.helloworld",
+                "org.example.helloworld", null);
+        oldMavenCoordinateParent.addVersion("0.9.19");
+
+        MavenCoordinate oldModuleA = new MavenCoordinate("org.example.helloworld",
+                "org.example.helloworld.modulA", null);
+        oldModuleA.addVersion("0.0.1");
+
+        MavenCoordinate oldModuleB = new MavenCoordinate("org.example.helloworld",
+                "org.example.helloworld.modulB", null);
+        oldModuleB.addVersion("0.0.2");
+        oldModuleB.addVersion("0.0.3");
+
+        oldMavenReactor.setCoordinate(oldMavenCoordinateParent);
+        oldMavenReactor.addModule(oldModuleA);
+        oldMavenReactor.addModule(oldModuleB);
+
+        NexusVersionsResolver resolver = new NexusVersionsResolver(null);
+
+        MavenReactor newReactor = new MavenReactor();
+        MavenCoordinate newMavenCoordinateParent = new MavenCoordinate(oldMavenCoordinateParent);
+        newMavenCoordinateParent.getVersions().clear();
+
+        newReactor.setCoordinate(newMavenCoordinateParent);
+
+        MavenCoordinate newModuleA = new MavenCoordinate(oldModuleA);
+        newModuleA.getVersions().clear();
+        newReactor.addModule(newModuleA);
+
+        MavenCoordinate newModuleC = new MavenCoordinate("org.example.helloworld",
+                "org.example.helloworld.modulC", null);
+        newReactor.addModule(newModuleC);
+
+        resolver.addVersions(newReactor, oldMavenReactor);
+
+        assertThat(newReactor.getCoordinate().getVersions().size(), is(1));
+        assertThat(newReactor.getCoordinate().getVersions(), hasItem("0.9.19"));
+
+        assertThat(newReactor.getModules().size(), is(2));
+        for (MavenCoordinate coordinate : newReactor.getModules()) {
+            if ("org.example.helloworld.modulA".equals(coordinate.getArtefactId())) {
+                assertThat(coordinate.getVersions().size(), is(1));
+                assertThat(coordinate.getVersions(), hasItem("0.0.1"));
+            } else if ("org.example.helloworld.modulC".equals(coordinate.getArtefactId())) {
+                assertThat(coordinate.getVersions().size(), is(0));
+            } else {
+                fail("found an unexpected coordinate");
+            }
+        }
+    }
 }
