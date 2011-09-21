@@ -15,7 +15,6 @@ import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.ProjectTemplateService;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
@@ -26,11 +25,13 @@ import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 import org.eclipse.skalli.model.ext.ValidationException;
 import org.eclipse.skalli.view.component.InformationBox;
+import org.eclipse.skalli.view.ext.ExtensionStreamSource;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.Navigator;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
-import org.eclipse.skalli.view.internal.ExtensionStreamSource;
 import org.eclipse.skalli.view.internal.application.ProjectApplication;
+
+import com.vaadin.terminal.Resource;
 import com.vaadin.terminal.StreamResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -118,6 +119,12 @@ public class ProjectViewPanel extends CssLayout {
                 @Override
                 public User getLoggedInUser() {
                     return UserUtil.getUser(ProjectViewPanel.this.application.getLoggedInUser());
+                }
+
+                @Override
+                public Resource getBundleResource(String path) {
+                    return new StreamResource(new ExtensionStreamSource(projectInfoBox.getClass(), path),
+                            FilenameUtils.getName(path), ProjectViewPanel.this.application);
                 }
 
                 @Override

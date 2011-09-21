@@ -8,7 +8,7 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.view.internal;
+package org.eclipse.skalli.view.ext;
 
 import java.io.IOException;
 import java.io.InputStream;

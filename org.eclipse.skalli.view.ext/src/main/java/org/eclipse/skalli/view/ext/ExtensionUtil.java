@@ -14,6 +14,8 @@ import org.eclipse.skalli.common.User;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.core.ProjectTemplate;
 
+import com.vaadin.terminal.Resource;
+
 public interface ExtensionUtil {
 
     public void persist(Project project);
@@ -27,4 +29,11 @@ public interface ExtensionUtil {
     public Navigator getNavigator();
 
     public ProjectTemplate getProjectTemplate();
+
+    /**
+     * Returns a resource from the bundle providing the info box.
+     * @param path  the path relative to the bundle root.
+     * @return  a Vaadin resource.
+     */
+    public Resource getBundleResource(String path);
 }

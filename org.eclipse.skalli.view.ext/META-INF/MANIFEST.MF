@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.eclipse.skalli.view.ext
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: Eclipse Skalli
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.vaadin.data,
+Import-Package: com.vaadin,
+ com.vaadin.data,
  com.vaadin.data.validator,
  com.vaadin.terminal,
  com.vaadin.ui,

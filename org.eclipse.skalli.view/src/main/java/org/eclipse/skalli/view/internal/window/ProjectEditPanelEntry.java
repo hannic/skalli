@@ -23,8 +23,8 @@ import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.model.ext.Issue;
 import org.eclipse.skalli.model.ext.Issues;
 import org.eclipse.skalli.view.ext.ExtensionFormService;
+import org.eclipse.skalli.view.ext.ExtensionStreamSource;
 import org.eclipse.skalli.view.ext.ProjectEditContext;
-import org.eclipse.skalli.view.internal.ExtensionStreamSource;
 
 import com.vaadin.Application;
 import com.vaadin.terminal.StreamResource;
