@@ -56,10 +56,6 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
     private static final String DEFAULT_USER = ValidationService.class.getName();
     private static final Severity DEFAULT_SEVERITY = Severity.INFO;
 
-    private static final String DEFAULT_NIGHTLY_VALIDATION_DAY = "*"; //$NON-NLS-1$
-    private static final String DEFAULT_NIGHTLY_VALIDATION_HOUR = "2"; //$NON-NLS-1$
-    private static final String DEFAULT_NIGHLY_VALIDATION_MINUTE = "0"; //$NON-NLS-1$
-
     private static final long DEFAULT_QUEUED_INITIAL_DELAY = TimeUnit.SECONDS.toMillis(10);
     private static final long DEFAULT_QUEUED_PERIOD = TimeUnit.SECONDS.toMillis(10);
 
@@ -467,7 +463,10 @@ public class ValidationServiceImpl implements ValidationService, EventListener<E
         @Override
         public void run() {
             for (EntityService<?> entityService : entityServices.values()) {
-                queueAll(entityService.getEntityClass(), minSeverity, userId);
+                Class<? extends EntityBase> entityClass = entityService.getEntityClass();
+                if (!Issues.class.isAssignableFrom(entityClass)) {
+                    queueAll(entityClass, minSeverity, userId);
+                }
             }
         }
     };
