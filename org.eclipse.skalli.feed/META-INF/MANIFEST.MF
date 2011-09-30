@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name:  Feed Managment
+Bundle-SymbolicName: org.eclipse.skalli.feed
+Bundle-Version: 0.1.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.skalli.api.java,
+ org.eclipse.skalli.api.java.feeds,
+ org.eclipse.skalli.model.core,
+ org.eclipse.skalli.model.ext,
+ org.osgi.service.component,
+ org.slf4j
+Service-Component: OSGI-INF/FeedManagerComponent.xml
