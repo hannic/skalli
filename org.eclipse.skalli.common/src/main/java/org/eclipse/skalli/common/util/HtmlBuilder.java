@@ -163,7 +163,7 @@ public class HtmlBuilder {
 
     public HtmlBuilder appendLink(String caption, URL url,
             String targetName, String styleClass, String style) {
-        appendLink(caption, url.toExternalForm(), targetName, styleClass, style);
+        appendLink(caption, url != null? url.toExternalForm() : null, targetName, styleClass, style);
         return this;
     }
 
