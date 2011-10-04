@@ -32,17 +32,18 @@
     <xsd:complexContent>
       <xsd:extension base="Extension">
         <xsd:sequence>
-          <xsd:element name="coordinate" type="MavenCoordinate" minOccurs="0">
+          <xsd:element name="coordinate" type="MavenModule" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The group id, artifact id and packaging type of the reactor project.
+                The group id, artifact id, packaging type and
+                available versions of the (reactor) project.
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="modules" type="MavenModules" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation xml:lang="EN">
-                The list of modules belonging to the reactor project.
+                The list of modules belonging to the (reactor) project.
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -53,10 +54,10 @@
 
   <xsd:complexType name="MavenModules">
     <xsd:sequence>
-      <xsd:element name="module" type="MavenCoordinate" minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="module" type="MavenModule" minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation xml:lang="EN">
-            The group id, artifact id and packaging type of a module.
+            The group id, artifact id, packaging type and available versions of a module.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
