@@ -8,6 +8,7 @@ Export-Package: org.eclipse.skalli.feed.db.entities
 Import-Package: 
  javax.persistence,
  org.eclipse.persistence.annotations,
- org.eclipse.skalli.api.java.feeds
+ org.eclipse.skalli.api.java.feeds,
+ org.eclipse.skalli.common.util
 Meta-Persistence: META-INF/persistence.xml
 
