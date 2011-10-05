@@ -20,7 +20,6 @@ import org.eclipse.skalli.model.core.Project;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.CustomField;
 import com.vaadin.ui.Layout;
 
 public class PhaseSelect extends CustomField {
