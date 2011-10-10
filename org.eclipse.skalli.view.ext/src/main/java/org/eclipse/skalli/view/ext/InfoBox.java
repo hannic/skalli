@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.util.HtmlBuilder;
 
 import com.vaadin.terminal.ExternalResource;
+import com.vaadin.terminal.Resource;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Link;
@@ -24,8 +25,9 @@ public class InfoBox {
 
     protected static final String STYLE_LABEL = "infolabel"; //$NON-NLS-1$
     protected static final String STYLE_LINK = "infolink"; //$NON-NLS-1$
-    protected static final String STYLE_TEAMLABEL = "teamlabel"; //$NON-NLS-1$
+
     protected static final String HSPACE = "&nbsp;&nbsp;&nbsp;&nbsp;"; //$NON-NLS-1$
+    protected static final String DEFAULT_TARGET = HtmlBuilder.DEFAULT_TARGET;
 
     protected void bindClipboard(Clipboard clipboard) {
         this.clipboard = clipboard;
@@ -50,17 +52,29 @@ public class InfoBox {
     }
 
     protected void createLink(Layout layout, String caption, String url){
-        createLink(layout, caption, url, HtmlBuilder.DEFAULT_TARGET);
+        createLink(layout, caption, url, DEFAULT_TARGET, null);
     }
 
-    protected void createLink(Layout layout, String caption, String url, String targetName){
-        Link link = new Link(caption, new ExternalResource(url));
+    protected void createLink(Layout layout, String caption, String url, String targetName, String styleName){
+        createLink(layout, caption, new ExternalResource(url), targetName, styleName);
+    }
+
+    protected void createLink(Layout layout, String caption, Resource resource){
+        createLink(layout, caption, resource, DEFAULT_TARGET, null);
+    }
+
+    protected void createLink(Layout layout, String caption, Resource resource, String targetName, String styleName){
+        Link link = new Link(caption, resource);
         if (StringUtils.isNotBlank(targetName)) {
             link.setTargetName(targetName);
         } else {
-            link.setTargetName(HtmlBuilder.DEFAULT_TARGET);
+            link.setTargetName(DEFAULT_TARGET);
         }
-        link.addStyleName(STYLE_LINK);
+        if (StringUtils.isNotBlank(styleName)) {
+            link.addStyleName(styleName);
+        } else {
+            link.addStyleName(STYLE_LINK);
+        }
         layout.addComponent(link);
     }
 

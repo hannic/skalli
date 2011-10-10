@@ -4,10 +4,10 @@
  @import url(styles_projectview.css);
  @import url(styles_projectedit.css);
  @import url(styles_tray.css);
- @import url(styles_tray.css);
  @import url(styles_peoplesearch.css);
  @import url(styles_multitext.css);
  @import url(styles_multicombobox.css);
+ @import url(styles_multilink.css);
  
 .v-app {
       background: #fff;
@@ -91,4 +91,8 @@ a.link:hover {
 
 .v-disabled.v-button > span > span {
 	color: silver;
+}
+
+.leftMargin {
+    margin-left: 10px;
 }

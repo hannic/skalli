@@ -32,6 +32,9 @@ import com.vaadin.ui.Layout;
 public class SubprojectsInfoBox extends InfoBox implements ProjectInfoBox {
 
     private static final int DELTA_INDENT = 20;
+
+    private static final String STYLE_SUBPROJECTS_INFOBOX = "infobox-subprojects";  //$NON-NLS-1$
+
     private ProjectService projectService;
     private ProjectTemplateService templateService;
 
@@ -64,6 +67,7 @@ public class SubprojectsInfoBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_SUBPROJECTS_INFOBOX);
         layout.setSizeFull();
 
         UUID uuid = project.getUuid();

@@ -14,20 +14,20 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.common.util.CollectionUtils;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.model.ext.scrum.ScrumProjectExt;
-import org.eclipse.skalli.view.component.InformationBox;
 import org.eclipse.skalli.view.component.PeopleComponent;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
-import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.Link;
 
 public class ProjectScrumBox extends InfoBox implements ProjectInfoBox {
+
+    private static final String STYLE_SCRUM_INFOBOX = "infobox-scrum"; //$NON-NLS-1$
+    private static final String STYLE_TEAMLABEL = "teamlabel"; //$NON-NLS-1$
+    private static final String STYLE_SCRUM_LOG = "scrumlog"; //$NON-NLS-1$
 
     @Override
     public String getIconPath() {
@@ -42,43 +42,33 @@ public class ProjectScrumBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_SCRUM_INFOBOX);
         layout.setSizeFull();
 
         boolean rendered = false;
         ScrumProjectExt scrumExt = project.getExtension(ScrumProjectExt.class);
         if (scrumExt != null) {
             if (CollectionUtils.isNotBlank(scrumExt.getProductOwners())) {
-                Label projectProductOwnersLabel = new Label("Product Owner");
-                projectProductOwnersLabel.addStyleName(STYLE_TEAMLABEL);
-                layout.addComponent(projectProductOwnersLabel);
-                Component peopleComponent = PeopleComponent
-                        .getPeopleListComponentForMember(scrumExt.getProductOwners());
-                peopleComponent.addStyleName(InformationBox.STYLE);
+                createLabel(layout, "Product Owner", STYLE_TEAMLABEL);
+                Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(scrumExt.getProductOwners());
                 layout.addComponent(peopleComponent);
                 rendered = true;
             }
 
             if (CollectionUtils.isNotBlank(scrumExt.getScrumMasters())) {
-                Label projectScrumMasterLabel = new Label("Scrum Master");
-                projectScrumMasterLabel.addStyleName(STYLE_TEAMLABEL);
-                layout.addComponent(projectScrumMasterLabel);
+                createLabel(layout, "Scrum Master", STYLE_TEAMLABEL);
                 Component peopleComponent = PeopleComponent.getPeopleListComponentForMember(scrumExt.getScrumMasters());
-                peopleComponent.addStyleName(InformationBox.STYLE);
                 layout.addComponent(peopleComponent);
                 rendered = true;
             }
 
             if (StringUtils.isNotBlank(scrumExt.getBacklogUrl())) {
-                Link backlogLink = new Link("Scrum Backlog", new ExternalResource(scrumExt.getBacklogUrl()));
-                backlogLink.addStyleName(STYLE_LINK);
-                layout.addComponent(backlogLink);
+                createLink(layout, "Scrum Backlog", scrumExt.getBacklogUrl(), DEFAULT_TARGET, STYLE_SCRUM_LOG);
                 rendered = true;
             }
         }
         if (!rendered) {
-            Label label = new Label("SCRUM extension added but no data maintained.");
-            label.addStyleName(STYLE_LABEL);
-            layout.addComponent(label);
+            createLabel(layout, "SCRUM extension added but no data maintained.", STYLE_LABEL);
         }
         return layout;
     }

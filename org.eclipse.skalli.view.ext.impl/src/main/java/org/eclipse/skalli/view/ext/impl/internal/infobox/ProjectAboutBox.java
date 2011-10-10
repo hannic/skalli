@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.skalli.view.ext.impl.internal.infobox;
 
+import java.text.MessageFormat;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.TaggingService;
@@ -20,17 +22,19 @@ import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
-import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Link;
 
 public class ProjectAboutBox extends InfoBox implements ProjectInfoBox {
 
-    private static final String DEBUG_ID = "projectAboutInfoBoxContent";
-    private static final String STYLE_ABOUT = "about";
-    private static final String STYLE_PHASE = "phase";
+    private static final String DEBUG_ID = "projectAboutInfoBoxContent"; //$NON-NLS-1$
+
+    private static final String STYLE_ABOUT_INFOBOX = "infobox-about"; //$NON-NLS-1$
+
+    private static final String STYLE_ABOUT = "about"; //$NON-NLS-1$
+    private static final String STYLE_HOMEPAGE = "homepage"; //$NON-NLS-1$
+    private static final String STYLE_PHASE = "phase"; //$NON-NLS-1$
 
     @Override
     public String getIconPath() {
@@ -45,23 +49,20 @@ public class ProjectAboutBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         CssLayout layout = new CssLayout();
+        layout.addStyleName(STYLE_ABOUT_INFOBOX);
         layout.setSizeFull();
 
         String description = "No description available";
         if (StringUtils.isNotBlank(project.getDescription())) {
             description = project.getDescription();
             description = StringEscapeUtils.escapeHtml(description);
-            description = StringUtils.replace(description, "\n", "<br />");
+            description = StringUtils.replace(description, "\n", "<br />");  //$NON-NLS-1$//$NON-NLS-2$
         }
-        Label aboutLabel = new Label(description, Label.CONTENT_XHTML);
-        aboutLabel.addStyleName(STYLE_ABOUT);
-        layout.addComponent(aboutLabel);
+        createLabel(layout, description, STYLE_ABOUT);
 
         InfoProjectExt ext = project.getExtension(InfoProjectExt.class);
         if (ext != null && StringUtils.isNotBlank(ext.getPageUrl())) {
-            Link wikiLink = new Link("Project Homepage", new ExternalResource(ext.getPageUrl()));
-            wikiLink.addStyleName(STYLE_LINK);
-            layout.addComponent(wikiLink);
+            createLink(layout, "Project Homepage", ext.getPageUrl(), DEFAULT_TARGET, STYLE_HOMEPAGE);
         }
 
         TaggingService taggingService = Services.getService(TaggingService.class);
@@ -72,10 +73,9 @@ public class ProjectAboutBox extends InfoBox implements ProjectInfoBox {
 
         if (util.getProjectTemplate().isVisible(Project.class.getName(), Project.PROPERTY_PHASE,
                 util.isUserProjectAdmin(project))) {
-            Label maturityLabel = new Label("This project is in the <b>" +
-                    project.getPhase().toString() + "</b> phase.", Label.CONTENT_XHTML);
-            maturityLabel.addStyleName(STYLE_PHASE);
-            layout.addComponent(maturityLabel);
+            createLabel(layout,
+                    MessageFormat.format("This project is in the <b>{0}</b> phase.", project.getPhase()),
+                    STYLE_PHASE);
         }
 
         // for ui testing

@@ -171,11 +171,10 @@ issues (header area / info box / edit form)
     font-weight: normal;
     color: #000000;
     list-style-type: none;
-    padding: 2px 2px 2px 30px;
+    padding: 2px 2px 2px 28px;
     background-repeat: no-repeat;
-    background-position: 5px 4px;
+    background-position: 5px 3px;
     min-width: 100px;
-    min-height: 20px;
 }
 
 .prj-issues ul li {

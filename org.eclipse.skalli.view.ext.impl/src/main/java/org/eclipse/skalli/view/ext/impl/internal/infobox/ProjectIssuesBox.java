@@ -26,11 +26,11 @@ import org.eclipse.skalli.view.ext.ProjectInfoBox;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
 public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
 
+    private static final String STYLE_ISSUES_INFOBOX = "infobox-issues"; //$NON-NLS-1$
     private static final String STYLE_ISSUES = "prj-issues"; //$NON-NLS-1$
 
     @Override
@@ -47,6 +47,7 @@ public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
     @SuppressWarnings("nls")
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_ISSUES_INFOBOX);
         layout.setSizeFull();
 
         IssuesService issuesService = Services.getService(IssuesService.class);
@@ -74,9 +75,7 @@ public class ProjectIssuesBox extends InfoBox implements ProjectInfoBox {
                     sb.append(project.getProjectId()).append("?").append(Consts.PARAM_ACTION).append("=");
                     sb.append(Consts.PARAM_VALUE_VALIDATE).append("\">here</a> to validate the project now.</p>");
                 }
-                Label issuesLabel = new Label(sb.toString(), Label.CONTENT_XHTML);
-                issuesLabel.addStyleName(STYLE_ISSUES);
-                layout.addComponent(issuesLabel);
+                createLabel(layout, sb.toString(), STYLE_ISSUES);
             }
         }
 

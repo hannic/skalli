@@ -56,6 +56,7 @@ public class HtmlBuilderTest {
             + "<a href=\"{2}\" target=\"{3}\" class=\"{4}\">{7}</a>";
 
     private static final String PATTERN_MAILTO = "<a href=\"mailto:{0}\">{1}</a>";
+    private static final String PATTERN_MAILTO_WITH_ICON = "<img src=\"{0}\"/><a href=\"mailto:{1}\">{2}</a>";
 
     private static final String PATTERN_HEADER = "<h{0} class=\"{1}\" style=\"{2}\">{3}</h{0}>\n";
     private static final String PATTERN_HEADER_NO_STYLES = "<h{0}>{1}</h{0}>\n";
@@ -227,22 +228,26 @@ public class HtmlBuilderTest {
     public void testAppendMailToLink() throws Exception {
         assertEquals(MessageFormat.format(PATTERN_MAILTO,
                 TEST_MAILTO_URL_ENCODED, TEST_LABEL),
-                html.appendMailToLink(TEST_MAILTO, TEST_LABEL));
+                html.appendMailToLink(null, TEST_MAILTO, TEST_LABEL));
         assertEquals(MessageFormat.format(PATTERN_MAILTO,
                 TEST_MAILTO_URL_ENCODED, TEST_MAILTO),
-                html.appendMailToLink(TEST_MAILTO, null));
+                html.appendMailToLink(null, TEST_MAILTO, null));
         assertEquals(MessageFormat.format(PATTERN_MAILTO,
                 TEST_MAILTO_URL_ENCODED, TEST_MAILTO),
-                html.appendMailToLink(TEST_MAILTO, ""));
+                html.appendMailToLink(null, TEST_MAILTO, ""));
         assertEquals(MessageFormat.format(PATTERN_MAILTO,
                 TEST_MAILTO_URL_ENCODED, "&lt;"),
-                html.appendMailToLink(TEST_MAILTO, "<"));
+                html.appendMailToLink(null, TEST_MAILTO, "<"));
 
         assertEquals(MessageFormat.format(PATTERN_MAILTO,
                 TEST_MAILTO_URL_ENCODED, TEST_MAILTO),
-                html.appendMailToLink(TEST_MAILTO));
-        assertEquals("", html.appendMailToLink(null));
-        assertEquals("", html.appendMailToLink(""));
+                html.appendMailToLink(null, TEST_MAILTO, null));
+        assertEquals("", html.appendMailToLink(null, null, null));
+        assertEquals("", html.appendMailToLink(null, "", null));
+
+        assertEquals(MessageFormat.format(PATTERN_MAILTO_WITH_ICON,
+                TEST_ICON, TEST_MAILTO_URL_ENCODED, TEST_LABEL),
+                html.appendMailToLink(TEST_ICON, TEST_MAILTO, TEST_LABEL));
     }
 
 

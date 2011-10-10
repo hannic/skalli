@@ -1,258 +1,259 @@
 .v-app-ProjectApplication .v-panel-projectview .v-panel-deco {
-	height: 0px;
-	border: none;
+    height: 0px;
+    border: none;
 }
 
-.v-app-ProjectApplication .v-panel-infobox {
-	color: #b8bbbe;
-	font-family: arial, helvetica, verdana, sans-serif;
-	font-size: 12px;
-	padding: 0px;
-	border-color: #555555;
-	margin: 0px;
-	overflow: auto;
-	outline: none;
+/* margins of the left (east) column of info boxes */
+.v-app-ProjectApplication .v-csslayout-east-column > div {
+    padding: 0px;
+    margin: 0px;
+}
 
+/* margins of the right (west) column of info boxes */
+.v-app-ProjectApplication .v-csslayout-west-column > div {
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 12px;
+    margin: 0px;
+}
+
+/* default styles for info boxes */
+.v-app-ProjectApplication .v-panel-infobox {
+    color: #000000;
+    font-family: arial, helvetica, verdana, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: normal;
+    padding-top: 12px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    margin: 0px;
+    overflow: auto;
+    outline: none;
 }
 
 .v-app-ProjectApplication .v-panel-infobox a {
-	color: #1B699F;
+    color: #1B699F;
 }
  
 .v-app-ProjectApplication .v-panel-infobox a:visited {
-	color: #1B699F;
+    color: #1B699F;
 }
 
+/* default styles for the content area of info boxes */
 .v-app-ProjectApplication .v-panel-infobox .v-panel-content {
     border-width: 1px;
     border-color: #C9C9C9;
     border-top: 0px;
     border-style: solid;
-    outline: none;
-    overflow: auto;
 }
 
-.v-app-ProjectApplication .v-panel-infobox .v-panel-content .panel-layout {
-    margin-top: 3px;
-    margin-left: 3px;
-    margin-right: 3px;
-    margin-bottom: 3px;
+/* margins around the content area of info boxes */
+.v-app-ProjectApplication .v-panel-infobox .v-panel-content > div > div {
+    padding-top: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 3px;
 }
-
 .v-app-ProjectApplication .v-panel-infobox .v-panel-deco {
-	height: 0px;
-	border: none;
+    height: 0px;
+    border: none;
 }
 
 .v-app-ProjectApplication .v-panel-infobox .v-panel-caption {
     color: #444444;
-    font-family: "Helvetica Neue", helvetica, arial, verdana, sans-serif;
+    background-color: #E0E0E0;
+    font-family:  arial, helvetica, verdana, sans-serif;
     font-size: 14px;
     font-weight: bold;
-    line-height: normal;
-    height: 16px;
     text-shadow: 0 1px 0 #fff;
-    margin: 0px;
+    height: 18px;
+    padding-left: 3px;
     padding-top: 2px;
-    padding-left: 2px;
-    background-color: #E0E0E0;
+    margin: 0px;
     border-width: 1px;
     border-color: #C9C9C9;
     border-style: solid;
     border-bottom: none;
 }
 
-.v-app-ProjectApplication .v-panel-infobox .v-panel-caption .v-label {
-	padding: 3px;
-}
-
-
-.v-app-ProjectApplication .v-panel-infobox .v-label-infobox {
-	color: #000;
-	font-family: "Helvetica Neue", helvetica, arial, verdana, sans-serif;
-	outline: none;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .v-customcomponent-peoplecomponent {
-	padding-left: 2px;	
-}
-
-.v-app-ProjectApplication .v-panel-infobox .v-customcomponent-peoplecomponent .v-table-body{
-	background: transparent;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .v-customcomponent-peoplecomponent .v-table-cell-wrapper {
-	color: #000;
-	cursor: pointer;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .v-customcomponent-peoplecomponent .v-table-cell-wrapper:hover{
-	text-decoration: underline;
-}
-	
-.v-app-ProjectApplication .v-panel-infobox .v-customcomponent-peoplecomponent .v-label-peoplecomponentseparator {
-
-	color: #000;
-}
-
-
-.v-app-ProjectApplication .v-gridlayout-projectviewgrid .v-gridlayout-spacing-on {
-	padding: 10px;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .v-label {
-	color: #000000;
-}
-
 .v-app-ProjectApplication .v-panel-infobox .v-label-infolabel {
-	padding-left: 3px;
-	padding-top: 3px;
+    line-height: 18px;
 }
 
 .v-app-ProjectApplication .v-panel-infobox .v-link-infolink {
-	padding-left: 3px;
-	padding-top: 3px;
-	line-height: 18px;
+    line-height: 18px;
 }
 
 .v-app-ProjectApplication .v-panel-infobox .v-button-link {
-	padding-left: 3px;
-	padding-top: 3px;
-	line-height: 18px;
+    line-height: 18px;
 }
 
-.v-app-ProjectApplication .v-label-projectname {
-	color: #000000;
-	font-family: "Helvetica Neue", helvetica, arial, verdana, sans-serif;
-	font-size: 22px;
-	font-weight: bold;
-	line-height: normal;
-	height: 30px;
-	text-shadow: 1px 1px 0 #aaa;
-	padding-left: 3px;
+
+/* common styles for labels, links and button links in info boxes */
+.v-app-ProjectApplication .v-panel-infobox .infobox-linkgroups {
 }
 
-.v-app-ProjectApplication .v-label-template {
-	color: #000000;
-	padding-left: 3px;
-	padding-bottom: 3px;
-	padding-top: 3px;
+.v-app-ProjectApplication .v-panel-infobox .infobox-linkgroups .v-label-grouplabel {
+    font-weight: bold;
 }
 
-.v-app-ProjectApplication .v-label-deleted {
+.v-app-ProjectApplication .v-panel-infobox .infobox-linkgroups .v-link-linklabel,
+.v-app-ProjectApplication .v-panel-infobox .infobox-linkgroups .v-label-linklabel,
+.v-app-ProjectApplication .v-panel-infobox .infobox-linkgroups .v-button-linklabel {
+    margin-left: 10px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-right: 0px;
+}
+
+
+/** styles for info box "About" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-about {
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-about .v-label-about {
+    padding-bottom: 3px;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-about .v-link-homepage {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-about .v-label-phase {
+    padding-top: 3px;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-about .tag-component > div {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+
+/* styles for info box "Development Information" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-devInf {
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-devInf h4 {
+    font-size: 12px;
+    margin-top: 15px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    padding:0px;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-devInf ul {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    padding: 0px;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-devInf ul li {
+    margin-bottom: 5px;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-devInf img {
+    width: 16px;
+    height: 16px;
+    vertical-align: bottom;
+    margin-right: 5px;
+    margin-top: 7px;
+    margin-bottom: 3px;
+}
+
+
+/* styles for info box "Mailing Lists" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-mailingList {
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-mailingList ul {
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-mailingList ul li {
+    margin: 0px;
+    padding-left: 25px;
+    padding-bottom: 3px;
+    background-image: url('/VAADIN/themes/simple/icons/mail/email.png');
+    background-repeat:  no-repeat;
+}
+
+
+/* styles for info box "Project Hierarchy" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-subprojects {
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-subprojects .natureicon {
+    width: 12px;
+    height: 12px;
+    vertical-align: top;
+    margin-top: 2px;
+    margin-right: 4px;
+}
+
+
+/* styles for info box "Team" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-team {
+}
+
+.v-app-ProjectApplication .v-panel-infobox .infobox-team .v-label-teamlabel {
     color: #000000;
-    padding-left: 3px;
     padding-bottom: 3px;
     padding-top: 3px;
     font-weight: bold;
-    font-size: larger;
 }
 
-.v-app-ProjectApplication .v-label-phase {
-	color: #000000;
-	padding-top: 5px;
-	padding-bottom: 3px;
-	padding-left: 3px;
+
+/* styles for info box "Scrum" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-scrum {
 }
 
-.v-app-ProjectApplication .v-label-about {
-	color: #000000;
-	padding-left: 3px;
+.v-app-ProjectApplication .v-panel-infobox .infobox-scrum .v-label-teamlabel {
+    color: #000000;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    font-weight: bold;
 }
 
-.v-app-ProjectApplication .v-label-plink {
-	color: #000000;
-	padding-left: 3px;
-	padding-top: 3px;
-	line-height: 18px;
+.v-app-ProjectApplication .v-panel-infobox .infobox-scrum .v-link-scrumlog {
+    padding-bottom: 3px;
+    padding-top: 10px;
 }
 
-.v-app-ProjectApplication .v-label-teamlabel {
-	color: #000000;
-	padding-left: 3px;
-	padding-bottom: 3px;
-	padding-top: 3px;
-	font-weight: bold;
+
+/* styles for info box "Related Projects" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-related-projects {
 }
 
-.v-app-ProjectApplication .v-label-grouplabel {
-	font-weight: bold;
-	margin-left: 5px;
+
+/* styles for info box "Maven Project Information" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-maven {
 }
 
-.v-app-ProjectApplication .v-link-linklabel,
-.v-app-ProjectApplication .v-label-linklabel,
-.v-app-ProjectApplication .v-button-linklabel {
-	margin-left: 10px;
-	margin-top: 2px;
-	margin-bottom: 2px;	
+.v-app-ProjectApplication .v-panel-infobox .infobox-maven .module-popup {
+    padding-bottom: 5px;
+    padding-top: 3px;
 }
 
-.v-app-ProjectApplication .v-button-groupaction,
-.v-app-ProjectApplication .v-button-linkaction {
-	margin-left: 10px;
+
+/* styles for info box "Project Activity" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-activity {
 }
 
-.v-app-ProjectApplication .v-button-groupaction > span > span {
-	font-weight: bold;
+
+/* styles for info box "Issues" */
+.v-app-ProjectApplication .v-panel-infobox .infobox-activity {
 }
 
-.v-app-ProjectApplication .v-button-addlink {
-	margin-top: 20px;
-}
-
-.v-app-ProjectApplication .v-panel-content {
-	border: none;
-}
-
-.v-app-ProjectApplication .v-panel-header {
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: gray;
-	border: none;
-}
-
-.v-app-ProjectApplication .natureicon {
-    width: 12px;
-    height: 12px;
-    overflow: hidden;
-    border: none;
-    text-decoration: none;
-    vertical-align: top;
-    padding-top: 1px;
-    padding-right: 3px;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .devInf h4 {
-	font-size: 12px;
-	margin-top: 15px;
-	margin-left: 5px;
-	margin-bottom: 5px;
-	padding:0px;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .mailingList ul, 
-.v-app-ProjectApplication .v-panel-infobox .devInf ul {
-	margin-top: 0px;
-	margin-bottom: 5px;
-	margin-left: 30px;
-	padding: 0px;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .mailingList ul li,
-.v-app-ProjectApplication .v-panel-infobox .devInf ul li {
-	margin-bottom: 5px;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .devInf img {
-	width:16px;
-	height:16px;
-	border:0px;
-	margin:5px;
-	vertical-align:middle;
-}
-
-.v-app-ProjectApplication .v-panel-infobox .mailingList .leftMargin,
-.v-app-ProjectApplication .v-panel-infobox .devInf .leftMargin {
-	margin-left: 10px;
+.v-app-ProjectApplication .v-panel-infobox .infobox-activity .v-label-issues {
 }

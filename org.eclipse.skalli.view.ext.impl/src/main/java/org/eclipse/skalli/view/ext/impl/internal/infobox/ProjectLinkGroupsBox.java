@@ -26,6 +26,8 @@ import com.vaadin.ui.Layout;
 
 public class ProjectLinkGroupsBox extends InfoBox implements ProjectInfoBox {
 
+    protected static final String SYTLE_LINKGROUPS_INFOBOX = "infobox-linkgroups"; //$NON-NLS-1$
+
     protected static final String STYLE_LABEL_GROUP = "grouplabel"; //$NON-NLS-1$
     protected static final String STYLE_LABEL_LINK = "linklabel"; //$NON-NLS-1$
 
@@ -42,6 +44,7 @@ public class ProjectLinkGroupsBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(SYTLE_LINKGROUPS_INFOBOX);
         layout.setSizeFull();
         LinkGroupsProjectExt ext = project.getExtension(LinkGroupsProjectExt.class);
         if (ext != null && !ext.getLinkGroups().isEmpty()) {

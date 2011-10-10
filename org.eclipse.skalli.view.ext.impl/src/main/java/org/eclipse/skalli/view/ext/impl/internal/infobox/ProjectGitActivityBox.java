@@ -28,6 +28,8 @@ import com.vaadin.ui.Layout;
 
 public class ProjectGitActivityBox implements ProjectInfoBox {
 
+    private static final String STYLE_ACTIVITY_INFOBOX = "infobox-activity"; //$NON-NLS-1$
+
     private ConfigurationService configService;
 
     protected void bindConfigurationService(ConfigurationService configService) {
@@ -97,6 +99,7 @@ public class ProjectGitActivityBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_ACTIVITY_INFOBOX);
         layout.setSizeFull();
 
         Label label;

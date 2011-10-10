@@ -32,7 +32,7 @@ import com.vaadin.ui.Layout;
 
 public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
 
-    private static final String STYLE_DEFINF = "devInf"; //$NON-NLS-1$
+    private static final String STYLE_DEFINF_INFOBOX = "infobox-devInf"; //$NON-NLS-1$
 
     // TODO: solve the icon madness
     private static final String ICON_SOURCES = "/VAADIN/themes/simple/icons/devinf/code.png"; //$NON-NLS-1$
@@ -65,6 +65,7 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_DEFINF_INFOBOX);
         layout.setSizeFull();
 
         DevInfProjectExt devInf = project.getExtension(DevInfProjectExt.class);
@@ -73,30 +74,31 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
         if (devInf != null) {
             // Project Sources
             if (StringUtils.isNotBlank(devInf.getScmUrl())) {
-                html.appendIconizedLink(ICON_SOURCES, "Project Sources", devInf.getScmUrl());
+                html.appendIconizedLink(ICON_SOURCES, "Project Sources", devInf.getScmUrl()).appendLineBreak();
             }
             // Bug Tracker
             if (StringUtils.isNotBlank(devInf.getBugtrackerUrl())) {
                 Set<String> linkList = new HashSet<String>();
                 linkList.add(devInf.getBugtrackerUrl());
                 addCreateBugLinks(linkList, project, devInf);
-                html.appendIconizedLinks(ICON_BUGTRACKER, "Bug Tracker", "(Create Issue)", linkList);
+                html.appendIconizedLinks(ICON_BUGTRACKER, "Bug Tracker", "(Create Issue)", linkList).appendLineBreak();
             }
             // Code Metrics
             if (StringUtils.isNotBlank(devInf.getMetricsUrl())) {
-                html.appendIconizedLink(ICON_METRICS, "Code Metrics", devInf.getMetricsUrl());
+                html.appendIconizedLink(ICON_METRICS, "Code Metrics", devInf.getMetricsUrl()).appendLineBreak();
             }
             // CI / Build Server
             if (StringUtils.isNotBlank(devInf.getCiUrl())) {
-                html.appendIconizedLink(ICON_CI_SERVER, "Continuous Integration / Build Server", devInf.getCiUrl());
+                html.appendIconizedLink(ICON_CI_SERVER, "Continuous Integration / Build Server", devInf.getCiUrl())
+                        .appendLineBreak();
             }
             // Code Review
             if (StringUtils.isNotBlank(devInf.getReviewUrl())) {
-                html.appendIconizedLink(ICON_REVIEW, "Code Review", devInf.getReviewUrl());
+                html.appendIconizedLink(ICON_REVIEW, "Code Review", devInf.getReviewUrl()).appendLineBreak();
             }
             // Javadoc
             if (CollectionUtils.isNotBlank(devInf.getJavadocs())) {
-                html.appendIconizedLinks(ICON_JAVADOC, "Javadoc", "(more Javadoc)", devInf.getJavadocs());
+                html.appendIconizedLinks(ICON_JAVADOC, "Javadoc", "(more Javadoc)", devInf.getJavadocs()).appendLineBreak();
             }
 
             // SCM Locations
@@ -117,7 +119,7 @@ public class ProjectDevInfBox extends InfoBox implements ProjectInfoBox {
         }
 
         if (html.length() > 0) {
-            createLabel(layout, html.toString(), STYLE_DEFINF);
+            createLabel(layout, html.toString());
         } else {
             createLabel(layout, "This project has no development information.");
         }

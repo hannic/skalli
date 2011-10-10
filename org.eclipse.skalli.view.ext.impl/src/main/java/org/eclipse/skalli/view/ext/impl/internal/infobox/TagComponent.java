@@ -17,6 +17,7 @@ import java.util.Set;
 import org.eclipse.skalli.api.java.TaggingService;
 import org.eclipse.skalli.model.core.Project;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
+
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
@@ -34,6 +35,8 @@ import com.vaadin.ui.Layout;
 public class TagComponent extends CustomComponent {
 
     private static final long serialVersionUID = 2926468032572843890L;
+
+    private static final String STYLE_TAG_COMPONENT = "tag-component";
 
     private final Project project;
     private final TaggingService taggingService;
@@ -53,7 +56,7 @@ public class TagComponent extends CustomComponent {
             @Override
             protected String getCss(Component c) {
                 if (c instanceof Label) {
-                    return "float: left; line-height:18px; padding-left:3px; padding-top:3px;";
+                    return "float: left; line-height: 18px; padding-right: 3px;";
                 } else {
                     return "float: left";
                 }
@@ -63,6 +66,7 @@ public class TagComponent extends CustomComponent {
         tagComboBoxLayout.setSizeFull();
         layout = new CssLayout();
         layout.setSizeFull();
+        layout.addStyleName(STYLE_TAG_COMPONENT);
         paintTagView();
         setCompositionRoot(layout);
     }
@@ -78,9 +82,9 @@ public class TagComponent extends CustomComponent {
                 @Override
                 protected String getCss(Component c) {
                     if (c instanceof Label) {
-                        return "float: left; line-height:18px; padding-left:3px; padding-top:3px;";
+                        return "float: left; line-height:18px; padding-right: 3px;";
                     } else {
-                        return "float: left; padding-right: 5px;";
+                        return "float: left; padding-right: 5px";
                     }
                 }
             };
@@ -170,9 +174,9 @@ public class TagComponent extends CustomComponent {
                     @Override
                     protected String getCss(Component c) {
                         if (c instanceof Label) {
-                            return "float: left; line-height:18px; padding-left:3px; padding-top:3px;";
+                            return "float: left; line-height: 18px; padding-right: 3px";
                         } else {
-                            return "float: left; line-height:18px; padding-left:3px; padding-top:3px; padding-right: 5px";
+                            return "float: left; line-height: 18px; padding-right: 5px";
                         }
                     }
                 };
@@ -217,8 +221,7 @@ public class TagComponent extends CustomComponent {
                         Iterator<Component> it = tagComboBoxLayout.getComponentIterator();
                         it.next(); // this is the combobox
                         if (!it.hasNext()) {
-                            tagComboBoxLayout
-                                    .addComponent(new Label("Use lowercase letters without whitespaces only."));
+                            tagComboBoxLayout.addComponent(new Label("Use lowercase letters without whitespaces only."));
                         }
                         return;
                     }

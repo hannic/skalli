@@ -38,6 +38,9 @@ import com.vaadin.ui.PopupView;
 
 public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
 
+    private static final String STYLE_MAVEN_INFOBOX = "infobox-maven"; //$NON-NLS-1$
+    private static final String STYLE_MODULE_POPUP = "module-popup"; //$NON-NLS-1$
+
     private static final String DEFAULT_POM_FILENAME = "pom.xml"; //$NON-NLS-1$
 
     private ConfigurationService configService;
@@ -63,6 +66,7 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_MAVEN_INFOBOX);
         layout.setSizeFull();
 
         boolean rendered = false;
@@ -72,13 +76,12 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
             MavenReactor mavenReactor = reactorExt.getMavenReactor();
             MavenCoordinate coordinate = mavenReactor.getCoordinate();
             groupId = coordinate.getGroupId();
-            createLabel(layout, "GroupId: <b>&nbsp;" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
+            createLabel(layout, "GroupId: <b>" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
             createLabel(layout, "ArtifactId: <b>" + coordinate.getArtefactId() + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
             TreeSet<MavenCoordinate> modules = mavenReactor.getModules();
             StringBuilder sb = new StringBuilder();
 
             if (modules.size() > 0) {
-
                 int lineLength = 0;
                 for (MavenCoordinate module : modules) {
                     //create popup with xml snippet
@@ -108,7 +111,7 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
 
                     @Override
                     public String getMinimizedValueAsHTML() {
-                        return "<div style=\"margin:3px\">Modules</div>";
+                        return "Modules";
                     }
 
                     @Override
@@ -119,6 +122,7 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
 
                 PopupView popup = new PopupView(content);
                 popup.setHideOnMouseOut(false);
+                popup.addStyleName(STYLE_MODULE_POPUP);
                 layout.addComponent(popup);
             }
             rendered = true;

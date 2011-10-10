@@ -25,6 +25,9 @@ import com.vaadin.ui.Layout;
 
 public class ProjectTeamBox extends InfoBox implements ProjectInfoBox {
 
+    private static final String STYLE_TEAM_INFOBOX = "infobox-team"; //$NON-NLS-1$
+    private static final String STYLE_TEAMLABEL = "teamlabel"; //$NON-NLS-1$
+
     @Override
     public String getIconPath() {
         return "res/icons/people.png"; //$NON-NLS-1$
@@ -38,6 +41,7 @@ public class ProjectTeamBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_TEAM_INFOBOX);
         layout.setSizeFull();
         PeopleProjectExt ext = project.getExtension(PeopleProjectExt.class);
         if (ext != null) {

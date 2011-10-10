@@ -40,11 +40,16 @@ public class ProjectViewPanel extends CssLayout {
 
     private static final long serialVersionUID = -2756706292280384313L;
 
-    protected static final String STYLE_PANEL_LAYOUT = "panel-layout"; //$NON-NLS-1$
+    private static final String STYLE_EAST_COLUMN = "east-column"; //$NON-NLS-1$
+    private static final String STYLE_WEST_COLUMN = "west-column"; //$NON-NLS-1$
 
     private final ProjectApplication application;
     private final Navigator navigator;
     private final Project project;
+
+    private final CssLayout leftLayout;
+    private final CssLayout rightLayout;
+
 
     public ProjectViewPanel(ProjectApplication application, Navigator navigator, Project project) {
         super();
@@ -53,48 +58,26 @@ public class ProjectViewPanel extends CssLayout {
         this.project = project;
         this.navigator = navigator;
 
-        CssLayout leftLayout = new CssLayout() {
-            private static final long serialVersionUID = -4251374136128934343L;
+        this.setSizeFull();
 
-            @Override
-            protected String getCss(Component c) {
-                if (c instanceof InformationBox) {
-                    return "margin-bottom: 10px;"; //$NON-NLS-1$
-                } else {
-                    return ""; //$NON-NLS-1$
-                }
-            }
-        };
-        CssLayout rightLayout = new CssLayout() {
-            private static final long serialVersionUID = 4993626671504156383L;
-
-            @Override
-            protected String getCss(Component c) {
-                if (c instanceof InformationBox) {
-                    return "margin-bottom: 10px;"; //$NON-NLS-1$
-                } else {
-                    return ""; //$NON-NLS-1$
-                }
-            }
-        };
-
+        leftLayout = new CssLayout();
+        leftLayout.addStyleName(STYLE_EAST_COLUMN);
         leftLayout.setWidth("50%"); //$NON-NLS-1$
-        leftLayout.setMargin(false, true, false, false);
-        rightLayout.setWidth("50%"); //$NON-NLS-1$
-        setSizeFull();
-
-        int leftCounter = 0;
-        int rightCounter = 0;
-
         addComponent(leftLayout);
+
+        rightLayout = new CssLayout();
+        rightLayout.addStyleName(STYLE_WEST_COLUMN);
+        rightLayout.setWidth("50%"); //$NON-NLS-1$
         addComponent(rightLayout);
 
+        renderContent();
+    }
+
+    private void renderContent() {
         Set<ProjectInfoBox> infoBoxes = getOrderedVisibleInfoBoxList();
         for (final ProjectInfoBox projectInfoBox : infoBoxes) {
             InformationBox infoBox = InformationBox.getInformationBox("&nbsp;" + projectInfoBox.getCaption()); //$NON-NLS-1$
             Component content = projectInfoBox.getContent(project, new ExtensionUtil() {
-                private ProjectTemplate projectTemplate;
-
                 @Override
                 public void persist(Project project) {
                     ProjectService projectService = Services.getRequiredService(ProjectService.class);
@@ -118,42 +101,38 @@ public class ProjectViewPanel extends CssLayout {
 
                 @Override
                 public User getLoggedInUser() {
-                    return UserUtil.getUser(ProjectViewPanel.this.application.getLoggedInUser());
+                    return UserUtil.getUser(application.getLoggedInUser());
                 }
 
                 @Override
                 public Resource getBundleResource(String path) {
                     return new StreamResource(new ExtensionStreamSource(projectInfoBox.getClass(), path),
-                            FilenameUtils.getName(path), ProjectViewPanel.this.application);
+                            FilenameUtils.getName(path), application);
                 }
 
                 @Override
                 public Navigator getNavigator() {
-                    return ProjectViewPanel.this.navigator;
+                    return navigator;
                 }
 
                 @Override
                 public ProjectTemplate getProjectTemplate() {
-                    if (projectTemplate == null) {
-                        ProjectTemplateService templateService = Services
-                                .getRequiredService(ProjectTemplateService.class);
-                        projectTemplate = templateService.getProjectTemplateById(ProjectViewPanel.this.project
-                                .getProjectTemplateId());
-                    }
-                    return projectTemplate;
+                    ProjectTemplateService templateService = Services.getRequiredService(ProjectTemplateService.class);
+                    return templateService.getProjectTemplateById(project.getProjectTemplateId());
                 }
 
             });
 
-            content.setStyleName(STYLE_PANEL_LAYOUT);
             infoBox.getContent().addComponent(content);
 
-            final String icon = projectInfoBox.getIconPath();
+            String icon = projectInfoBox.getIconPath();
             if (StringUtils.isNotBlank(icon)) {
                 infoBox.setIcon(new StreamResource(new ExtensionStreamSource(projectInfoBox.getClass(), icon),
                         FilenameUtils.getName(icon), application));
             }
 
+            int leftCounter = 0;
+            int rightCounter = 0;
             if (projectInfoBox.getPreferredColumn() == ProjectInfoBox.COLUMN_WEST) {
                 leftLayout.addComponent(infoBox);
                 leftCounter++;

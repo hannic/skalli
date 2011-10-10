@@ -32,11 +32,12 @@ public class MultiLinkField extends CustomField implements ILinkAddedHandler, IL
 
     private static final long serialVersionUID = 8114438955923388539L;
 
-    protected static final String STYLE_LABEL_GROUP = "grouplabel"; //$NON-NLS-1$
-    protected static final String STYLE_LABEL_LINK = "linklabel"; //$NON-NLS-1$
-    private static final String STYLE_BUTTON_GROUPACTION = "groupaction"; //$NON-NLS-1$
-    private static final String STYLE_BUTTON_LINKACTION = "linkaction"; //$NON-NLS-1$
-    private static final String STYLE_BUTTON_ADD = "addlink"; //$NON-NLS-1$
+    private static final String STYLE_LAYOUT = "multilink-layout"; //$NON-NLS-1$
+    private static final String STYLE_LABEL_GROUP = "multilink-grouplabel"; //$NON-NLS-1$
+    private static final String STYLE_LABEL_LINK = "multilink-linklabel"; //$NON-NLS-1$
+    private static final String STYLE_BUTTON_GROUPACTION = "multilink-groupaction"; //$NON-NLS-1$
+    private static final String STYLE_BUTTON_LINKACTION = "multilink-linkaction"; //$NON-NLS-1$
+    private static final String STYLE_BUTTON_ADD = "multilink-addlink"; //$NON-NLS-1$
 
     private GridLayout layout;
 
@@ -51,6 +52,7 @@ public class MultiLinkField extends CustomField implements ILinkAddedHandler, IL
         layout = new GridLayout();
         // do not change the width! otherwise right border of table is hidden in IE!
         layout.setWidth(100, Sizeable.UNITS_PERCENTAGE);
+        layout.setStyleName(STYLE_LAYOUT);
         render();
         setCompositionRoot(layout);
     }

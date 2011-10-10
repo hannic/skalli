@@ -18,18 +18,17 @@ import com.vaadin.ui.Panel;
 @SuppressWarnings("serial")
 public class InformationBox extends Panel {
 
-    public static final String STYLE = "infobox";
+    public static final String STYLE = "infobox"; //$NON-NLS-1$
 
     public static final int CONTENT_TEXT = Label.CONTENT_TEXT;
     public static final int CONTENT_XHTML = Label.CONTENT_XHTML;
 
     private InformationBox(String caption) {
         super(caption);
-        setWidth("100%");
+        setWidth("100%"); //$NON-NLS-1$
 
         Layout layout = new CssLayout();
         layout.setSizeFull();
-        layout.setMargin(false);
         setContent(layout);
 
         addStyleName(STYLE);

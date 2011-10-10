@@ -32,6 +32,8 @@ import com.vaadin.ui.Layout;
 
 public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
 
+    private static final String STYLE_RELATEDPROJECTS_INFOBOX = "infobox-related-projects"; //$NON-NLS-1$
+
     @Override
     public String getIconPath() {
         return "res/icons/relProjects.png"; //$NON-NLS-1$
@@ -45,6 +47,7 @@ public class RelatedProjectsInfoBox extends InfoBox implements ProjectInfoBox {
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_RELATEDPROJECTS_INFOBOX);
         layout.setSizeFull();
 
         RelatedProjectsExt ext = project.getExtension(RelatedProjectsExt.class);

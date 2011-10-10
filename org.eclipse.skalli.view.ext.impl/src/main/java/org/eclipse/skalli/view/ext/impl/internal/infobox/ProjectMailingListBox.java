@@ -23,8 +23,6 @@ import org.eclipse.skalli.model.ext.info.MailingListMapper;
 import org.eclipse.skalli.view.ext.ExtensionUtil;
 import org.eclipse.skalli.view.ext.InfoBox;
 import org.eclipse.skalli.view.ext.ProjectInfoBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
@@ -32,9 +30,7 @@ import com.vaadin.ui.Layout;
 
 public class ProjectMailingListBox extends InfoBox implements ProjectInfoBox {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProjectMailingListBox.class);
-
-    private static final String STYLE_MAILING = "mailingList"; //$NON-NLS-1$
+    private static final String STYLE_MAILING_INFOBOX = "infobox-mailingList"; //$NON-NLS-1$
 
     private ConfigurationService configService;
 
@@ -56,9 +52,11 @@ public class ProjectMailingListBox extends InfoBox implements ProjectInfoBox {
         return "Mailing Lists";
     }
 
+    @SuppressWarnings("nls")
     @Override
     public Component getContent(Project project, ExtensionUtil util) {
         Layout layout = new CssLayout();
+        layout.addStyleName(STYLE_MAILING_INFOBOX);
         layout.setSizeFull();
 
         HtmlBuilder html = new HtmlBuilder();
@@ -69,22 +67,22 @@ public class ProjectMailingListBox extends InfoBox implements ProjectInfoBox {
                 MailingListMapper mapper = new MailingListMapper();
                 html.append("<ul>"); //$NON-NLS-1$
                 for (String mailingList : ext.getMailingLists()) {
-                    html.append("<li>"); //$NON-NLS-1$
+                    html.append("<li>");
                     html.appendMailToLink(mailingList);
                     List<Link> mappedLinks = mapper.getMappedLinks(configService, project.getProjectId(),
                             mailingList, LinkMapper.ALL_PURPOSES);
                     if (!mappedLinks.isEmpty()) {
-                        html.append("<br/>"); //$NON-NLS-1$
+                        html.appendLineBreak();
                         html.appendLinks(mappedLinks);
                     }
-                    html.append("</li>"); //$NON-NLS-1$
+                    html.append("</li>");
                 }
-                html.append("</ul>"); //$NON-NLS-1$
+                html.append("</ul>");
             }
         }
 
         if (html.length() > 0) {
-            createLabel(layout, html.toString(), STYLE_MAILING);
+            createLabel(layout, html.toString());
         } else {
             createLabel(layout, "This project has no mailing lists."); //$NON-NLS-1$
         }

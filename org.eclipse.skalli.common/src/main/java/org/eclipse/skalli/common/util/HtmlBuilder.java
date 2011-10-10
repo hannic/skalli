@@ -224,12 +224,13 @@ public class HtmlBuilder {
     }
 
     public HtmlBuilder appendMailToLink(String link) {
-        appendMailToLink(link, link);
+        appendMailToLink(null, link, null);
         return this;
     }
 
     @SuppressWarnings("nls")
-    public HtmlBuilder appendMailToLink(String link, String caption) {
+    public HtmlBuilder appendMailToLink(String icon, String link, String caption) {
+        appendIcon(icon);
         if (StringUtils.isNotBlank(link)) {
             String urlEncoded = null;
             try {
