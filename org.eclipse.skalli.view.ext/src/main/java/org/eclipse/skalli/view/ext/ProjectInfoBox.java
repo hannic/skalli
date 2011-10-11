@@ -12,6 +12,7 @@ package org.eclipse.skalli.view.ext;
 
 import org.eclipse.skalli.api.java.IconProvider;
 import org.eclipse.skalli.model.core.Project;
+
 import com.vaadin.ui.Component;
 
 /**
@@ -56,21 +57,24 @@ public interface ProjectInfoBox extends IconProvider {
     public int getPreferredColumn();
 
     /**
-     * Returns <code>true</code>, if the info box should be rendered and the user
-     * requesting the info box is allowed to view it.
-     * Info boxes that can be switched on/off in the project edit dialog should at least
+     * Returns <code>true</code>, if the info box is visible and the user
+     * requesting the info box is allowed to see it.
+     *
+     * Info boxes that can be switched on/off in the project edit dialog should
      * check whether a corresponding extension is attached to the <code>project</code>
      * and return <code>false</code> if there is no such extension available.
      *
      * @param project  the project for which the info box is to be rendered.
      * @param userId  the unique identifier of the user viewing the project details page.
      *
-     * @return <code>true</code>, if the info box should be rendered.
+     * @return <code>true</code>, if the info box is visible.
      */
     public boolean isVisible(Project project, String userId);
 
     /**
-     * Returns the Vaadin component to be rendered inside the info box panel.
+     * Returns the Vaadin component to be rendered inside the info box panel,
+     * or <code>null</code> if the info box has nothing to display and should
+     * therefore not be rendered at all.
      *
      * @param project  the project for which the component is to be created.
      * @param util  context information for the creation of the component.
