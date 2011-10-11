@@ -11,14 +11,18 @@
 package org.eclipse.skalli.feed;
 
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.skalli.api.java.ProjectService;
+import org.eclipse.skalli.api.java.feeds.Entry;
 import org.eclipse.skalli.api.java.feeds.FeedManager;
 import org.eclipse.skalli.api.java.feeds.FeedPersistenceService;
 import org.eclipse.skalli.api.java.feeds.FeedProvider;
+import org.eclipse.skalli.api.java.feeds.FeedServiceException;
 import org.eclipse.skalli.api.java.feeds.FeedUpdater;
 import org.eclipse.skalli.model.core.Project;
 import org.osgi.service.component.ComponentConstants;
@@ -81,7 +85,31 @@ public class FeedManagerImpl implements FeedManager {
             for (FeedProvider feedProvider : feedProviders) {
                 List<FeedUpdater> feedUpdaters = feedProvider.getFeedUpdaters(project);
                 for (FeedUpdater feedUpdater : feedUpdaters) {
-                    //TODO retrieve feed entries and persist them
+                    try {
+                        List<Entry> entries = feedUpdater.updateFeed();
+                        if (!entries.isEmpty()) {
+                            try {
+                                for (Entry entry : entries) {
+                                    entry.setSource(feedUpdater.getSource());
+                                    entry.setProjectId(project.getUuid());
+
+                                    String id = entry.getId();
+                                    if (id == null) {
+                                        Date published = entry.getPublished();
+                                        String publishedString = (published == null) ? "" : published.toString();
+                                        id = entry.getProjectId().toString() + publishedString
+                                                + entry.getSource();
+                                    }
+                                    entry.setId(DigestUtils.shaHex(id));
+                                }
+                                feedPersistenceService.merge(entries);
+                            } catch (FeedServiceException e) {
+                                LOG.error("Failed to merge feed entries", e);
+                            }
+                        }
+                    } catch (RuntimeException e) {
+                        LOG.error("Failed to update the feed", e);
+                    }
                 }
             }
 
@@ -96,4 +124,3 @@ public class FeedManagerImpl implements FeedManager {
         LOG.info("Updating all project feeds: done");
     }
 }
-

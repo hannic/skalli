@@ -10,32 +10,131 @@
  *******************************************************************************/
 package org.eclipse.skalli.feed.db;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.feeds.Entry;
 import org.eclipse.skalli.api.java.feeds.FeedService;
 import org.eclipse.skalli.api.java.feeds.FeedServiceException;
+import org.eclipse.skalli.feed.db.entities.EntryJPA;
 
 public class JPAFeedService implements FeedService {
 
-    @Override
-    public List<Entry> findEntries(UUID projectId, int maxResults) throws FeedServiceException {
-        // TODO Auto-generated method stub
-        return null;
+    private static EntityManagerFactory emf;
+
+    public JPAFeedService() {
+    }
+
+    private EntityManager getEntityManager() throws FeedServiceException {
+        try {
+            return emf.createEntityManager();
+        } catch (RuntimeException e) {
+            throw new FeedServiceException("EntityManager could not be created", e);
+        }
+    }
+
+    public synchronized void setService(EntityManagerFactory emFactory) {
+        emf = emFactory;
+    }
+
+    public synchronized void unsetService(EntityManagerFactory emFactory) {
+        emf = null;
     }
 
     @Override
-    public List<Entry> findEntries(UUID projectId, Collection<String> categories, int maxResults)
+    public List<Entry> findEntries(UUID projectId, int maxResults) throws FeedServiceException {
+        List<Entry> results = new ArrayList<Entry>();
+        EntityManager em = getEntityManager();
+        EntityTransaction tx = null;
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+            Query q = em.createNamedQuery(EntryJPA.FIND_BY_PROJECT_ID);
+            if (maxResults > 0) {
+                q.setMaxResults(maxResults);
+            }
+            q.setParameter("projectId", projectId.toString());
+
+            results = (List<Entry>) q.getResultList();
+            if (results == null) {
+                results = new ArrayList<Entry>();
+            }
+            tx.rollback();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new FeedServiceException("Can't find feed entries for project " + projectId.toString(), e);
+        } finally {
+            em.close();
+        }
+        return results;
+    }
+
+    @Override
+    public List<Entry> findEntries(UUID projectId, Collection<String> sources, int maxResults)
             throws FeedServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        List<Entry> results = new ArrayList<Entry>();
+        EntityManager em = getEntityManager();
+        EntityTransaction tx = null;
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+            Query q = em.createNamedQuery(EntryJPA.FIND_BY_PROJECT_AND_SOURCES);
+            if (maxResults > 0) {
+                q.setMaxResults(maxResults);
+            }
+            q.setParameter("projectId", projectId.toString());
+            q.setParameter("sources", sources);
+
+            results = (List<Entry>) q.getResultList();
+            if (results == null) {
+                results = new ArrayList<Entry>();
+            }
+            tx.rollback();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new FeedServiceException("Can't find feed entries for project " + projectId.toString() + " matching any of " + StringUtils.join(sources, ","), e);
+        } finally {
+            em.close();
+        }
+        return results;
     }
 
     @Override
     public List<String> findSources(UUID projectId) throws FeedServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        List<String> results;
+        EntityManager em = getEntityManager();
+        EntityTransaction tx = null;
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+            Query q = em.createNamedQuery(EntryJPA.FIND_SOURCES_BY_PROJECT_ID);
+            q.setParameter("projectId", projectId.toString());
+
+            results = (List<String>) q.getResultList();
+            if (results == null) {
+                results = new ArrayList<String>();
+            }
+            tx.rollback();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new FeedServiceException("Can't find feed sources for project " + projectId.toString(), e);
+        } finally {
+            em.close();
+        }
+        return results;
     }
 }

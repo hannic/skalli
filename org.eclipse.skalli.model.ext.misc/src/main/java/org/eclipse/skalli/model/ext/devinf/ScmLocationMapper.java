@@ -36,6 +36,8 @@ public class ScmLocationMapper extends AbstractLinkMapper {
     /** Purpose filter for mappings that provide the createBug url for the bug tracking system. */
     public static final String PURPOSE_CREATE_BUG = "create_bug"; //$NON-NLS-1$
 
+    public static final String PURPOSE_FEED = "feed"; //$NON-NLS-1$
+
     public static final String ALL_PROVIDERS = "*"; //$NON-NLS-1$
 
     public List<ScmLocationMappingConfig> getMappings(ConfigurationService configService, String provider,

@@ -8,16 +8,11 @@
  * Contributors:
  *     SAP AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.skalli.api.java.feeds;
+package org.eclipse.skalli.feed;
 
-import java.util.List;
-
-public interface FeedUpdater {
-
-    public List<Entry> updateFeed();
-
-    public String getSource();
-
-    public String getCaption();
+/**
+ *
+ */
+public interface FeedUpdaterRunnableService {
 
 }
