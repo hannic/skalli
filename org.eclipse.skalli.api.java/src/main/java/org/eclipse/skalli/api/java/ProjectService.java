@@ -101,14 +101,35 @@ public interface ProjectService extends EntityService<Project>, Issuer {
 
     /**
      * Returns a sorted list of subprojects of the given project.
+     * This method is equivalent to calling {@link #getSubProjects(UUID, Comparator, int)} with
+     * <code>depth</code> 1.
      *
      * @param uuid
      *          a project's UUID (see
      *          {@link org.eclipse.skalli.model.core.Project#getUuid()}).
+     * @param c the comparator to use to sort the returned projects, or <code>null</code>
+     *          if the order is not specified.
      *
      * @return  projects that reference the given project as parent project, or an empty set.
      */
     public List<Project> getSubProjects(UUID uuid, Comparator<Project> c);
+
+    /**
+     * Returns a sorted list of subprojects of the given project and depth of search.
+     *
+     * @param uuid
+     *          a project's UUID (see
+     *          {@link org.eclipse.skalli.model.core.Project#getUuid()}).
+     * @param c the comparator to use to sort the returned projects, or <code>null</code>
+     *          if the order is not specified.
+     *  @param depth
+     *          depth of subprojects tree. A <code>depth</code> of -1 is equivalent
+     *          to {@link Integer#MAX_VALUE}.
+     *
+     * @return  projects that reference the given project as parent project (but not necessary direct parent),
+     *          or an empty set.
+     */
+    public List<Project> getSubProjects(UUID uuid, Comparator<Project> c, int depth);
 
     /**
      * Returns the chain of parent projects of the given project.

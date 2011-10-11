@@ -122,20 +122,44 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 
     @Override
     public List<Project> getSubProjects(UUID uuid) {
-        List<Project> result = new ArrayList<Project>();
-        for (Project p : getAll()) {
-            if (uuid.equals(p.getParentProject())) {
-                result.add(p);
-            }
-        }
-        return result;
+        return getSubProjects(uuid, null, 1);
     }
 
     @Override
     public List<Project> getSubProjects(UUID uuid, Comparator<Project> c) {
-        List<Project> result = getSubProjects(uuid);
-        Collections.sort(result, c);
+        return getSubProjects(uuid, c, 1);
+    }
+
+    @Override
+    public List<Project> getSubProjects(UUID uuid, Comparator<Project> c, int depth) {
+        depth = depth < 0? Integer.MAX_VALUE : depth;
+        List<Project> result = new ArrayList<Project>();
+        if (depth == 0) {
+            return result;
+        }
+        for (Project project : getAll()) {
+            if (isSubproject(project, uuid, depth)) {
+                result.add(project);
+            }
+        }
+        if (c != null) {
+            Collections.sort(result, c);
+        }
         return result;
+    }
+
+    private boolean isSubproject(Project project, UUID uuid, int depth) {
+        for (int i = 0; i < depth; i++) {
+            project = (Project) project.getParentEntity();
+            if (project == null) {
+                return false;
+            }
+            UUID parentUUID = project.getUuid();
+            if (uuid.equals(parentUUID)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -298,7 +322,8 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
         else {
             if (projectId.trim().length() != projectId.length()) {
                 issues.add(new Issue(Severity.FATAL, ProjectService.class, project.getUuid(),
-                        Project.class, Project.PROPERTY_PROJECTID, 2, "Project ID must not have leading or trailing whitespaces"));
+                        Project.class, Project.PROPERTY_PROJECTID, 2,
+                        "Project ID must not have leading or trailing whitespaces"));
             }
             else {
                 for (Project anotherProject : getAll()) {
@@ -362,7 +387,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                             Severity.ERROR, ProjectTemplate.class, projectUUID, extension.getClass(), null,
                             MessageFormat.format("{0} projects are not compatible with ''{1}'' extensions. " +
                                     "Disable the extension or select another project template.",
-                                            projectTemplate.getDisplayName(), extensionClassName)));
+                                    projectTemplate.getDisplayName(), extensionClassName)));
                 }
                 if (excluded != null && excluded.contains(extensionClassName) ||
                         included != null && !included.contains(extensionClassName)) {
@@ -370,7 +395,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                             Severity.ERROR, ProjectTemplate.class, projectUUID, extension.getClass(), null,
                             MessageFormat.format("''{0}'' extensions are not appropriate for {1} projects. " +
                                     "Disable the extension or select another project template.",
-                                            extensionClassName, projectTemplate.getDisplayName())));
+                                    extensionClassName, projectTemplate.getDisplayName())));
                 }
             }
         }

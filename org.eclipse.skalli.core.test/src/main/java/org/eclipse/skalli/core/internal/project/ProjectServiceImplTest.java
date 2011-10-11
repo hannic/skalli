@@ -12,8 +12,9 @@ package org.eclipse.skalli.core.internal.project;
 
 import static org.easymock.EasyMock.*;
 
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ import org.osgi.framework.BundleException;
 
 @SuppressWarnings("nls")
 public class ProjectServiceImplTest {
+
+    private static final UUID[] EMPTY_UUID_LIST = new UUID[0];
 
     private static class TestProjectTemplate1 extends DefaultProjectTemplate {
         @Override
@@ -272,84 +275,57 @@ public class ProjectServiceImplTest {
 
     @Test
     public void testGetSubProjects() {
-        List<Project> res1 = ps.getSubProjects(uuids[1]);
-        Assert.assertNotNull(res1);
-        Assert.assertEquals(1, res1.size());
-        Assert.assertEquals(uuids[2], res1.iterator().next().getUuid());
+        assertEquals(ps.getSubProjects(uuids[1]), uuids[2]);
+        assertEquals(ps.getSubProjects(uuids[2]), uuids[3]);
+        assertEquals(ps.getSubProjects(uuids[3]), uuids[6], uuids[8]);
+        assertEquals(ps.getSubProjects(uuids[6]), uuids[7]);
+        assertEquals(ps.getSubProjects(uuids[7]), EMPTY_UUID_LIST);
+        verify(mocks);
+    }
 
-        List<Project> res2 = ps.getSubProjects(uuids[2]);
-        Assert.assertNotNull(res2);
-        Assert.assertEquals(1, res2.size());
-        Assert.assertEquals(uuids[3], res2.iterator().next().getUuid());
+    @Test
+    public void testGetSubProjectsWithDepth() {
+        assertEquals(ps.getSubProjects(uuids[1], null, 0), EMPTY_UUID_LIST);
+        assertEquals(ps.getSubProjects(uuids[1], null, 1), uuids[2]);
+        assertEquals(ps.getSubProjects(uuids[1], null, 2), uuids[2], uuids[3]);
+        assertEquals(ps.getSubProjects(uuids[1], null, 3), uuids[2], uuids[3], uuids[6], uuids[8]);
+        assertEquals(ps.getSubProjects(uuids[1], null, Integer.MAX_VALUE), uuids[2], uuids[3], uuids[6], uuids[7], uuids[8]);
+        assertEquals(ps.getSubProjects(uuids[1], null, -1), uuids[2], uuids[3], uuids[6], uuids[7], uuids[8]);
+        assertEquals(ps.getSubProjects(uuids[8], null, -1), EMPTY_UUID_LIST);
+        verify(mocks);
+    }
 
-        List<Project> res3 = ps.getSubProjects(uuids[3]);
-        Assert.assertNotNull(res3);
-        Assert.assertEquals(2, res3.size());
-        Set<UUID> res3uuids = new HashSet<UUID>(res3.size());
-        for (Project p : res3) {
-            res3uuids.add(p.getUuid());
-        }
-        Assert.assertTrue(res3uuids.contains(uuids[6]));
-        Assert.assertTrue(res3uuids.contains(uuids[8]));
-
-        List<Project> res4 = ps.getSubProjects(uuids[6]);
-        Assert.assertNotNull(res4);
-        Assert.assertEquals(1, res4.size());
-        Assert.assertEquals(uuids[7], res4.iterator().next().getUuid());
-
-        List<Project> res5 = ps.getSubProjects(uuids[7]);
-        Assert.assertNotNull(res5);
-        Assert.assertEquals(0, res5.size());
-
+    @Test
+    public void testGetSubProjectsSorted() {
+        Comparator<Project> c = new Comparator<Project>() {
+            @Override
+            public int compare(Project o1, Project o2) {
+                return o1.getProjectId().compareTo(o2.getProjectId());
+            }
+        };
+        assertEquals(ps.getSubProjects(uuids[1], c, -1), uuids[6], uuids[7], uuids[8], uuids[2], uuids[3]);
         verify(mocks);
     }
 
     @Test
     public void testGetParentChain() {
-        List<Project> res1 = ps.getParentChain(uuids[1]);
-        Assert.assertNotNull(res1);
-        Assert.assertEquals(1, res1.size());
-        Assert.assertEquals(uuids[1], res1.get(0).getUuid());
-
-        List<Project> res2 = ps.getParentChain(uuids[2]);
-        Assert.assertNotNull(res2);
-        Assert.assertEquals(2, res2.size());
-        Assert.assertEquals(uuids[2], res2.get(0).getUuid());
-        Assert.assertEquals(uuids[1], res2.get(1).getUuid());
-
-        List<Project> res3 = ps.getParentChain(uuids[3]);
-        Assert.assertNotNull(res3);
-        Assert.assertEquals(3, res3.size());
-        Assert.assertEquals(uuids[3], res3.get(0).getUuid());
-        Assert.assertEquals(uuids[2], res3.get(1).getUuid());
-        Assert.assertEquals(uuids[1], res3.get(2).getUuid());
-
-        List<Project> res4 = ps.getParentChain(uuids[6]);
-        Assert.assertNotNull(res4);
-        Assert.assertEquals(4, res4.size());
-        Assert.assertEquals(uuids[6], res4.get(0).getUuid());
-        Assert.assertEquals(uuids[3], res4.get(1).getUuid());
-        Assert.assertEquals(uuids[2], res4.get(2).getUuid());
-        Assert.assertEquals(uuids[1], res4.get(3).getUuid());
-
-        List<Project> res5 = ps.getParentChain(uuids[7]);
-        Assert.assertNotNull(res5);
-        Assert.assertEquals(5, res5.size());
-        Assert.assertEquals(uuids[7], res5.get(0).getUuid());
-        Assert.assertEquals(uuids[6], res5.get(1).getUuid());
-        Assert.assertEquals(uuids[3], res5.get(2).getUuid());
-        Assert.assertEquals(uuids[2], res5.get(3).getUuid());
-        Assert.assertEquals(uuids[1], res5.get(4).getUuid());
-
-        List<Project> res6 = ps.getParentChain(uuids[8]);
-        Assert.assertNotNull(res6);
-        Assert.assertEquals(4, res6.size());
-        Assert.assertEquals(uuids[8], res6.get(0).getUuid());
-        Assert.assertEquals(uuids[3], res6.get(1).getUuid());
-        Assert.assertEquals(uuids[2], res6.get(2).getUuid());
-        Assert.assertEquals(uuids[1], res6.get(3).getUuid());
-
+        assertEquals(ps.getParentChain(uuids[1]), uuids[1]);
+        assertEquals(ps.getParentChain(uuids[2]), uuids[2], uuids[1]);
+        assertEquals(ps.getParentChain(uuids[3]), uuids[3], uuids[2], uuids[1]);
+        assertEquals(ps.getParentChain(uuids[6]), uuids[6], uuids[3], uuids[2], uuids[1]);
+        assertEquals(ps.getParentChain(uuids[7]), uuids[7], uuids[6], uuids[3], uuids[2], uuids[1]);
+        assertEquals(ps.getParentChain(uuids[8]), uuids[8], uuids[3], uuids[2], uuids[1]);
         verify(mocks);
+    }
+
+
+    private void assertEquals(Collection<Project> projects, UUID...uuids) {
+        Assert.assertNotNull(projects);
+        Assert.assertEquals(uuids.length, projects.size());
+        Iterator<Project> it = projects.iterator();
+        for (UUID uuid: uuids) {
+            Assert.assertEquals(uuid, it.next().getUuid());
+        }
     }
 
     @Test

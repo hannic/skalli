@@ -20,6 +20,7 @@ import org.eclipse.skalli.api.rest.internal.admin.StatusResource;
 import org.eclipse.skalli.api.rest.internal.resources.IssuesResource;
 import org.eclipse.skalli.api.rest.internal.resources.ProjectResource;
 import org.eclipse.skalli.api.rest.internal.resources.ProjectsResource;
+import org.eclipse.skalli.api.rest.internal.resources.SubprojectsResource;
 import org.eclipse.skalli.api.rest.internal.resources.UserResource;
 import org.eclipse.skalli.api.rest.monitor.Monitorable;
 import org.restlet.Application;
@@ -52,6 +53,7 @@ public class RestApplication extends Application {
         router.attach("/projects", ProjectsResource.class); //$NON-NLS-1$
         router.attach("/projects/{id}", ProjectResource.class); //$NON-NLS-1$
         router.attach("/projects/{id}/issues", IssuesResource.class); //$NON-NLS-1$
+        router.attach("/projects/{id}/subprojects", SubprojectsResource.class); //$NON-NLS-1$
 
         router.attach("/user/{id}", UserResource.class); //$NON-NLS-1$
 
