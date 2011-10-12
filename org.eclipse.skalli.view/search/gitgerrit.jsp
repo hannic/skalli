@@ -1,9 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="org.eclipse.skalli.view.internal.filter.ext.GitGerritFilter"%>
-<%@page import="org.eclipse.skalli.common.Consts"%>
-<%@page errorPage="/error" %>
-<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.eclipse.skalli.view.internal.filter.ext.GitGerritFilter" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
+<%@ page errorPage="/error" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -26,12 +37,12 @@
     font-style: italic;
   }
   .buttonOnlyForm {
-    display: inline;  
+    display: inline;
   }
   .cancel, .cancel:active, .cancel:visited, .cancel:hover {
     color: #000000;
-      font-family: arial,helvetica,verdana,sans-serif;
-      font-size: 13px;    
+    font-family: arial,helvetica,verdana,sans-serif;
+    font-size: 13px;
     padding-left:8px;
     padding-right:8px;
     padding-top:1px;
@@ -48,14 +59,14 @@
 </head>
 <body>
 
-<!-- header area -->
+<%-- header area --%>
 <jsp:include page="<%= Consts.JSP_HEADER %>" flush="true" />
 <jsp:include page="<%= Consts.JSP_HEADER_SEARCH %>" flush="true" />
 
-<!-- navigation menu on left side -->
+<%-- navigation menu on left side --%>
 <jsp:include page="<%= Consts.JSP_NAVIGATIONBAR%>" flush="true" />
 
-<!-- Gerrit Form -->
+<%-- Gerrit Form --%>
 <div class="projectarearight">
 <h3>
 <img src="/img/git_logo.png" alt="Git Logo" style="width:32px; height:32px; margin-right:5px; vertical-align:middle;" /> Create Git/Gerrit Repository
@@ -77,7 +88,7 @@
           <small>Choose from an existing Gerrit group related to this project</small>
         </p>
         <p id="submitButton">
-          <input type="submit" name="btnSubmit" value="Go" class="searchsubmit"/>  
+          <input type="submit" name="btnSubmit" value="Go" class="searchsubmit"/>
         </p>
         <script type="text/javascript">
           $('#submitButton').css('display', 'none');
@@ -184,11 +195,11 @@
             <p class="hint">Click 'Proceed' to create the group, the repository and assign the group to it.</p>
           </c:when>
           <c:when test="${groupExists && !repoExists}">
-            <p class="warningmessage">Note that creating a group or a repository on Gerrit cannot be undone.</p> 
+            <p class="warningmessage">Note that creating a group or a repository on Gerrit cannot be undone.</p>
             <p class="hint">Click 'Proceed' to create the repository and assign it to the existing group.</p>
           </c:when>
           <c:when test="${!groupExists && repoExists}">
-            <p class="errormessage">It is not possible to assign new groups to existing repositories. Hence this request cannot be processed.</p> 
+            <p class="errormessage">It is not possible to assign new groups to existing repositories. Hence this request cannot be processed.</p>
           </c:when>
           <c:when test="${!groupExists && !repoExists && empty knownAccounts}">
             <p class="errormessage">No one of your team has a known Gerrit account. You would not be able to administer the group and/or project by yourself. Hence this request cannot be processed.</p>

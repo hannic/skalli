@@ -1,8 +1,19 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="org.eclipse.skalli.model.core.ProjectNature"%>
-<%@ page import="org.eclipse.skalli.model.core.Project"%>
-<%@ page import="org.eclipse.skalli.common.Consts"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.eclipse.skalli.model.core.ProjectNature" %>
+<%@ page import="org.eclipse.skalli.model.core.Project" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -83,19 +94,19 @@ setTimeout('if (typeof com_vaadin_terminal_gwt_DefaultWidgetSet == "undefined") 
 <script type="text/javascript" src="<%=Consts.TOGGLE_JS%>"></script>
 
 
-<!-- header area -->
+<%-- header area --%>
 <jsp:include page="<%=Consts.JSP_HEADER%>" flush="true" />
 <jsp:include page="<%=Consts.JSP_HEADER_SEARCH%>" flush="true" />
 
-<!-- navigation menu on left side -->
+<%-- navigation menu on left side --%>
 <jsp:include page="<%=Consts.JSP_NAVIGATIONBAR%>" flush="true" />
 
-<!-- project details -->
+<%-- project details --%>
 <div class="projectarearight">
-    <!-- project issues -->
+    <%-- project issues --%>
     <jsp:include page="<%=Consts.JSP_ISSUES%>" flush="true" />
 
-    <!-- project header -->
+    <%-- project header --%>
     <c:if test="${project!=null && editmode==false}">
         <div class="projectheader">
             <c:choose>
@@ -131,8 +142,8 @@ setTimeout('if (typeof com_vaadin_terminal_gwt_DefaultWidgetSet == "undefined") 
             </c:if>
         </div>
     </c:if>
-    
-    <!-- info boxes -->
+
+    <%-- info boxes --%>
     <center>
         <div id="project" class="v-app v-app-loading v-theme-simple v-app-ProjectApplication"></div>
     </center>

@@ -1,16 +1,23 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-  pageEncoding="ISO-8859-1"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 
 <div class="searchheader">
   <div class="searchheader-left">
-    <a href="/"> <img
-      src="/VAADIN/themes/simple/images/logo_medium.png" alt="Logo" />
+    <a href="/"> <img src="/VAADIN/themes/simple/images/logo_medium.png" alt="Logo" />
     </a>
   </div>
-
   <div class="searchheader-right">
-
     <form method="get" id="searchform" action="/projects">
       <c:choose>
         <c:when test="${query != null }">
@@ -39,7 +46,6 @@
       <c:when test="${userquery != null }">${resultSize} projects found for '${userquery}' in ${duration} ms</c:when>
       <c:otherwise />
     </c:choose>
-
   </div>
 </div>
 

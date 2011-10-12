@@ -1,9 +1,20 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="org.eclipse.skalli.view.internal.filter.ext.JiraFilter"%>
-<%@page import="org.eclipse.skalli.common.Consts"%>
-<%@page errorPage="/error" %>
-<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.eclipse.skalli.view.internal.filter.ext.JiraFilter" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
+<%@ page errorPage="/error" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -22,14 +33,14 @@
 </head>
 <body>
 
-<!-- header area -->
+<%-- header area --%>
 <jsp:include page="<%= Consts.JSP_HEADER %>" flush="true" />
 <jsp:include page="<%= Consts.JSP_HEADER_SEARCH %>" flush="true" />
 
-<!-- navigation menu on left side -->
+<%-- navigation menu on left side --%>
 <jsp:include page="<%=Consts.JSP_NAVIGATIONBAR%>" flush="true" />
 
-<!-- P4 Project -->
+<%-- P4 Project --%>
 <div class="projectarearight" style="max-width:600px;">
     <h3>
         <img src="/img/p4_logo.png" alt="Perforce Logo" style="width:32px; height:32px; margin-right:5px; vertical-align:middle;"/> Request Perforce Project
@@ -59,7 +70,7 @@
         <tr align="left">
             <td>Proposal:</td>
             <td><em>${proposedName}</em></td>
-        </tr>    
+        </tr>
         <tr align="left">
             <td>Codelines:</td>
             <td><em>dev</em></td>
@@ -67,7 +78,7 @@
         <tr align="left">
             <td>Preferred Server:</td>
             <td><em>(if known, otherwise leave empty)</em></td>
-        </tr>        
+        </tr>
         <tr align="left">
             <td>User(s):</td>
             <td><em>${committers}</em></td>
@@ -75,7 +86,7 @@
         <tr align="left">
             <td>Process:</td>
             <td><em>https://wiki.wdf.sap.corp/x/T4oEMw</em></td>
-        </tr>        
+        </tr>
     </table>
     <p>or simply copy the above to your clipboard:&nbsp;
         <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
@@ -100,7 +111,7 @@
                    bgcolor="#FFFFFF"
                />
         </object>
-    </p> 
+    </p>
     <p class="important">Note: The new Perforce project will <strong>not</strong> automatically be added to your SCM locations, but needs to be added manually once it has been created by the Production team.</p>
     <p><a href="/projects/${project.projectId}">Back to project</a></p>
 </div>

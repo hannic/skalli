@@ -1,97 +1,109 @@
- @import url(../reindeer/styles.css);
- @import url(styles_userspicker.css);
- @import url(styles_peoplecomponent.css);
- @import url(styles_projectview.css);
- @import url(styles_projectedit.css);
- @import url(styles_tray.css);
- @import url(styles_peoplesearch.css);
- @import url(styles_multitext.css);
- @import url(styles_multicombobox.css);
- @import url(styles_multilink.css);
- @import url(styles_toolbar.css);
- 
+/*******************************************************************************
+ * Copyright (c) 2011 SAP AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     SAP AG - initial API and implementation
+ *******************************************************************************/
+
+@import url(../reindeer/styles.css);
+@import url(styles_userspicker.css);
+@import url(styles_peoplecomponent.css);
+@import url(styles_projectview.css);
+@import url(styles_projectedit.css);
+@import url(styles_tray.css);
+@import url(styles_peoplesearch.css);
+@import url(styles_multitext.css);
+@import url(styles_multicombobox.css);
+@import url(styles_multilink.css);
+@import url(styles_toolbar.css);
+
 .v-app {
-      background: #fff;
-      font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
-      color: #222;
+    background: #fff;
+    font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: #222;
 }
 
 .v-table-body {
-      border: none;
+    border: none;
 }
- 
+
 .v-panel-deco {
-	color: #fff;	
+    color: #fff;
 }
- 
+
 .v-panel-caption-view {
-	  color: #004b98;
+    color: #004b98;
 }
- 
+
 .view {
-      background: white;     
+    background: white;
 }
 
 .v-app-ProjectApplication .v-panel {
-	padding: none;
-	border: none;
-	margin: none;
-	overflow: hidden;
-	outline: none;	
+    padding: none;
+    border: none;
+    margin: none;
+    overflow: hidden;
+    outline: none;
 }
- 
 
 .v-app-ProjectApplication .v-horizontallayout-header {
-	border-bottom-width: 1px; 
+    border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: gray;	
+    border-bottom-color: gray;
 }
- 
-em { font-weight: bold; font-style: normal;}
- 
+
+em { 
+    font-weight: bold;
+    font-style: normal;
+}
+
 .v-link a:link span {
     color: #1B699F;
 }
- 
+
 .v-link > a > span {
-	text-decoration:none;
+    text-decoration: none;
 }
 .v-link > a > span:hover {
-    text-decoration:underline;
+    text-decoration: underline;
 }
- 
+
 .link:hover {
     text-decoration: none;
 }
- 
+
 .link {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 a.link {
     text-decoration: none;
-}	
+}
 
 a.link:hover {
     text-decoration: underline;
-}   
- 
- 
-.v-button-link > span > span {
-    text-decoration: none !important;  
 }
-     
-.v-button-link:hover > span > span { 
-    text-decoration: underline !important;   
-} 	
+
+.v-button-link > span > span {
+    text-decoration: none !important;
+}
+
+.v-button-link:hover > span > span {
+    text-decoration: underline !important;
+}
 
 .v-disabled {
-	cursor: default;
-	opacity: 1; 
+    cursor: default;
+    opacity: 1;
 }
 
 .v-disabled.v-button > span > span {
-	color: silver;
+    color: silver;
 }
 
 .leftMargin {

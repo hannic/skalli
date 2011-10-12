@@ -1,12 +1,23 @@
-<%@page import="org.apache.commons.lang.StringUtils"%>
-<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="org.eclipse.skalli.view.component.TagCloud"%>
-<%@page import="org.eclipse.skalli.common.User"%>
-<%@page import="org.osgi.framework.Version"%>
-<%@page import="org.eclipse.skalli.view.internal.ViewBundleUtil"%>
-<%@page import="org.eclipse.skalli.common.Consts"%>
-<%@page import="org.eclipse.skalli.api.java.authentication.LoginUtil"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.apache.commons.lang.StringUtils" %>
+<%@ page import="org.eclipse.skalli.view.component.TagCloud" %>
+<%@ page import="org.eclipse.skalli.common.User" %>
+<%@ page import="org.osgi.framework.Version" %>
+<%@ page import="org.eclipse.skalli.view.internal.ViewBundleUtil" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
+<%@ page import="org.eclipse.skalli.api.java.authentication.LoginUtil" %>
 
 <div class="mainheader">
 <%
@@ -21,7 +32,7 @@
 
     <div class="mainheader-left">
        <c:forEach var="toplinkConfig" items="${toplinksConfig.topLinks}" >
-         <a href ="${toplinkConfig.url}">${toplinkConfig.displayName}</a>        
+         <a href ="${toplinkConfig.url}">${toplinkConfig.displayName}</a>
        </c:forEach>
     </div>
     <div class="mainheader-right">

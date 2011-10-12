@@ -1,6 +1,17 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="org.eclipse.skalli.common.Consts"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
 
 <div class="navigationbar">
     <div style="font-weight: bold; padding-bottom: 2px">Project Portal</div>
@@ -19,15 +30,13 @@
     <c:if test="${isProjectAdmin == true && editmode == false}">
         <div style="font-weight: bold; padding-bottom: 2px">This Project</div>
         <a href="<%=request.getRequestURI() + "?" + Consts.PARAM_ACTION + "=" + Consts.PARAM_VALUE_EDIT%>" target="_top">Edit</a><br />
-
-         <c:forEach var="link" items="${projectContextLinks}" >
-            <!-- render the project context links-->
+          <c:forEach var="link" items="${projectContextLinks}" >
+            <%-- render the project context links --%>
             <c:set var="linkCaption" value="${link.caption}" />
             <c:set var="linkUri" value="${link.uri}" />
             <c:set var="linkId" value="${link.id}" />
             <a id="${linkId}" href="${linkUri}" target="_top">${linkCaption}</a><br />
         </c:forEach>
-
     </c:if>
 </div>
 

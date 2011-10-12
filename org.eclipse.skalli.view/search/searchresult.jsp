@@ -1,14 +1,24 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pp" %>
-<%@ page import="org.eclipse.skalli.common.Consts"%>
-<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
 
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pp" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>${title} - ${pagetitle}</title>
-
 <style type="text/css">
 @import "<%=Consts.JSP_STYLE%>";
 </style>
@@ -26,7 +36,7 @@
         }
       }
     }
-    
+
     function resultsPerPage(count) {
         if(window.location.search == "") {
           window.location.href = window.location.href + "?count="+count;
@@ -37,29 +47,26 @@
             window.location.href = window.location.href + "&count="+count;
           }
         }
-      }    
+      }
 </script>
 
 <script type="text/javascript" src="<%=Consts.TOGGLE_JS%>"></script>
 
 </head>
 <body class="searchresult">
-<!-- for test purposes
+
+<%-- for test purposes
 viewsize = ${viewSize} @ start = ${start} @ currentPage = ${currentPage} @ pages = ${pages}
--->
+ --%>
 
-<!-- header area -->
-
+<%-- header area --%>
 <jsp:include page="<%=Consts.JSP_HEADER%>" flush="true" />
-
 <jsp:include page="<%=Consts.JSP_HEADER_SEARCH%>" flush="true" />
 
-<!-- navigation menu on left side -->
-
+<%-- navigation menu on left side --%>
 <jsp:include page="<%=Consts.JSP_NAVIGATIONBAR%>" flush="true" />
 
-<!-- search results and pagination -->
-
+<%-- search results and pagination --%>
 <div class="rightarea">
     <c:if test="${pages > 1}">
         <div class="resultsperpage">
@@ -71,12 +78,12 @@ viewsize = ${viewSize} @ start = ${start} @ currentPage = ${currentPage} @ pages
     </c:if>
 
     <c:forEach var="project" items="${projects}" >
-        <!-- render the project details, see /search/tags/project-details.tag -->
+        <%-- render the project details, see /search/tags/project-details.tag --%>
         <c:set var="uuid" value="${project.singleValues['uuid']}" />
         <pp:project-details project="${project}" parentChain="${parentChains[uuid]}" style="project" />
     </c:forEach>
 
-    <!-- page navigator -->
+    <%-- page navigator --%>
     <center>
         <div class="pagination">
             <c:if test="${pages > 1}">
@@ -101,8 +108,6 @@ viewsize = ${viewSize} @ start = ${start} @ currentPage = ${currentPage} @ pages
             </c:if>
         </div>
     </center>
-
 </div>
-
 </body>
 </html>

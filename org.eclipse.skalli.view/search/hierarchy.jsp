@@ -1,21 +1,31 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<%@page import="org.eclipse.skalli.model.ext.Severity"%>
-<%@page import="org.eclipse.skalli.model.ext.Issues"%>
-<%@page import="org.eclipse.skalli.api.java.authentication.LoginUtil"%>
-<%@page import="org.eclipse.skalli.api.java.authentication.UserUtil"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.LinkedList"%>
-<%@ page import="java.util.Comparator"%>
-<%@ page import="java.io.IOException"%>
-<%@ page import="org.eclipse.skalli.model.core.Project"%>
-<%@ page import="org.eclipse.skalli.api.java.ProjectNode"%>
-<%@ page import="java.util.List"%>
-<%@ page import="org.eclipse.skalli.api.java.ProjectService"%>
-<%@ page import="org.eclipse.skalli.api.java.IssuesService"%>
-<%@ page import="org.eclipse.skalli.common.Services"%>
-<%@ page import="org.eclipse.skalli.common.Consts"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.eclipse.skalli.model.ext.Severity" %>
+<%@ page import="org.eclipse.skalli.model.ext.Issues" %>
+<%@ page import="org.eclipse.skalli.api.java.authentication.LoginUtil" %>
+<%@ page import="org.eclipse.skalli.api.java.authentication.UserUtil" %>
+<%@ page import="java.util.LinkedList" %>
+<%@ page import="java.util.Comparator" %>
+<%@ page import="java.io.IOException" %>
+<%@ page import="org.eclipse.skalli.model.core.Project" %>
+<%@ page import="org.eclipse.skalli.api.java.ProjectNode" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.eclipse.skalli.api.java.ProjectService" %>
+<%@ page import="org.eclipse.skalli.api.java.IssuesService" %>
+<%@ page import="org.eclipse.skalli.common.Services" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -45,24 +55,21 @@ function collapseAll() {
 </head>
 <body>
 
-<!-- header area -->
-
+<%-- header area --%>
 <jsp:include page="<%=Consts.JSP_HEADER%>" flush="true" />
-
 <jsp:include page="<%=Consts.JSP_HEADER_SEARCH%>" flush="true" />
 
-<!-- navigation menu on left side -->
-
+<%-- navigation menu on left side --%>
 <jsp:include page="<%=Consts.JSP_NAVIGATIONBAR%>" flush="true" />
 
-<!-- search results and pagination -->
-
+<%-- search results and pagination --%>
 <div class="hierarchyarea">
-<pre><%
+<pre>
+<%
     Comparator<Project> comp = new Comparator<Project>() {
       public int compare(Project project1, Project project2) {
         return project1.getName().compareToIgnoreCase(project2.getName());
-      } 
+      }
     };
     String projectId = request.getParameter(Consts.PARAM_ID);
     ProjectService service = Services.getService(ProjectService.class);
@@ -71,7 +78,7 @@ function collapseAll() {
       nodes = service.getRootProjectNodes(comp);
     } else {
       Project project = service.getProjectByProjectId(projectId);
-      if (project!=null) { 
+      if (project!=null) {
         ProjectNode node = service.getProjectNode(project.getUuid(), comp);
         nodes = new LinkedList<ProjectNode>();
         nodes.add(node);
@@ -100,7 +107,8 @@ function collapseAll() {
         traverseSubProjects(request, out, rootNode, 0, showIssues);
       }
     }
-%></pre>
+%>
+</pre>
 </div>
 </body>
 </html>
@@ -110,14 +118,14 @@ function collapseAll() {
 
   private void traverseSubProjects(ServletRequest request, JspWriter out, ProjectNode projectNode, int tab, boolean showIssues) throws IOException{
     Project project = projectNode.getProject();
-    for (int i=0; i<tab; i++) 
+    for (int i=0; i<tab; i++)
           out.append("     ");
     out.append("<a class='projectlink"+tab+"' href='/projects/"+project.getProjectId()+"' target='_top'>");
     out.append(project.getName());
     int sizeChildren = countSubProjects(projectNode, true);
     if (sizeChildren>0)
       out.append(" ("+sizeChildren+")");
-    
+
     if (showIssues && issuesService!=null) {
       Issues issues = issuesService.getByUUID(projectNode.getProject().getUuid());
       if (issues!=null && issues.getIssues().size()>0) {
@@ -134,10 +142,10 @@ function collapseAll() {
           out.append("/VAADIN/themes/simple/icons/issues/info.png\" alt=\"Info\"");
         }
         out.append(" title=\""+ tooltip +"\" />");
-      }        
+      }
     }
     out.append("</a>");
-    
+
     if (sizeChildren>0) {
       out.append("<a class='optionlink' href=\"javascript:toggle('"+project.getUuid()+"');\">expand/collapse</a>");
       out.append("<a class='optionlink' href=\""+Consts.URL_ALLPROJECTS+"&"+Consts.PARAM_ID+"="+project.getProjectId()+"\">browse</a>");

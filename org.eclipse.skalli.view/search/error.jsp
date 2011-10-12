@@ -1,14 +1,24 @@
-<%@page import="java.io.OutputStreamWriter"%>
-<%@page import="java.beans.XMLEncoder"%>
-<%@page import="java.net.URLEncoder"%>
-<%@page import="java.io.PrintWriter"%>
-<%@page import="java.io.StringWriter"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="org.eclipse.skalli.common.Consts"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%--
+    Copyright (c) 2010, 2011 SAP AG and others.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
 
+    Contributors:
+        SAP AG - initial API and implementation
+ --%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="java.io.OutputStreamWriter" %>
+<%@ page import="java.beans.XMLEncoder" %>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import="java.io.StringWriter" %>
+<%@ page import="org.eclipse.skalli.common.Consts" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -19,17 +29,14 @@
 </head>
 <body>
 
-<!-- header area -->
-
+<%-- header area --%>
 <jsp:include page="<%= Consts.JSP_HEADER %>" flush="true" />
-
 <jsp:include page="<%= Consts.JSP_HEADER_SEARCH %>" flush="true" />
 
-<!-- navigation menu on left side -->
-
+<%-- navigation menu on left side --%>
 <jsp:include page="<%=Consts.JSP_NAVIGATIONBAR%>" flush="true" />
 
-<!-- Error -->
+<%-- Error --%>
 <div class="projectarearight" >
 <div class="error">
 
@@ -37,8 +44,7 @@
 
 <c:if test="${exception != null}">
   <c:if test="${feedbackConfig != null }">
-    Please inform the ProjectPortal team about this exception: 
-    <a title="${feedbackConfig.displayName}" href="${feedbackConfig.url}">Send Bug Report</a>
+    Please inform the ProjectPortal team about this exception: <a title="${feedbackConfig.displayName}" href="${feedbackConfig.url}">Send Bug Report</a>
     <br><br>
     Please include the following information:
     <br>
