@@ -26,7 +26,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 
-public class ProjectGitActivityBox implements ProjectInfoBox {
+public class ProjectActivityBox implements ProjectInfoBox {
 
     private static final String STYLE_ACTIVITY_INFOBOX = "infobox-activity"; //$NON-NLS-1$
 
