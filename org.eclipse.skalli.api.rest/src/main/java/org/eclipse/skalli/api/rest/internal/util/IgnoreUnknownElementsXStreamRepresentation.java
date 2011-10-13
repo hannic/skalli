@@ -10,11 +10,11 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.rest.internal.util;
 
+import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.restlet.data.MediaType;
 import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 
-import org.eclipse.skalli.model.ext.AliasedConverter;
 import com.thoughtworks.xstream.XStream;
 
 public class IgnoreUnknownElementsXStreamRepresentation<T> extends XstreamRepresentation<T> {
@@ -49,6 +49,7 @@ public class IgnoreUnknownElementsXStreamRepresentation<T> extends XstreamRepres
         for (Class<?> clazz : classes) {
             xstream.processAnnotations(clazz);
         }
+        xstream.setMode(XStream.NO_REFERENCES);
         return xstream;
     }
 
