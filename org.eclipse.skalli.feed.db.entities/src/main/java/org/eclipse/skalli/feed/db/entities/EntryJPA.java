@@ -34,14 +34,14 @@ import org.eclipse.skalli.common.util.UUIDUtils;
 @Table(name = "Entry")
 @NamedQueries({
         @NamedQuery(name = EntryJPA.FIND_BY_PROJECT_ID,
-                query = "SELECT e FROM EntryJPA e where e.projectId like :projectId " + EntryJPA.ORDER_BY),
+                query = "SELECT e FROM EntryJPA e where e.projectId = :projectId " + EntryJPA.ORDER_BY),
 
         @NamedQuery(name = EntryJPA.FIND_BY_PROJECT_AND_SOURCES,
-                query = "SELECT e FROM EntryJPA e where e.projectId like :projectId and e.source in :sources "
+                query = "SELECT e FROM EntryJPA e where e.projectId = :projectId and e.source in :sources "
                         + EntryJPA.ORDER_BY),
 
         @NamedQuery(name = EntryJPA.FIND_SOURCES_BY_PROJECT_ID,
-                query = "SELECT DISTINCT e.source FROM EntryJPA e where e.projectId like :projectId "
+                query = "SELECT DISTINCT e.source FROM EntryJPA e where e.projectId = :projectId "
                         + EntryJPA.ORDER_BY)
 
 })
