@@ -72,8 +72,8 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
         boolean rendered = false;
         String groupId = null;
         MavenReactorProjectExt reactorExt = project.getExtension(MavenReactorProjectExt.class);
-        if (reactorExt != null) {
-            MavenReactor mavenReactor = reactorExt.getMavenReactor();
+        MavenReactor mavenReactor = reactorExt.getMavenReactor();
+        if (reactorExt != null &&  mavenReactor!= null) {
             MavenCoordinate coordinate = mavenReactor.getCoordinate();
             groupId = coordinate.getGroupId();
             createLabel(layout, "GroupId: <b>" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
