@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.feeds.Entry;
 import org.eclipse.skalli.api.java.feeds.FeedManager;
@@ -73,6 +74,9 @@ public class FeedManagerImpl implements FeedManager {
         this.feedPersistenceService = null;
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.skalli.api.java.feeds.FeedManager#updateAllFeeds()
+     */
     @Override
     public void updateAllFeeds() {
         LOG.info("Updating all project feeds...");
@@ -92,15 +96,9 @@ public class FeedManagerImpl implements FeedManager {
                                 for (Entry entry : entries) {
                                     entry.setSource(feedUpdater.getSource());
                                     entry.setProjectId(project.getUuid());
-
-                                    String id = entry.getId();
-                                    if (id == null) {
-                                        Date published = entry.getPublished();
-                                        String publishedString = (published == null) ? "" : published.toString();
-                                        id = entry.getProjectId().toString() + publishedString
-                                                + entry.getSource();
+                                    if (StringUtils.isBlank(entry.getId())) {
+                                        setDefaultEntryId(entry);
                                     }
-                                    entry.setId(DigestUtils.shaHex(id));
                                 }
                                 feedPersistenceService.merge(entries);
                             } catch (FeedServiceException e) {
@@ -122,5 +120,12 @@ public class FeedManagerImpl implements FeedManager {
             }
         }
         LOG.info("Updating all project feeds: done");
+    }
+
+    private void setDefaultEntryId(Entry entry) {
+        Date published = entry.getPublished();
+        String publishedString = (published == null) ? "" : published.toString();
+        String id = entry.getProjectId().toString() + publishedString + entry.getSource();
+        entry.setId(DigestUtils.shaHex(id));
     }
 }
