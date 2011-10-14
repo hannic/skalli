@@ -25,12 +25,12 @@ import com.sun.syndication.feed.synd.SyndPerson;
 
 public class Converter {
 
-    static public List<Entry> syndFeed2Feed(SyndFeed syndEntry, String feedId) {
-        if (syndEntry == null) {
+    static public List<Entry> syndFeed2Entry(SyndFeed syndFeed) {
+        if (syndFeed == null) {
             return Collections.emptyList();
         }
         List<Entry> entries = new ArrayList<Entry>();
-        for (Object o : syndEntry.getEntries()) {
+        for (Object o : syndFeed.getEntries()) {
             entries.add(syndEntry2Entry((SyndEntry) o));
         }
         return entries;
@@ -61,10 +61,7 @@ public class Converter {
     }
 
     private static PersonJPA syndPerson2Person(SyndPerson syndEntry) {
-        PersonJPA p = new PersonJPA();
-        p.setName(syndEntry.getName());
-        p.setEmail(p.getEmail());
-        return p;
+        return new PersonJPA(syndEntry.getName(),syndEntry.getEmail());
     }
 
     private static LinkJPA syndLink2Link(SyndLink syndEntry) {

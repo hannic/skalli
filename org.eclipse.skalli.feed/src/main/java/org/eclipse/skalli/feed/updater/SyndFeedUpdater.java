@@ -52,7 +52,7 @@ public class SyndFeedUpdater implements FeedUpdater {
         if (LOG.isInfoEnabled()) {
             LOG.info(MessageFormat.format("Updating ''{0}'' feed for project ''{1}'' from {2}", source, projectName, url.toString()));
         }
-        return Converter.syndFeed2Feed(getSyndFeed(), url.toString());
+        return Converter.syndFeed2Entry(getSyndFeed());
     }
 
     private SyndFeed getSyndFeed() throws FeedException {
