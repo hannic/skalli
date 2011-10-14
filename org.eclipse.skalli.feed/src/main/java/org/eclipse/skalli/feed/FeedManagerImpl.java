@@ -124,7 +124,7 @@ public class FeedManagerImpl implements FeedManager {
 
     private void setDefaultEntryId(Entry entry) {
         Date published = entry.getPublished();
-        String publishedString = (published == null) ? "" : published.toString();
+        String publishedString = (published == null) ? "" : Long.toString(published.getTime());
         String id = entry.getProjectId().toString() + publishedString + entry.getSource();
         entry.setId(DigestUtils.shaHex(id));
     }
