@@ -34,15 +34,15 @@ import org.eclipse.skalli.common.util.UUIDUtils;
 @Table(name = "Entry")
 @NamedQueries({
         @NamedQuery(name = EntryJPA.FIND_BY_PROJECT_ID,
-                query = "SELECT e FROM EntryJPA e where e.projectId = :projectId " + EntryJPA.ORDER_BY),
+                query = "SELECT e FROM EntryJPA e where e.projectId = :projectId " + EntryJPA.ENTRYJPA_DEFAULT_ORDER_BY),
 
         @NamedQuery(name = EntryJPA.FIND_BY_PROJECT_AND_SOURCES,
                 query = "SELECT e FROM EntryJPA e where e.projectId = :projectId and e.source in :sources "
-                        + EntryJPA.ORDER_BY),
+                        + EntryJPA.ENTRYJPA_DEFAULT_ORDER_BY),
 
         @NamedQuery(name = EntryJPA.FIND_SOURCES_BY_PROJECT_ID,
                 query = "SELECT DISTINCT e.source FROM EntryJPA e where e.projectId = :projectId "
-                        + EntryJPA.ORDER_BY)
+                        +  "order by e.source")
 
 })
 @Entity
@@ -51,7 +51,7 @@ public class EntryJPA implements Entry {
     public static final String FIND_BY_PROJECT_ID = "EntryJPA.findByProjectID";
     public static final String FIND_BY_PROJECT_AND_SOURCES = "EntryJPA.findByProjectAndSources";
     public static final String FIND_SOURCES_BY_PROJECT_ID = "EntryJPA.findSourcesByProjectID";
-    static final String ORDER_BY = "order by e.published DESC, e.id ASC";
+    static final String ENTRYJPA_DEFAULT_ORDER_BY = "order by e.published DESC, e.id ASC";
 
     public static final int ID_LENGTH = 40;
     public static final int URI_LENGTH = 512;
