@@ -6,18 +6,30 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     SAP AG - initial API and implementation
+ * SAP AG - initial API and implementation
  *******************************************************************************/
 package org.eclipse.skalli.feed.db;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.eclipse.skalli.api.java.feeds.Entry;
 import org.eclipse.skalli.api.java.feeds.FeedServiceException;
+import org.eclipse.skalli.feed.db.entities.EntryJPA;
 import org.junit.Test;
 
 public class JPAFeedPersistenceServiceTest {
 
     @Test
-    public void testMerge() throws FeedServiceException {
-        //TODO
+    public void testCreateEntry() throws FeedServiceException {
+        JPAFeedPersistenceService s = new JPAFeedPersistenceService();
+        Entry newEntry = s.createEntry();
+        assertNotNull(newEntry);
+
+        assertTrue(
+                "JPAFeedPersistenceService.createEntry() should return an Element instanceof "
+                        + EntryJPA.class.getName(), newEntry instanceof EntryJPA);
     }
+
 
 }

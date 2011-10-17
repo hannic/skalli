@@ -64,7 +64,7 @@ public class JPAFeedPersistenceService implements FeedPersistenceService {
     }
 
     @Override
-    public Entry createEntry() {
+    public EntryJPA createEntry() {
         return new EntryJPA();
     }
 
