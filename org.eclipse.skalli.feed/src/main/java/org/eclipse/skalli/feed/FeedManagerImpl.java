@@ -34,11 +34,24 @@ import org.slf4j.LoggerFactory;
 public class FeedManagerImpl implements FeedManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(FeedManagerImpl.class);
+    private boolean doSleep = true;
 
     private ProjectService projectService;
     private Set<FeedProvider> feedProviders = new HashSet<FeedProvider>();
 
     private FeedPersistenceService feedPersistenceService;
+
+    public FeedManagerImpl() {
+        super();
+    }
+
+    /**
+     * Constructor to avoid sleeping, eg. to speed up the test.
+     */
+    FeedManagerImpl(boolean doSleep) {
+        super();
+        this.doSleep = doSleep;
+    }
 
     protected void activate(ComponentContext context) {
         LOG.info(MessageFormat.format("[FeedManager] {0} : activated",
@@ -111,12 +124,13 @@ public class FeedManagerImpl implements FeedManager {
                 }
             }
 
-            // delay the execution for 10 seconds, otherwise we may
-            // overload the remote systems
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                break;
+            if (doSleep) {
+                try {
+                    // delay the execution for 10 seconds, otherwise we may overload the remote systems
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         }
         LOG.info("Updating all project feeds: done");

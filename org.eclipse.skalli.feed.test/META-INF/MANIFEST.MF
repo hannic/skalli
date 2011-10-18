@@ -7,6 +7,7 @@ Bundle-Vendor: Eclipse Skalli
 Fragment-Host: org.eclipse.skalli.feed
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.easymock,
- org.junit
-Require-Bundle: 
+ org.eclipse.skalli.testutil,
+ org.eclipse.skalli.testutil.feeds
+Require-Bundle: org.junit4,
  org.hamcrest
