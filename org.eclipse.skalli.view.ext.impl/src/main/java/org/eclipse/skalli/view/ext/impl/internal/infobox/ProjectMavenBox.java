@@ -72,60 +72,62 @@ public class ProjectMavenBox extends InfoBox implements ProjectInfoBox {
         boolean rendered = false;
         String groupId = null;
         MavenReactorProjectExt reactorExt = project.getExtension(MavenReactorProjectExt.class);
-        MavenReactor mavenReactor = reactorExt.getMavenReactor();
-        if (reactorExt != null &&  mavenReactor!= null) {
-            MavenCoordinate coordinate = mavenReactor.getCoordinate();
-            groupId = coordinate.getGroupId();
-            createLabel(layout, "GroupId: <b>" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
-            createLabel(layout, "ArtifactId: <b>" + coordinate.getArtefactId() + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
-            TreeSet<MavenCoordinate> modules = mavenReactor.getModules();
-            StringBuilder sb = new StringBuilder();
+        if (reactorExt != null) {
+            MavenReactor mavenReactor = reactorExt.getMavenReactor();
+            if (mavenReactor != null) {
+                MavenCoordinate coordinate = mavenReactor.getCoordinate();
+                groupId = coordinate.getGroupId();
+                createLabel(layout, "GroupId: <b>" + groupId + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
+                createLabel(layout, "ArtifactId: <b>" + coordinate.getArtefactId() + "</b>");//$NON-NLS-1$ //$NON-NLS-2$
+                TreeSet<MavenCoordinate> modules = mavenReactor.getModules();
+                StringBuilder sb = new StringBuilder();
 
-            if (modules.size() > 0) {
-                int lineLength = 0;
-                for (MavenCoordinate module : modules) {
-                    //create popup with xml snippet
-                    sb.append("<dependency>\n");
-                    sb.append("    <artifactId>" + module.getArtefactId() + "</artifactId>\n");
-                    sb.append("    <groupId>" + module.getGroupId() + "</groupId>\n");
-                    String latestVersion = module.getLatestVersion();
-                    if (StringUtils.isNotBlank(latestVersion)) {
-                        sb.append("    <version>" + latestVersion + "</version>\n");
-                    } else {
-                        sb.append("    <!--<version>0.0.0</version>-->\n");
+                if (modules.size() > 0) {
+                    int lineLength = 0;
+                    for (MavenCoordinate module : modules) {
+                        //create popup with xml snippet
+                        sb.append("<dependency>\n");
+                        sb.append("    <artifactId>" + module.getArtefactId() + "</artifactId>\n");
+                        sb.append("    <groupId>" + module.getGroupId() + "</groupId>\n");
+                        String latestVersion = module.getLatestVersion();
+                        if (StringUtils.isNotBlank(latestVersion)) {
+                            sb.append("    <version>" + latestVersion + "</version>\n");
+                        } else {
+                            sb.append("    <!--<version>0.0.0</version>-->\n");
+                        }
+                        String packaging = module.getPackaging();
+                        if (StringUtils.isNotBlank(packaging)) {
+                            sb.append("    <type>" + packaging + "</type>\n");
+                        }
+                        sb.append("</dependency>\n");
+                        lineLength = calculateLineLength(module, lineLength);
                     }
-                    String packaging = module.getPackaging();
-                    if (StringUtils.isNotBlank(packaging)) {
-                        sb.append("    <type>" + packaging + "</type>\n");
-                    }
-                    sb.append("</dependency>\n");
-                    lineLength = calculateLineLength(module, lineLength);
+
+                    final Label label = new Label(sb.toString(), Label.CONTENT_PREFORMATTED);
+                    //add a buffer 10, as we didn't calculate the length of surrounding strings.
+                    label.setWidth(lineLength + 10, Sizeable.UNITS_EM);
+
+                    PopupView.Content content = new PopupView.Content() {
+                        private static final long serialVersionUID = -8362267064485433525L;
+
+                        @Override
+                        public String getMinimizedValueAsHTML() {
+                            return "Modules";
+                        }
+
+                        @Override
+                        public Component getPopupComponent() {
+                            return label;
+                        }
+                    };
+
+                    PopupView popup = new PopupView(content);
+                    popup.setHideOnMouseOut(false);
+                    popup.addStyleName(STYLE_MODULE_POPUP);
+                    layout.addComponent(popup);
                 }
-
-                final Label label = new Label(sb.toString(), Label.CONTENT_PREFORMATTED);
-                //add a buffer 10, as we didn't calculate the length of surrounding strings.
-                label.setWidth(lineLength + 10, Sizeable.UNITS_EM);
-
-                PopupView.Content content = new PopupView.Content() {
-                    private static final long serialVersionUID = -8362267064485433525L;
-
-                    @Override
-                    public String getMinimizedValueAsHTML() {
-                        return "Modules";
-                    }
-
-                    @Override
-                    public Component getPopupComponent() {
-                        return label;
-                    }
-                };
-
-                PopupView popup = new PopupView(content);
-                popup.setHideOnMouseOut(false);
-                popup.addStyleName(STYLE_MODULE_POPUP);
-                layout.addComponent(popup);
+                rendered = true;
             }
-            rendered = true;
         }
         MavenProjectExt mavenExt = project.getExtension(MavenProjectExt.class);
         if (mavenExt != null) {
