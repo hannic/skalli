@@ -10,8 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.feed.db;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -211,15 +210,17 @@ public class JPAFeedServiceTest {
         fps.merge(entries);
 
         // findEntries: check that the maxResult parameter of findEnties works:
-        for (int maxResults = 1; maxResults < 10; maxResults++) {
+        for (int maxResults = 0; maxResults < 10; maxResults++) {
             List<Entry> foundEntries = fs.findEntries(testFindProjectUuid, maxResults);
             assertThat(foundEntries.size(), is(Math.min(maxResults, 4)));
 
-            // check that the entries are ordered desc by published
-            for (int i = 1; i < foundEntries.size(); i++) {
-                Date date0 = foundEntries.get(i - 1).getPublished();
-                Date date1 = foundEntries.get(i).getPublished();
-                assertTrue("expected: " + date0.getTime() + ">" + date1.getTime(), date0.compareTo(date1) > 0);
+            if (maxResults > 0) {
+                // check that the entries are ordered desc by published
+                for (int i = 1; i < foundEntries.size(); i++) {
+                    Date date0 = foundEntries.get(i - 1).getPublished();
+                    Date date1 = foundEntries.get(i).getPublished();
+                    assertTrue("expected: " + date0.getTime() + ">" + date1.getTime(), date0.compareTo(date1) > 0);
+                }
             }
         }
 
@@ -270,4 +271,52 @@ public class JPAFeedServiceTest {
         newEntry.setId(DigestUtils.shaHex(id));
     }
 
+    @Test
+    public void testfindEntriesIllegalParameters() throws FeedServiceException {
+        JPAFeedService fps = new JPAFeedService();
+
+        try {
+            fps.findEntries(null, 4711);
+            fail("IllegalArgumentException was expected.");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("projectId"));
+        }
+
+        try {
+            fps.findEntries(defaultProjectUuid, -2);
+            fail("IllegalArgumentException was expected.");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("maxResults"));
+        }
+
+        @SuppressWarnings("unchecked")
+        Collection<String> empty_sources = Collections.EMPTY_LIST;
+        try {
+            fps.findEntries(null, empty_sources, 4711);
+            fail("IllegalArgumentException was expected.");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("projectId"));
+        }
+
+        List<Entry> result = fps.findEntries(defaultProjectUuid, null, 4711);
+        assertThat(result.size(), is(0));
+
+        try {
+            fps.findEntries(defaultProjectUuid, null, -2);
+            fail("IllegalArgumentException was expected.");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("maxResults"));
+        }
+    }
+
+    @Test
+    public void testFindSourcesIllegalParameters() throws FeedServiceException {
+        JPAFeedService fps = new JPAFeedService();
+        try {
+            fps.findSources(null);
+            fail("IllegalArgumentException was expected.");
+        } catch (IllegalArgumentException e) {
+            assertThat(e.getMessage(), containsString("projectId"));
+        }
+    }
 }

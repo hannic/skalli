@@ -12,6 +12,7 @@ package org.eclipse.skalli.feed.db;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.feeds.Entry;
 import org.eclipse.skalli.api.java.feeds.FeedService;
@@ -51,6 +53,16 @@ public class JPAFeedService implements FeedService {
 
     @Override
     public List<Entry> findEntries(UUID projectId, int maxResults) throws FeedServiceException {
+        if (projectId == null) {
+            throw new IllegalArgumentException("projectId expected to be not null");
+        }
+        if (maxResults < 0 && maxResults != FeedService.SELECT_ALL) {
+            throw new IllegalArgumentException("maxResults expected to be >= 0 or " + FeedService.SELECT_ALL);
+        }
+        if (maxResults == 0) {
+            return Collections.emptyList();
+        }
+
         List<Entry> results = new ArrayList<Entry>();
         EntityManager em = getEntityManager();
         EntityTransaction tx = null;
@@ -82,6 +94,16 @@ public class JPAFeedService implements FeedService {
     @Override
     public List<Entry> findEntries(UUID projectId, Collection<String> sources, int maxResults)
             throws FeedServiceException {
+        if (projectId == null) {
+            throw new IllegalArgumentException("projectId expected to be not null");
+        }
+        if (maxResults < 0 && maxResults != FeedService.SELECT_ALL) {
+            throw new IllegalArgumentException("maxResults expected to be >= 0 or " + FeedService.SELECT_ALL);
+        }
+        if (maxResults == 0 || CollectionUtils.isEmpty(sources)) {
+            return Collections.emptyList();
+        }
+
         List<Entry> results = new ArrayList<Entry>();
         EntityManager em = getEntityManager();
         EntityTransaction tx = null;
@@ -104,15 +126,20 @@ public class JPAFeedService implements FeedService {
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
-            throw new FeedServiceException("Can't find feed entries for project " + projectId.toString() + " matching any of " + StringUtils.join(sources, ","), e);
+            throw new FeedServiceException("Can't find feed entries for project " + projectId.toString()
+                    + " matching any of " + StringUtils.join(sources, ","), e);
         } finally {
             em.close();
         }
         return results;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<String> findSources(UUID projectId) throws FeedServiceException {
+        if (projectId == null) {
+            throw new IllegalArgumentException("projectId expected to be not null");
+        }
         List<String> results;
         EntityManager em = getEntityManager();
         EntityTransaction tx = null;

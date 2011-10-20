@@ -8,6 +8,7 @@ Service-Component: OSGI-INF/JPAFeedPersistenceService.xml,
   OSGI-INF/JPAFeedService.xml
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.persistence,
+ org.apache.commons.collections,
  org.apache.commons.lang,
  org.eclipse.skalli.api.java.feeds,
  org.eclipse.skalli.feed.db.entities
