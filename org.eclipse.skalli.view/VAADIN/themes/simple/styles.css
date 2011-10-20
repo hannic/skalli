@@ -19,7 +19,6 @@
 @import url(styles_multitext.css);
 @import url(styles_multicombobox.css);
 @import url(styles_multilink.css);
-@import url(styles_toolbar.css);
 
 .v-app {
     background: #fff;
@@ -57,7 +56,7 @@
     border-bottom-color: gray;
 }
 
-em { 
+em {
     font-weight: bold;
     font-style: normal;
 }
