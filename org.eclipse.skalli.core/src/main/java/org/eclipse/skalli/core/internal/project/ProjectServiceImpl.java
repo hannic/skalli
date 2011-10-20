@@ -132,7 +132,7 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
 
     @Override
     public List<Project> getSubProjects(UUID uuid, Comparator<Project> c, int depth) {
-        depth = depth < 0? Integer.MAX_VALUE : depth;
+        depth = depth < 0 ? Integer.MAX_VALUE : depth;
         List<Project> result = new ArrayList<Project>();
         if (depth == 0) {
             return result;
@@ -440,7 +440,12 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                 propertyValidators.addAll(customValidators);
             }
             for (PropertyValidator propertyValidator : propertyValidators) {
-                issues.addAll(propertyValidator.validate(projectUUID, ext.getProperty(propertyName), minSeverity));
+                try {
+                    issues.addAll(propertyValidator.validate(projectUUID, ext.getProperty(propertyName), minSeverity));
+                } catch (RuntimeException e) {
+                    LOG.error(MessageFormat.format("{0}#validate on project {1} threw an exception", propertyValidator
+                            .getClass().getName(), projectUUID), e);
+                }
             }
         }
 
@@ -468,7 +473,12 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
                     projectTemplate.getClass().getName()));
         } else {
             for (ExtensionValidator<?> extensionValidator : extensionValidators) {
-                issues.addAll(extensionValidator.validate(projectUUID, ext, minSeverity));
+                try {
+                    issues.addAll(extensionValidator.validate(projectUUID, ext, minSeverity));
+                } catch (RuntimeException e) {
+                    LOG.error(MessageFormat.format("{0}#validate on project {1} threw an exception", extensionValidator
+                            .getClass().getName(), projectUUID), e);
+                }
             }
         }
         return issues;
@@ -479,15 +489,18 @@ public class ProjectServiceImpl extends EntityServiceImpl<Project> implements Pr
         Set<Issue> issues = new TreeSet<Issue>();
         Set<ExtensionValidator<?>> extentionValidators = projectTemplate.getExtensionValidators(ext.getClass()
                 .getName());
-        if (extentionValidators == null)
-        {
+        if (extentionValidators == null) {
             LOG.warn(MessageFormat.format(
                     "{0}#getExtensionValidators({1}) returned null, but is expected to return an empty set",
                     projectTemplate.getClass().getName(), ext.getClass().getName()));
-        }
-        else {
+        } else {
             for (ExtensionValidator<?> extensionValidator : extentionValidators) {
-                issues.addAll(extensionValidator.validate(uuid, ext, minSeverity));
+                try {
+                    issues.addAll(extensionValidator.validate(uuid, ext, minSeverity));
+                } catch (RuntimeException e) {
+                    LOG.error(MessageFormat.format("{0}#validate on project {1} threw an exception", extensionValidator
+                            .getClass().getName(), uuid), e);
+                }
             }
         }
         return issues;
