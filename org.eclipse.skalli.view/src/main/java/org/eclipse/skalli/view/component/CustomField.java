@@ -27,24 +27,53 @@ import com.vaadin.ui.Field;
  * typically.
  *
  * See {@link Field} for more information on the individual methods. Typically,
- * only {@link #setValue(Object)} and {@link #getValue()} need to be overridded.
- *
- * @author Simon Kaufmann
+ * only {@link #setValue(Object)}, {@link #getValue()} and {@link #getType()}
+ * need to be overridden.
  *
  */
 public abstract class CustomField extends CustomComponent implements Field {
 
+    private final class AbstractFieldDelegator extends AbstractField {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Class<?> getType() {
+            return CustomField.this.getType();
+        }
+
+        @Override
+        public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+            if (isReadThrough() || !isModified()) {
+                fireValueChange(false);
+            }
+        }
+
+        @Override
+        public void setValue(Object newValue) throws ReadOnlyException, ConversionException {
+            CustomField.this.setValue(newValue);
+        }
+
+        @Override
+        public Object getValue() {
+            return CustomField.this.getValue();
+        }
+
+        private Object superGetValue(){
+          return super.getValue();
+        }
+
+        private void superSetValue(Object newValue){
+            super.setValue(newValue);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
-    private AbstractField abstractField;
+    private AbstractFieldDelegator abstractField;
+
+
 
     public CustomField() {
-        abstractField = new AbstractField() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public Class<?> getType() {
-                return CustomField.this.getType();
-            }
-        };
+        abstractField = new AbstractFieldDelegator();
     }
 
     @Override
@@ -129,12 +158,12 @@ public abstract class CustomField extends CustomComponent implements Field {
 
     @Override
     public Object getValue() {
-        return abstractField.getValue();
+        return abstractField.superGetValue();
     }
 
     @Override
     public void setValue(Object newValue) throws ReadOnlyException, ConversionException {
-        abstractField.setValue(newValue);
+        abstractField.superSetValue(newValue);
     }
 
     @Override
