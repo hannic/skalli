@@ -221,9 +221,9 @@ public class HostReachableValidator implements Issuer, PropertyValidator {
                 return newIssue(Severity.WARNING, entityId, item, TXT_MISSING_PROXY, label, responseCode,
                         getStatusText(responseCode));
             case SC_UNAUTHORIZED:
-                return newIssue(Severity.WARNING, entityId, item, TXT_AUTH_REQUIRED, label, responseCode,
-                        getStatusText(responseCode));
-                // case SC_PAYMENT_REQUIRED:
+                // do not create an issue, as the link might be checked with an anonymous user;
+                // project members might have the rights, you can't know.
+                return null;
             case SC_LOCKED:
                 return newIssue(Severity.WARNING, entityId, item, TXT_RESOURCE_LOCKED, label, responseCode,
                         getStatusText(responseCode));
