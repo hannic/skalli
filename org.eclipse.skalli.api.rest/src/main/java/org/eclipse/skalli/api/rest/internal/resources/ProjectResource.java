@@ -10,23 +10,22 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.rest.internal.resources;
 
+import java.io.IOException;
 import java.util.UUID;
 
+import org.eclipse.skalli.api.java.ProjectService;
+import org.eclipse.skalli.api.java.authentication.LoginUtil;
+import org.eclipse.skalli.api.java.authentication.UserUtil;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
+import org.eclipse.skalli.common.Services;
+import org.eclipse.skalli.common.util.Statistics;
+import org.eclipse.skalli.model.core.Project;
+import org.eclipse.skalli.model.ext.ValidationException;
 import org.restlet.data.Status;
 import org.restlet.ext.servlet.ServletUtils;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
-
-import org.eclipse.skalli.api.java.ProjectService;
-import org.eclipse.skalli.api.java.authentication.LoginUtil;
-import org.eclipse.skalli.api.java.authentication.UserUtil;
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
-import org.eclipse.skalli.common.Services;
-import org.eclipse.skalli.common.util.Statistics;
-import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AliasedConverter;
-import org.eclipse.skalli.model.ext.ValidationException;
 
 public class ProjectResource extends AbstractServerResource {
 
@@ -47,19 +46,23 @@ public class ProjectResource extends AbstractServerResource {
             return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" not found.", id); //$NON-NLS-1$
         }
 
-        IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-                project, new AliasedConverter[] { new ProjectConverter(getRequest().getResourceRef()
-                        .getHostIdentifier(), false) });
+        ResourceRepresentation<Project> representation = new ResourceRepresentation<Project>(
+                project, new ProjectConverter(getRequest().getResourceRef().getHostIdentifier(), false));
         return representation;
     }
 
     @Put
     public Representation store(Representation entity) {
-        IgnoreUnknownElementsXStreamRepresentation<Project> representation = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-                entity, new AliasedConverter[] { new ProjectConverter(
-                        getRequest().getResourceRef().getHostIdentifier(), false) },
-                new Class[] { Project.class });
-        Project project = representation.getObject();
+        ResourceRepresentation<Project> representation = new ResourceRepresentation<Project>();
+        representation.setConverters(new ProjectConverter(getRequest().getResourceRef().getHostIdentifier(), false));
+        representation.setAnnotatedClasses(Project.class);
+        Project project = null;
+        try {
+            project = representation.read(entity, Project.class);
+        } catch (IOException e) {
+            createError(Status.SERVER_ERROR_INTERNAL,
+                    "Failed to read project entity: " + e.getMessage());
+        }
         try {
             LoginUtil loginUtil = new LoginUtil(ServletUtils.getRequest(getRequest()));
             String loggedInUser = loginUtil.getLoggedInUserId();

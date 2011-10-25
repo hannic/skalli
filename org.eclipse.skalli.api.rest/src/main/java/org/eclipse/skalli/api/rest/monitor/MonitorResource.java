@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.rest.monitor;
 
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
 import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
@@ -25,8 +25,7 @@ public abstract class MonitorResource extends ServerResource {
         if (converter == null) {
             return new EmptyRepresentation();
         }
-        return new IgnoreUnknownElementsXStreamRepresentation<Object>(new Object(),
-                new AliasedConverter[] { converter });
+        return new ResourceRepresentation<Object>(new Object(), converter);
     }
 
     protected abstract AliasedConverter getConverter(String host);

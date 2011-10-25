@@ -64,7 +64,6 @@
 <!-- Third party components which are not yet in Orbit and need to be downloaded manually -->
 <unit id="org.restlet" version="2.0.0.RC4"/>
 <unit id="org.restlet.ext.servlet" version="2.0.0.RC4"/>
-<unit id="org.restlet.ext.xstream" version="2.0.0.RC4"/>
 <unit id="org.codehaus.jettison.jettison" version="1.2.0"/>
 <unit id="com.springsource.com.thoughtworks.xstream" version="1.3.1"/>
 <unit id="com.springsource.org.custommonkey.xmlunit" version="1.2.0"/>

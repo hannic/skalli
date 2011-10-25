@@ -14,12 +14,12 @@ import java.io.IOException;
 
 import org.eclipse.skalli.api.java.authentication.LoginUtil;
 import org.eclipse.skalli.api.java.authentication.UserUtil;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.configuration.ConfigurationService;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.servlet.ServletUtils;
-import org.restlet.ext.xstream.XstreamRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
@@ -77,8 +77,8 @@ public abstract class AbstractResource<T> extends ServerResource {
         ConfigurationService configService = getConfigService();
         if (configService != null) {
             T config = readConfig(configService);
-            XstreamRepresentation<T> representation = new XstreamRepresentation<T>(config);
-            representation.setXstream(getXStream());
+            ResourceRepresentation<T> representation = new ResourceRepresentation<T>(config);
+            representation.setXStream(getXStream());
             return representation;
         } else {
             String message = "Failed to read configuration (" + getConfigClass().getSimpleName()

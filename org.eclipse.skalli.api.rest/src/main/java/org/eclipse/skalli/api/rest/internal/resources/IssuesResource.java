@@ -14,11 +14,10 @@ import java.util.UUID;
 
 import org.eclipse.skalli.api.java.IssuesService;
 import org.eclipse.skalli.api.java.ProjectService;
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.Issues;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -52,8 +51,11 @@ public class IssuesResource extends AbstractServerResource {
         }
 
         Issues issues = issuesService.getByUUID(project.getUuid());
+        if (issues == null) {
+            return createError(Status.CLIENT_ERROR_NOT_FOUND, "Project \"{0}\" has no issues", id);
+        }
 
-        return new IgnoreUnknownElementsXStreamRepresentation<Issues>(issues,
-                new AliasedConverter[] { new IssuesConverter(getRequest().getResourceRef().getHostIdentifier()) });
+        return new ResourceRepresentation<Issues>(issues,
+                new IssuesConverter(getRequest().getResourceRef().getHostIdentifier()));
     }
 }

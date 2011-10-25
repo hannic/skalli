@@ -10,20 +10,18 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.rest.internal.admin;
 
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
+import org.eclipse.skalli.common.util.Statistics;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
-
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
-import org.eclipse.skalli.common.util.Statistics;
-import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class StatisticsResource extends ServerResource {
 
     @Get
     public Representation retrieve() {
         Statistics stats = Statistics.getDefault();
-        return new IgnoreUnknownElementsXStreamRepresentation<Statistics>(stats,
-                new AliasedConverter[] { new StatisticsConverter(getRequest().getResourceRef().getHostIdentifier()) });
+        return new ResourceRepresentation<Statistics>(stats,
+                new StatisticsConverter(getRequest().getResourceRef().getHostIdentifier()));
     }
 }

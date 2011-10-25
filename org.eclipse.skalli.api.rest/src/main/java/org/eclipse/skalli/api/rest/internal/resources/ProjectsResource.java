@@ -17,12 +17,11 @@ import org.eclipse.skalli.api.java.PagingInfo;
 import org.eclipse.skalli.api.java.ProjectService;
 import org.eclipse.skalli.api.java.QueryParseException;
 import org.eclipse.skalli.api.java.SearchService;
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -63,9 +62,8 @@ public class ProjectsResource extends ServerResource {
             if (extensionParam != null) {
                 extensions = extensionParam.split(Consts.PARAM_LIST_SEPARATOR);
             }
-            return new IgnoreUnknownElementsXStreamRepresentation<Projects>(projects,
-                    new AliasedConverter[] { new ProjectsConverter(getRequest().getResourceRef().getHostIdentifier(),
-                            extensions) });
+            return new ResourceRepresentation<Projects>(projects,
+                   new ProjectsConverter(getRequest().getResourceRef().getHostIdentifier(), extensions));
         } catch (QueryParseException e) {
             getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return new StringRepresentation("Error parsing query: " + e.getMessage()); //$NON-NLS-1$

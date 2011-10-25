@@ -7,13 +7,12 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.skalli.api.java.ProjectService;
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
 import org.eclipse.skalli.common.Consts;
 import org.eclipse.skalli.common.Services;
 import org.eclipse.skalli.common.util.Statistics;
 import org.eclipse.skalli.common.util.UUIDUtils;
 import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -62,8 +61,7 @@ public class SubprojectsResource extends AbstractServerResource {
             extensions = extensionParam.split(Consts.PARAM_LIST_SEPARATOR);
         }
 
-        return new IgnoreUnknownElementsXStreamRepresentation<Subprojects>(subprojects,
-                new AliasedConverter[] { new SubprojectsConverter(getRequest().getResourceRef().getHostIdentifier(),
-                        extensions) });
+        return new ResourceRepresentation<Subprojects>(subprojects,
+               new SubprojectsConverter(getRequest().getResourceRef().getHostIdentifier(), extensions));
     }
 }

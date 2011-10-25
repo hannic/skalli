@@ -15,18 +15,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.osgi.framework.BundleException;
-
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
 import org.eclipse.skalli.model.core.Project;
-import org.eclipse.skalli.model.ext.AliasedConverter;
 import org.eclipse.skalli.model.ext.ExtensionEntityBase;
 import org.eclipse.skalli.model.ext.ExtensionService;
 import org.eclipse.skalli.testutil.BundleManager;
 import org.eclipse.skalli.testutil.TestExtension;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.osgi.framework.BundleException;
 
 @SuppressWarnings("nls")
 public class InheritanceTest {
@@ -74,23 +72,23 @@ public class InheritanceTest {
         };
 
         // Verify that the parent has the extension, but not inherited
-        IgnoreUnknownElementsXStreamRepresentation<Project> rep1 = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-                parent, new AliasedConverter[] { projectConverter });
+        ResourceRepresentation<Project> rep1 = new ResourceRepresentation<Project>(
+                parent, projectConverter);
         String res1 = rep1.getText();
         Assert.assertTrue(res1.contains("<testExtension"));
         Assert.assertFalse(res1.contains("inherited=\"true\""));
 
         // Verify that the project doesn't have the extension
-        IgnoreUnknownElementsXStreamRepresentation<Project> rep2 = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-                project, new AliasedConverter[] { projectConverter });
+        ResourceRepresentation<Project> rep2 = new ResourceRepresentation<Project>(
+                project, projectConverter);
         String res2 = rep2.getText();
         Assert.assertFalse(res2.contains("<testExtension"));
         Assert.assertFalse(res2.contains("inherited=\"true\""));
 
         project.setInherited(TestExtension.class, true);
         // Verify that now the project inherits the extension
-        IgnoreUnknownElementsXStreamRepresentation<Project> rep3 = new IgnoreUnknownElementsXStreamRepresentation<Project>(
-                project, new AliasedConverter[] { projectConverter });
+        ResourceRepresentation<Project> rep3 = new ResourceRepresentation<Project>(
+                project, projectConverter);
         String res3 = rep3.getText();
         Assert.assertTrue(res3.contains("<testExtension"));
         Assert.assertTrue(res3.contains("inherited=\"true\""));

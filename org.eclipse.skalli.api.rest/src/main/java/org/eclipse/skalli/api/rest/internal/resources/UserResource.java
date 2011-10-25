@@ -10,15 +10,13 @@
  *******************************************************************************/
 package org.eclipse.skalli.api.rest.internal.resources;
 
+import org.eclipse.skalli.api.java.authentication.UserUtil;
+import org.eclipse.skalli.api.rest.internal.util.ResourceRepresentation;
+import org.eclipse.skalli.common.User;
+import org.eclipse.skalli.common.util.Statistics;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-
-import org.eclipse.skalli.api.java.authentication.UserUtil;
-import org.eclipse.skalli.api.rest.internal.util.IgnoreUnknownElementsXStreamRepresentation;
-import org.eclipse.skalli.common.User;
-import org.eclipse.skalli.common.util.Statistics;
-import org.eclipse.skalli.model.ext.AliasedConverter;
 
 public class UserResource extends AbstractServerResource {
 
@@ -33,7 +31,7 @@ public class UserResource extends AbstractServerResource {
             return createError(Status.CLIENT_ERROR_NOT_FOUND, "User \"{0}\" not found.", id); //$NON-NLS-1$
         }
 
-        return new IgnoreUnknownElementsXStreamRepresentation<User>(user, new AliasedConverter[] { new UserConverter(
-                getRequest().getResourceRef().getHostIdentifier()) });
+        return new ResourceRepresentation<User>(user,
+                new UserConverter(getRequest().getResourceRef().getHostIdentifier()));
     }
 }
