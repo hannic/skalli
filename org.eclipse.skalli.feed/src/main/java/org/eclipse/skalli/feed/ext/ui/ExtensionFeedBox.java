@@ -55,13 +55,13 @@ public class ExtensionFeedBox extends InfoBox implements ProjectInfoBox {
 
     private static final String ICON = "res/icons/feed.png"; //$NON-NLS-1$
 
-    private final ThemeResource ICON_ARROW_DOWN = new ThemeResource("icons/feed/bullet_arrow_down.png"); //$NON-NLS-1$
-    private final ThemeResource ICON_ARROW_UP = new ThemeResource("icons/feed/bullet_arrow_up.png"); //$NON-NLS-1$
+    private static final ThemeResource ICON_COLLAPSED = new ThemeResource("icons/feed/bullet_arrow_right.png"); //$NON-NLS-1$
+    private static final ThemeResource ICON_EXPANDED = new ThemeResource("icons/feed/bullet_arrow_down.png"); //$NON-NLS-1$
 
     private static final String STYLE_TIMELINE_INFOBOX = "infobox-timeline"; //$NON-NLS-1$
     private static final String INFOBOX_HEIGHT = "200px"; //$NON-NLS-1$
 
-    private static final String STYLE_TIMELINE_PANEL = "timeline-panel";  //$NON-NLS-1$
+    private static final String STYLE_TIMELINE_PANEL = "timeline-panel"; //$NON-NLS-1$
     private static final String STYLE_SOURCE_SELECT = "source-select"; //$NON-NLS-1$
     private static final String STYLE_TIMELINE_CONTENT = "timeline-content"; //$NON-NLS-1$
     private static final String STYLE_TIMELINE_ENTRY = "timeline-entry"; //$NON-NLS-1$
@@ -143,7 +143,8 @@ public class ExtensionFeedBox extends InfoBox implements ProjectInfoBox {
         try {
             return feedService.findSources(project.getUuid());
         } catch (FeedServiceException e) {
-            LOG.error(MessageFormat.format("Failed to retrieve feed sources for project {0}", project.getProjectId()), e);
+            LOG.error(MessageFormat.format("Failed to retrieve feed sources for project {0}", project.getProjectId()),
+                    e);
         }
         return Collections.emptyList();
     }
@@ -190,7 +191,8 @@ public class ExtensionFeedBox extends InfoBox implements ProjectInfoBox {
                 }
             }
         } catch (FeedServiceException e) {
-            LOG.error(MessageFormat.format("Failed to retrieve feed entries for project {0}", project.getProjectId()), e);
+            LOG.error(MessageFormat.format("Failed to retrieve feed entries for project {0}", project.getProjectId()),
+                    e);
         }
         return timelineLayout;
     }
@@ -201,6 +203,7 @@ public class ExtensionFeedBox extends InfoBox implements ProjectInfoBox {
         cb.setImmediate(true);
         cb.addListener(new Button.ClickListener() {
             private static final long serialVersionUID = 7364120771141334914L;
+
             @Override
             public void buttonClick(ClickEvent event) {
                 boolean checked = event.getButton().booleanValue();
@@ -273,7 +276,7 @@ public class ExtensionFeedBox extends InfoBox implements ProjectInfoBox {
             if (entry.getAuthor().getName() != null) {
                 author.append(entry.getAuthor().getName());
             }
-            if (entry.getAuthor().getEmail() != null){
+            if (entry.getAuthor().getEmail() != null) {
                 if (author.length() > 0) {
                     author.append(" ");
                 }
@@ -292,20 +295,21 @@ public class ExtensionFeedBox extends InfoBox implements ProjectInfoBox {
         label.addStyleName(STYLE_DETAILS);
 
         final Button expandButton = new Button(CAPTION_EXPAND);
-        expandButton.setIcon(ICON_ARROW_DOWN);
+        expandButton.setIcon(ICON_COLLAPSED);
         expandButton.setStyle(Button.STYLE_LINK);
         expandButton.addStyleName(STYLE_TOOGLE_BUTTON);
         expandButton.addListener(new Button.ClickListener() {
             private static final long serialVersionUID = 303119182831057658L;
+
             @Override
             public void buttonClick(ClickEvent event) {
                 if (label.isVisible()) {
                     expandButton.setCaption(CAPTION_EXPAND);
-                    expandButton.setIcon(ICON_ARROW_DOWN);
+                    expandButton.setIcon(ICON_COLLAPSED);
                     label.setVisible(false);
                 } else {
                     expandButton.setCaption(CAPTION_COLLAPSE);
-                    expandButton.setIcon(ICON_ARROW_UP);
+                    expandButton.setIcon(ICON_EXPANDED);
                     label.setVisible(true);
                 }
             }
