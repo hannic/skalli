@@ -107,11 +107,9 @@ public class FeedManagerImpl implements FeedManager {
                         if (!entries.isEmpty()) {
                             try {
                                 for (Entry entry : entries) {
-                                    entry.setSource(feedUpdater.getSource());
+                                    setSource(entry, feedUpdater);
                                     entry.setProjectId(project.getUuid());
-                                    if (StringUtils.isBlank(entry.getId())) {
-                                        setDefaultEntryId(entry);
-                                    }
+                                    setEntryId(entry);
                                 }
                                 feedPersistenceService.merge(entries);
                             } catch (FeedServiceException e) {
@@ -136,10 +134,27 @@ public class FeedManagerImpl implements FeedManager {
         LOG.info("Updating all project feeds: done");
     }
 
-    private void setDefaultEntryId(Entry entry) {
+    private void setSource(Entry entry, FeedUpdater feedUpdater) {
+        String source = entry.getSource();
+        if (StringUtils.isBlank(source)) {
+            source = feedUpdater.getSource();
+            if (StringUtils.isBlank(source)) {
+                source = "unknown"; //$NON-NLS-1$
+            }
+            entry.setSource(source);
+        }
+    }
+
+    private void setEntryId(Entry entry) {
+        StringBuilder newId = new StringBuilder(entry.getProjectId().toString());
         Date published = entry.getPublished();
-        String publishedString = (published == null) ? "" : Long.toString(published.getTime());
-        String id = entry.getProjectId().toString() + publishedString + entry.getSource();
-        entry.setId(DigestUtils.shaHex(id));
+        if (published != null) {
+            newId.append(Long.toString(published.getTime()));
+        }
+        newId.append(entry.getSource());
+        if (StringUtils.isNotBlank(entry.getId())) {
+            newId.append(entry.getId());
+        }
+        entry.setId(DigestUtils.shaHex(newId.toString()));
     }
 }

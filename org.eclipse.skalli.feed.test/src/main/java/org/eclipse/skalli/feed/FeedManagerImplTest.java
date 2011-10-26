@@ -89,7 +89,7 @@ public class FeedManagerImplTest {
         assertThat(foundEntry1.getPublished(), is(aTestDate));
 
         assertNotNull(foundEntry2.getId());
-        assertThat(foundEntry2.getId(), is("idTitle2")); //the original, not changed!
+        assertThat(foundEntry2.getId(), is("a4e8621588347aa9192f95708bdb48c8e4fb2b68")); //the original + alwasGeneratedPart as shaHex
         assertThat(foundEntry2.getSource(), is("source-a"));
         assertThat(foundEntry2.getProjectId(), is(PROJECT1_UUID));
         assertThat(foundEntry2.getPublished(), is(aTestDate));
