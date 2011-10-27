@@ -45,21 +45,18 @@
         <module>org.eclipse.skalli.maven.test</module>
         <module>org.eclipse.skalli.storage.db</module>
         <module>org.eclipse.skalli.storage.db.entities</module>
+        <module>org.eclipse.skalli.feed</module>
+        <module>org.eclipse.skalli.feed.test</module>
+        <module>org.eclipse.skalli.feed.db</module>
+        <module>org.eclipse.skalli.feed.db.entities</module>
         <module>org.eclipse.skalli.examples</module>
         <!-- modules building the update site:-->
         <module>org.eclipse.skalli.feature</module>
+        <module>org.eclipse.skalli.orbit.feature</module>
         <module>org.eclipse.skalli.eclipse.feature</module>
         <module>org.eclipse.skalli.source.feature</module>
         <module>org.eclipse.skalli.testing.feature</module>
         <module>org.eclipse.skalli.site</module>
-        <module>org.eclipse.skalli.feed</module>
-        <module>org.eclipse.skalli.feed.test</module>
-        <module>org.eclipse.skalli.feed.db</module>
-        <!-- find out how to configure DB for skalli-jetty
-        <module>org.eclipse.skalli.feed.db.test</module>
-        -->
-        <module>org.eclipse.skalli.feed.db.entities</module>
-
     </modules>
 
     <profiles>
@@ -67,6 +64,7 @@
             <id>db</id>
             <modules>
                 <module>org.eclipse.skalli.storage.db.test</module>
+                <module>org.eclipse.skalli.feed.db.test</module>
             </modules>
         </profile>
         <profile>

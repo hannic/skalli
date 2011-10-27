@@ -52,7 +52,7 @@
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
 <!-- Jetty Runtime to run it locally during development -->
 <unit id="org.eclipse.jetty.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/jetty/updates/jetty-rt-3.7milestones/S-3.7.RC5-201106141948/"/>
+<repository location="http://download.eclipse.org/jetty/updates/jetty-rt-3.7milestones/S-3.7.1-201109140245/"/>
 </location>
 
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
