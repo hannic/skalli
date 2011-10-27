@@ -1,4 +1,4 @@
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" immediate="true" name="org.eclipse.skalli.storage.db.persistencedb">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.skalli.storage.db.persistencedb">
   <implementation class="org.eclipse.skalli.storage.db.PersistenceDB"/>
   <service>
     <provide interface="org.eclipse.skalli.api.java.StorageService"/>
@@ -8,6 +8,8 @@
     target="(osgi.unit.name=store)"
     interface="javax.persistence.EntityManagerFactory"
     name="EntityManagerFactory"
-    bind="setService" cardinality="1..1"
-    unbind="unsetService" policy="dynamic" />
+    policy="dynamic"
+    cardinality="1..1"
+    bind="setService"
+    unbind="unsetService" />
 </scr:component>

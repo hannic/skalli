@@ -19,7 +19,15 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
-            <property name="eclipselink.ddl-generation" value="create-tables" />
+        <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:derby:SkalliDB;create=true" />
+        <property name="javax.persistence.jdbc.user" value="skalli" />
+        <property name="javax.persistence.jdbc.password" value="skalli" />
+        <property name="eclipselink.target-database" value="Derby" />
+
+        <property name="eclipselink.weaving" value="false" />
+        <property name="eclipselink.ddl-generation" value="create-tables"/>
+        <property name="eclipselink.logging.level" value="FINE" />
         </properties>
     </persistence-unit>
 </persistence>
